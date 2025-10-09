@@ -1,0 +1,290 @@
+---
+title: "1 6 Fundamentals Scope"
+format: html
+---
+
+[Review time!](https://drive.google.com/file/d/1AG5_-a8AtFjUCYEruLzeQI2NOLyVKQVS/view?usp=drive_link)
+
+---
+
+# Python Scopes
+
+[Read the slides first!](https://docs.google.com/presentation/d/104NkGpkBCbF8TzAIWwObnLGTcuICtgT7/edit?usp=drive_link&ouid=112793419067458804625&rtpof=true&sd=true)
+
+## Return inside an `if` Clause
+
+When `return` is used inside an `if` clause, it means that if the condition specified in the `if` statement is met, the function will return a value, and the execution of the function will stop. For example:
+
+```{python}
+def check_even(number):
+  if number % 2 == 0:
+    return True
+  return False
+
+print(check_even(5))
+print(check_even(8))
+```
+
+In this case, if `number` is even, the function returns `True` and exits immediately. If `number` is not even, it proceeds to the next line (`return False`) and then exits.
+
+## Return inside a `for` Loop
+
+When `return` is used inside a `for` loop, it also affects the function's behavior. Once `return` is encountered within the loop, the function will exit, and the value provided after `return` will be returned as the result of the function. For example:
+
+```{python}
+def find_element(sequence, target):
+  for item in sequence:
+    if item == target:
+      return True
+  return False
+
+seq = [1, 2, 3, 4, 5, 6]
+print(find_element(seq, 5))
+print(find_element(seq, 8))
+```
+
+In this case, if the `target` element is found in the `sequence`, the function returns `True` and exits the loop and the function. If the loop completes without finding the target, it returns `False`.
+
+It's important to note that using `return` inside loops and conditionals can be a way to efficiently handle certain cases when you want to exit a function early based on specific conditions. However, it's crucial to design your functions carefully to ensure they behave as expected and return the correct values.
+
+**Example.** Write a Python function `is_prime(n)` that checks if a given number `n` is prime.
+
+```{python}
+def is_prime(number):
+  # Loop through all numbers lower than `number`
+  for x in range(2, number):
+    if number % x == 0:
+      # If the module is 0, then the number is not prime
+      # Using return inside a loop will finish the whole function execution
+      return False
+  # If the loop finishes, that means the number is prime
+  return True
+
+print(is_prime(3))
+print(is_prime(11))
+print(is_prime(4))
+```
+
+## Local Scope
+
+```{python}
+x = 10  # Global variable (we define it to be 10)
+print(x) # Build-in function (defined by Python)
+```
+
+```{python}
+def example_function():
+  y = 5  # Local variable
+  z = 2 * x # Accessing the global variable
+  print(y) # Accessing the local variable
+```
+
+```{python}
+example_function()
+```
+
+```{python}
+# If we try to access `y` here, it will fail because we are outside the function
+print(y)
+```
+
+**Example.** Before running the code below, take a moment to think about what you expect to happen with the variable `x` when we call the `modify_variable` function. Will it change its value? Why or why not?
+
+```{python}
+x = 5
+
+
+def modify_variable(y):
+  x = 10
+  return y + x
+
+
+
+result = modify_variable(7)
+print(result)
+```
+
+There are two variables named `x`. The global `x` is set to 5, while the `x` inside the `modify_variable` function is set to 10. When we call `modify_variable(7)`, it returns `7 + 10`, which is 17.
+
+**Variable shadowing** happens when a function defines a variable (inside its local scope) with the same name as a variable in the global scope. In the example above, `x` is a shadow variable.
+
+Variable shadowing is not necessary problematic but it is better practice to always use unique variable names, to avoid confussion!
+
+## Function and Variable Names
+
+Be careful with variable and function names! Using a function name as a variable will overwrite it.
+
+```{python}
+# Define `square_root` as a function
+def square_root(x):
+  return x**(1/2)
+```
+
+```{python}
+square_root = square_root(16)
+# Now `square_root` refers to the variable above
+# We have lost our `square_root` function!
+```
+
+```{python}
+# What happens when we call the function now?
+print(square_root(9))
+```
+
+---
+
+# Extra Exercises
+
+## Function Without Return
+What they expect the value of variable to be after the function call?
+
+```{python}
+def modify_variable(x: int):
+    x += 5
+
+variable = 10
+modify_variable(variable)
+print(variable)
+```
+
+The value of `variable` remains unchanged even after calling the `modify_variable` function. This is because integers are immutable in Python, and when we pass `variable` to the function, it creates a new local variable `x` inside the function's scope. Any changes made to `x` do not affect the global `variable`. So, the output will be `10`.
+
+## Variable Shadowing
+
+Before running the code below, take a moment to think about what you expect to happen with the variable `x` when we call the `factorial` function. Will it change its value? Why or why not?
+
+```{python}
+def factorial(num: int) -> int:
+  """
+  This is a function to calculate the factorial of a number.
+  It takes an integer 'num' as input and returns its factorial.
+  """
+  # Store the original value of 'num' in 'x'
+  x = num
+  # Initialize the result variable to 1
+  result = 1
+  # Start a loop while 'x' is greater than 1
+  while x > 1:
+    result = result * x
+    x = x - 1
+  return result
+
+x = 10
+# Call the 'factorial' function with 'x' as input and print the result
+print(factorial(x))
+# Print `x`
+print(x)
+```
+
+After examining the code, you might have noticed that the function `factorial` performs operations on its local variables, such as `num` and `result`. It does not modify the variable `x` defined outside the function.
+
+When we call `factorial(x)` and print the result, it will display the factorial of 10, but it will not change the value of `x`. This behavior illustrates the concept of variable scope in Python.
+
+## Decimal to Binary Conversion
+
+Write a Python function `decimal_to_binary(decimal)` that takes a decimal number as input and returns its binary representation as a string.
+
+For example, if the input is `10`, the function should return `'1010'`.
+
+You can use the following steps to perform the conversion:
+
+1. Initialize an empty string to store the binary representation.
+2. Use a while loop to repeatedly perform the following:
+   - Calculate the remainder of the decimal number when divided by `2`. This will be the least significant bit of the binary representation.
+   - Add the remainder to the beginning of the binary string.
+   - Update the decimal number by performing integer division by `2`.
+   - Continue this process until the decimal number becomes `0`.
+
+Test your function with various decimal inputs to ensure it correctly converts them to binary.
+
+```{python}
+def decimal_to_binary(decimal: int) -> str:
+  """
+  Convert a decimal number to its binary representation.
+
+  Parameters
+  ----------
+  decimal : int
+    The decimal number to convert.
+
+  Returns
+  -------
+  str
+    The binary representation of the decimal number as a string.
+  """
+
+  # Initialize an empty string to store the binary representation.
+  binary_str = ""
+
+  # Perform the conversion using a while loop.
+  while decimal > 0:
+    # Calculate the remainder of the decimal when divided by 2.
+    remainder = decimal % 2
+
+    # Add the remainder to the beginning of the binary string.
+    binary_str = str(remainder) + binary_str
+
+    # Update the decimal number by performing integer division by 2.
+    decimal //= 2
+
+  return binary_str
+```
+
+```{python}
+for number in range(10):
+  binary = decimal_to_binary(number)
+  print(f"The binary representation of {number} is {binary}")
+```
+
+## Binary to Decimal Conversion
+
+Write a Python function `binary_to_decimal(binary)` that converts a binary number represented as a string to its decimal equivalent.
+
+You can use the following steps to perform the conversion:
+
+1. Create a Python function called `binary_to_decimal` with the specified input parameter and return type.
+2. Inside the function, initialize a variable `decimal` to 0. This variable will store the decimal equivalent.
+3. Iterate through each character in the `binary_str` from left to right.
+4. For each character:
+   - Multiply the current `decimal` by 2.
+   - Add the integer value of the current binary digit (0 or 1) to the `decimal`.
+5. After processing all characters in `binary_str`, return the `decimal` as the result.
+
+Ensure that your function works correctly for different binary strings of varying lengths. You can use `decimal_to_binary` to check the results are right!
+
+```{python}
+def binary_to_decimal(binary: str) -> int:
+  """
+  Converts a binary number represented as a string to its decimal equivalent.
+
+  Parameters
+  ----------
+  binary : str
+    A binary number represented as a string.
+
+  Returns
+  -------
+  int
+    The decimal equivalent of the binary number.
+  """
+  decimal = 0
+
+  # Iterate through each character in binary
+  for digit in binary:
+    # Multiply the current decimal by 2 and add the current binary digit
+    decimal = decimal * 2 + int(digit)
+
+  return decimal
+```
+
+```{python}
+for number in range(5):
+  binary = decimal_to_binary(number)
+  print(f"The binary representation of {number} is {binary}")
+  x = binary_to_decimal(binary)
+  print(f"The binary number {binary} is {x}")
+  if x == number:
+    print("The function works!")
+  else:
+    print("We did something wrong...")
+```

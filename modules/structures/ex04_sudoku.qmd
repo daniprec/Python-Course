@@ -1,0 +1,156 @@
+---
+title: "Ex04 Sudoku"
+format: html
+---
+
+# Exercise: Sudoku Solver
+
+Sudoku is a classic logic-based number-placement puzzle. The objective is to fill a 9x9 grid with digits in such a way that each column, each row, and each of the nine 3x3 sub-grids that compose the grid contains all of the digits from 1 to 9.
+
+<p align="center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Sudoku_Puzzle_by_L2G-20050714_standardized_layout.svg/800px-Sudoku_Puzzle_by_L2G-20050714_standardized_layout.svg.png" width="300" height="auto" />
+</p>
+
+The challenge in Sudoku isn't just about placing numbers in the correct order, but also about strategic thinking and planning ahead.
+
+We want to develop a function that solves any given sudoku. In order to do so, we will need to master two concepts: updating list and backtracking.
+
+### Why Modify Lists?
+
+In the world of Python, lists are among the most versatile data structures to store and manipulate collections of items. In the context of our sudoku puzzle, we'll use a list of lists to represent our 9x9 board. As we try to solve the puzzle, we will be making many changes to this list: filling in numbers, erasing numbers (when backtracking), and checking rows, columns, and sub-grids. This mutable nature of lists in Python makes them ideal for this task.
+
+```{python}
+board = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+```
+
+### The Essence of Backtracking
+
+Backtracking is a general algorithmic technique that involves exploring each and every possible solution to a problem. The idea is simple:
+
+1. Choose a path of solution.
+2. If the path leads to a dead-end (i.e., it's not a solution), backtrack to a previous step and try a different path.
+3. Repeat this process until you find a solution or have explored all possible paths.
+
+When solving Sudoku, it's often the case that we may make a series of correct placements of numbers, only to find out later that we've reached an impasse. Maybe there's no valid number that can be placed in the next empty cell. This is where backtracking comes into play. We'll step back, change one of our previous placements, and proceed again. This "trial and error" approach continues until we find a valid solution or exhaust all possibilities.
+
+## Step 1: Find the Next Empty Cell
+
+Create a function named `find_empty_cell`:
+
+Arguments:
+1. `board`: A 9x9 list representing the current state of the Sudoku board.
+
+The function should:
+1. Iterate over the board to find the first empty cell (represented by 0).
+2. Return the coordinates (row and column) of the empty cell. If there are no empty cells, it should return `None`.
+
+### Example
+
+Using the sudoku above:
+```python
+row, column = find_empty_cell(board)
+print(f"Row: {row}, Column: {column}")
+```
+Should ouput:
+```output
+Row: 0, Column: 2
+```
+
+```{python}
+
+```
+
+## Step 2: Validate the Number Placement
+
+Create a function named `is_valid`:
+
+Arguments:
+1. `board`: A 9x9 list representing the current state of the Sudoku board.
+2. `row`: An integer representing the row index.
+3. `col`: An integer representing the column index.
+4. `num`: An integer representing the number to be checked for validity.
+
+The function should:
+1. Check if the given number can be placed in the specified row and column without breaking Sudoku rules.
+  - No repetition within the same row.
+  - No repetition within the same column.
+  - No repetition within the same sub-grid.
+2. Return `True` if it's a valid placement and `False` otherwise.
+
+### Examples
+Some use cases with the sudoku above:
+```python
+is_valid(board, 0, 2, 5)
+```
+
+&ensp; Should return `False` because row 0 already has a 5.
+
+```python
+is_valid(board, 0, 2, 8)
+```
+
+&ensp; Should return `False` because column 2 already has a 8.
+
+```python
+is_valid(board, 1, 2, 3)
+```
+
+&ensp; Should return `False` because that sub-grid already has the number 3.
+
+```python
+is_valid(board, 0, 2, 1)
+```
+
+&ensp; Should return `True` because neither row 0 nor column 2 have a 1.
+
+```{python}
+
+```
+
+## Step 3: Implement Backtracking
+
+Using the helper functions `find_empty_cell` and `is_valid`, create the main function `solve_sudoku`:
+
+Arguments:
+1. `board`: A 9x9 list representing the current state of the Sudoku board.
+
+The function should:
+1. Implement the backtracking algorithm to solve the Sudoku puzzle.
+2. Return `True` if a solution is found and `False` if no solution exists.
+3. Print the solution on screen.
+
+
+
+```{python}
+
+```
+
+If you need a step-by-step process, you can follow this guide!
+
+### 3.1: Base Case for Recursion
+The first thing to do when implementing the `solve_sudoku` function is to find an empty cell on the board using the `find_empty_cell` function. If there's no empty cell, it means the board is completely filled and you've successfully solved the puzzle, so you can return `True`.
+
+### 3.2: Recursive Case
+If you find an empty cell:
+
+1. Loop through numbers 1 to 9.
+2. For each number, use the `is_valid` function to check if the number can be placed in the empty cell without breaking the Sudoku rules.
+3. If the number is valid, place it in the cell.
+4. Now, recursively attempt to solve the rest of the board with this number in place by calling `solve_sudoku` again.
+5. If the recursive call to `solve_sudoku` returns `True`, it means the current number placement led to a solution and you can return `True`.
+6. If the recursive call to `solve_sudoku` returns `False`, it means the current number placement didn't lead to a solution, so you need to remove the number (backtrack) and try the next number.
+7. If none of the numbers lead to a solution, return `False` to backtrack to a previous empty cell.
+
+```{python}
+
+```
