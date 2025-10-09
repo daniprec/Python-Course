@@ -1,0 +1,386 @@
+---
+title: "Lesson 3: Basic Operations"
+---
+
+## Introduction
+
+In this lesson, you'll learn about the different types of operations you can perform in Python, including arithmetic, comparison, and logical operations.
+
+## Arithmetic Operations
+
+Python supports all standard mathematical operations:
+
+### Basic Arithmetic
+
+```{python}
+#| echo: true
+# Addition
+print(10 + 5)      # 15
+
+# Subtraction
+print(10 - 5)      # 5
+
+# Multiplication
+print(10 * 5)      # 50
+
+# Division (always returns float)
+print(10 / 5)      # 2.0
+print(7 / 2)       # 3.5
+
+# Floor division (returns integer)
+print(7 // 2)      # 3
+
+# Modulus (remainder)
+print(7 % 2)       # 1
+
+# Exponentiation (power)
+print(2 ** 3)      # 8
+```
+
+### Operator Precedence
+
+Python follows mathematical order of operations (PEMDAS):
+
+```{python}
+#| echo: true
+# Parentheses first
+result1 = (2 + 3) * 4
+print(result1)  # 20
+
+# Multiplication before addition
+result2 = 2 + 3 * 4
+print(result2)  # 14
+
+# Exponentiation before multiplication
+result3 = 2 * 3 ** 2
+print(result3)  # 18
+```
+
+::: {.callout-tip}
+## Order of Operations
+
+1. Parentheses `()`
+2. Exponentiation `**`
+3. Multiplication `*`, Division `/`, Floor Division `//`, Modulus `%`
+4. Addition `+`, Subtraction `-`
+:::
+
+### Compound Assignment Operators
+
+Shorthand for common operations:
+
+```{python}
+#| echo: true
+x = 10
+
+x += 5  # Same as: x = x + 5
+print(x)  # 15
+
+x -= 3  # Same as: x = x - 3
+print(x)  # 12
+
+x *= 2  # Same as: x = x * 2
+print(x)  # 24
+
+x /= 4  # Same as: x = x / 4
+print(x)  # 6.0
+```
+
+## Comparison Operations
+
+Comparison operators return `True` or `False`:
+
+```{python}
+#| echo: true
+# Equal to
+print(5 == 5)      # True
+print(5 == 3)      # False
+
+# Not equal to
+print(5 != 3)      # True
+print(5 != 5)      # False
+
+# Greater than
+print(5 > 3)       # True
+print(3 > 5)       # False
+
+# Less than
+print(3 < 5)       # True
+print(5 < 3)       # False
+
+# Greater than or equal to
+print(5 >= 5)      # True
+print(4 >= 5)      # False
+
+# Less than or equal to
+print(3 <= 5)      # True
+print(6 <= 5)      # False
+```
+
+::: {.callout-warning}
+## Common Mistake
+
+Don't confuse `=` (assignment) with `==` (comparison)!
+
+```python
+x = 5     # Assignment: x now equals 5
+x == 5    # Comparison: checks if x equals 5
+```
+:::
+
+## Logical Operations
+
+Logical operators combine boolean values:
+
+### AND, OR, NOT
+
+```{python}
+#| echo: true
+# AND: True only if both are True
+print(True and True)    # True
+print(True and False)   # False
+print(False and False)  # False
+
+# OR: True if at least one is True
+print(True or False)    # True
+print(False or False)   # False
+
+# NOT: Reverses the boolean value
+print(not True)         # False
+print(not False)        # True
+```
+
+### Combining Conditions
+
+```{python}
+#| echo: true
+age = 20
+has_license = True
+
+# Check multiple conditions
+can_drive = age >= 18 and has_license
+print(can_drive)  # True
+
+# More complex example
+temperature = 25
+is_sunny = True
+is_weekend = False
+
+good_beach_day = temperature > 20 and is_sunny and is_weekend
+print(good_beach_day)  # False
+```
+
+## String Operations
+
+### Concatenation
+
+Combine strings with `+`:
+
+```{python}
+#| echo: true
+first_name = "John"
+last_name = "Doe"
+full_name = first_name + " " + last_name
+print(full_name)  # John Doe
+```
+
+### Repetition
+
+Repeat strings with `*`:
+
+```{python}
+#| echo: true
+print("Hello! " * 3)  # Hello! Hello! Hello! 
+print("-" * 20)       # --------------------
+```
+
+### String Methods
+
+```{python}
+#| echo: true
+text = "Hello, Python!"
+
+print(text.upper())      # HELLO, PYTHON!
+print(text.lower())      # hello, python!
+print(text.replace("Python", "World"))  # Hello, World!
+print(len(text))         # 14
+```
+
+## Input and Output
+
+### Getting User Input
+
+```{python}
+#| echo: true
+#| eval: false
+# input() always returns a string
+name = input("What is your name? ")
+print("Hello, " + name + "!")
+
+# Convert input to number
+age = int(input("How old are you? "))
+print("You are", age, "years old")
+```
+
+### Formatted Output
+
+```{python}
+#| echo: true
+name = "Alice"
+age = 25
+height = 1.65
+
+# Using f-strings (recommended, Python 3.6+)
+print(f"{name} is {age} years old and {height}m tall")
+
+# Using format()
+print("{} is {} years old and {}m tall".format(name, age, height))
+
+# Using % formatting (older style)
+print("%s is %d years old and %.2fm tall" % (name, age, height))
+```
+
+## Exercises
+
+::: {.callout-note collapse="true"}
+## Exercise 1: Math Calculator
+
+Write a program that:
+1. Asks the user for two numbers
+2. Performs all arithmetic operations on them
+3. Displays the results
+
+Example output:
+```
+10 + 5 = 15
+10 - 5 = 5
+10 * 5 = 50
+...
+```
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 2: Temperature Converter
+
+Write a program that:
+1. Asks for a temperature in Celsius
+2. Converts it to Fahrenheit using: F = C × 9/5 + 32
+3. Displays the result
+
+Example: 20°C = 68°F
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 3: Even or Odd
+
+Write a program that:
+1. Asks for a number
+2. Uses the modulus operator to check if it's even or odd
+3. Prints the result
+
+Hint: A number is even if `number % 2 == 0`
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 4: Discount Calculator
+
+Write a program that:
+1. Asks for an original price
+2. Asks for a discount percentage
+3. Calculates and displays the final price
+
+Example: $100 with 20% discount = $80
+:::
+
+## Solutions
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 1
+
+```python
+# Get input
+num1 = float(input("Enter first number: "))
+num2 = float(input("Enter second number: "))
+
+# Perform operations
+print(f"{num1} + {num2} = {num1 + num2}")
+print(f"{num1} - {num2} = {num1 - num2}")
+print(f"{num1} * {num2} = {num1 * num2}")
+print(f"{num1} / {num2} = {num1 / num2}")
+print(f"{num1} // {num2} = {num1 // num2}")
+print(f"{num1} % {num2} = {num1 % num2}")
+print(f"{num1} ** {num2} = {num1 ** num2}")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 2
+
+```python
+# Get temperature in Celsius
+celsius = float(input("Enter temperature in Celsius: "))
+
+# Convert to Fahrenheit
+fahrenheit = celsius * 9/5 + 32
+
+# Display result
+print(f"{celsius}°C = {fahrenheit}°F")
+
+# More detailed version
+print(f"{celsius} degrees Celsius is equal to {fahrenheit:.1f} degrees Fahrenheit")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 3
+
+```python
+# Get number from user
+number = int(input("Enter a number: "))
+
+# Check if even or odd
+if number % 2 == 0:
+    print(f"{number} is even")
+else:
+    print(f"{number} is odd")
+
+# Alternative: using logical operators
+result = "even" if number % 2 == 0 else "odd"
+print(f"{number} is {result}")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 4
+
+```python
+# Get input
+original_price = float(input("Enter original price: $"))
+discount_percent = float(input("Enter discount percentage: "))
+
+# Calculate discount and final price
+discount_amount = original_price * (discount_percent / 100)
+final_price = original_price - discount_amount
+
+# Display results
+print(f"\nOriginal price: ${original_price:.2f}")
+print(f"Discount ({discount_percent}%): -${discount_amount:.2f}")
+print(f"Final price: ${final_price:.2f}")
+```
+:::
+
+## Summary
+
+In this lesson, you learned:
+
+- ✅ Arithmetic operations and operator precedence
+- ✅ Comparison operations for comparing values
+- ✅ Logical operations for combining conditions
+- ✅ String operations and methods
+- ✅ Getting user input and formatted output
+
+## Module 1 Complete! 🎉
+
+Congratulations! You've completed Module 1. You now have a solid foundation in Python basics.
+
+Continue to [Module 2: Data Structures](../module2/_index.qmd) to learn about lists, tuples, dictionaries, and more!

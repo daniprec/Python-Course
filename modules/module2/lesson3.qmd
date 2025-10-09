@@ -1,0 +1,412 @@
+---
+title: "Lesson 3: String Operations"
+---
+
+## Introduction
+
+Strings are one of the most commonly used data types in Python. This lesson covers advanced string manipulation techniques.
+
+## String Basics Review
+
+```{python}
+#| echo: true
+# Creating strings
+single = 'Hello'
+double = "World"
+multiline = """This is a
+multiline string"""
+
+# String concatenation
+greeting = single + " " + double
+print(greeting)  # Hello World
+```
+
+## String Indexing and Slicing
+
+Strings behave like lists of characters:
+
+```{python}
+#| echo: true
+text = "Python Programming"
+
+# Indexing
+print(text[0])   # P
+print(text[-1])  # g
+
+# Slicing
+print(text[0:6])    # Python
+print(text[7:])     # Programming
+print(text[:6])     # Python
+print(text[::2])    # Pto rgamn
+print(text[::-1])   # gnimmargorP nohtyP
+```
+
+## String Methods
+
+### Case Manipulation
+
+```{python}
+#| echo: true
+text = "Hello World"
+
+print(text.upper())      # HELLO WORLD
+print(text.lower())      # hello world
+print(text.title())      # Hello World
+print(text.capitalize()) # Hello world
+print(text.swapcase())   # hELLO wORLD
+```
+
+### Searching and Checking
+
+```{python}
+#| echo: true
+text = "Python is awesome"
+
+# Check if string starts/ends with
+print(text.startswith("Python"))  # True
+print(text.endswith("awesome"))   # True
+
+# Find position of substring
+print(text.find("is"))      # 7
+print(text.find("Java"))    # -1 (not found)
+
+# Count occurrences
+print(text.count("o"))      # 2
+
+# Check content type
+print("123".isdigit())      # True
+print("abc".isalpha())      # True
+print("abc123".isalnum())   # True
+```
+
+### Whitespace and Alignment
+
+```{python}
+#| echo: true
+text = "  Hello World  "
+
+# Remove whitespace
+print(text.strip())       # "Hello World"
+print(text.lstrip())      # "Hello World  "
+print(text.rstrip())      # "  Hello World"
+
+# Alignment
+print("Python".center(20, "-"))  # -------Python-------
+print("Python".ljust(20, "-"))   # Python--------------
+print("Python".rjust(20, "-"))   # --------------Python
+```
+
+### Splitting and Joining
+
+```{python}
+#| echo: true
+# Split string into list
+sentence = "Python is a great language"
+words = sentence.split()
+print(words)  # ['Python', 'is', 'a', 'great', 'language']
+
+# Split with custom separator
+csv_data = "apple,banana,cherry"
+fruits = csv_data.split(",")
+print(fruits)  # ['apple', 'banana', 'cherry']
+
+# Join list into string
+words = ["Python", "is", "awesome"]
+sentence = " ".join(words)
+print(sentence)  # Python is awesome
+
+# Join with different separator
+numbers = ["1", "2", "3", "4"]
+result = "-".join(numbers)
+print(result)  # 1-2-3-4
+```
+
+### Replacing
+
+```{python}
+#| echo: true
+text = "I love Java. Java is great."
+
+# Replace all occurrences
+new_text = text.replace("Java", "Python")
+print(new_text)  # I love Python. Python is great.
+
+# Replace limited occurrences
+new_text = text.replace("Java", "Python", 1)
+print(new_text)  # I love Python. Java is great.
+```
+
+## String Formatting
+
+### F-Strings (Recommended)
+
+```{python}
+#| echo: true
+name = "Alice"
+age = 25
+height = 1.65
+
+# Basic f-string
+print(f"My name is {name}")
+
+# Multiple variables
+print(f"{name} is {age} years old")
+
+# Expressions in f-strings
+print(f"Next year {name} will be {age + 1}")
+
+# Formatting numbers
+print(f"Height: {height:.2f}m")  # 2 decimal places
+print(f"Age: {age:03d}")         # Zero-padded to 3 digits
+```
+
+### Format Method
+
+```{python}
+#| echo: true
+# Basic format
+print("Hello, {}!".format("World"))
+
+# Multiple placeholders
+print("{} is {} years old".format("Bob", 30))
+
+# Named placeholders
+print("{name} is {age} years old".format(name="Charlie", age=35))
+
+# Formatting
+print("Pi: {:.3f}".format(3.14159))  # Pi: 3.142
+```
+
+### Old-Style Formatting
+
+```{python}
+#| echo: true
+# % formatting (older style)
+name = "David"
+age = 28
+print("My name is %s and I'm %d years old" % (name, age))
+```
+
+## Advanced String Techniques
+
+### String Multiplication
+
+```{python}
+#| echo: true
+print("=" * 50)
+print("*" * 10)
+print("Python! " * 3)  # Python! Python! Python! 
+```
+
+### Character Operations
+
+```{python}
+#| echo: true
+# Get ASCII value
+print(ord('A'))  # 65
+print(ord('a'))  # 97
+
+# Get character from ASCII
+print(chr(65))   # A
+print(chr(97))   # a
+```
+
+### Escape Characters
+
+```{python}
+#| echo: true
+# Common escape characters
+print("Line 1\nLine 2")        # Newline
+print("Column1\tColumn2")      # Tab
+print("He said \"Hello\"")     # Quote
+print("Path: C:\\Users\\Name") # Backslash
+
+# Raw strings (ignore escapes)
+print(r"C:\Users\Name")
+```
+
+## String Immutability
+
+Strings cannot be modified in place:
+
+```{python}
+#| echo: true
+#| eval: false
+text = "Hello"
+# text[0] = "h"  # ERROR! Strings are immutable
+
+# Instead, create a new string
+text = "h" + text[1:]
+print(text)  # hello
+```
+
+## Exercises
+
+::: {.callout-note collapse="true"}
+## Exercise 1: String Analyzer
+
+Write a program that takes a string and reports:
+1. Length of the string
+2. Number of uppercase letters
+3. Number of lowercase letters
+4. Number of digits
+5. Number of spaces
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 2: Name Formatter
+
+Create a program that:
+1. Takes a full name as input (first and last name)
+2. Formats it as: "LAST, First"
+3. Example: "john smith" → "SMITH, John"
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 3: Email Validator
+
+Write a function that checks if an email is valid. A simple check:
+1. Contains exactly one @ symbol
+2. Has characters before and after @
+3. The part after @ contains at least one dot
+4. Has characters after the last dot
+
+Example: "user@example.com" → Valid
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 4: Word Reverser
+
+Create a program that:
+1. Takes a sentence as input
+2. Reverses each word individually (not the whole sentence)
+3. Returns the modified sentence
+
+Example: "Hello World" → "olleH dlroW"
+:::
+
+## Solutions
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 1
+
+```python
+def analyze_string(text):
+    print(f"String: '{text}'")
+    print(f"Length: {len(text)}")
+    
+    uppercase = sum(1 for c in text if c.isupper())
+    lowercase = sum(1 for c in text if c.islower())
+    digits = sum(1 for c in text if c.isdigit())
+    spaces = text.count(" ")
+    
+    print(f"Uppercase letters: {uppercase}")
+    print(f"Lowercase letters: {lowercase}")
+    print(f"Digits: {digits}")
+    print(f"Spaces: {spaces}")
+
+# Test
+analyze_string("Hello World 123")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 2
+
+```python
+def format_name(full_name):
+    # Split into parts
+    parts = full_name.strip().split()
+    
+    if len(parts) != 2:
+        return "Please enter exactly first and last name"
+    
+    first_name = parts[0]
+    last_name = parts[1]
+    
+    # Format: LAST, First
+    formatted = f"{last_name.upper()}, {first_name.capitalize()}"
+    return formatted
+
+# Test
+print(format_name("john smith"))    # SMITH, John
+print(format_name("ALICE JONES"))   # JONES, Alice
+print(format_name("bob WILLIAMS"))  # WILLIAMS, Bob
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 3
+
+```python
+def is_valid_email(email):
+    # Check for exactly one @
+    if email.count("@") != 1:
+        return False
+    
+    # Split at @
+    parts = email.split("@")
+    local = parts[0]
+    domain = parts[1]
+    
+    # Check local part has content
+    if len(local) == 0:
+        return False
+    
+    # Check domain has at least one dot
+    if "." not in domain:
+        return False
+    
+    # Check there's content after the last dot
+    domain_parts = domain.split(".")
+    if len(domain_parts[-1]) == 0:
+        return False
+    
+    return True
+
+# Test
+print(is_valid_email("user@example.com"))     # True
+print(is_valid_email("invalid.email.com"))    # False
+print(is_valid_email("@example.com"))         # False
+print(is_valid_email("user@domain"))          # False
+print(is_valid_email("user@domain."))         # False
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 4
+
+```python
+def reverse_words(sentence):
+    # Split into words
+    words = sentence.split()
+    
+    # Reverse each word
+    reversed_words = [word[::-1] for word in words]
+    
+    # Join back together
+    result = " ".join(reversed_words)
+    return result
+
+# Test
+print(reverse_words("Hello World"))           # olleH dlroW
+print(reverse_words("Python Programming"))    # nohtyP gnimmargorP
+print(reverse_words("The quick brown fox"))   # ehT kciuq nworb xof
+```
+:::
+
+## Summary
+
+In this lesson, you learned:
+
+- ✅ String indexing and slicing
+- ✅ Essential string methods
+- ✅ String formatting with f-strings and format()
+- ✅ String immutability and workarounds
+- ✅ Advanced string manipulation techniques
+
+## Module 2 Complete! 🎉
+
+Congratulations! You've completed Module 2 and learned about Python's built-in data structures.
+
+Continue to [Module 3: Control Flow and Functions](../module3/_index.qmd) to learn about conditional statements, loops, and functions!

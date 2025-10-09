@@ -1,0 +1,391 @@
+---
+title: "Lesson 1: Conditional Statements"
+---
+
+## Introduction
+
+Conditional statements allow your program to make decisions and execute different code based on conditions. This is fundamental to writing intelligent programs.
+
+## The if Statement
+
+### Basic if Statement
+
+```{python}
+#| echo: true
+age = 18
+
+if age >= 18:
+    print("You are an adult")
+    print("You can vote")
+```
+
+::: {.callout-note}
+## Indentation Matters!
+
+Python uses indentation to define code blocks. All statements at the same indentation level belong to the same block.
+:::
+
+### if-else Statement
+
+```{python}
+#| echo: true
+temperature = 15
+
+if temperature > 20:
+    print("It's warm outside")
+else:
+    print("It's cool outside")
+```
+
+### if-elif-else Statement
+
+```{python}
+#| echo: true
+score = 85
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+elif score >= 60:
+    grade = "D"
+else:
+    grade = "F"
+
+print(f"Your grade is: {grade}")
+```
+
+## Comparison Operators
+
+```{python}
+#| echo: true
+x = 10
+y = 20
+
+print(f"{x} == {y}:", x == y)   # Equal
+print(f"{x} != {y}:", x != y)   # Not equal
+print(f"{x} < {y}:", x < y)     # Less than
+print(f"{x} > {y}:", x > y)     # Greater than
+print(f"{x} <= {y}:", x <= y)   # Less than or equal
+print(f"{x} >= {y}:", x >= y)   # Greater than or equal
+```
+
+## Logical Operators
+
+### and, or, not
+
+```{python}
+#| echo: true
+age = 25
+has_license = True
+
+# AND: both must be True
+if age >= 18 and has_license:
+    print("You can drive")
+
+# OR: at least one must be True
+is_weekend = False
+is_holiday = True
+
+if is_weekend or is_holiday:
+    print("No work today!")
+
+# NOT: reverses the boolean
+is_raining = False
+if not is_raining:
+    print("You don't need an umbrella")
+```
+
+### Combining Multiple Conditions
+
+```{python}
+#| echo: true
+age = 25
+income = 50000
+credit_score = 720
+
+# Complex condition
+if (age >= 21 and income >= 30000) or credit_score >= 700:
+    print("Loan approved")
+else:
+    print("Loan denied")
+```
+
+## Membership Operators
+
+Check if a value is in a sequence:
+
+```{python}
+#| echo: true
+fruits = ["apple", "banana", "cherry"]
+
+if "apple" in fruits:
+    print("We have apples!")
+
+if "orange" not in fruits:
+    print("We don't have oranges")
+
+# Works with strings too
+text = "Hello, World!"
+if "World" in text:
+    print("Found 'World' in text")
+```
+
+## Nested if Statements
+
+```{python}
+#| echo: true
+age = 25
+has_ticket = True
+
+if age >= 18:
+    if has_ticket:
+        print("Welcome to the concert!")
+    else:
+        print("You need a ticket")
+else:
+    print("Sorry, you must be 18 or older")
+```
+
+## Ternary Operator
+
+A concise way to write simple if-else statements:
+
+```{python}
+#| echo: true
+age = 20
+
+# Traditional if-else
+if age >= 18:
+    status = "adult"
+else:
+    status = "minor"
+
+# Ternary operator (one line)
+status = "adult" if age >= 18 else "minor"
+print(status)
+
+# More examples
+x = 10
+y = 20
+max_value = x if x > y else y
+print(f"Maximum: {max_value}")
+```
+
+## Truthy and Falsy Values
+
+In Python, some values are considered "falsy":
+
+```{python}
+#| echo: true
+# Falsy values
+if not 0:
+    print("0 is falsy")
+
+if not "":
+    print("Empty string is falsy")
+
+if not []:
+    print("Empty list is falsy")
+
+if not None:
+    print("None is falsy")
+
+# Truthy values (everything else)
+if 1:
+    print("Non-zero numbers are truthy")
+
+if "hello":
+    print("Non-empty strings are truthy")
+
+if [1, 2, 3]:
+    print("Non-empty lists are truthy")
+```
+
+## Match Statement (Python 3.10+)
+
+A modern alternative to multiple elif statements:
+
+```{python}
+#| echo: true
+#| eval: false
+def get_day_type(day):
+    match day:
+        case "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday":
+            return "Weekday"
+        case "Saturday" | "Sunday":
+            return "Weekend"
+        case _:
+            return "Invalid day"
+
+print(get_day_type("Monday"))    # Weekday
+print(get_day_type("Saturday"))  # Weekend
+```
+
+## Exercises
+
+::: {.callout-note collapse="true"}
+## Exercise 1: Grade Calculator
+
+Write a program that:
+1. Takes a numerical score (0-100) as input
+2. Converts it to a letter grade (A, B, C, D, F)
+3. Prints an encouraging message based on the grade
+
+Grading scale: A (90-100), B (80-89), C (70-79), D (60-69), F (0-59)
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 2: Leap Year Checker
+
+Write a program to determine if a year is a leap year. A year is a leap year if:
+- It's divisible by 4, AND
+- If it's divisible by 100, it must also be divisible by 400
+
+Examples: 2000 (leap), 2020 (leap), 1900 (not leap), 2024 (leap)
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 3: BMI Calculator
+
+Create a BMI calculator that:
+1. Takes weight (kg) and height (m) as input
+2. Calculates BMI = weight / (height²)
+3. Classifies the result:
+   - Underweight: BMI < 18.5
+   - Normal: 18.5 ≤ BMI < 25
+   - Overweight: 25 ≤ BMI < 30
+   - Obese: BMI ≥ 30
+:::
+
+::: {.callout-note collapse="true"}
+## Exercise 4: Password Validator
+
+Write a password validator that checks if a password is strong. A strong password:
+1. Is at least 8 characters long
+2. Contains at least one uppercase letter
+3. Contains at least one lowercase letter
+4. Contains at least one digit
+
+Print "Strong password" or "Weak password" with reasons.
+:::
+
+## Solutions
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 1
+
+```python
+score = int(input("Enter your score (0-100): "))
+
+if score >= 90:
+    grade = "A"
+    message = "Excellent work!"
+elif score >= 80:
+    grade = "B"
+    message = "Great job!"
+elif score >= 70:
+    grade = "C"
+    message = "Good effort!"
+elif score >= 60:
+    grade = "D"
+    message = "You passed, but consider studying more."
+else:
+    grade = "F"
+    message = "Don't give up! You can improve."
+
+print(f"Grade: {grade}")
+print(message)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 2
+
+```python
+year = int(input("Enter a year: "))
+
+if year % 4 == 0:
+    if year % 100 == 0:
+        if year % 400 == 0:
+            print(f"{year} is a leap year")
+        else:
+            print(f"{year} is not a leap year")
+    else:
+        print(f"{year} is a leap year")
+else:
+    print(f"{year} is not a leap year")
+
+# More concise version
+is_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+print(f"{year} is {'a' if is_leap else 'not a'} leap year")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 3
+
+```python
+weight = float(input("Enter your weight in kg: "))
+height = float(input("Enter your height in meters: "))
+
+bmi = weight / (height ** 2)
+
+print(f"Your BMI is: {bmi:.2f}")
+
+if bmi < 18.5:
+    category = "Underweight"
+elif bmi < 25:
+    category = "Normal weight"
+elif bmi < 30:
+    category = "Overweight"
+else:
+    category = "Obese"
+
+print(f"Category: {category}")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution to Exercise 4
+
+```python
+password = input("Enter a password to check: ")
+
+# Check all criteria
+is_long_enough = len(password) >= 8
+has_uppercase = any(c.isupper() for c in password)
+has_lowercase = any(c.islower() for c in password)
+has_digit = any(c.isdigit() for c in password)
+
+if is_long_enough and has_uppercase and has_lowercase and has_digit:
+    print("Strong password!")
+else:
+    print("Weak password. Issues:")
+    if not is_long_enough:
+        print("  - Password must be at least 8 characters long")
+    if not has_uppercase:
+        print("  - Password must contain at least one uppercase letter")
+    if not has_lowercase:
+        print("  - Password must contain at least one lowercase letter")
+    if not has_digit:
+        print("  - Password must contain at least one digit")
+```
+:::
+
+## Summary
+
+In this lesson, you learned:
+
+- ✅ How to write if, elif, and else statements
+- ✅ Comparison and logical operators
+- ✅ Membership operators (in, not in)
+- ✅ Nested conditionals
+- ✅ Ternary operators for concise conditions
+- ✅ Truthy and falsy values
+
+## Next Steps
+
+Continue to [Lesson 2: Loops](lesson2.qmd) to learn how to repeat code efficiently!
