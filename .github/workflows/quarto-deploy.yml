@@ -1,0 +1,33 @@
+name: Build and deploy Quarto site
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Ensure Quarto picks up the correct Python for notebook execution
+      QUARTO_JUPYTER_PYTHON: /usr/bin/python3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure system python pip and install jupyter for Quarto
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
+          /usr/bin/python3 -m pip install jupyter nbformat ipykernel
+
+      - name: Render Quarto site
+        run: |
+          quarto render
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
