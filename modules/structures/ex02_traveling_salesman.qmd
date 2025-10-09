@@ -1,0 +1,182 @@
+---
+title: "Ex02 Traveling Salesman"
+format: html
+---
+
+# Exercise: Travelling Salesman Problem
+
+The Traveling Salesman Problem (TSP) is a classic problem in computer science and combinatorial optimization. The problem can be described as follows:
+
+"Given a list of cities and the distances between each pair of cities, find the shortest possible route that visits each city exactly once and returns to the original city."
+
+<p align="center">
+<img src="https://s2.qwant.com/thumbr/474x306/7/1/5d1ecb339cd8fe4846619ecc9f413326c5c83f8927c8de3e3e3a6f8f40111f/OIP.zaWQLeX6mAP94OP7xZZO4QHaEy.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%2Fid%2FOIP.zaWQLeX6mAP94OP7xZZO4QHaEy%3Fpid%3DApi&q=0&b=1&p=0&a=0" width="600" height="auto" />
+</p>
+
+Implement a function to solve the TSP using a brute-force approach (which tries every possible permutation of cities). Though this is not efficient for a large number of cities, it's a good starting point for understanding the problem.
+
+```{python}
+# Example usage:
+# Each city is defined by a point in (x, y)
+cities = {
+    "A": (0, 0),
+    "B": (1, 5),
+    "C": (5, 2),
+    "D": (2, 3),
+    "E": (4, 4)
+}
+
+# An example route
+route = ("A", "B", "D", "C", "E")
+
+# The distance traveled here is:
+# A - B: 5.10
+# B - D: 2.24
+# D - C: 3.16
+# C - E: 2.24
+# E - A: 5.66 (Rember it goes back to the origin)
+# Meaning the total is 18.39
+```
+
+**Example usage:** Assuming your function is `find_shortest_route`, it should receive the dictionary of cities as input, and output the best route as a tuple.
+
+**Input:**
+```python
+route, dist = find_shortest_route(cities)
+print(route)
+print(f"Distance: {dist:2.f}")
+```
+
+**Output:**
+```output
+(A, B, D, E, C)
+Distance: 18.39
+```
+
+## Extra Help: Plot Function
+
+To provide a clearer visualization of the problem, I have defined the following plotting function for your convenience.
+
+You do not have to understand it yet, just know that calling the function with a dictionary of cities and a route will output a visualization for you. Hope this helps to understand the problem better!
+
+```{python}
+import matplotlib.pyplot as plt
+
+def plot_cities_route(cities: dict[str, tuple[float]], route: tuple[str]):
+    """
+    Plot the cities and the route taken.
+
+    Parameters
+    ----------
+    cities : dict
+        Dictionary where keys are city names and values are (x, y)
+        coordinates of the cities.
+    route : tuple
+        Tuple representing the order of cities visited.
+    """
+
+    # Extract city coordinates
+    x_coords = [cities[city][0] for city in route]
+    y_coords = [cities[city][1] for city in route]
+
+    # Close the route by adding the starting city to the end
+    x_coords.append(x_coords[0])
+    y_coords.append(y_coords[0])
+
+    # Plot the cities
+    plt.scatter(x_coords, y_coords, c='blue', marker='o', s=100, zorder=2)
+
+    # Label the cities
+    for city, coords in cities.items():
+        plt.text(coords[0], coords[1], city, fontsize=12, ha='right')
+
+    # Plot the route
+    plt.plot(x_coords, y_coords, c='grey', linestyle='-', linewidth=1, zorder=1)
+
+    # Display the plot
+    plt.title("TSP Route Visualization")
+    plt.grid(True)
+    plt.show()
+
+# You can call the function with the given dictionary and the route
+plot_cities_route(cities, route)
+```
+
+## Step 1
+
+Create a function named `compute_distance` that takes in two arguments:
+1. `city1`: A tuple representing the (x, y) coordinates of the first city.
+2. `city2`: A tuple representing the (x, y) coordinates of the second city.
+
+The function should:
+1. Compute the Euclidean distance between `city1` and `city2`.
+2. Return the calculated distance.
+
+```{python}
+
+```
+
+## Step 2
+
+Create a function named `route_distance` that takes in two arguments:
+1. `route`: A list or tuple representing the order of cities to be visited.
+2. `cities`: A dictionary where keys are city names and values are their (x, y) coordinates.
+
+The function should:
+1. Calculate the total distance for the given route by iterating through the `route`.
+2. Add the distance from the last city back to the starting city to complete the loop.
+3. Return the total distance of the route.
+
+⚠ Remember that the route is closed! Once the salesman gets to the end of it, they still have to return to the first point. For example, the route (A, B, C) would follow the path A - B - C - A.
+
+```{python}
+
+```
+
+## Step 3
+
+Create a function named `generate_permutations` that takes in one argument:
+1. `lst`: A list of items for which we want to generate all possible permutations.
+
+The function should:
+1. If the list is empty, return an empty list.
+2. Otherwise, generate and return all possible permutations of the list.
+
+```{python}
+
+```
+
+## Step 4
+
+Create a function named `find_shortest_route` that takes in one argument:
+1. `cities`: A dictionary where keys are city names and values are their (x, y) coordinates.
+
+The function should:
+1. Generate all possible routes using the `generate_permutations` function.
+2. Evaluate the total distance of each route using the `route_distance` function.
+3. Determine and return the route with the shortest distance and its associated distance.
+
+```{python}
+
+```
+
+---
+
+## Stretch Goals
+
+1. **Understanding Time Complexity:** Our current approach relies heavily on brute force with loops, which may not be the most efficient. To delve deeper into its inefficiency:
+   - Evaluate the solution's execution time for scenarios where the salesman visits 3, 4, 5, and 6 cities.
+   - Based on the results, can you infer a pattern in how the execution time scales with the addition of each city?
+
+2. **Accounting for Tolls:** It's not just about the distance anymore; tolls between cities add another layer of complexity for our salesman. Here's how the tolls work:
+   - Tolls are represented in a dictionary.
+   - If the journey between cities X and Y is 8 units and there's an "XY" toll of 2 units, then the overall cost for that route becomes 10 units.
+   - Importantly, tolls are reciprocal. So, an "XY" toll is applicable for both X to Y and Y to X travels.
+   
+   Your challenge? Design a new function that determines the optimal route, weighing in both distances and potential tolls.
+
+```{python}
+tolls = {"AB": 2,
+         "BD": 1,
+         "CE": 4}
+```

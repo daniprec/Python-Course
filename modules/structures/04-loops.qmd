@@ -1,0 +1,638 @@
+---
+title: "2 4 Structures Iterables"
+format: html
+---
+
+[Review previous sessions here!](https://drive.google.com/file/d/1pdfubE7_7a44_Mz7O3yK2PqXfD0S0rXH/view?usp=sharing)
+
+---
+
+# Data Structures: How to Iterate
+
+In many applications, we may need to **store, update, and organize information as we process it**. Whether we are simulating a physical system, analyzing a network, or solving a mathematical problem step by step.
+
+This notebook focuses on how to do exactly that using **Python data structures** such as lists and dictionaries. We will see:
+
+- How to **initialize** these structures and **update them inside loops**, especially in situations where the amount of data isn't known in advance.
+- How to use **list comprehensions** to build lists more efficiently and expressively.
+
+
+---
+
+## Looping Through Lists
+
+A for loop is commonly used to iterate over a list. **Lists are ordered**, so when we loop through them, elements will appear in that order.
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+for fruit in fruits:
+    print(fruit)
+```
+
+**Exercise.** Print the amount of letters in each element of `fruits`, using a message like "apple has 5 letters."
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+for fruit in fruits:
+    print(f"{fruit} has {len(fruit)} letters.")
+```
+
+As list are indexable, we can retrieve not only each element but also its associated index, using the generation funcion `enumerate()`.
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+for index, fruit in enumerate(fruits):
+  print(f"The fruit {fruit} is stored in index {index}")
+```
+
+## Looping Through Tuples
+
+Exactly the same as with lists, because tuples are both **ordered** and **indexable**.
+
+```{python}
+names = ("Adam", "María", "Pablo")
+
+for name in names:
+  print(f"Hello {name}!")
+```
+
+### Tuple Unpacking
+
+Sometimes, we want to assign multiple values from a collection to individual variables. Python allows this through a feature called **tuple unpacking**, or iterable unpacking.
+
+```{python}
+names = ("Adam", "María", "Pablo")
+n1, n2, n3 = names
+```
+
+The tuple syntax is optional.
+
+```{python}
+n1, n2, n3 = "Adam", "María", "Pablo"
+```
+
+Unpacking works with any iterable (e.g., lists, strings, ranges).
+
+```{python}
+list_of_numbers = [1, 2, 3, 4]
+w, x, y, z = list_of_numbers
+```
+
+If the number of elements doesn't match the number of variables, Python raises a ValueError.
+
+```{python}
+names = ("Adam", "María", "Pablo")
+n1, n2 = names
+```
+
+## Looping Through Sets
+
+We can loop through a set, but because **sets are not ordered**, there is no guarantee of which elements will appear first.
+
+```{python}
+primes = {13, 1, 2, 3, 5, 7}
+
+for number in primes:
+  print(number)
+```
+
+**Sets are not indexable**, and yet we can use `enumerate()`. This is because of how the function is buit inside Python: as we can loop through the set, Python assumes an index exists for each element (even though it is not true for a set!).
+
+```{python}
+primes = {13, 1, 2, 3, 5, 7}
+
+for index, prime in enumerate(primes):
+  print(f"The prime {prime} is in position {index}")
+```
+
+## Looping Through Dictionaries
+
+We can iterate over a dictionary in three different ways: we can loop through its keys, its values, or both.
+
+```{python}
+person = {
+    "name": "Kim Seok-jin",
+    "nickname": "Jin",
+    "age": 32,
+    "job": "singer"
+}
+
+# Loop through keys
+for key in person.keys():
+    print(key)
+```
+
+```{python}
+# Loop through values
+for key in person.values():
+    print(key)
+```
+
+`keys()` and `values()` return a single element in each step.
+
+Meanwhile, `items()` return a tuple of `(key, value)`.
+
+```{python}
+# Iterate over the dictionary's key–value pairs.
+# Option 1: Retrieve each item as a (key, value) tuple, then unpack it explicitly.
+for item in person.items():
+  key, value = item  # Unpack the tuple into key and value
+  print(key, "---", value)
+
+```
+
+```{python}
+# Iterate over the dictionary's key–value pairs.
+# Option 2: Unpack each (key, value) tuple directly in the loop header.
+for key, value in person.items():
+  print(key, "---", value)
+```
+
+---
+
+## Updating Lists Dynamically
+
+In the previous example, we created the list `fruits` manually, all in one line. But what if we want to build a list **whose elements aren't known in advance**?
+
+This is a common scenario: we often generate or collect values **dynamically**. Inside a loop, based on calculations, conditions, or user input. In these cases, we need to **initialize an empty list** and then update it step by step as we go.
+
+```python
+ls = []  # starts empty
+
+for loop:
+  ls.append(x)  # adds x at the end of the list
+```
+
+**Exercise.** Create a list called `powers` containing the first ten powers of 2, starting at $2^1$.
+
+```{python}
+# We first initialize an empty list
+powers = []
+
+# We create a for loop that goes from 0 to 10
+for n in range(1, 11):
+  # List are mutable. Thanks to that property,
+  # we can append new elements to them
+  powers.append(2**n)
+
+print(powers)
+```
+
+We can do the same using **while loops**.
+
+```{python}
+# We first initialize an empty list
+powers = []
+
+# We also initialize the power, which will change along the loop
+n = 1
+
+# We will increase the list one element at a time until we
+# reach the desired size
+while len(powers) < 10:
+  # List are mutable. Thanks to that property,
+  # we can append new elements to them
+  powers.append(2**n)
+  # Don't forget to update the power `n` too!
+  n = n + 1  # Alternative: n+= 1
+
+print(powers)
+```
+
+**Exercise.** Generate a list with the first 100 elements of the Fibonacci sequence.
+
+```{python}
+# We can initialize the list with the first two elements of the series
+fibonacci = [1, 1]
+
+# As we want to reach 100 elements, we can implement a while loop,
+# looking at the size of our sequence. The loop continues until we
+# reach the desired amount of elements
+while len(fibonacci) < 100:
+  # Any Fibonacci element is equal to the sum of the previous two
+  # How can we take the last two elements of our Fibonacci list?
+  # We can use negative indices: -1 is the last element,
+  # -2 is the second to last
+  new = fibonacci[-2] + fibonacci[-1]
+  # Finally, we append the new value into our sequence
+  # This means that, in the next iteration of this loop,
+  # the -1 index will take this "new" value (because it is now the last)
+  fibonacci.append(new)
+
+print(fibonacci)
+```
+
+**Exercise.** A diagonal matrix is a squared matrix full of zeros, except the diagonal, which are ones.
+
+$$
+\left(\begin{array}{cc}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{array}\right)
+$$
+
+Define a function that builds a diagonal matrix of any size, using lists.
+
+```{python}
+def diagonal_matrix(size: int) -> list[list]:
+  # Initialize the empty matrix
+  matrix = []
+  # Loop through each row
+  for position in range(size):
+    # Initialize the row full of zeros
+    row = [0] * size
+    # Place a one in the current position
+    row[position] = 1
+    # Add the row to our matrix
+    matrix.append(row)
+  return matrix
+
+diag = diagonal_matrix(4)
+print(diag)
+```
+
+⚠ Never update the same list you are iterating over in a for loop!
+
+```{python}
+numbers = [1, 2, 3]
+
+for n in numbers:
+    numbers.append(n + 1)
+```
+
+When you iterate over a list and modify it at the same time, especially by appending new items to it, you create a loop that may:
+
+- Run forever (infinite loop),
+- Or behave unpredictably, depending on how Python manages the iteration behind the scenes.
+
+In this case, the list numbers keeps growing:
+
+```output
+# Iteration 1: n = 1 > append(2) > numbers = [1, 2, 3, 2]
+# Iteration 2: n = 2 > append(3) > numbers = [1, 2, 3, 2, 3]
+# Iteration 3: n = 3 > append(4) > numbers = [1, 2, 3, 2, 3, 4]
+# Iteration 4: n = 2 > append(3)
+# ... and so on
+```
+
+You're chasing your own tail: every time you add a number, it becomes part of the next iteration!
+
+If you want to build a new list based on an existing one, always create a separate list:
+
+```{python}
+numbers = [1, 2, 3]
+new_numbers = []
+
+for n in numbers:
+    new_numbers.append(n + 1)
+```
+
+ ## Updating Tuples Dynamically?
+
+⚠ Updating lists dynamically is possible because **lists are mutable**. However, this is not possible with tuples, because they are immutable.
+
+## Updating Sets Dynamically
+
+It is possible to update a set dynamically, because sets are **mutable**. However, they are **not ordered**, which may limit the application of this kind of techniques.
+
+## Updating Dictionaries Dynamically
+
+Similar to lists, dictionaries are mutable and are often updated dynamically in computer programmes.
+
+**Exercise.** You've just finished grading an exam. To maintain student privacy, each student has been assigned a unique ID number, and the corresponding marks have been published online using these IDs.
+
+Now, you are given two dictionaries: one with student names and IDs, the other with IDs and marks. Write a Python program that creates a dictionary where each student's name is associated with their corresponding mark.
+
+```{python}
+dict_ids = {
+    "Allen": "789",
+    "Damian": "123",
+    "Ireena": "012",
+    "Ludmilla": "456",
+}
+
+dict_marks = {
+    "123": 45,
+    "456": 97,
+    "789": 64,
+    "012": 56,
+}
+```
+
+```{python}
+# Solution
+
+# We first initialize a new dictionary
+# We will store our solutions there
+dict_solution = {}
+
+# Loop trough the dictionary containing (names, ids)
+for name, id in dict_ids.items():
+  # We use the ID to access the dictionary with the marks
+  # And we store each mark with its associated name
+  dict_solution[name] = dict_marks[id]
+
+print(dict_solution)
+```
+
+---
+
+
+## List Comprehension
+
+Instead of building a list using a `for` loop and `append`, we can often write the same logic in a single line using a list comprehension.
+
+The structure of a list comprehension is:
+
+```python
+[<expression> for <element> in <list>]
+```
+
+Mathematically, this is analogous to: $\{ f(x) : x \in A \}$
+
+This builds a new list by evaluating `<expression>` for each `<element>` in the `<list>`.
+
+
+```{python}
+# Traditional way
+squares = []
+for x in range(10):
+    squares.append(x**2)
+print(squares)
+```
+
+```{python}
+# Same thing using list comprehension
+squares = [x**2 for x in range(10)]
+print(squares)
+```
+
+This is not only shorter but also more readable for simple transformations.
+
+**Exercise.** Use a list comprehension to create a list of the first ten even numbers.
+
+```{python}
+ls_even = [2*n for n in range(1, 11)]
+print(ls_even)
+```
+
+**Exercise.** Generate the list of the first ten values of the function $f(x) = (-1)^x · x^2$.
+
+
+```{python}
+# Using a list comprehension
+values = [(-1)**x * x**2 for x in range(1, 11)]
+print(values)
+```
+
+We can apply list comprehensions not just over ranges, but over any existing list. This is especially powerful when we want to **transform**, **filter**, or **extract** data from another list.
+
+**Exercise.** You have a list of raw measurements, named `data`. Apply a **linear transformation** to rescale them to the [0, 1] interval.
+
+```{python}
+data = [3.5, 7.2, 1.8, 5.0, 6.3]
+
+# Normalize the data using list comprehension
+min_val = min(data)
+max_val = max(data)
+
+normalized = [(x - min_val) / (max_val - min_val) for x in data]
+print(normalized)
+```
+
+List comprehensions don't just allow us to **transform** data. We can also **filter** it using conditions, just like in set-builder notation in math.
+
+The structure with a condition is:
+
+```python
+[<expression> for <element> in <list> if <condition>]
+```
+
+This is similar to $\{ f(x) : x \in A, x\ \text{satisfies some condition} \}$
+
+
+**Exercise.** Given a list of numbers, write a list comprehension to return the squares of all values above the mean.
+
+```{python}
+numbers = [1, 2, 3, 5, 6, 7]
+
+# We can estimate the mean using two build-in functions
+mean = sum(numbers) / len(numbers)
+
+# Apply list comprehension with conditions
+squares = [n**2 for n in numbers if n > mean]
+print(squares)
+```
+
+**Exercise.** Given a list of integers, create a new list that contains the squares of all the odd numbers.
+
+```{python}
+numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+
+odd_squared = [n**2 for n in numbers if n % 2 == 1]
+print(odd_squared)
+```
+
+---
+
+##Appendix: Split and join methods
+
+There is another **string** method called `split()`. The `split(<separator>, <num>)` method splits a string into a **list** os substrings, based on a separator:
+
+
+```{python}
+#Split a string
+string = "There are a lot of string methods"
+
+list_string = string.split(" ")
+print(list_string)
+```
+
+Here, we have used a blank space (" ") as a separator.
+
+We can also specify how many times we want to split the string with the argument `<num>`:
+
+```{python}
+list_string = string.split(" ", 2)
+print(list_string)
+```
+
+Once we have used it, we can manipulate the resulting list:
+
+```{python}
+#Program to get an acronym
+name = "north atlantic treaty organization"
+list_name = name.split(" ")
+acronym = " "
+for word in list_name:
+  acronym += word[0].upper()
+
+print(acronym)
+```
+
+It is also possible to perform the inverse operation, creating a string from the elements of a list using the `join` method:
+
+
+
+```python
+list_name = [element1, element2,..., elementN]
+
+string = "separator".join(list_name)
+```
+
+Where `<separator>` will be the string placed between each element.
+
+
+```{python}
+#Program to create a string from a list
+list_name = ["Hello", "my", "name", "is", "Wally"]
+
+greeting = " ".join(list_name)
+print(greeting)
+```
+
+The elements inside the list must be **strings** if we want to use the `join` mehtod.
+
+```{python}
+#Join method with nums
+num_list = [1, 2, 3, 4, 5]
+
+nums = ",".join(num_list)
+```
+
+We can use list comprehension together with `join` to transform the elements before joining.
+
+```{python}
+#Join method with comprehension
+
+nums = ",".join([str(num) for num in num_list])
+print(nums)
+```
+
+**Exercise:** Write a program that takes a list of lists, where the first element of each sublist is the name of an artist and the second is the number of plays on Spotify. The output should be a string that shows the artist's position in the listening top chart with the following format: : `{Position}. {Name}{(num plays)}`.
+
+```{python}
+#Program to create a listening top chart
+artists = [
+    ["Taylor Swift", 1250],
+    ["Bad Bunny", 980],
+    ["Drake", 1120],
+    ["The Weeknd", 890],
+    ["Central Cee", 650],
+    ["Rosalia", 1030],
+    ["Billie Eilish", 720],
+    ["JID", 540],
+    ["Qeuvedo", 25],
+    ["Kendrick Lamar", 800]
+]
+
+#First we sort the list depending on the number of plays
+artists.sort(key=lambda artist: artist[1], reverse = True)
+
+#Use enumerate and join to create the listening top chart
+listening_top_chart = "\n".join([f"{position}.{artist_info[0]}: ({artist_info[1]}M plays on Spotify)" for position, artist_info in enumerate(artists, 1)])
+
+print(listening_top_chart)
+```
+
+**Exercise:** Write a program that asks the user for a sentence and counts how many times each word is repeated. The program output should be a list of lists containing each word and the number of times it appears, sorted from the word with the highest number of occurrences to the lowest.
+
+```{python}
+#Program to sort a list of words depending on its ocurrences in a sentence
+sentence = input("Introduce a sentence: ").strip()
+
+#Clean the sentence removing special characters
+sentence = "".join([char.lower() for char in sentence if char.isalnum() or char.isspace()])
+
+#Create a list containing each word in sentence
+word_list = sentence.split(" ")
+
+#List to store each word and its ocurrences
+count_word_list = []
+#Count how many occurrences has each word
+while word_list:
+  word = word_list[0]
+  #Count how many ocurrences the word has
+  ocurrences = word_list.count(word)
+  #Add word and its occurrences to a new list
+  count_word_list.append([word, ocurrences])
+  #Delete the rest of occurences of that word in the sentence
+  word_list = [w for w in word_list if w != word]
+
+#Sort list
+count_word_list.sort(key=lambda item: item[1], reverse = True)
+
+print(count_word_list)
+
+```
+
+**Exercise:** You are a political speech analyst. You want to detect which words are most used by politicians. To do this, you create a Python function that takes sentences from two different politicians and detects which words are repeated in both, storing them in a list.
+
+```{python}
+#Program to detect repeated words in a political speech
+def detect_repeated_words(sentence1, sentence2):
+  #Remove special characters
+  clean_sentence1 = "".join([char for char in sentence1 if char.isalnum() or char.isspace()])
+  clean_sentence2 = "".join([char for char in sentence2 if char.isalnum() or char.isspace()])
+
+  #Create lists from sentences
+  sentence_list1 = clean_sentence1.split(" ")
+  sentence_list2 = clean_sentence2.split(" ")
+
+  #Convert lists to sets (Remove repeated words)
+  sentence_set1 = set(sentence_list1)
+  sentence_set2 = set(sentence_list2)
+
+  #Intersection between sets
+  repeated_words = sentence_set1 & sentence_set2
+
+  #Exclude general words
+  stopwords = {
+    "the", "a", "an", "and", "or", "but",
+    "is", "are", "was", "were", "be", "been", "being",
+    "to", "of", "for", "in", "on", "at", "by", "with",
+    "as", "that", "this", "these", "those",
+    "we", "you", "they", "he", "she", "it", "our", "their", "his", "her",
+    "from", "about", "into", "over", "after", "before",
+    "all", "any", "each", "every", "some", "no", "not"
+  }
+  repeated_words = list(repeated_words - stopwords)
+
+  return repeated_words
+
+sentence_1 = "Our nation must stand united for freedom, democracy, and the future of our people"
+sentence_2 = "We will defend the rights of our people, protect our democracy, and secure a future of freedom."
+print(detect_repeated_words(sentence_1, sentence_2))
+```
+
+**Exercise**: We can rewrite the program to count the occurrences of each word in a sentence using sets.
+
+```{python}
+#Program to count how many times each word appears in a sentence
+sentence = input("Introduce a sentence: ").lower()
+
+#Remove special characters
+clean_sentence = "".join([char for char in sentence if char.isalnum() or char.isspace()])
+
+#Create a list
+sentence_list = clean_sentence.split(" ")
+
+#Create a set removing duplicate words
+sentence_set = set(sentence_list)
+
+#Empty list to store occurrences of each word
+count_list = []
+#Iterate over set
+for word in sentence_set:
+  occurrences = sentence_list.count(word)
+  count_list.append([word, occurrences])
+
+#Sort count list
+count_list.sort(key=lambda item: item[1], reverse = True)
+
+print(count_list)
+```

@@ -1,0 +1,430 @@
+---
+title: "2 1 Structures List Tuples"
+format: html
+---
+
+# Data Structures: Lists
+
+Lists are a fundamental data structure in Python that allow you to store and manipulate collections of items. In this section, we will explore the basics of lists.
+
+## Creating Lists
+
+
+
+
+
+
+You can create a list in Python by enclosing a comma-separated sequence of items within square brackets.
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+print(fruits)
+```
+
+A list can contain **any** type of data. You can even mix different types.
+
+```{python}
+ls = ["one", 2, "three", 4]
+
+print(ls)
+```
+
+In fact, you can do **nested lists**: one list inside another. This is the basis to create matrices.
+
+```{python}
+nested_list = [
+    [1, 2, 3],  # Row 1
+    [4, 5, 6],  # Row 2
+    [7, 8, 9],  # Row 3
+    ]
+
+print(nested_list)
+```
+
+---
+
+## Properties of Lists
+
+### Ordered
+
+Lists in Python are ordered, which means that the elements in a list have a specific order, and this order is maintained. You can access elements in a list by their position or index within the list. The order of elements is significant because it allows you to perform operations on the elements in a specific sequence.
+
+Remember that Python uses zero-based indexing, which means that the first element has an index of 0, the second has an index of 1, and so on. You can access elements in a list by referring to their index.
+
+```{python}
+first_fruit = fruits[0]
+print(first_fruit)
+```
+
+```{python}
+second_fruit = fruits[1]
+print(second_fruit)
+```
+
+We can also slice lists, the same way we did with strings.
+
+```{python}
+fruits = ["apple", "banana", "cherry", "pineapple", "watermelon"]
+
+print(fruits[2:4])
+```
+
+To index and access an element inside a nested list:
+
+```{python}
+target_element = nested_list[1][2]  # Access the element at row 1, column 2.
+print(target_element)
+```
+
+### Mutable
+
+In Python, lists are mutable, which means that you can change their contents after they are created. This mutability allows you to add, remove, or modify elements within a list.
+
+```{python}
+fruits[0] = "orange"
+
+print(fruits)
+```
+
+Because lists are mutable, we can use **methods** to modify them. We will learn about these methods later!
+
+### Duplicate Elements
+
+Lists in Python can contain duplicate elements, which means that you can have the same value multiple times in a list. Duplicate elements can be useful in various situations, such as when you need to store multiple occurrences of the same data.
+
+```{python}
+numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+
+print(numbers)
+```
+
+---
+
+## Operations with Lists
+
+Lists are a type of *sequence* in Python, similar to strings. If you remember how operations work with strings, you'll find it easy to work with lists!
+
+We cannot sum an element to a list.
+
+```{python}
+ls_numbers = [1, 2, 3]
+ls_numbers = ls_numbers + 4
+
+print(ls_numbers)
+```
+
+But we can sum two lists. This will concatenate them.
+
+```{python}
+ls_numbers = [1, 2, 3]
+ls_numbers = ls_numbers + [4, 5, 6]
+
+print(ls_numbers)
+```
+
+What happens if we multiply a list by a number? The same that happens to strings: the list gets repeated.
+
+```{python}
+ls_numbers = [1, 2, 3]
+ls_numbers = ls_numbers * 3
+
+print(ls_numbers)
+```
+
+The function `len` will tell us the size of a list.
+
+```{python}
+fruits = ["apple", "banana", "cherry", "pineapple", "watermelon"]
+print(fruits)
+print(len(fruits))
+```
+
+If we are working with nested lists, `len` will give the size of the outter-most list.
+
+```{python}
+matrix = [
+    [1, 2, 3, 4, 5],
+    [6, 7, 8, 9, 0]
+]
+
+print(f"Length of `matrix`: {len(matrix)}")
+print(f"Length of the first row of `matrix`: {len(matrix[0])}")
+```
+
+---
+
+## Built-in List Methods
+
+
+
+In Python, when you use a list method, you don't need to assign the result to a new variable because list methods typically operate directly on the list itself (**in-place**). Here's why you don't need to assign the result to a variable:
+
+- **Mutability of Lists:** Lists in Python are mutable, which means you can modify them in place. When you call a list method, it modifies the original list directly.
+
+- **No Need for Reassignment:** Since list methods modify the original list, there's no need to reassign the modified list to a new variable. The changes are made to the list object that you called the method on.
+
+Python provides a variety of built-in methods to work with lists. Let's explore some of the most commonly used methods.
+
+The `append()` method adds an item to the end of the list.
+
+```{python}
+fruits = ["apple", "banana", "cherry", "pineapple", "watermelon"]
+
+fruits.append("grape")
+# We do not need to re-assign the variable (fruits = ...)
+# because the `append()` method modifies the list in place
+
+print(fruits)
+```
+
+The `extend()` method adds elements from another iterable to the end of the list.
+
+```{python}
+fruits = ["apple"]
+more_fruits = ["kiwi", "pear"]
+fruits.extend(more_fruits)
+# We do not need to re-assign the variable (fruits = ...)
+# because the `extend()` method modifies the list in place
+
+print(fruits)
+```
+
+The `insert()` method inserts an item at a specified position in the list.
+
+```{python}
+fruits.insert(1, "strawberry")
+# We do not need to re-assign the variable (fruits = ...)
+# because the `insert()` method modifies the list in place
+
+print(fruits)
+```
+
+The `remove()` method removes the first occurrence of a specific value from the list.
+
+```{python}
+fruits = ["apple", "pear", "banana", "pineapple", "cherry"]
+print(fruits)
+
+fruits.remove("banana")
+# We do not need to re-assign the variable (fruits = ...)
+# because the `remove()` method modifies the list in place
+print("After removing an element")
+print(fruits)
+```
+
+The `pop()` method removes and returns an item at a specified position.
+
+```{python}
+fruits = ["apple", "pear", "banana", "pineapple", "cherry"]
+
+removed_fruit = fruits.pop(3)
+# In this case, the `pop()` method removes the element
+# at the specified index (3) in place and returns the removed element
+
+print(removed_fruit)
+print(fruits)
+
+```
+
+The `index()` method finds the index of the first occurrence of a value.
+
+```{python}
+index = fruits.index("cherry")
+
+print(index)
+print(fruits[index])
+```
+
+The `count()` method counts the number of occurrences of a specific value.
+
+```{python}
+count = fruits.count("apple")
+
+print(count)
+```
+
+The `sort()` method sorts the list in ascending order.
+
+```{python}
+fruits.sort()
+# We do not need to re-assign the variable (fruits = ...)
+# because the `sort()` method modifies the list in place
+
+print(fruits)
+```
+
+The `key` parameter of the `sort()` method accepts any function to order the elements within a list. Even functions that we create **ourselves**!
+
+```{python}
+#Program to sort a list depending on the last character of each item
+def last_character(string):
+  return string[-1]
+
+string_list = ["Dog", "Cat", "Bird", "Horse"]
+
+string_list.sort(key = last_character)
+
+print(string_list)
+```
+
+**Exercise**: Sort the following list by the number of vowels that each item has (from smallest to largest).
+
+```{python}
+#Program to sort a list by the number of vowels of each item
+word_list = ["Pen", "Notebook", "Computer", "Eraser"]
+
+def vowels_in_word(word):
+  count = 0
+  for char in word:
+    if char.lower() in "aeiou":
+      count += 1
+  return count
+
+word_list.sort(key=lambda word: vowels_in_word(word))
+print(word_list)
+```
+
+**Exercise**: Modify the program above to add a second criterion. If two words have the same number of vowels, sort them by their length.
+
+```{python}
+#Program to sort a list by the number of vowels of each item and by their length
+# (from longest to shortest)
+word_list = ["Pen", "Notebook", "Computer", "Eraser"]
+
+def vowels_in_word(word):
+  count = 0
+  for char in word:
+    if char.lower() in "aeiou":
+      count += 1
+  return count
+
+def vowels_in_word_and_length(word):
+  # This function returns two outputs
+  return (vowels_in_word(word), len(word))
+
+word_list.sort(key=vowels_in_word_and_length, reverse = True)
+print(word_list)
+```
+
+The `reverse()` method reverses the order of items in the list.
+
+```{python}
+fruits.reverse()
+# We do not need to re-assign the variable (fruits = ...)
+# because the `reverse()` method modifies the list in place
+
+print(fruits)
+```
+
+The `clear()` method removes all items from the list.
+
+```{python}
+fruits.clear()
+# We do not need to re-assign the variable (fruits = ...)
+# because the `clear()` method modifies the list in place
+
+print(fruits)
+```
+
+---
+
+[Practice some exercises here!](https://drive.google.com/file/d/1uwHBMmKv1rfujqPTAoVojDHUcXLSD5pw/view?usp=sharing)
+
+---
+
+# Data Structures: Tuples
+
+Having understood lists, grasping the concept of tuples becomes straightforward. They function similarly, with only a few subtle distinctions.
+
+```{python}
+# A list uses []
+fruits = ["apple", "banana", "cherry"]
+print(f"This is a list: {fruits}")
+print(type(fruits))
+```
+
+```{python}
+# A tuple uses ()
+veggies = ("tomato", "carrot", "onion")
+print(f"This is a tuple: {veggies}")
+print(type(veggies))
+```
+
+Tuples are **ordered**, just like lists.
+
+```{python}
+# We can index tuples
+veg_second = veggies[1]
+print(f"The second element of the tuple is {veg_second}")
+```
+
+Tuples can contain duplicate elements too.
+
+```{python}
+numbers = ("one", "one", "two")
+
+print(numbers)
+```
+
+However, tuples are **not mutable**.
+
+```{python}
+veggies[1] = "potato"
+
+print(veggies)
+```
+
+Tuples, being immutable, lack many of the methods available for lists.
+
+So, why would we choose to use tuples?
+
+- **Safety:** Because tuples are immutable, they provide a level of data protection. You can be certain that the data won't be accidentally modified elsewhere in your program.
+
+- **Multiple Returns:** Functions in Python can return multiple values using tuples. This allows for returning more than one piece of information easily.
+
+**Exercise.** Define a function named `multiplication_and_division` that, given two numbers, returns both the multiplication and the division of them.
+
+```{python}
+def multiplication_and_division(x: float, y: float) -> tuple[float]:
+    """
+    This function performs the multiplication and division of two variables,
+    x and y.
+
+    Parameters
+    ----------
+    x : float
+        The first input value.
+    y : float
+        The second input value. Should not be zero to avoid division by zero.
+
+    Returns
+    -------
+    tuple[float]
+        A tuple containing two elements:
+        the result of multiplying x by y and the result of dividing x by y.
+    """
+
+    mul = x * y
+    div = x / y
+    return (mul, div)
+
+# Use the function and get the two outputs
+a, b = multiplication_and_division(10, 5)
+print(f"First result is {a}")
+print(f"Second result is {b}")
+```
+
+---
+
+[Practice some exercises here!](https://drive.google.com/file/d/1uwHBMmKv1rfujqPTAoVojDHUcXLSD5pw/view?usp=sharing)
+
+---
+
+## Summary
+
+| Data Structure | Ordered | Mutable | Duplication |
+|----------------|--------------------------|---------|----------------------|
+| List           | ✅                       | ✅     | ✅                  |
+| Tuple          | ✅                       | ❌     | ✅                  |
+

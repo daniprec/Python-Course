@@ -1,0 +1,291 @@
+---
+title: "Review Structures Math"
+format: html
+---
+
+# Calculus I: Checking Continuity
+
+Write a function named `is_continuous(f, c)` that checks if the function `f` is continuous at the point `c`. The function should return a boolean value.
+
+```{python}
+# Your code goes here
+```
+
+```{python}
+# Test your function with this example
+f = lambda x: x**2
+print(is_continuous(f, 1))  # Expected: True
+```
+
+```{python}
+# Test your function with this example
+f = lambda x: abs(x)
+print(is_continuous(f, 0))  # Expected: True
+```
+
+```{python}
+# Test your function with this example
+def f(x):
+  if x < 0:
+    return x - 1
+  else:
+    return x
+print(is_continuous(f, 0))  # Expected: False
+```
+
+<p align="center">
+<img src="https://preview.redd.it/different-ways-math-students-look-at-continuity-v0-mwo97pdpyw3a1.png?auto=webp&s=828f745146de3bac52aa1abc0792505588411f60" width="400" height="auto" />
+</p>
+
+```{python}
+# Solution
+
+def is_continuous(f: callable, c: float) -> bool:
+  """
+  This function checks if f(x) is continuous at f(c)
+
+  Parameters
+  ----------
+  f : callable
+    Function f(x), must have only one input parameter
+
+  c : float
+    Point where we check if f(x) is continuous
+
+  Returns
+  -------
+  bool
+    Continuous yes or no
+  """
+  # We will use the mathematical definition of continuity
+  epsilon = 10**-3
+  delta = 10**-5
+
+  f_left = f(c - delta)
+  f_right = f(c + delta)
+  f_diff = abs(f_left - f_right)
+
+  if f_diff < epsilon:
+    return True
+  else:
+    return False
+```
+
+## Stretch Goals
+
+**Custom Precision:** Enhance the `is_continuous` function by allowing the user to specify `epsilon` and `delta` through keyword arguments, following the formal definition:
+
+The function $f$ is said to be continuous at a point $c $ if for every $\epsilon > 0 $, there exists a $\delta > 0 $ such that for all $x $ in the domain of $f $ satisfying $0 < |x - c| < \delta $, we have $|f(x) - f(c)| < \epsilon $.
+
+```{python}
+
+```
+
+---
+
+# Discrete Math: Counting Ordered Subsets
+
+
+Define a function `ordered_subsets(<set>)` that, given any set of numbers, returns how many possible ordered subsets of 3 elements we can form with it.
+
+```{python}
+# Your code goes here
+```
+
+```{python}
+# Test your function with this example
+sample = {1, 2, 3, 4, 5}
+print(ordered_subsets(sample))  # Expected: 10
+```
+
+```{python}
+# Solution: Using the formula
+
+def factorial(num: int) -> int:
+  """Compute the factorial of a number"""
+  result = 1
+  for n in range(1, num + 1):
+    result *= n
+  return result
+
+def ordered_subsets(sample: set, size: int=3) -> int:
+  """Count the number of ordered subsets of size `size`
+  in the set `sample`"""
+  # We use the formula: n! / (n - r)! r!
+  # Where n is the size of the set
+  # and r is the size of the subsets
+  return int(factorial(len(sample))
+  / (factorial(len(sample) - size) * factorial(size)))
+
+```
+
+## Stretch Goals
+
+Add a keyword argument to the function, `show_subsets`, default to `False`. When the user sets the argument to `True`, the function will print all the possible subsets on screen.
+
+```{python}
+
+```
+
+---
+
+# Geometry: Projection Calculator
+
+Write a function `projection(<u>, <v>)` that finds the orthogonal projection of one vector `u` onto another vector `v`.
+
+```{python}
+# Your code goes here
+```
+
+```{python}
+# Test your function with this example
+u = [2, 2]
+v = [1, 0]
+print(projection(u, v))  # Expected: [2, 0]
+```
+
+```{python}
+# Test your function with this example
+u = [3, 1, 2]
+v = [1, 0, 1]
+print(projection(u, v))  # Expected: [2.5, 0, 2.5]
+```
+
+<p align="center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Projection_and_rejection.png" width="300" height="auto" />
+</p>
+
+---
+
+```{python}
+# Solution
+
+def dot_product(a: list, b: list) -> float:
+  # We can define the dot product as:
+  # a_1 * b_1 + a_2 * b_2 + ... + a_n * b_n
+  # Which means we can do it with a for loop
+  # Initialize the result as 0
+  result = 0
+  # Loop through the elements
+  for i in range(len(a)):
+    result += a[i] * b[i]
+
+  return result
+
+
+def projection(a: list[float], b: list[float]) -> list[float]:
+  # Ensure the two vectors have the same size
+  if len(a) != len(b):
+    print("Vectors have different lengths!")
+    return None
+
+  # Use the formula of projection
+  # a_b = ( (a . b) / (b . b) ) a
+  # We can express it as
+  # a_b = c a
+  # Where
+  # c = (a . b) / (b . b)
+  c = dot_product(a, b) / dot_product(b, b)
+
+  # Initialize the result as an empty list
+  ab = []
+  # Loop through the elements
+  for i in range(len(a)):
+    ab.append(c * b[i])
+
+  return ab
+```
+
+# Linear Algebra: Linear Dependancy
+
+Implement a function `is_independent(<list_vectors>)` that determines whether a list of vectors is linearly independent or dependent.
+
+```{python}
+# Your code goes here
+```
+
+```{python}
+# Test your function with this example
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [1, 1, 0]
+print(is_independent([v1, v2, v3]))  # Expected: False
+```
+
+```{python}
+# Test your function with this example
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [1, 0, 1]
+print(is_independent([v1, v2, v3]))  # Expected: True
+```
+
+```{python}
+# Solution
+
+def is_independent(matrix: list[list]) -> bool:
+  """Gauss-Jordan elimination method"""
+  n, m = len(matrix), len(matrix[0])
+
+  # Convert matrix to row echelon form
+  for i in range(n):
+    # Make the diagonal contain all non-zero elements
+    if matrix[i][i] == 0:
+      # This code will only happen when diagonal element "i" is zero
+      # Loop through the rows below "i"
+      for j in range(i+1, n):
+        if matrix[j][i] != 0:
+          # If the row "j" contains a non-zero in position "i"
+          # swap row "j" with row "i":
+          # that way the diagonal element "i" becomes non-zero
+          matrix[i], matrix[j] = matrix[j], matrix[i]
+          break
+
+      # Pivot: the element in the diagonal which we forced to be non-zero
+      pivot = matrix[i][i]
+
+      # Skip if the pivot is zero,
+      # as this indicates that the vectors are dependent
+      if pivot == 0:
+        return False
+
+      # Normalize the row "i" based on the pivot
+      for j in range(m):
+        # Normalize element "j" of row "i"
+        matrix[i][j] /= pivot
+
+      # Zero out the above and below entries of the pivot
+      for j in range(n):
+        if i != j:
+          factor = -matrix[j][i]
+          for k in range(m):
+            matrix[j][k] += factor * matrix[i][k]
+
+  # If no row of zeros, then vectors are independent
+  for row in matrix:
+    # Initialize the sum of the row
+    sum_row = 0
+    # Loop through the values of the row
+    for val in row:
+      # Add the absolute value
+      sum_row += abs(val)
+    # If all values were 0 then the result is 0
+    if sum_row == 0:
+      return False
+
+  return True
+```
+
+## Stretch Goals
+
+Make the function print on console which vectors are linearly independent between them, even if not all of them are.
+
+```{python}
+# Test your function with this example
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [2, 0, 0]
+output = is_independent([v1, v2, v3])
+# Expected: Vectors 1 and 2 are linearly independant
+print(output)  # Expected: False
+```
