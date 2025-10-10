@@ -19,6 +19,134 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      QUARTO_JUPYTER_PYTHON: /usr/bin/python3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.4.549
+
+      - name: Ensure system python pip and install jupyter for Quarto
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
+          /usr/bin/python3 -m pip install jupyter nbformat ipykernel
+
+      - name: Render Quarto website
+        run: quarto render
+        continue-on-error: true
+
+      - name: Debug: dump notebook cell metadata
+        if: always()
+        run: |
+          echo "Running notebook metadata dumper"
+          chmod +x ./.github/scripts/dump_nb_meta.py || true
+          /usr/bin/python3 ./.github/scripts/dump_nb_meta.py || true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+name: Publish Quarto Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      QUARTO_JUPYTER_PYTHON: /usr/bin/python3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.4.549
+
+      - name: Ensure system python pip and install jupyter for Quarto
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
+          /usr/bin/python3 -m pip install jupyter nbformat ipykernel
+
+      - name: Render Quarto website
+        run: quarto render
+        continue-on-error: true
+
+      - name: Debug: dump notebook cell metadata
+        if: always()
+        run: |
+          echo "Running notebook metadata dumper"
+          chmod +x ./.github/scripts/dump_nb_meta.py || true
+          /usr/bin/python3 ./.github/scripts/dump_nb_meta.py || true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+name: Publish Quarto Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
       # Ensure Quarto picks up the correct Python for notebook execution
       QUARTO_JUPYTER_PYTHON: /usr/bin/python3
     steps:
@@ -39,6 +167,79 @@ jobs:
 
       - name: Render Quarto website
         run: quarto render
+        continue-on-error: true
+
+      - name: Debug: dump notebook cell metadata
+        if: always()
+        run: |
+          echo "Running notebook metadata dumper"
+          chmod +x ./.github/scripts/dump_nb_meta.py || true
+          /usr/bin/python3 ./.github/scripts/dump_nb_meta.py || true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+name: Publish Quarto Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Ensure Quarto picks up the correct Python for notebook execution
+      QUARTO_JUPYTER_PYTHON: /usr/bin/python3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.4.549
+
+      - name: Ensure system python pip and install jupyter for Quarto
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
+          /usr/bin/python3 -m pip install jupyter nbformat ipykernel
+
+      - name: Render Quarto website
+        run: quarto render
+        continue-on-error: true
+
+      - name: Debug: dump notebook cell metadata
+        if: always()
+        run: |
+          echo "Running notebook metadata dumper"
+          chmod +x ./.github/scripts/dump_nb_meta.py || true
+          /usr/bin/python3 ./.github/scripts/dump_nb_meta.py || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
