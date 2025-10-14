@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Sync execute flags from .qmd into notebooks and stage any changed notebooks.
+set -euo pipefail
+
+echo "Running tools/sync_execute_flags.py (dry-run)..."
+if ! command -v python >/dev/null 2>&1; then
+  echo "ERROR: python not found in PATH. Skipping sync." >&2
+  exit 1
+fi
+
+python tools/sync_execute_flags.py --dir modules --apply
+
+# Stage any notebook files that changed
+changed=$(git ls-files -m -- '*.quarto_ipynb' '*.ipynb' || true)
+if [ -n "$changed" ]; then
+  echo "Staging updated notebooks:"
+  echo "$changed"
+  git add $changed
+fi
+
+exit 0
