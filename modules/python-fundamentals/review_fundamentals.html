@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computer Programming I (Python) - Review Fundamentals</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Computer Programming I (Python)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-modules" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Modules</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-modules">    
+        <li>
+    <a class="dropdown-item" href="../../modules/python-fundamentals/_index.qmd">
+ <span class="dropdown-text">Python fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../modules/structures/_index.qmd">
+ <span class="dropdown-text">Structures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../modules/numpy/_index.qmd">
+ <span class="dropdown-text">NumPy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../modules/ides/_index.qmd">
+ <span class="dropdown-text">IDEs &amp; Tools</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/daniprec/Python-Course"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Review Fundamentals</li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Module 1 — Python fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/_index.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/01-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01 — Variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/02-flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02 — Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/03-loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03 — Loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/04-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04 — Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/05-recursion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05 — Recursion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/06-python-scope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">06 — Scope</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Module 2 — Structures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/_index.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/01-list-tuples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01 — Lists &amp; Tuples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/02-sets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02 — Sets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/03-dictionaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03 — Dictionaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/04-loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04 — Iterables &amp; Loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/05-mutability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05 — Mutability</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Module 3 — NumPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/_index.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Module 4 — IDEs &amp; Tools</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/_index.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#before-we-begin" id="toc-before-we-begin" class="nav-link active" data-scroll-target="#before-we-begin">Before We Begin</a></li>
+  <li><a href="#review-of-session-1.1-variables" id="toc-review-of-session-1.1-variables" class="nav-link" data-scroll-target="#review-of-session-1.1-variables">Review of Session 1.1: Variables</a></li>
+  <li><a href="#review-of-session-1.2-flow-control" id="toc-review-of-session-1.2-flow-control" class="nav-link" data-scroll-target="#review-of-session-1.2-flow-control">Review of Session 1.2: Flow Control</a></li>
+  <li><a href="#review-of-session-1.3-loops" id="toc-review-of-session-1.3-loops" class="nav-link" data-scroll-target="#review-of-session-1.3-loops">Review of Session 1.3: Loops</a></li>
+  <li><a href="#review-of-session-1.4-functions" id="toc-review-of-session-1.4-functions" class="nav-link" data-scroll-target="#review-of-session-1.4-functions">Review of Session 1.4: Functions</a></li>
+  <li><a href="#review-of-session-1.6-python-scope" id="toc-review-of-session-1.6-python-scope" class="nav-link" data-scroll-target="#review-of-session-1.6-python-scope">Review of Session 1.6: Python Scope</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/python-fundamentals/review_fundamentals.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Review Fundamentals</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="before-we-begin" class="level2">
+<h2 class="anchored" data-anchor-id="before-we-begin">Before We Begin</h2>
+<p>This code is designed to test your intuition. Try to understand the code without running it first. I suggest clicking <strong>“Edit -&gt; Clear all outputs”</strong> in the menu bar at the top of your notebook before you begin. Afterward, you can run the code to check your understanding.</p>
+<p>The quiz will include similar exercises to the ones below (adding multiple-choice answers).</p>
+<hr>
+</section>
+<section id="review-of-session-1.1-variables" class="level1">
+<h1>Review of Session 1.1: Variables</h1>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="c71a7515" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span><span class="dv">2</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4
+4</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="3910fd74" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">"Pi is"</span>  <span class="st">"3.14"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pi is3.14</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> How would you print a message with a quote? For instance, print: <em>The cow says “Moooo”</em></p>
+<div id="9d5c7e51" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use single quotation marks</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The cow says 'Moooo'"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># It also works the other way around!</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'The cow says "Moooo"'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The cow says 'Moooo'
+The cow says "Moooo"</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Which ones <code>print</code> statement will fail? (May be more than one)</p>
+<div id="6e7944a8" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number 3.14 is close to pi"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># B)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number </span><span class="sc">{</span><span class="fl">3.1415.2</span><span class="er">f</span><span class="sc">}</span><span class="ss"> is close to pi"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># C)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number </span><span class="sc">{</span>number<span class="sc">:.2f}</span><span class="ss"> is close to pi"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># D)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number"</span>, number, <span class="st">" is close to pi"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># E)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number"</span> <span class="op">+</span> number <span class="op">+</span> <span class="st">"is close to pi"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># F)</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="st">"3.14"</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number"</span>, number, <span class="st">"is close to pi"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>SyntaxError: invalid decimal literal (2991825780.py, line 5)</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> What will be the output of the following code blocks?</p>
+<div id="8cab7fc0" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"dog"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="ss">f"I have a </span><span class="sc">{</span>pet<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>I have a dog</code></pre>
+</div>
+</div>
+<div id="e79294d3" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"dog"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="ss">f"I have a </span><span class="sc">{</span>pet<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"cat"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>I have a dog</code></pre>
+</div>
+</div>
+<div id="02efeded" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> x</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="review-of-session-1.2-flow-control" class="level1">
+<h1>Review of Session 1.2: Flow Control</h1>
+<p><strong>Exercise.</strong> Which of the following <code>if</code> statements will never happen?</p>
+<div id="5f0ed45d" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We have apples and bananas. We want to give at least one fruit to each friend.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Do we have enough fruits? Are the apples enough? Are the bananas?</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>apples <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>bananas <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>friends <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (apples <span class="op">+</span> bananas) <span class="op">&gt;=</span> friends:</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough fruits for our friends!"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> apples <span class="op">&gt;=</span> friends:</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough apples for our friends!"</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> bananas <span class="op">&gt;=</span> friends:</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough bananas for our friends!"</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We don't have enough fruit for our friends!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>We have enough fruits for our friends!</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> What is going to be the final value of <code>x</code>?</p>
+<div id="c538b05a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>condition <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">10</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> condition:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4.0</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="9f279659" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="st">"5"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> years <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"I am </span><span class="sc">{</span>years<span class="sc">}</span><span class="ss"> years old"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: '&gt;' not supported between instances of 'str' and 'int'</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div id="37c7c27d" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 2.2</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a code that checks if a number a is divisible by another b. The output</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># should be a message like “(a) is divisible by (b)”</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output: Yes</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># (a, b) are divisible if the remainder of a/b is 0</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a <span class="op">%</span> b <span class="op">=</span> <span class="dv">0</span>:</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> is divisible by </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='? (3301397529.py, line 10)</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="review-of-session-1.3-loops" class="level1">
+<h1>Review of Session 1.3: Loops</h1>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="6a21a796" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1
+2
+3</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="b2b4991d" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> b <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">3</span>):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1
+2</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="2597d396" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(c)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Next!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1
+3
+Next!</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="92ff61e7" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"chocolate"</span>]:</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(c)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"Next!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3
+Next!
+3
+Next!
+3
+Next!</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="6faf9d7f" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count the number of steps in the loop</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"chocolate"</span>]:</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Increase step count</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> n <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="op">!=</span> <span class="dv">1</span>:</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(d)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"Next!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Next!
+banana
+Next!
+chocolate
+Next!</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> How would you implement a <code>for</code> loop to simplify this piece of code? And a <code>while</code> loop?</p>
+<div id="4bab944e" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the sum of all positive numbers lower than 10</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">6</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">7</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">8</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">9</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>46</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> How would you implement a <code>for</code> loop to simplify this piece of code?</p>
+<div id="30fb6b06" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The multiplication table of 2 and 4</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Multiplication table of 2"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 1 = 2"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 2 = 4"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 3 = 6"</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"..."</span>)  <span class="co"># We keep going until 10</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 10 = 20"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Multiplication table of 4"</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 1 = 4"</span>)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 2 = 8"</span>)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 3 = 12"</span>)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"..."</span>)  <span class="co"># We keep going until 10</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 10 = 40"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Multiplication table of 2
+2 x 1 = 2
+2 x 2 = 4
+2 x 3 = 6
+...
+2 x 10 = 20
+Multiplication table of 4
+4 x 1 = 4
+4 x 2 = 8
+4 x 3 = 12
+...
+4 x 10 = 40</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> How would you implement a <code>for</code> loop to simplify this piece of code? And a <code>while</code> loop?</p>
+<div id="df6a93f4" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify this code with a for loop</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">3</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">4</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>120</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> How would you implement a <code>for</code> loop to simplify this piece of code? And a <code>while</code> loop?</p>
+<div id="fd5bf7b4" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify this code with a for loop</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>list_words <span class="op">=</span> [<span class="st">"Hello"</span>, <span class="st">"my"</span>, <span class="st">"name"</span>, <span class="st">"is"</span>, <span class="st">"Daniel"</span>]</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> list_words[<span class="dv">0</span>]</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">1</span>]</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">2</span>]</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">3</span>]</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">4</span>]</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sentence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello my name is Daniel</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div id="62f2ca24" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 3.3</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a Python program that finds and displays all the multiples of a given</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number within a specified range. The user inputs the number and the range,</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and the program lists the multiples. The output should be a string with all</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the terms separated by commas.</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output: "7, 14, 21, 28, 35, 42, 49"</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the output string</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through all numbers up to the limit</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If x is divisible by our number, add it to the output</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> x <span class="op">%</span> number <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    msg <span class="op">=</span> msg <span class="op">+</span> x <span class="op">+</span> <span class="st">", "</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: can only concatenate str (not "int") to str</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div id="b392d5a0" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 3.5</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a Python program that generates the Fibonacci sequence up to a specified</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number of terms. The input should be the number of terms we want to see in</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the sequence. The output should be a string with all the terms separated by</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co"># commas.</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Expected output: "0, 1, 1, 2, 3"</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the first Fibonacci term</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>fib_1 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the second Fibonacci term</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>fib_2 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the number of terms computed</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>nterms <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the string of terms</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">"0, 1"</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> nterms <span class="op">&lt;</span> num:</span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the next Fibonacci term</span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  fib_next <span class="op">=</span> fib_1 <span class="op">+</span> fib_2</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the term to the msg</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>  msg <span class="op">=</span> msg <span class="op">+</span> <span class="st">",  "</span> <span class="op">+</span> fib_next</span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Increment the number of terms</span></span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>  nterms <span class="op">=</span> <span class="op">+</span><span class="dv">1</span></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: can only concatenate str (not "int") to str</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="review-of-session-1.4-functions" class="level1">
+<h1>Review of Session 1.4: Functions</h1>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="44317c5f" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text<span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(text.upper() <span class="op">+</span> <span class="st">"!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Some variants:</p>
+<div id="9bbc92ab" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text: <span class="bu">str</span><span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(text.upper() <span class="op">+</span> <span class="st">"!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a5511d6f" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What if we use return?</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text<span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> text.upper() <span class="op">+</span> <span class="st">"!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6087c9e8" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># When using return, the function "yell()" outputs a string</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We can concatenate that string to another</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(yell() <span class="op">+</span> <span class="st">" CLASS!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>HELLO! CLASS!</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="ab8287f8" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> powers_of_number(n, limit<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit):</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">^</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>n<span class="op">**</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>powers_of_number(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2^1 = 2
+2^2 = 4
+2^3 = 8</code></pre>
+</div>
+</div>
+<div id="80dd4923" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> powers_of_number(n: <span class="bu">int</span>, limit: <span class="bu">int</span><span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit):</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">^</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>n<span class="op">**</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>powers_of_number(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2^1 = 2
+2^2 = 4
+2^3 = 8</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ask the user for a password until it gets it right</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"coconout"</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> user_input <span class="op">!=</span> password:</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Access granted!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Answer:</strong> We need to define the variable <code>user_input</code> before performing the comparison <code>user_input != password</code>.</p>
+<p>Fixed:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ask the user for a password until it gets it right</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"coconout"</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> user_input <span class="op">!=</span> password:</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Access granted!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This code computes the sum of the first N natural numbers</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a positive integer: "</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The sum of the first </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> natural numbers is..."</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> n <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>  result <span class="op">+=</span> n  <span class="co"># result = result + n</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>  n <span class="op">-=</span> <span class="dv">1</span>  <span class="co"># n = n - 1</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Answer:</strong> Same as before, we need to initialize the variable <code>result</code> before we start the while loop.</p>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div id="f6a0f663" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.6</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function rectangle_area(length, width) that calculates the area of</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># a rectangle based on its length and width.</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length, width):</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">len</span> <span class="op">*</span> width</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area(<span class="dv">10</span>, <span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: unsupported operand type(s) for *: 'builtin_function_or_method' and 'int'</code></pre>
+</div>
+</div>
+<div id="ab7c2718" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.6</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function rectangle_area(length, width) that calculates the area of</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co"># a rectangle based on its length and width.</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length, width):</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> length <span class="op">*</span> width</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>length <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>rectangle_area <span class="op">=</span> rectangle_area(length, width)</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>length_2 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>width_2 <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>rectangle_area_2 <span class="op">=</span> rectangle_area(length_2, width_2)</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>800</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'int' object is not callable</code></pre>
+</div>
+</div>
+<div id="c2c16d47" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<div id="8979a09d" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<p><strong>Answer:</strong> The name of the variable we are using is <code>length</code>, not <code>len</code>! In fact, <code>len</code> is reserved to be the name of a Python built-in function.</p>
+<div id="e0f61f94" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length: <span class="bu">float</span>, width: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">len</span> <span class="op">*</span> width</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area(<span class="dv">10</span>, <span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: unsupported operand type(s) for *: 'builtin_function_or_method' and 'int'</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Look at the following piece of code and explain why it fails.</p>
+<div id="9670d385" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.19</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function circle_area(radius, is_diameter=False) that calculates</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the area of a circle based on its radius.</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If the keyword argument is_diameter is input as True,</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="co"># then the function considers that radius is instead the diameter</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius, is_diameter <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute for radius</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<div id="457eac4b" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.19</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function circle_area(radius, is_diameter=False) that calculates</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the area of a circle based on its radius.</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If the keyword argument is_diameter is input as True,</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="co"># then the function considers that radius is instead the diameter</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius, is_diameter <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute for radius</span></span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<p><strong>Answer:</strong> The <code>return</code> statement will finish the function right at the start. The <code>if</code> clause will never happen because of that <code>return</code>. We need to include an <code>if</code> clause when <code>is_diameter</code> is <code>False</code>.</p>
+<div id="603f00c5" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius: <span class="bu">float</span>, is_diameter: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute for radius</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="review-of-session-1.6-python-scope" class="level1">
+<h1>Review of Session 1.6: Python Scope</h1>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="86a90d80" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> multiply(a, b):</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">*</span> b</span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(multiply(a, b))</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<div id="95e63830" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> multiply(c, d):</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c <span class="op">*</span> d</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(multiply(a, b))</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'str' object is not callable</code></pre>
+</div>
+</div>
+<p><strong>Exercise.</strong> Without running the code, what is going to be the output of this cell?</p>
+<div id="8e8b4855" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: 'int' object is not callable</code></pre>
+</div>
+</div>
+<p>To fix the <code>print()</code> function, you will need to re-start this Python session.</p>
+<hr>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb80" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Review Fundamentals"</span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Before We Begin</span></span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>This code is designed to test your intuition. Try to understand the code without running it first. I suggest clicking **"Edit -&gt; Clear all outputs"** in the menu bar at the top of your notebook before you begin. Afterward, you can run the code to check your understanding.</span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>The quiz will include similar exercises to the ones below (adding multiple-choice answers).</span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># Review of Session 1.1: Variables</span></span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-23"><a href="#cb80-23" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb80-24"><a href="#cb80-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb80-25"><a href="#cb80-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-26"><a href="#cb80-26" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span><span class="dv">2</span></span>
+<span id="cb80-27"><a href="#cb80-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span>
+<span id="cb80-28"><a href="#cb80-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-29"><a href="#cb80-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-30"><a href="#cb80-30" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-31"><a href="#cb80-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-34"><a href="#cb80-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-35"><a href="#cb80-35" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">"Pi is"</span>  <span class="st">"3.14"</span></span>
+<span id="cb80-36"><a href="#cb80-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span>
+<span id="cb80-37"><a href="#cb80-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-38"><a href="#cb80-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-39"><a href="#cb80-39" aria-hidden="true" tabindex="-1"></a>**Exercise.** How would you print a message with a quote? For instance, print: _The cow says "Moooo"_</span>
+<span id="cb80-40"><a href="#cb80-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-43"><a href="#cb80-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-44"><a href="#cb80-44" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use single quotation marks</span></span>
+<span id="cb80-45"><a href="#cb80-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The cow says 'Moooo'"</span>)</span>
+<span id="cb80-46"><a href="#cb80-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-47"><a href="#cb80-47" aria-hidden="true" tabindex="-1"></a><span class="co"># It also works the other way around!</span></span>
+<span id="cb80-48"><a href="#cb80-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'The cow says "Moooo"'</span>)</span>
+<span id="cb80-49"><a href="#cb80-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-50"><a href="#cb80-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-51"><a href="#cb80-51" aria-hidden="true" tabindex="-1"></a>**Exercise.** Which ones <span class="in">`print`</span> statement will fail? (May be more than one)</span>
+<span id="cb80-52"><a href="#cb80-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-55"><a href="#cb80-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-56"><a href="#cb80-56" aria-hidden="true" tabindex="-1"></a><span class="co"># A)</span></span>
+<span id="cb80-57"><a href="#cb80-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number 3.14 is close to pi"</span>)</span>
+<span id="cb80-58"><a href="#cb80-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-59"><a href="#cb80-59" aria-hidden="true" tabindex="-1"></a><span class="co"># B)</span></span>
+<span id="cb80-60"><a href="#cb80-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number </span><span class="sc">{</span><span class="fl">3.1415.2</span><span class="er">f</span><span class="sc">}</span><span class="ss"> is close to pi"</span>)</span>
+<span id="cb80-61"><a href="#cb80-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-62"><a href="#cb80-62" aria-hidden="true" tabindex="-1"></a><span class="co"># C)</span></span>
+<span id="cb80-63"><a href="#cb80-63" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb80-64"><a href="#cb80-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number </span><span class="sc">{</span>number<span class="sc">:.2f}</span><span class="ss"> is close to pi"</span>)</span>
+<span id="cb80-65"><a href="#cb80-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-66"><a href="#cb80-66" aria-hidden="true" tabindex="-1"></a><span class="co"># D)</span></span>
+<span id="cb80-67"><a href="#cb80-67" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb80-68"><a href="#cb80-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The number"</span>, number, <span class="st">" is close to pi"</span>)</span>
+<span id="cb80-69"><a href="#cb80-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-70"><a href="#cb80-70" aria-hidden="true" tabindex="-1"></a><span class="co"># E)</span></span>
+<span id="cb80-71"><a href="#cb80-71" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="fl">3.1415</span></span>
+<span id="cb80-72"><a href="#cb80-72" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number"</span> <span class="op">+</span> number <span class="op">+</span> <span class="st">"is close to pi"</span>)</span>
+<span id="cb80-73"><a href="#cb80-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-74"><a href="#cb80-74" aria-hidden="true" tabindex="-1"></a><span class="co"># F)</span></span>
+<span id="cb80-75"><a href="#cb80-75" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="st">"3.14"</span></span>
+<span id="cb80-76"><a href="#cb80-76" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The number"</span>, number, <span class="st">"is close to pi"</span>)</span>
+<span id="cb80-77"><a href="#cb80-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-78"><a href="#cb80-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-79"><a href="#cb80-79" aria-hidden="true" tabindex="-1"></a>**Exercise.** What will be the output of the following code blocks?</span>
+<span id="cb80-80"><a href="#cb80-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-83"><a href="#cb80-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-84"><a href="#cb80-84" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"dog"</span></span>
+<span id="cb80-85"><a href="#cb80-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-86"><a href="#cb80-86" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="ss">f"I have a </span><span class="sc">{</span>pet<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb80-87"><a href="#cb80-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-88"><a href="#cb80-88" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span>
+<span id="cb80-89"><a href="#cb80-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-90"><a href="#cb80-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-93"><a href="#cb80-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-94"><a href="#cb80-94" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"dog"</span></span>
+<span id="cb80-95"><a href="#cb80-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-96"><a href="#cb80-96" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="ss">f"I have a </span><span class="sc">{</span>pet<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb80-97"><a href="#cb80-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-98"><a href="#cb80-98" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> <span class="st">"cat"</span></span>
+<span id="cb80-99"><a href="#cb80-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-100"><a href="#cb80-100" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span>
+<span id="cb80-101"><a href="#cb80-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-102"><a href="#cb80-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-105"><a href="#cb80-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-106"><a href="#cb80-106" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb80-107"><a href="#cb80-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-108"><a href="#cb80-108" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> x</span>
+<span id="cb80-109"><a href="#cb80-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-110"><a href="#cb80-110" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb80-111"><a href="#cb80-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-112"><a href="#cb80-112" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x</span>
+<span id="cb80-113"><a href="#cb80-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-114"><a href="#cb80-114" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span>
+<span id="cb80-115"><a href="#cb80-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-116"><a href="#cb80-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-117"><a href="#cb80-117" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb80-118"><a href="#cb80-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-119"><a href="#cb80-119" aria-hidden="true" tabindex="-1"></a><span class="fu"># Review of Session 1.2: Flow Control</span></span>
+<span id="cb80-120"><a href="#cb80-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-121"><a href="#cb80-121" aria-hidden="true" tabindex="-1"></a>**Exercise.** Which of the following <span class="in">`if`</span> statements will never happen?</span>
+<span id="cb80-122"><a href="#cb80-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-125"><a href="#cb80-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-126"><a href="#cb80-126" aria-hidden="true" tabindex="-1"></a><span class="co"># We have apples and bananas. We want to give at least one fruit to each friend.</span></span>
+<span id="cb80-127"><a href="#cb80-127" aria-hidden="true" tabindex="-1"></a><span class="co"># Do we have enough fruits? Are the apples enough? Are the bananas?</span></span>
+<span id="cb80-128"><a href="#cb80-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-129"><a href="#cb80-129" aria-hidden="true" tabindex="-1"></a>apples <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb80-130"><a href="#cb80-130" aria-hidden="true" tabindex="-1"></a>bananas <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb80-131"><a href="#cb80-131" aria-hidden="true" tabindex="-1"></a>friends <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb80-132"><a href="#cb80-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-133"><a href="#cb80-133" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (apples <span class="op">+</span> bananas) <span class="op">&gt;=</span> friends:</span>
+<span id="cb80-134"><a href="#cb80-134" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough fruits for our friends!"</span>)</span>
+<span id="cb80-135"><a href="#cb80-135" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> apples <span class="op">&gt;=</span> friends:</span>
+<span id="cb80-136"><a href="#cb80-136" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough apples for our friends!"</span>)</span>
+<span id="cb80-137"><a href="#cb80-137" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> bananas <span class="op">&gt;=</span> friends:</span>
+<span id="cb80-138"><a href="#cb80-138" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We have enough bananas for our friends!"</span>)</span>
+<span id="cb80-139"><a href="#cb80-139" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb80-140"><a href="#cb80-140" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"We don't have enough fruit for our friends!"</span>)</span>
+<span id="cb80-141"><a href="#cb80-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-142"><a href="#cb80-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-143"><a href="#cb80-143" aria-hidden="true" tabindex="-1"></a>**Exercise.** What is going to be the final value of <span class="in">`x`</span>?</span>
+<span id="cb80-144"><a href="#cb80-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-147"><a href="#cb80-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-148"><a href="#cb80-148" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb80-149"><a href="#cb80-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-150"><a href="#cb80-150" aria-hidden="true" tabindex="-1"></a>condition <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">10</span></span>
+<span id="cb80-151"><a href="#cb80-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-152"><a href="#cb80-152" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> condition:</span>
+<span id="cb80-153"><a href="#cb80-153" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb80-154"><a href="#cb80-154" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb80-155"><a href="#cb80-155" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb80-156"><a href="#cb80-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-157"><a href="#cb80-157" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb80-158"><a href="#cb80-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-159"><a href="#cb80-159" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb80-160"><a href="#cb80-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-161"><a href="#cb80-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-162"><a href="#cb80-162" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-163"><a href="#cb80-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-166"><a href="#cb80-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-167"><a href="#cb80-167" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="st">"5"</span></span>
+<span id="cb80-168"><a href="#cb80-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-169"><a href="#cb80-169" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> years <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb80-170"><a href="#cb80-170" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"I am </span><span class="sc">{</span>years<span class="sc">}</span><span class="ss"> years old"</span>)</span>
+<span id="cb80-171"><a href="#cb80-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-172"><a href="#cb80-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-173"><a href="#cb80-173" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-174"><a href="#cb80-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-177"><a href="#cb80-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-178"><a href="#cb80-178" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 2.2</span></span>
+<span id="cb80-179"><a href="#cb80-179" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a code that checks if a number a is divisible by another b. The output</span></span>
+<span id="cb80-180"><a href="#cb80-180" aria-hidden="true" tabindex="-1"></a><span class="co"># should be a message like “(a) is divisible by (b)”</span></span>
+<span id="cb80-181"><a href="#cb80-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-182"><a href="#cb80-182" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb80-183"><a href="#cb80-183" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb80-184"><a href="#cb80-184" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output: Yes</span></span>
+<span id="cb80-185"><a href="#cb80-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-186"><a href="#cb80-186" aria-hidden="true" tabindex="-1"></a><span class="co"># (a, b) are divisible if the remainder of a/b is 0</span></span>
+<span id="cb80-187"><a href="#cb80-187" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a <span class="op">%</span> b <span class="op">=</span> <span class="dv">0</span>:</span>
+<span id="cb80-188"><a href="#cb80-188" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> is divisible by </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb80-189"><a href="#cb80-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-190"><a href="#cb80-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-191"><a href="#cb80-191" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb80-192"><a href="#cb80-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-193"><a href="#cb80-193" aria-hidden="true" tabindex="-1"></a><span class="fu"># Review of Session 1.3: Loops</span></span>
+<span id="cb80-194"><a href="#cb80-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-195"><a href="#cb80-195" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-196"><a href="#cb80-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-199"><a href="#cb80-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-200"><a href="#cb80-200" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]:</span>
+<span id="cb80-201"><a href="#cb80-201" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(a)</span>
+<span id="cb80-202"><a href="#cb80-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-203"><a href="#cb80-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-204"><a href="#cb80-204" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-205"><a href="#cb80-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-208"><a href="#cb80-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-209"><a href="#cb80-209" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> b <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">3</span>):</span>
+<span id="cb80-210"><a href="#cb80-210" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(b)</span>
+<span id="cb80-211"><a href="#cb80-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-212"><a href="#cb80-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-213"><a href="#cb80-213" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-214"><a href="#cb80-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-217"><a href="#cb80-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-218"><a href="#cb80-218" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>):</span>
+<span id="cb80-219"><a href="#cb80-219" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(c)</span>
+<span id="cb80-220"><a href="#cb80-220" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Next!"</span>)</span>
+<span id="cb80-221"><a href="#cb80-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-222"><a href="#cb80-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-223"><a href="#cb80-223" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-224"><a href="#cb80-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-227"><a href="#cb80-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-228"><a href="#cb80-228" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"chocolate"</span>]:</span>
+<span id="cb80-229"><a href="#cb80-229" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(c)</span>
+<span id="cb80-230"><a href="#cb80-230" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"Next!"</span>)</span>
+<span id="cb80-231"><a href="#cb80-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-232"><a href="#cb80-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-233"><a href="#cb80-233" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-234"><a href="#cb80-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-237"><a href="#cb80-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-238"><a href="#cb80-238" aria-hidden="true" tabindex="-1"></a><span class="co"># Count the number of steps in the loop</span></span>
+<span id="cb80-239"><a href="#cb80-239" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb80-240"><a href="#cb80-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-241"><a href="#cb80-241" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"chocolate"</span>]:</span>
+<span id="cb80-242"><a href="#cb80-242" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Increase step count</span></span>
+<span id="cb80-243"><a href="#cb80-243" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> n <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb80-244"><a href="#cb80-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-245"><a href="#cb80-245" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="op">!=</span> <span class="dv">1</span>:</span>
+<span id="cb80-246"><a href="#cb80-246" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(d)</span>
+<span id="cb80-247"><a href="#cb80-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-248"><a href="#cb80-248" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">"Next!"</span>)</span>
+<span id="cb80-249"><a href="#cb80-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-250"><a href="#cb80-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-251"><a href="#cb80-251" aria-hidden="true" tabindex="-1"></a>**Exercise.** How would you implement a <span class="in">`for`</span> loop to simplify this piece of code? And a <span class="in">`while`</span> loop?</span>
+<span id="cb80-252"><a href="#cb80-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-253"><a href="#cb80-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-256"><a href="#cb80-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-257"><a href="#cb80-257" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the sum of all positive numbers lower than 10</span></span>
+<span id="cb80-258"><a href="#cb80-258" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb80-259"><a href="#cb80-259" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb80-260"><a href="#cb80-260" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb80-261"><a href="#cb80-261" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb80-262"><a href="#cb80-262" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb80-263"><a href="#cb80-263" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb80-264"><a href="#cb80-264" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">6</span></span>
+<span id="cb80-265"><a href="#cb80-265" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">7</span></span>
+<span id="cb80-266"><a href="#cb80-266" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">8</span></span>
+<span id="cb80-267"><a href="#cb80-267" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">+</span> <span class="dv">9</span></span>
+<span id="cb80-268"><a href="#cb80-268" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
+<span id="cb80-269"><a href="#cb80-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-270"><a href="#cb80-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-271"><a href="#cb80-271" aria-hidden="true" tabindex="-1"></a>**Exercise.** How would you implement a <span class="in">`for`</span> loop to simplify this piece of code?</span>
+<span id="cb80-272"><a href="#cb80-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-275"><a href="#cb80-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-276"><a href="#cb80-276" aria-hidden="true" tabindex="-1"></a><span class="co"># The multiplication table of 2 and 4</span></span>
+<span id="cb80-277"><a href="#cb80-277" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Multiplication table of 2"</span>)</span>
+<span id="cb80-278"><a href="#cb80-278" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 1 = 2"</span>)</span>
+<span id="cb80-279"><a href="#cb80-279" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 2 = 4"</span>)</span>
+<span id="cb80-280"><a href="#cb80-280" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 3 = 6"</span>)</span>
+<span id="cb80-281"><a href="#cb80-281" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"..."</span>)  <span class="co"># We keep going until 10</span></span>
+<span id="cb80-282"><a href="#cb80-282" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2 x 10 = 20"</span>)</span>
+<span id="cb80-283"><a href="#cb80-283" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Multiplication table of 4"</span>)</span>
+<span id="cb80-284"><a href="#cb80-284" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 1 = 4"</span>)</span>
+<span id="cb80-285"><a href="#cb80-285" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 2 = 8"</span>)</span>
+<span id="cb80-286"><a href="#cb80-286" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 3 = 12"</span>)</span>
+<span id="cb80-287"><a href="#cb80-287" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"..."</span>)  <span class="co"># We keep going until 10</span></span>
+<span id="cb80-288"><a href="#cb80-288" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"4 x 10 = 40"</span>)</span>
+<span id="cb80-289"><a href="#cb80-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-290"><a href="#cb80-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-291"><a href="#cb80-291" aria-hidden="true" tabindex="-1"></a>**Exercise.** How would you implement a <span class="in">`for`</span> loop to simplify this piece of code? And a <span class="in">`while`</span> loop?</span>
+<span id="cb80-292"><a href="#cb80-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-293"><a href="#cb80-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-296"><a href="#cb80-296" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-297"><a href="#cb80-297" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify this code with a for loop</span></span>
+<span id="cb80-298"><a href="#cb80-298" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb80-299"><a href="#cb80-299" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb80-300"><a href="#cb80-300" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">3</span></span>
+<span id="cb80-301"><a href="#cb80-301" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">4</span></span>
+<span id="cb80-302"><a href="#cb80-302" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> result <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb80-303"><a href="#cb80-303" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
+<span id="cb80-304"><a href="#cb80-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-305"><a href="#cb80-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-306"><a href="#cb80-306" aria-hidden="true" tabindex="-1"></a>**Exercise.** How would you implement a <span class="in">`for`</span> loop to simplify this piece of code? And a <span class="in">`while`</span> loop?</span>
+<span id="cb80-307"><a href="#cb80-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-308"><a href="#cb80-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-311"><a href="#cb80-311" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-312"><a href="#cb80-312" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify this code with a for loop</span></span>
+<span id="cb80-313"><a href="#cb80-313" aria-hidden="true" tabindex="-1"></a>list_words <span class="op">=</span> [<span class="st">"Hello"</span>, <span class="st">"my"</span>, <span class="st">"name"</span>, <span class="st">"is"</span>, <span class="st">"Daniel"</span>]</span>
+<span id="cb80-314"><a href="#cb80-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-315"><a href="#cb80-315" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> list_words[<span class="dv">0</span>]</span>
+<span id="cb80-316"><a href="#cb80-316" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">1</span>]</span>
+<span id="cb80-317"><a href="#cb80-317" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">2</span>]</span>
+<span id="cb80-318"><a href="#cb80-318" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">3</span>]</span>
+<span id="cb80-319"><a href="#cb80-319" aria-hidden="true" tabindex="-1"></a>sentence <span class="op">=</span> sentence <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> list_words[<span class="dv">4</span>]</span>
+<span id="cb80-320"><a href="#cb80-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-321"><a href="#cb80-321" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sentence)</span>
+<span id="cb80-322"><a href="#cb80-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-323"><a href="#cb80-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-324"><a href="#cb80-324" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-325"><a href="#cb80-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-328"><a href="#cb80-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-329"><a href="#cb80-329" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 3.3</span></span>
+<span id="cb80-330"><a href="#cb80-330" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a Python program that finds and displays all the multiples of a given</span></span>
+<span id="cb80-331"><a href="#cb80-331" aria-hidden="true" tabindex="-1"></a><span class="co"># number within a specified range. The user inputs the number and the range,</span></span>
+<span id="cb80-332"><a href="#cb80-332" aria-hidden="true" tabindex="-1"></a><span class="co"># and the program lists the multiples. The output should be a string with all</span></span>
+<span id="cb80-333"><a href="#cb80-333" aria-hidden="true" tabindex="-1"></a><span class="co"># the terms separated by commas.</span></span>
+<span id="cb80-334"><a href="#cb80-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-335"><a href="#cb80-335" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb80-336"><a href="#cb80-336" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb80-337"><a href="#cb80-337" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output: "7, 14, 21, 28, 35, 42, 49"</span></span>
+<span id="cb80-338"><a href="#cb80-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-339"><a href="#cb80-339" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the output string</span></span>
+<span id="cb80-340"><a href="#cb80-340" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb80-341"><a href="#cb80-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-342"><a href="#cb80-342" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through all numbers up to the limit</span></span>
+<span id="cb80-343"><a href="#cb80-343" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb80-344"><a href="#cb80-344" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If x is divisible by our number, add it to the output</span></span>
+<span id="cb80-345"><a href="#cb80-345" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> x <span class="op">%</span> number <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb80-346"><a href="#cb80-346" aria-hidden="true" tabindex="-1"></a>    msg <span class="op">=</span> msg <span class="op">+</span> x <span class="op">+</span> <span class="st">", "</span></span>
+<span id="cb80-347"><a href="#cb80-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-348"><a href="#cb80-348" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span>
+<span id="cb80-349"><a href="#cb80-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-350"><a href="#cb80-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-351"><a href="#cb80-351" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-352"><a href="#cb80-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-355"><a href="#cb80-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-356"><a href="#cb80-356" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 3.5</span></span>
+<span id="cb80-357"><a href="#cb80-357" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a Python program that generates the Fibonacci sequence up to a specified</span></span>
+<span id="cb80-358"><a href="#cb80-358" aria-hidden="true" tabindex="-1"></a><span class="co"># number of terms. The input should be the number of terms we want to see in</span></span>
+<span id="cb80-359"><a href="#cb80-359" aria-hidden="true" tabindex="-1"></a><span class="co"># the sequence. The output should be a string with all the terms separated by</span></span>
+<span id="cb80-360"><a href="#cb80-360" aria-hidden="true" tabindex="-1"></a><span class="co"># commas.</span></span>
+<span id="cb80-361"><a href="#cb80-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-362"><a href="#cb80-362" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Expected output: "0, 1, 1, 2, 3"</span></span>
+<span id="cb80-363"><a href="#cb80-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-364"><a href="#cb80-364" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the first Fibonacci term</span></span>
+<span id="cb80-365"><a href="#cb80-365" aria-hidden="true" tabindex="-1"></a>fib_1 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb80-366"><a href="#cb80-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-367"><a href="#cb80-367" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the second Fibonacci term</span></span>
+<span id="cb80-368"><a href="#cb80-368" aria-hidden="true" tabindex="-1"></a>fib_2 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb80-369"><a href="#cb80-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-370"><a href="#cb80-370" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the number of terms computed</span></span>
+<span id="cb80-371"><a href="#cb80-371" aria-hidden="true" tabindex="-1"></a>nterms <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb80-372"><a href="#cb80-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-373"><a href="#cb80-373" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the string of terms</span></span>
+<span id="cb80-374"><a href="#cb80-374" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> <span class="st">"0, 1"</span></span>
+<span id="cb80-375"><a href="#cb80-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-376"><a href="#cb80-376" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> nterms <span class="op">&lt;</span> num:</span>
+<span id="cb80-377"><a href="#cb80-377" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the next Fibonacci term</span></span>
+<span id="cb80-378"><a href="#cb80-378" aria-hidden="true" tabindex="-1"></a>  fib_next <span class="op">=</span> fib_1 <span class="op">+</span> fib_2</span>
+<span id="cb80-379"><a href="#cb80-379" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the term to the msg</span></span>
+<span id="cb80-380"><a href="#cb80-380" aria-hidden="true" tabindex="-1"></a>  msg <span class="op">=</span> msg <span class="op">+</span> <span class="st">",  "</span> <span class="op">+</span> fib_next</span>
+<span id="cb80-381"><a href="#cb80-381" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Increment the number of terms</span></span>
+<span id="cb80-382"><a href="#cb80-382" aria-hidden="true" tabindex="-1"></a>  nterms <span class="op">=</span> <span class="op">+</span><span class="dv">1</span></span>
+<span id="cb80-383"><a href="#cb80-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-384"><a href="#cb80-384" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg)</span>
+<span id="cb80-385"><a href="#cb80-385" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-386"><a href="#cb80-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-387"><a href="#cb80-387" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb80-388"><a href="#cb80-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-389"><a href="#cb80-389" aria-hidden="true" tabindex="-1"></a><span class="fu"># Review of Session 1.4: Functions</span></span>
+<span id="cb80-390"><a href="#cb80-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-391"><a href="#cb80-391" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-392"><a href="#cb80-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-395"><a href="#cb80-395" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-396"><a href="#cb80-396" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text<span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb80-397"><a href="#cb80-397" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(text.upper() <span class="op">+</span> <span class="st">"!"</span>)</span>
+<span id="cb80-398"><a href="#cb80-398" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-399"><a href="#cb80-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-400"><a href="#cb80-400" aria-hidden="true" tabindex="-1"></a>Some variants:</span>
+<span id="cb80-401"><a href="#cb80-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-404"><a href="#cb80-404" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-405"><a href="#cb80-405" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb80-406"><a href="#cb80-406" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text: <span class="bu">str</span><span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb80-407"><a href="#cb80-407" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(text.upper() <span class="op">+</span> <span class="st">"!"</span>)</span>
+<span id="cb80-408"><a href="#cb80-408" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-409"><a href="#cb80-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-412"><a href="#cb80-412" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-413"><a href="#cb80-413" aria-hidden="true" tabindex="-1"></a><span class="co"># What if we use return?</span></span>
+<span id="cb80-414"><a href="#cb80-414" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> yell(text<span class="op">=</span><span class="st">"hello"</span>):</span>
+<span id="cb80-415"><a href="#cb80-415" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> text.upper() <span class="op">+</span> <span class="st">"!"</span></span>
+<span id="cb80-416"><a href="#cb80-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-417"><a href="#cb80-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-420"><a href="#cb80-420" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-421"><a href="#cb80-421" aria-hidden="true" tabindex="-1"></a><span class="co"># When using return, the function "yell()" outputs a string</span></span>
+<span id="cb80-422"><a href="#cb80-422" aria-hidden="true" tabindex="-1"></a><span class="co"># We can concatenate that string to another</span></span>
+<span id="cb80-423"><a href="#cb80-423" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(yell() <span class="op">+</span> <span class="st">" CLASS!"</span>)</span>
+<span id="cb80-424"><a href="#cb80-424" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-425"><a href="#cb80-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-426"><a href="#cb80-426" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-427"><a href="#cb80-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-430"><a href="#cb80-430" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-431"><a href="#cb80-431" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> powers_of_number(n, limit<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb80-432"><a href="#cb80-432" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit):</span>
+<span id="cb80-433"><a href="#cb80-433" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">^</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>n<span class="op">**</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb80-434"><a href="#cb80-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-435"><a href="#cb80-435" aria-hidden="true" tabindex="-1"></a>powers_of_number(<span class="dv">2</span>)</span>
+<span id="cb80-436"><a href="#cb80-436" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-437"><a href="#cb80-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-440"><a href="#cb80-440" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-441"><a href="#cb80-441" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb80-442"><a href="#cb80-442" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> powers_of_number(n: <span class="bu">int</span>, limit: <span class="bu">int</span><span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb80-443"><a href="#cb80-443" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, limit):</span>
+<span id="cb80-444"><a href="#cb80-444" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">^</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>n<span class="op">**</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb80-445"><a href="#cb80-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-446"><a href="#cb80-446" aria-hidden="true" tabindex="-1"></a>powers_of_number(<span class="dv">2</span>)</span>
+<span id="cb80-447"><a href="#cb80-447" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-448"><a href="#cb80-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-449"><a href="#cb80-449" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-450"><a href="#cb80-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-451"><a href="#cb80-451" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb80-452"><a href="#cb80-452" aria-hidden="true" tabindex="-1"></a><span class="co"># Ask the user for a password until it gets it right</span></span>
+<span id="cb80-453"><a href="#cb80-453" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"coconout"</span></span>
+<span id="cb80-454"><a href="#cb80-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-455"><a href="#cb80-455" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> user_input <span class="op">!=</span> password:</span>
+<span id="cb80-456"><a href="#cb80-456" aria-hidden="true" tabindex="-1"></a>  user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb80-457"><a href="#cb80-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-458"><a href="#cb80-458" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Access granted!"</span>)</span>
+<span id="cb80-459"><a href="#cb80-459" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-460"><a href="#cb80-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-461"><a href="#cb80-461" aria-hidden="true" tabindex="-1"></a>**Answer:** We need to define the variable <span class="in">`user_input`</span> before performing the comparison <span class="in">`user_input != password`</span>.</span>
+<span id="cb80-462"><a href="#cb80-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-463"><a href="#cb80-463" aria-hidden="true" tabindex="-1"></a>Fixed:</span>
+<span id="cb80-464"><a href="#cb80-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-465"><a href="#cb80-465" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb80-466"><a href="#cb80-466" aria-hidden="true" tabindex="-1"></a><span class="co"># Ask the user for a password until it gets it right</span></span>
+<span id="cb80-467"><a href="#cb80-467" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"coconout"</span></span>
+<span id="cb80-468"><a href="#cb80-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-469"><a href="#cb80-469" aria-hidden="true" tabindex="-1"></a>user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb80-470"><a href="#cb80-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-471"><a href="#cb80-471" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> user_input <span class="op">!=</span> password:</span>
+<span id="cb80-472"><a href="#cb80-472" aria-hidden="true" tabindex="-1"></a>  user_input <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a password: "</span>)</span>
+<span id="cb80-473"><a href="#cb80-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-474"><a href="#cb80-474" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Access granted!"</span>)</span>
+<span id="cb80-475"><a href="#cb80-475" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-476"><a href="#cb80-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-477"><a href="#cb80-477" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-478"><a href="#cb80-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-479"><a href="#cb80-479" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb80-480"><a href="#cb80-480" aria-hidden="true" tabindex="-1"></a><span class="co"># This code computes the sum of the first N natural numbers</span></span>
+<span id="cb80-481"><a href="#cb80-481" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Enter a positive integer: "</span>)</span>
+<span id="cb80-482"><a href="#cb80-482" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The sum of the first </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> natural numbers is..."</span>)</span>
+<span id="cb80-483"><a href="#cb80-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-484"><a href="#cb80-484" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> n <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb80-485"><a href="#cb80-485" aria-hidden="true" tabindex="-1"></a>  result <span class="op">+=</span> n  <span class="co"># result = result + n</span></span>
+<span id="cb80-486"><a href="#cb80-486" aria-hidden="true" tabindex="-1"></a>  n <span class="op">-=</span> <span class="dv">1</span>  <span class="co"># n = n - 1</span></span>
+<span id="cb80-487"><a href="#cb80-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-488"><a href="#cb80-488" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
+<span id="cb80-489"><a href="#cb80-489" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-490"><a href="#cb80-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-491"><a href="#cb80-491" aria-hidden="true" tabindex="-1"></a>**Answer:** Same as before, we need to initialize the variable <span class="in">`result`</span> before we start the while loop.</span>
+<span id="cb80-492"><a href="#cb80-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-493"><a href="#cb80-493" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-494"><a href="#cb80-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-497"><a href="#cb80-497" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-498"><a href="#cb80-498" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.6</span></span>
+<span id="cb80-499"><a href="#cb80-499" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function rectangle_area(length, width) that calculates the area of</span></span>
+<span id="cb80-500"><a href="#cb80-500" aria-hidden="true" tabindex="-1"></a><span class="co"># a rectangle based on its length and width.</span></span>
+<span id="cb80-501"><a href="#cb80-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-502"><a href="#cb80-502" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length, width):</span>
+<span id="cb80-503"><a href="#cb80-503" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">len</span> <span class="op">*</span> width</span>
+<span id="cb80-504"><a href="#cb80-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-505"><a href="#cb80-505" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area(<span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb80-506"><a href="#cb80-506" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-507"><a href="#cb80-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-510"><a href="#cb80-510" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-511"><a href="#cb80-511" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.6</span></span>
+<span id="cb80-512"><a href="#cb80-512" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function rectangle_area(length, width) that calculates the area of</span></span>
+<span id="cb80-513"><a href="#cb80-513" aria-hidden="true" tabindex="-1"></a><span class="co"># a rectangle based on its length and width.</span></span>
+<span id="cb80-514"><a href="#cb80-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-515"><a href="#cb80-515" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length, width):</span>
+<span id="cb80-516"><a href="#cb80-516" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> length <span class="op">*</span> width</span>
+<span id="cb80-517"><a href="#cb80-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-518"><a href="#cb80-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-519"><a href="#cb80-519" aria-hidden="true" tabindex="-1"></a>length <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb80-520"><a href="#cb80-520" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb80-521"><a href="#cb80-521" aria-hidden="true" tabindex="-1"></a>rectangle_area <span class="op">=</span> rectangle_area(length, width)</span>
+<span id="cb80-522"><a href="#cb80-522" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area)</span>
+<span id="cb80-523"><a href="#cb80-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-524"><a href="#cb80-524" aria-hidden="true" tabindex="-1"></a>length_2 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb80-525"><a href="#cb80-525" aria-hidden="true" tabindex="-1"></a>width_2 <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb80-526"><a href="#cb80-526" aria-hidden="true" tabindex="-1"></a>rectangle_area_2 <span class="op">=</span> rectangle_area(length_2, width_2)</span>
+<span id="cb80-527"><a href="#cb80-527" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area_2)</span>
+<span id="cb80-528"><a href="#cb80-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-529"><a href="#cb80-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-532"><a href="#cb80-532" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-533"><a href="#cb80-533" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb80-534"><a href="#cb80-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-535"><a href="#cb80-535" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>)</span>
+<span id="cb80-536"><a href="#cb80-536" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-537"><a href="#cb80-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-540"><a href="#cb80-540" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-541"><a href="#cb80-541" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">8</span>)</span>
+<span id="cb80-542"><a href="#cb80-542" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-543"><a href="#cb80-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-544"><a href="#cb80-544" aria-hidden="true" tabindex="-1"></a>**Answer:** The name of the variable we are using is <span class="in">`length`</span>, not <span class="in">`len`</span>! In fact, <span class="in">`len`</span> is reserved to be the name of a Python built-in function.</span>
+<span id="cb80-545"><a href="#cb80-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-548"><a href="#cb80-548" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-549"><a href="#cb80-549" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb80-550"><a href="#cb80-550" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rectangle_area(length: <span class="bu">float</span>, width: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb80-551"><a href="#cb80-551" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">len</span> <span class="op">*</span> width</span>
+<span id="cb80-552"><a href="#cb80-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-553"><a href="#cb80-553" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rectangle_area(<span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb80-554"><a href="#cb80-554" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-555"><a href="#cb80-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-556"><a href="#cb80-556" aria-hidden="true" tabindex="-1"></a>**Exercise.** Look at the following piece of code and explain why it fails.</span>
+<span id="cb80-557"><a href="#cb80-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-560"><a href="#cb80-560" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-561"><a href="#cb80-561" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.19</span></span>
+<span id="cb80-562"><a href="#cb80-562" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function circle_area(radius, is_diameter=False) that calculates</span></span>
+<span id="cb80-563"><a href="#cb80-563" aria-hidden="true" tabindex="-1"></a><span class="co"># the area of a circle based on its radius.</span></span>
+<span id="cb80-564"><a href="#cb80-564" aria-hidden="true" tabindex="-1"></a><span class="co"># If the keyword argument is_diameter is input as True,</span></span>
+<span id="cb80-565"><a href="#cb80-565" aria-hidden="true" tabindex="-1"></a><span class="co"># then the function considers that radius is instead the diameter</span></span>
+<span id="cb80-566"><a href="#cb80-566" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-567"><a href="#cb80-567" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius, is_diameter <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb80-568"><a href="#cb80-568" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute for radius</span></span>
+<span id="cb80-569"><a href="#cb80-569" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-570"><a href="#cb80-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-571"><a href="#cb80-571" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb80-572"><a href="#cb80-572" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb80-573"><a href="#cb80-573" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb80-574"><a href="#cb80-574" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-575"><a href="#cb80-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-576"><a href="#cb80-576" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-577"><a href="#cb80-577" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb80-578"><a href="#cb80-578" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span>
+<span id="cb80-579"><a href="#cb80-579" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-580"><a href="#cb80-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-583"><a href="#cb80-583" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-584"><a href="#cb80-584" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercise 4.19</span></span>
+<span id="cb80-585"><a href="#cb80-585" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function circle_area(radius, is_diameter=False) that calculates</span></span>
+<span id="cb80-586"><a href="#cb80-586" aria-hidden="true" tabindex="-1"></a><span class="co"># the area of a circle based on its radius.</span></span>
+<span id="cb80-587"><a href="#cb80-587" aria-hidden="true" tabindex="-1"></a><span class="co"># If the keyword argument is_diameter is input as True,</span></span>
+<span id="cb80-588"><a href="#cb80-588" aria-hidden="true" tabindex="-1"></a><span class="co"># then the function considers that radius is instead the diameter</span></span>
+<span id="cb80-589"><a href="#cb80-589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-590"><a href="#cb80-590" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius, is_diameter <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb80-591"><a href="#cb80-591" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb80-592"><a href="#cb80-592" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb80-593"><a href="#cb80-593" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb80-594"><a href="#cb80-594" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-595"><a href="#cb80-595" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb80-596"><a href="#cb80-596" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute for radius</span></span>
+<span id="cb80-597"><a href="#cb80-597" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-598"><a href="#cb80-598" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-599"><a href="#cb80-599" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb80-600"><a href="#cb80-600" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span>
+<span id="cb80-601"><a href="#cb80-601" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-602"><a href="#cb80-602" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-603"><a href="#cb80-603" aria-hidden="true" tabindex="-1"></a>**Answer:** The <span class="in">`return`</span> statement will finish the function right at the start. The <span class="in">`if`</span> clause will never happen because of that <span class="in">`return`</span>. We need to include an <span class="in">`if`</span> clause when <span class="in">`is_diameter`</span> is <span class="in">`False`</span>.</span>
+<span id="cb80-604"><a href="#cb80-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-607"><a href="#cb80-607" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-608"><a href="#cb80-608" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as above, with type hints</span></span>
+<span id="cb80-609"><a href="#cb80-609" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> circle_area(radius: <span class="bu">float</span>, is_diameter: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb80-610"><a href="#cb80-610" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute for radius</span></span>
+<span id="cb80-611"><a href="#cb80-611" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-612"><a href="#cb80-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-613"><a href="#cb80-613" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Correction for diameter</span></span>
+<span id="cb80-614"><a href="#cb80-614" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> is_diameter:</span>
+<span id="cb80-615"><a href="#cb80-615" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> radius <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb80-616"><a href="#cb80-616" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">3.1415</span> <span class="op">*</span> radius<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb80-617"><a href="#cb80-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-618"><a href="#cb80-618" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-619"><a href="#cb80-619" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>))  <span class="co"># Expected output: 314.15</span></span>
+<span id="cb80-620"><a href="#cb80-620" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(circle_area(<span class="dv">10</span>, is_diameter<span class="op">=</span><span class="va">True</span>))  <span class="co"># Expected output: 78.54</span></span>
+<span id="cb80-621"><a href="#cb80-621" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-622"><a href="#cb80-622" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-623"><a href="#cb80-623" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb80-624"><a href="#cb80-624" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-625"><a href="#cb80-625" aria-hidden="true" tabindex="-1"></a><span class="fu"># Review of Session 1.6: Python Scope</span></span>
+<span id="cb80-626"><a href="#cb80-626" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-627"><a href="#cb80-627" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-628"><a href="#cb80-628" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-631"><a href="#cb80-631" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-632"><a href="#cb80-632" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb80-633"><a href="#cb80-633" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb80-634"><a href="#cb80-634" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb80-635"><a href="#cb80-635" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-636"><a href="#cb80-636" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> multiply(a, b):</span>
+<span id="cb80-637"><a href="#cb80-637" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">*</span> b</span>
+<span id="cb80-638"><a href="#cb80-638" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-639"><a href="#cb80-639" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(multiply(a, b))</span>
+<span id="cb80-640"><a href="#cb80-640" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-641"><a href="#cb80-641" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
+<span id="cb80-642"><a href="#cb80-642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-643"><a href="#cb80-643" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb80-644"><a href="#cb80-644" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-645"><a href="#cb80-645" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-648"><a href="#cb80-648" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-649"><a href="#cb80-649" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb80-650"><a href="#cb80-650" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb80-651"><a href="#cb80-651" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb80-652"><a href="#cb80-652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-653"><a href="#cb80-653" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> multiply(c, d):</span>
+<span id="cb80-654"><a href="#cb80-654" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c <span class="op">*</span> d</span>
+<span id="cb80-655"><a href="#cb80-655" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-656"><a href="#cb80-656" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(multiply(a, b))</span>
+<span id="cb80-657"><a href="#cb80-657" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-658"><a href="#cb80-658" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
+<span id="cb80-659"><a href="#cb80-659" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-660"><a href="#cb80-660" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb80-661"><a href="#cb80-661" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-662"><a href="#cb80-662" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-663"><a href="#cb80-663" aria-hidden="true" tabindex="-1"></a>**Exercise.** Without running the code, what is going to be the output of this cell?</span>
+<span id="cb80-664"><a href="#cb80-664" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-667"><a href="#cb80-667" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb80-668"><a href="#cb80-668" aria-hidden="true" tabindex="-1"></a><span class="co"># What will be the output of this cell?</span></span>
+<span id="cb80-669"><a href="#cb80-669" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb80-670"><a href="#cb80-670" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>)</span>
+<span id="cb80-671"><a href="#cb80-671" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-672"><a href="#cb80-672" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-673"><a href="#cb80-673" aria-hidden="true" tabindex="-1"></a>To fix the <span class="in">`print()`</span> function, you will need to re-start this Python session.</span>
+<span id="cb80-674"><a href="#cb80-674" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-675"><a href="#cb80-675" aria-hidden="true" tabindex="-1"></a>---</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/python-fundamentals/review_fundamentals.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/daniprec/Python-Course">
+      <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
