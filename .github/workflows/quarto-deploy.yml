@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch: {}
+permissions:
+  contents: write
+  pages: write
 
 jobs:
   build-and-deploy:
@@ -11,6 +14,11 @@ jobs:
     env:
       # Ensure Quarto picks up the correct Python for notebook execution
       QUARTO_JUPYTER_PYTHON: /usr/bin/python3
+      # Note: this workflow uses the automatically provided GITHUB_TOKEN to push
+      # to the `gh-pages` branch. If your repo has branch protection or special
+      # policies that block the default token, create a personal access token
+      # with repo:public_repo (or appropriate scopes) and store it as
+      # `ACTIONS_DEPLOY_KEY` or similar, then replace `secrets.GITHUB_TOKEN` below.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
