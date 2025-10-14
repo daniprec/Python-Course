@@ -19,7 +19,7 @@ Remember, some objects in Python are *mutable* (like lists and dictionaries) whi
 
 First, it is important for us to remember how a method can change a list.
 
-```{python error=true}
+```{python}
 my_list = [1, 2, 3]
 print("List before:", my_list)
 
@@ -29,7 +29,7 @@ print("List after:", my_list)
 
 The majority of list methods do not return new list! They instead update the **original** list in place.
 
-```{python error=true}
+```{python}
 my_list = [1, 2, 3]
 print("List before:", my_list)
 
@@ -47,7 +47,7 @@ There is a different between applying a method and an operation
 
 **Operations** create new objects.
 
-```{python error=true}
+```{python}
 my_list = [1, 2, 3]
 print("List before:", my_list)
 
@@ -56,7 +56,7 @@ print("New list:", new_list)  # Method returns None
 print("List after:", my_list)  # Method modifies the original list
 ```
 
-```{python error=true}
+```{python}
 my_list = [1, 2, 3]
 print("List before:", my_list)
 
@@ -71,7 +71,7 @@ print("List after:", my_list)  # Operation does not modify the original list
 
 So what happens when we use a method inside a function?
 
-```{python error=true}
+```{python}
 def add_element(my_list: list) -> list:
   my_list.append("New Element")
   return my_list
@@ -88,7 +88,7 @@ You might expect that `sample_list` remains `[1, 2, 3]`, but if you check its va
 
 **Exercise.** What will be the outputs of this cell?
 
-```{python error=true}
+```{python}
 def add_element(my_list: list) -> list:
   my_list.append("New Element")
 
@@ -108,7 +108,7 @@ When we do `x = fun()`, if the function lacks a `return`, then `x = None`.
 
 The same logic applies to **sets** and **dictionaries**. And with any other **mutable** object.
 
-```{python error=true}
+```{python}
 def expand_set(my_set: set, element) -> set:
   my_set.add(element)
 
@@ -120,7 +120,7 @@ print("Modified set:", modified_set)
 print("Original set after function:", sample_set)
 ```
 
-```{python error=true}
+```{python}
 def update_dict(my_dict: dict, key, value) -> dict:
   my_dict[key] = value
 
@@ -140,7 +140,7 @@ If you don't want a function to modify a mutable object, you need to copy that o
 
 For lists, you can use the `copy` method:
 
-```{python error=true}
+```{python}
 def add_element(my_list: list) -> list:
   # We perform a copy to avoid modifying the original input
   copied_list = my_list.copy()
@@ -156,7 +156,7 @@ print("Original list after function:", sample_list)
 
 **Exercise.** What will be the outputs of this cell?
 
-```{python error=true}
+```{python}
 def add_element(my_list: list) -> list:
   # We perform a copy to avoid modifying the original input
   copied_list = my_list.copy()
@@ -177,7 +177,7 @@ When a function defines a mutable object as a default parameter, the object is c
 
 Consider the following function which appends a value to a list:
 
-```{python error=true}
+```{python}
 def add_to_list(value, default_list: list=[]) -> list:
   default_list.append(value)
   return default_list
@@ -185,7 +185,7 @@ def add_to_list(value, default_list: list=[]) -> list:
 
 Now, let's see how this behaves:
 
-```{python error=true}
+```{python}
 # First call
 print(add_to_list(1))  # Expected [1], Actual [1]
 
@@ -203,7 +203,7 @@ As seen in the example above, the `default_list` keeps accumulating values acros
 
 **Exercise.** How many different keys will `dict_animals` have?
 
-```{python error=true}
+```{python}
 def update_dict(key, value, dict_base: dict={}) -> dict:
   """
   Update a dictionary with a key-value pair.
@@ -229,7 +229,7 @@ print(dict_animals)
 
 **Exercise.** How long will be the set `st_evens`?
 
-```{python error=true}
+```{python}
 def add_even_numbers(n: int, myset: set = {}) -> set:
   """
   Adds `n` even numbers higher than any number in the original set.
@@ -263,7 +263,7 @@ print("Set with 10 even numbers:", st_evens)
 
 One of the common patterns to prevent this behavior is to use `None` as the default value and then instantiate the mutable object within the function:
 
-```{python error=true}
+```{python}
 def add_to_list(value, default_list: list=None) -> list:
   # If no input list is given, initialize a new one
   if default_list is None:
@@ -277,7 +277,7 @@ def add_to_list(value, default_list: list=None) -> list:
 
 With this revised function, each call to `add_to_list` without a specific list will use a new, empty list:
 
-```{python error=true}
+```{python}
 print(add_to_list(1))  # [1]
 print(add_to_list(2))  # [2]
 print(add_to_list(3))  # [3]
@@ -286,12 +286,12 @@ print(add_to_list(4))  # [4]
 
 **Exercise.** Fix the function `update_dict()`.
 
-```{python error=true}
+```{python}
 
 ```
 
 ---
 
-```{python error=true}
+```{python}
 
 ```
