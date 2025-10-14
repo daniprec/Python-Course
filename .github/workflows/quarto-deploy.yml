@@ -35,12 +35,12 @@ jobs:
           /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
           /usr/bin/python3 -m pip install jupyter nbformat ipykernel
 
-      - name: Render Quarto site
+      - name: Render Quarto site (output to docs/)
         run: |
-          quarto render
+          quarto render --output-dir docs
 
-      - name: Deploy to gh-pages
+      - name: Deploy to gh-pages (publish ./docs)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          publish_dir: ./docs
