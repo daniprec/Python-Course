@@ -1,0 +1,639 @@
+---
+title: "Numpy Arithmetics"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://drive.google.com/file/d/18tl_5f4400Jrw3Fkfsy0LpK3FBRXPg3r/view?usp=drive_link)
+
+---
+
+# NumPy: Arithmetics
+
+```{python}
+import numpy as np
+```
+
+## Element-Wise Operations
+
+With NumPy, you can easily perform array-with-array arithmetic, or scalar-with-array arithmetic.
+
+```{python}
+# Create two arrays
+a = np.array([1, 2, 3, 4])
+b = np.array([4, 3, 2, 1])
+```
+
+```{python}
+# Addition
+c = a + b
+print(c)
+```
+
+```{python}
+# Subtraction
+c = a - b
+print(c)
+```
+
+```{python}
+# Multiplication element-wise
+c = a * b
+print(c)
+```
+
+```{python}
+# Division element-wise
+c = a / b
+print(c)
+```
+
+```{python}
+# Power element-wise
+c = a ** b
+print(c)
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** How would you create an array containing 50 eights?
+
+```{python}
+# Try it
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** How would you create an array containing all the powers of 2 from $2^0$ to $2^{10}$?
+
+```{python}
+# Try it
+```
+
+:::
+
+---
+
+## Broadcasting in NumPy
+
+Broadcasting is a powerful mechanism that allows NumPy to work with arrays of different shapes when performing arithmetic operations.
+
+```{python}
+# Create a scalar and an array
+scalar = 5
+arr = np.array([1, 2, 3, 4])
+
+# Add scalar to array through broadcasting
+print(scalar + arr)
+```
+
+Broadcasting becomes extremely powerful when dealing with multidimensional arrays.
+
+```{python}
+arr1 = np.ones((3, 3))
+print(arr1)
+```
+
+```{python}
+arr2 = np.array([-1, 0, 1])
+print(arr2)
+```
+
+```{python}
+# Use broadcasting
+arr3 = arr1 + arr2
+print(arr3)
+```
+
+```{python}
+print(arr3[0])
+```
+
+How does broadcasing works?
+
+- NumPy compares the shapes of the arrays element-wise, starting from the trailing dimensions.
+- If the dimensions are equal, or one of them is 1, they are considered compatible.
+- NumPy then "stretches" the smaller array along the dimension with size 1 to match the larger array.
+
+Example of broadcasting:
+- Let's say you have a 2D array (matrix) `A` with shape `(m, n)` and a 1D vector `v` with shape `(n,)`.
+- The array `A` has `m` rows and `n` columns, while the vector `v` has `n` elements.
+
+```{python}
+A = np.array([[1, 2],
+              [3, 4],
+              [5, 6]])
+print(A.shape)
+```
+
+```{python}
+v = np.array([1, 0])
+print(v.shape)
+```
+
+```{python}
+# The last dimension matches! They can be added
+result = A + v
+
+print(result)
+```
+
+In this case, the sum is performed along the columns of `A` (dimension 1) because `v` is added to each row of `A`.
+
+If `v` had shape `(m,)` instead, an error would occur.
+
+```{python}
+A = np.array([[1, 2],
+              [3, 4],
+              [5, 6]])
+print(A.shape)
+
+v = np.array([1, 0, -1])
+print(v.shape)
+
+result = A + v
+
+print(result)
+```
+
+---
+
+## Practice
+
+Deactivate AI assistant tools, and try the following exercises.
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Perform the following operation:
+
+$$5 \cdot A \cdot v$$
+
+Where $$A=\begin{pmatrix}
+1 & 2 & 3 & 4\\
+5 & 6 & 7 & 8\\
+9 & 10 & 11 & 12
+\end{pmatrix}$$ and $v = [-2, -1, 0, 1]$
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Given any matrix $A$, multiply the elements of its first column times 1, the second column times 2, the third times 3, and so on.
+
+For instance:
+
+$$A = \begin{pmatrix}
+1 & 2 & 3\\
+4 & 5 & 6\\
+\end{pmatrix}$$
+
+Would end up being:
+$$A' = \begin{pmatrix}
+1 & 4 & 9\\
+4 & 10 & 18\\
+\end{pmatrix}$$
+
+```{python}
+# Try it
+```
+
+:::
+
+---
+
+## Mathematical Functions
+
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Square root
+print(np.sqrt(arr))
+```
+
+```{python}
+# For higher roots, we can just operate as we do with arrays
+print(arr**(1/3))
+```
+
+So why use `np.sqrt` if we can do `**(1/2)`?
+
+Because the NumPy function is optimized. We can see it by executing the computation many times and looking at its execution time.
+
+```{python}
+arr = np.arange(1, 10000)  # We use a very big array
+
+for _ in range(10000):
+  np.sqrt(arr)
+
+# We are not printing anything, because we do not want to fill the output
+# We only want to see how much time this takes!
+```
+
+```{python}
+for _ in range(10000):
+  arr**(1/2)
+
+# We are not printing anything, because we do not want to fill the output
+# We only want to see how much time this takes!
+```
+
+The same logic applies to exponentiation!
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Exponentiation
+print(np.exp(arr))
+```
+
+---
+
+## Geometry Functions
+
+NumPy can do more than just element-wise operations. It also supports matrix multiplication, transposition, and other matrix math.
+
+**Matrix multiplication:**
+
+$$A\ B =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{11}b_{11} + a_{12}b_{21} &
+a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} &
+a_{21}b_{12} + a_{22}b_{22}
+\end{pmatrix}$$
+
+```{python}
+# Matrix multiplication (option A)
+c = np.matmul(a, b)
+print(c)
+```
+
+```{python}
+# Matrix multiplication (option B)
+c = a @ b
+print(c)
+```
+
+**Dot product?:** The term "dot product" can be confussing when applied to matrices. For some, a dot product of two matrices is the following.
+
+$$A \cdot B = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} \cdot \begin{pmatrix} b_{11} & b_{12} \\ b_{21} & b_{22} \end{pmatrix} = a_{11} b_{11} + a_{12} b_{12} + a_{21} b_{21} + a_{22} b_{22}$$
+
+However, for NumPy, a dot product of two matrices is a matrix mutliplication.
+
+$$A \cdot B = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} \cdot \begin{pmatrix} b_{11} & b_{12} \\ b_{21} & b_{22} \end{pmatrix} = \begin{pmatrix} a_{11} b_{11} & a_{21} b_{12} \\ a_{12} b_{21} & a_{22} b_{22} \end{pmatrix}$$
+
+
+```{python}
+# Dot product?
+c = np.dot(a, b)
+print(c)
+```
+
+Very careful with `np.dot()`!
+
+Using `np.dot()` with two matrices, it will compute the matrix multiplication, not their dot product!
+
+```{python}
+# To compute the actual dot product
+c = np.sum(a * b)
+print(c)
+```
+
+Both `dot` and `matmul` are used for matrix multiplication in NumPy, but they behave differently, especially when dealing with higher-dimensional arrays (i.e., tensors). The primary difference emerges in multi-dimensional array multiplication.
+
+The [official documentation](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html) says: `matmul` differs from `dot` in two important ways.
+
+- Multiplication by scalars is not allowed.
+- Stacks of matrices are broadcast together as if the matrices were elements.
+
+**Cross product:**
+
+$$A \times B =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+\times
+\begin{pmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{12}b_{21} - a_{11}b_{22} \\
+a_{21}b_{12} - a_{22}b_{11}
+\end{pmatrix}$$
+
+```{python}
+# Create two arrays
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[4, 3], [2, 1]])
+
+# Cross product
+c = np.cross(a, b)
+print(c)
+```
+
+**Transposition:**
+
+$$A^T =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}^T
+=
+\begin{pmatrix}
+a_{11} & a_{21} \\
+a_{12} & a_{22}
+\end{pmatrix}$$
+
+```{python}
+a = np.array([[1, 2, 3], [4, 5, 6]])
+print(a)
+
+# Matrix transposition
+b = a.T
+print(b)
+```
+
+Determinants provide information about the matrix's invertibility, while the inverse of a matrix is crucial for solving systems of linear equations.
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Assuming the matrix you created is $A$, perform the following operation (cross product):
+
+$$A \times B / 6$$
+
+Where
+
+$$B=\begin{pmatrix}
+-1 & 0 & 0 & -1\\
+0 & 1 & 1 & 0\\
+1 & -1 & 1 & -1
+\end{pmatrix}$$
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+---
+
+## Linear Algebra Functions
+
+```{python}
+a = np.array([[1, 2], [3, 4]])
+
+det_a = np.linalg.det(a)
+
+print(det_a)
+```
+
+```{python}
+a = np.array([[1, 2], [3, 4]])
+
+inverse_a = np.linalg.inv(a)
+
+print(inverse_a)
+```
+
+---
+
+## Trigonometric Functions
+
+NumPy operates in radians. If you are using degrees, make sure to convert them first!
+
+```{python}
+angles = np.array([0, 30, 45, 60, 90])  # in degrees
+
+# NumPy operates in radians!
+angles_rad = np.radians(angles)
+
+print(angles_rad)
+```
+
+```{python}
+sines = np.sin(angles_rad)
+
+print(sines)
+```
+
+```{python}
+cosines = np.cos(angles_rad)
+
+print(cosines)
+```
+
+```{python}
+tangents = np.tan(angles_rad)
+
+print(tangents)
+```
+
+---
+
+## Statistical Functions
+
+The **mean** is the average of a data set.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Mean
+print("Mean:", np.mean(arr))
+```
+
+ The **median** is the middle value when the data set is ordered.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Median
+print("Median:", np.median(arr))
+```
+
+The **standard deviation** measures the dispersion of data from its mean.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Standard Deviation
+print("Standard Deviation:", np.std(arr))
+```
+
+**Variance** is the square of the standard deviation.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Variance
+print("Variance:", np.var(arr))
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Given a set of student grades, compute the mean, median, mode, standard deviation, and variance.
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+---
+
+## Sorting and Searching
+
+```{python}
+grades = np.array([85, 90, 78, 92, 88])
+
+sorted_indices = np.argsort(grades)
+
+print(f"Indices to sort grades: {sorted_indices}")
+```
+
+```{python}
+max_grade_index = np.argmax(grades)
+
+print(f"Index of highest grade: {max_grade_index}")
+```
+
+```{python}
+min_grade_index = np.argmin(grades)
+
+print(f"Index of lowest grade: {min_grade_index}")
+```
+
+---
+
+## Aggregation Functions
+
+```{python}
+arr = np.array([[1, 2], [3, 4]])
+print("Array:\n", arr)
+
+total_sum = np.sum(arr)
+
+print(f"Sum: {total_sum}")
+```
+
+```{python}
+# We sum across dimension 0
+col_sum = np.sum(arr, axis=0)
+
+print(f"Sum of columns: {col_sum}")
+```
+
+```{python}
+# We sum across dimension 1
+row_sum = np.sum(arr, axis=1)
+
+print(f"Sum of rows: {row_sum}")
+```
+
+```{python}
+cumulative_sum = np.cumsum(arr)
+
+print(f"Cumulative Sum: {cumulative_sum}")
+```
+
+```{python}
+product = np.prod(arr)
+
+print(f"Product: {product}")
+```
+
+---
+
+## Practice
+
+Deactivate AI assistant tools, and try the following exercises.
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Given a "magic square" matrix $A$:
+
+$$A = \begin{pmatrix}
+23 & 28 & 21\\
+22 & 24 & 26\\
+27 & 20 & 25
+\end{pmatrix}$$
+
+Normalize its values (subtract mean and divide by standard deviation). We call the new matrix $B$.
+
+$$B[i,j] = \frac{A[i,j] - \text{mean}(A)}{\text{std}(A)}$$
+
+```{python}
+arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
+
+b = (arr - np.mean(arr)) / np.std(arr)
+
+b
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Compute $B^T$.
+
+```{python}
+np.dot(arr, b.T)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Compute $A \cdot B^T$.
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+**Example:** Can you find some interesting properties about this magic square matrix $A$?
+
+Try to sum its rows, its columns, its diagonal.
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+# Want more?
+
+[You will find more exercises here!](https://drive.google.com/file/d/1280Tk_Nw6JXPJ_bD4qQhCtyFKKnjpsAK/view?usp=drive_link)

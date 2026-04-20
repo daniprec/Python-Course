@@ -1,0 +1,485 @@
+---
+title: "Numpy Statistics"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://drive.google.com/file/d/18tl_5f4400Jrw3Fkfsy0LpK3FBRXPg3r/view?usp=drive_link)
+
+---
+
+# NumPy: Statistics
+
+In this lesson, we'll explore several key statistical concepts through practical Python coding exercises. We'll start by simulating random walks to understand their properties and distribution.
+
+
+## Setup
+
+First, let's import the necessary libraries for our analysis.
+
+
+```{python}
+import numpy as np  # for numerical operations on arrays
+import matplotlib.pyplot as plt  # to display images
+import matplotlib.cm as cm  # to define colormaps
+```
+
+```{python}
+# YOU CAN SKIP THIS CELL
+# The following auxiliary function will help us plot the series we will generate
+# during this class
+
+def plot_series(
+  ls_ser: list[np.ndarray],
+  xlabel: str = None,
+  ylabel: str = None,
+  title: str = None):
+  """
+  Plot a series of line plots using matplotlib.
+
+  Parameters
+  ----------
+  ls_ser : List[np.ndarray]
+    List of numpy arrays to be plotted.
+  xlabel : str, optional
+    Label for the x-axis.
+  ylabel : str, optional
+    Label for the y-axis.
+  title : str, optional
+    Title of the plot.
+
+  Returns
+  -------
+  None
+      This function only plots the series and does not return any value.
+  """
+  # Convert a single numpy array to a list of arrays for consistency
+  if isinstance(ls_ser, np.ndarray):
+    ls_ser = [ls_ser]
+
+  # Generating colors from the 'Greens' colormap, starting with a strong green
+  colors = cm.Greens(np.linspace(1, 0.3, len(ls_ser)))
+
+  # Creating the plot
+  plt.figure(figsize=(12, 6))
+  for i, ser in enumerate(ls_ser):
+    plt.plot(ser, color=colors[i])  # Plot each series in a different shade of green
+
+  # Setting labels and title
+  plt.xlabel(xlabel if xlabel else "Index")
+  plt.ylabel(ylabel)
+  plt.title(title)
+  plt.grid(True)
+  plt.show()
+```
+
+---
+
+## Random Walk Simulation
+
+A random walk is a process where each step is determined randomly. It's a simple yet powerful concept used in various domains, including finance. Let's simulate a random walk using NumPy.
+
+<p align="center">
+<img src="https://qph.cf2.quoracdn.net/main-qimg-85602ae0258abac4a739172309395a55-pjlq" width="500" height="auto" />
+</p>
+
+For our example, we can image someone walking forward, but tumbling randomly to the left (-1) or right (+1) in each step they take.
+
+::: {.callout-note}
+## Exercise
+
+Generate an array of random steps, that can be either -1 or 1.
+
+```{python}
+# Option A
+steps = 10  # Number of steps
+# We can use "randint" to generate random numbers  (-1, 0, 1)
+ser = np.random.randint(-1, 2, size=steps)
+# And now we need to remove all the 0's - Use masking here
+ser = ser[ser != 0]
+# Problem: the resulting array is smaller than our desired size!
+# We need to repeat this process until we get 10 values
+while len(ser) < steps:
+  need = steps - len(ser)  # How many extra values we need
+  ser = np.concatenate([ser, np.random.randint(-1, 2, size=need)])
+  ser = ser[ser != 0]
+
+print(ser)
+```
+
+```{python}
+# Option B (better)
+steps = 10  # Number of steps
+# We will use "choice" - Generates a random sample from a given 1-D array
+ser = np.random.choice([-1, 1], size=steps)
+
+print(ser)
+```
+
+```{python}
+# "choice" does not work with strings
+ser = np.random.choice("-1, 1", size=steps)
+
+print(ser)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Add these steps cumulatively.
+
+For instance, `[1, -1, -1, -1, 1]` should output `[1, 0, -1, -2, -1]`
+
+```{python}
+ser_cumul = np.cumsum(ser)
+
+print(ser_cumul)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Add the steps cumulatively but ensure we start at 0.
+
+For instance, `[1, -1, -1, -1, 1]` should output `[0, 1, 0, -1, -2, -1]`
+
+```{python}
+# Option A
+# Initialize an array of zeros, with one element more than the amount of steps
+steps = 10
+arr = np.zeros(steps + 1)
+# Generate the steps
+ser = np.random.choice([-1, 1], size=steps)
+# Add the steps cumulatively
+arr[1:] = np.cumsum(ser)
+
+print(arr)  # This is a float! How can we make them integers?
+```
+
+:::
+
+Now we can define a function that simulates a random walk.
+
+```{python}
+def random_walk(steps: int) -> np.ndarray:
+  """
+  Simulate a random walk.
+
+  Generates a random walk by randomly selecting steps of -1 or 1 and
+  cumulatively summing them to create the walk.
+
+  Parameters
+  ----------
+  steps : int
+    The number of steps in the random walk.
+
+  Returns
+  -------
+  np.ndarray
+    An array representing the positions of the random walk at each step.
+  """
+  # Generate an array of random steps (-1 or 1) of size 'steps'
+  steps_array = np.random.choice([-1, 1], size=steps)
+  # Add a zero
+  steps_array = np.insert(steps_array, 0, 0)
+
+  # Cumulatively sum the steps to create the random walk and return it
+  return np.cumsum(steps_array)
+```
+
+Lets perform several simulations, store them in a list, and plot them using our auxiliary function `plot_list_series`.
+
+```{python}
+# Parameters for the random walk
+n_simulations = 5
+n_steps = 100
+
+# Simulating multiple random walks
+ls_sim = []
+for _ in range(n_simulations):
+  ls_sim.append(random_walk(n_steps))
+
+plot_series(ls_sim, xlabel="Step", ylabel="Position", title="Random Walk Simulations")
+```
+
+---
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Improve the `random_walk` function so that it can generate any number of random walk simulations all at once. Then plot a hundred of these walks.
+
+```{python}
+def random_walks(steps: int, num: int=1) -> np.ndarray:
+  """
+  Simulate any number of random walks.
+
+  Generates a random walk by randomly selecting steps of -1 or 1 and
+  cumulatively summing them to create the walk.
+
+  Parameters
+  ----------
+  steps : int
+    The number of steps in the random walk.
+
+  Returns
+  -------
+  np.ndarray
+    An array representing the positions of the random walk at each step.
+  """
+  # Generate an array of random steps (-1 or 1) of size 'steps'
+  steps_array = np.random.choice([-1, 1], size=(num, steps))
+  # Add a zero
+  steps_array = np.insert(steps_array, 0, 0, axis=1)
+
+  # Cumulatively sum the steps to create the random walk and return it
+  ser = np.cumsum(steps_array, axis=1)
+  if num == 1:
+    return ser[0]
+  else:
+    return ser
+```
+
+```{python}
+# Parameters for the random walk
+n_simulations = 100
+n_steps = 100
+
+# Simulating multiple random walks
+arr_sim = random_walks(n_steps, n_simulations)
+
+plot_series(arr_sim.T, xlabel="Step", ylabel="Position", title="Random Walk Simulations")
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Where did the 5th walker end up after 17 steps?
+
+```{python}
+# We use NumPy fancy indexing: row 4, column 16
+position = arr_sim[4, 16]
+
+print(position)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The walk begins at an origin of 0. How can we start at -30 instead?
+
+```{python}
+# We use NumPy broadcasting
+arr_new = arr_sim - 30
+
+plot_series(arr_new.T, xlabel="Step", ylabel="Position", title="Random Walk Simulations")
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Imagine two people taking a random walk independently, but they only move when both agree on the direction:
+- Both choose +1, then move +1.
+- Both choose -1, then move -1.
+- If one chooses +1 and the other -1 (or vice versa), they stay in place.
+
+```{python}
+n_steps = 100
+
+# Initialize both random steps
+steps1 = np.random.choice([-1, 1], size=n_steps)
+steps2 = np.random.choice([-1, 1], size=n_steps)
+
+# Use NumPy masking
+# First create a boolean mask indicating when the two steps coincide
+mask = (steps1 == steps2)
+# Initialize a new steps array of zeros
+steps_together = np.zeros(n_steps)
+# Use masking to modify this array
+steps_together[mask] = steps1[mask]
+# Add a first zero (starting position)
+steps_together = np.insert(steps_together, 0, 0)
+# Cumulative sum
+walk = np.cumsum(steps_together)
+
+plot_series(walk, xlabel="Step", ylabel="Position", title="Random Walk Simulations")
+```
+
+:::
+
+---
+
+## Analysis of Random Walk Distribution
+
+After simulating individual random walks, we'll aggregate the results of multiple simulations to analyze their overall distribution and compare it with a normal distribution.
+
+
+```{python}
+# YOU CAN SKIP THIS CELL
+# The following auxiliary function will help us plot the distribution
+
+def plot_distribution(
+  ser: list[float],
+  name: str = "Our Points",
+  bins: int=30,
+  xlabel: str = None,
+  plot_normal: bool=False):
+  """
+  Plot the distribution of a series and optionally overlay a normal distribution.
+
+  Parameters
+  ----------
+  ser : List[float]
+    The series for which the distribution is to be plotted.
+  name : str, optional
+    Name of the series, used in the legend.
+  bins : int, optional
+    Number of bins in the distribution, by default 30.
+  xlabel : str, optional
+    Label for the x-axis.
+  plot_normal : bool, optional
+    Overlay normal distribution, by default False.
+
+  Returns
+  -------
+  None
+    This function only plots the distribution and does not return any value.
+  """
+  # Plotting the distribution of the series
+  plt.figure(figsize=(12, 6))
+  plt.hist(ser, bins=bins, density=True, alpha=0.6, color='g')
+  legend = [name]
+
+  # Overlaying a normal distribution if mean and std are provided
+  if plot_normal:
+    x = np.linspace(min(ser), max(ser), 100)
+    mean, std = np.mean(ser), np.std(ser)
+    plt.plot(x, (1/(std * np.sqrt(2 * np.pi)) * np.exp( - (x - mean)**2 / (2 * std**2))), linewidth=2, color='r')
+    legend = ["Normal Distribution"] + legend
+
+  # Setting labels and legend
+  plt.xlabel(xlabel)
+  plt.ylabel("Density")
+  plt.legend(legend)
+  plt.grid(True)
+  plt.show()
+```
+
+We can reuse our previous code to run 1000 simulations, of 100 steps each. Thanks to Python, this experiments can be done easily! Then, we find what is the last position of each simulation, and plot the distribution of those final positions using our auxiliary function.
+
+```{python}
+# Parameters for aggregating random walks
+n_simulations_agg = 1000
+n_steps_agg = 100
+
+arr_walks = random_walks(n_steps_agg, n_simulations_agg)
+endpoints = arr_walks[:, -1]
+
+plot_distribution(endpoints, name="Random Walk Endpoints", xlabel="End position")
+```
+
+We did 1000 simulations of 100 steps each, and stored each individual step in `arr_walks`. So, what should be the shape of this array?
+
+```{python}
+print(arr_walks.shape)
+```
+
+And how can we get the final position of each simulation?
+
+```{python}
+print(arr_walks[:, -1])
+```
+
+How could we compute the average final position over the 1000 simulations?
+
+```{python}
+# OPTION 1 (bad option, but viable)
+
+arr = arr_walks[:, -1]
+
+mean = 0
+
+for v in arr:
+  mean = mean + v
+
+print(mean / len(arr))
+```
+
+```{python}
+# OPTION 2 (smart option)
+
+print(np.mean(arr))
+```
+
+Let's go back to the distribution for a second:
+
+```{python}
+# Parameters for aggregating random walks
+n_simulations_agg = 1000
+n_steps_agg = 100
+
+arr_walks = random_walks(n_steps_agg, n_simulations_agg)
+endpoints = arr_walks[:, -1]
+
+plot_distribution(endpoints, name="Random Walk Endpoints", xlabel="End position")
+```
+
+Does this distribution look familiar? It looks like a **normal distribution**!
+
+To check this, lets generate a normal distribution using NumPy.
+
+```{python}
+# We get the mean and standard deviation of the set of end points
+mean = np.mean(endpoints)
+std = np.std(endpoints)
+
+# Generate points from a normal distribution using NumPy
+ser_norm = np.random.normal(mean, std, size=n_simulations_agg)
+# Plot the points
+plot_distribution(ser_norm)
+```
+
+They look very similar! To make it more apparent, our auxiliary function `plot_distribution` provides the keyword `plot_normal` to overlay the normal distribution over our current histogram.
+
+```{python}
+plot_distribution(endpoints, name="Random Walk Endpoints", xlabel="End position", plot_normal=True)
+```
+
+---
+
+## Exercise: Approximating Pi with Monte Carlo
+
+
+
+Consider a square with a circle inside it. We randomly generate points within this square. The image below illustrates this with blue points inside the circle and red points outside.
+
+<p align="center">
+<img src="https://i.sstatic.net/8R3ce.png" width="400" height="auto" />
+</p>
+
+To estimate the value of $\pi$, we use the Monte Carlo method. This involves comparing the number of points inside the circle (blue) to the total number of points (blue and red). The formula for approximating $\pi$ is:
+
+$$\pi \approx 4 \times \frac{\text{number of blue points}}{\text{total number of points}}$$
+
+Write the `monte_carlo_pi` function to approximate $\pi$. It should:
+
+- Accept `num_points`, the number of random points to create.
+- Generate random points in a square with corners (-1, -1) and (1, 1).
+- Count how many points fall inside the unit circle $x^2 + y^2 \leq 1$.
+- Calculate $\pi$ following the equation above.
+- Return this estimated value of $\pi$.
+
+```{python}
+#| eval: false
+
+```

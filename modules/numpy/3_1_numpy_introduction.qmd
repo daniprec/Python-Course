@@ -1,0 +1,493 @@
+---
+title: "Numpy Introduction"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+# NumPy: Introduction
+
+## What is NumPy?
+
+NumPy (Numerical Python) is one of the most fundamental packages for numerical computations in Python. It provides support for large multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays.
+
+<p align="center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/NumPy_logo_2020.svg/1200px-NumPy_logo_2020.svg.png" width="400" height="auto" />
+</p>
+
+### Why use NumPy?
+- Efficient storage and manipulation of numerical arrays is fundamental to many forms of scientific and data analysis.
+- It's much faster than traditional Python lists for numerical operations.
+- Behind the scenes optimizations written in C.
+
+
+```{python}
+# First, let's import NumPy
+import numpy as np
+```
+
+## Creating Arrays
+
+To create an array we use the function `np.array()`. We must pass a list or tuple to the function.
+
+```{python}
+# Create a simple array from a list
+ls = [1, 2, 3, 4, 5]
+arr = np.array(ls)
+print(arr)
+```
+
+```{python}
+# Single line
+# Create a simple array from a list
+arr = np.array([1, 2, 3, 4, 5])
+print(arr)
+```
+
+```{python}
+# Tuples work too!
+tup = (1, 2, 3, 4, 5)
+arr = np.array(tup)
+print(arr)
+```
+
+```{python}
+# Single line
+arr = np.array((1, 2, 3, 4, 5))
+print(arr)
+```
+
+What happens when we initialize a numpy array with a set?
+
+The [np.array documentation](https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html) says that the object argument must be "an array, any object exposing the array interface, an object whose `__array__` method returns an array, **or any (nested) sequence**".
+
+A set is not a [sequence](https://docs.python.org/3/glossary.html#term-sequence). Specifically, sets are unordered and do not support the `__getitem__` method. Hence we cannot create an array from a set like we trying to with the list.
+
+
+```{python}
+# Just do not do this...
+arr = np.array({1, 2, 3, 4, 5})
+
+print(arr)
+```
+
+::: {.callout-note}
+## Exercise
+
+What will be the value of `arr`? Which value type will their elements have?
+
+```{python}
+arr = np.array((1, 2.0, 3))
+
+print(arr)
+```
+
+:::
+
+The elements of the array will all be of type `float64`. This is because NumPy automatically upcasts the integer values to floats to ensure that all elements in the array have the same data type, which is necessary for efficient computation.
+
+::: {.callout-note}
+## Exercise
+
+What will be the value of `arr`? Which value type will their elements have?
+
+```{python}
+arr = np.array(1, 2.0, 3)
+
+print(arr)
+```
+
+:::
+
+The `np.array` function expects a single argument, (typically a list or a tuple). In this case, we are passing three separate arguments instead of a single iterable.
+
+---
+
+### Array Types
+
+NumPy arrays are restricted to a single data type. The hierarchy of data types is as follows: string > float > integer. Other data types are not permitted.
+
+```{python}
+# Array of strings
+a = np.array(["a", "b", "c"])
+
+print(a)
+```
+
+```{python}
+# Array of floats
+a = np.array([1, 2.2, 3.3])
+
+# Notice how '1' is turned into a float '1.'
+print(a)
+```
+
+```{python}
+# Mixed array
+a = np.array([1, "two", 3])
+
+# Notice that '1' and '3' are turned into strings!
+print(a)
+```
+
+We can specify the NumPy array type in the second argument of `np.array()`.
+
+```{python}
+a = np.array([1, 2, 3], float)
+print(a)
+```
+
+```{python}
+a = np.array([1, 2, 3], str)
+print(a)
+```
+
+---
+
+### Multi-Dimensional Arrays
+
+Nested list are used to create multi-dimensional arrays.
+
+```{python}
+# Create a 2D array (Matrix)
+# We will use nested lists
+row_0 = [1, 2, 3]
+row_1 = [4, 5, 6]
+row_2 = [7, 8, 9]
+ls_matrix = [row_0, row_1, row_2]
+matrix = np.array(ls_matrix)
+print(matrix)
+```
+
+```{python}
+# All nested list must have the same length!
+row_0 = [1, 2, 3]
+row_1 = [4, 5, 6, 0]
+row_2 = [7, 8, 9]
+ls_matrix = [row_0, row_1, row_2]
+matrix = np.array(ls_matrix)
+print(matrix)
+```
+
+```{python}
+# Single line
+# Create a 2D array (Matrix)
+matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(matrix)
+```
+
+```{python}
+# Best format - helps clarity
+# Create a 2D array (Matrix)
+matrix = np.array([
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+])
+print(matrix)
+```
+
+In NumPy, the order of dimensions is indicated by the nesting of brackets. The outermost bracket (purple) represents the first dimension, indexed as dimension 0. The next level of brackets inside (blue) represents the second dimension, or dimension 1. If you continue adding more nested brackets, each new level represents a higher dimension. For example, the third level of brackets would be dimension 2, and so on. This hierarchical structure helps in understanding the shape and structure of multi-dimensional arrays.
+
+::: {.callout-note}
+## Exercise
+
+How would we create a 3D matrix?
+
+```{python}
+# Try it!
+```
+
+:::
+
+---
+
+### Some Functions to Quickly Create Arrays
+
+```{python}
+# Create an array of zeros
+zeros = np.zeros(5)
+print(zeros)
+```
+
+```{python}
+# Create a 2x3 matrix of ones
+shape = (2, 3)
+ones = np.ones(shape)
+print(ones)
+```
+
+```{python}
+# Single line
+# Create a 2x3 matrix of ones
+ones = np.ones((2, 3))
+print(ones)
+```
+
+```{python}
+# Create an array of a range of numbers
+range_array = np.arange(0, 10, 2)  # start, stop, step
+print(range_array)
+```
+
+```{python}
+# Create an array of a range of numbers
+range_array = np.linspace(0, 10, 6)  # start, stop, length
+print(range_array)
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Create an array containing all odd numbers between 25 and 50.
+
+```{python}
+# Try it!
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Imagine you have a rope that is 12 meters long. You want to cut this rope into 7 equal lengths. Using numpy, create an array that shows at which points (in meters) you should make the cuts to obtain these 7 equal lengths.
+
+```{python}
+# Try it!
+```
+
+:::
+
+---
+
+## Basic Properties of Arrays
+
+Unlike methods, properties don't require parentheses when accessed. They provide insights into the attributes of the array. Here is a list of some key properties of NumPy arrays.
+
+`ndim`: Indicates the number of dimensions of the array.
+
+```{python}
+arr = np.zeros((5, 4))
+
+print(arr.ndim)
+```
+
+`shape`: Returns a tuple representing the dimensions of the array. For a matrix with n rows and m columns, the shape will be (n,m).
+
+```{python}
+# shape returns a tuple
+print(arr.shape)
+```
+
+---
+
+## Array Indexing
+
+Indexing 1D-arrays is the same as indexing lists, tuples or strings.
+
+```{python}
+arr = np.array([0, 1, 2, 3, 4, 5, 6])
+
+# Accessing single element (0-indexed)
+print(arr[2])
+```
+
+Indexing multi-dimensional arrays is "similar" to indexing nested lists.
+
+```{python}
+matrix = np.array([[0, 1, 2], [3, 4, 5]])
+
+# Accessing element in 2D array (Matrix)
+print(matrix[1][2])  # second row, third column
+```
+
+For NumPy arrays, we can include all indices within a single set of parentheses! This is called "indexing with a tuple".
+
+```{python}
+matrix = np.array([[0, 1, 2], [3, 4, 5]])
+
+# Accessing element in 2D array (Matrix)
+print(matrix[1, 2])  # second row, third column
+```
+
+::: {.callout-note}
+## Exercise
+
+What will be the value of `x`?
+
+```{python}
+matrix = np.array([[0, 1, 2], [3, 4, 5]])
+
+print(matrix[-1, 0])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What will be the value of `x`?
+
+```{python}
+matrix = [[0, 1, 2], [3, 4, 5]]
+
+print(matrix[2, 1])
+```
+
+:::
+
+This raises an error because **lists** cannot be indexed with tuples.
+
+::: {.callout-note}
+## Exercise
+
+What will be the value of `x`?
+
+```{python}
+arr_A = np.array([[0, 1, 2], [3, 4, 5]])
+arr_B = np.array([[6, 7, 8], [9, 10, 11]])
+
+ls_arrays = [arr_A, arr_B]
+
+x = ls_arrays[1][0, 2]
+
+print(x)
+```
+
+:::
+
+---
+
+## Array Slicing
+
+Slicing NumPy arrays is the same as slicing lists.
+
+```{python}
+arr = np.array([0, 1, 2, 3, 4, 5, 6])
+
+# Accessing a slice of an array
+print(arr[1:4])  # Start is inclusive, end is exclusive
+```
+
+```{python}
+matrix = np.array([[0, 1, 2], [3, 4, 5]])
+
+# Accessing rows/columns of a matrix
+print(matrix[:, 1])  # All rows, second column
+```
+
+```{python}
+matrix = np.array([[0, 1, 2], [3, 4, 5]])
+
+print(matrix[1, :])  # Second row, all columns
+```
+
+```{python}
+arr = np.array([0, 1, 2, 3, 4, 5, 6])
+
+# Using steps in slicing
+print(arr[0:5:2])  # Start at 0, go to 5, step by 2
+```
+
+::: {.callout-note}
+## Exercise
+
+What slicing should we take to retrieve the array `[2, 4, 6]`?
+
+```{python}
+arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What slicing should we take to retrieve the array `[7, 4, 1]`?
+
+```{python}
+arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What slicing should we take to retrieve the array `[2, 4, 6]`?
+
+```{python}
+arr = np.array([
+  [0, 1, 2],
+  [1, 2, 3],
+  [2, 3, 4],
+  [3, 4, 5],
+  [4, 5, 6]
+  ])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What slicing should we take to retrieve the following matrix?
+
+$$\begin{pmatrix}
+1 & 2\\
+3 & 4\\
+5 & 6
+\end{pmatrix}$$
+
+```{python}
+arr = np.array([
+  [0, 1, 2],
+  [1, 2, 3],
+  [2, 3, 4],
+  [3, 4, 5],
+  [4, 5, 6]
+  ])
+```
+
+:::
+
+---
+
+## Practice
+
+Deactivate AI assistant tools, and try the following exercises.
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Create an array filled with integers ordered from 1 to 12.
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Reshape it to a $3 \times 4$ matrix.
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Print its value at the first row, fourth column.
+
+```{python}
+#| eval: false
+
+```
+
+:::

@@ -1,0 +1,480 @@
+---
+title: "Numpy Masking"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+# NumPy: Masking
+
+Welcome to our interactive exploration of masking using NumPy! Masking means utilizing boolean arrays to select or modify specific portions of an array.
+
+What arrays are we working with today? Images! Since images are essentially arrays of pixel values, tools like NumPy allow us to manipulate these arrays, achieving various visual effects.
+
+For instance, in this we will use masking to overlap images.
+
+---
+
+## Setting Up
+Before we dive into the main content, let's import the required libraries.
+
+```{python}
+import cv2  # for image processing tasks
+import matplotlib.pyplot as plt  # to display images
+import numpy as np  # for numerical operations on arrays
+import requests  # to fetch images from the internet
+```
+
+---
+
+## Loading and Displaying Images
+
+We've defined two functions to help us:
+- `load_image`: This function fetches an image from a given URL.
+- `show_image`: Displays the provided NumPy array as an image.
+
+```{python}
+def load_image(url: str, color: bool=False) -> np.ndarray:
+  """
+  Fetch and return an image from the provided URL as a grayscale
+  NumPy array.
+
+  Parameters
+  ----------
+  url : str
+    The URL of the image to be fetched.
+  color : bool, optional
+    If True, loads the image in color. If False, loads the image in grayscale.
+    Default is False.
+
+  Returns
+  -------
+  np.ndarray
+    If `color` is False, returns a grayscale image represented as a 2D NumPy
+    array with values ranging from 0 to 255. If `color` is True,
+    returns a color image in RGB format.
+  """
+  response = requests.get(url)
+  image_array = np.asarray(bytearray(response.content), dtype="uint8")
+
+  if color:
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
+  else:
+    image = cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)
+  return image
+
+def show_image(img: np.ndarray):
+  """
+  Display the provided NumPy array as an image.
+
+  Parameters
+  ----------
+  img : np.ndarray
+    The image data represented as either a 2D NumPy array for grayscale images
+    or a 3D NumPy array for color images.
+  """
+  # Check if the image is color (3D) or grayscale (2D)
+  if img.ndim == 3:  # Color image
+    if img.max() > 1:  # Real image
+      plt.imshow(img, vmax=255)
+    else: # Binary mask
+      img = np.mean(img, axis=2)
+      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
+  else:  # Grayscale image
+    if img.max() > 1:  # Real image
+      plt.imshow(img, cmap="gray", vmin=0, vmax=255)
+    else:  # Binary mask
+      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
+
+  plt.show()
+  plt.close()
+```
+
+Let's start by loading an image of a puppy and displaying it.
+
+```{python}
+# Link to the image
+url_dog = "https://www.freeiconspng.com/thumbs/dog-png/dog-png-30.png"
+
+# Load and display the image
+dog = load_image(url_dog)
+print(f"The array has dimension: {dog.ndim}")
+print(f"The array contains values of type: {dog.dtype}\n")
+show_image(dog)
+```
+
+```{python}
+show_image(dog[:150, 50:250])
+```
+
+```{python}
+x = dog[:200, 50:250]
+print(x.shape)
+
+show_image(x)
+
+x_new = x.reshape(100, 400)
+x_new = x_new.reshape(400, 100)
+
+show_image(x_new)
+```
+
+## Masking: The Basics
+
+Masking is a technique where we create a boolean array (mask) of the same shape as our data. Here, we will create a mask for the dog image to identify regions with the dog's presence.
+
+In our case, any pixel value greater than 0 in the grayscale image indicates the presence of the dog, so we will use this criterion to generate our mask.
+
+```{python}
+mask_dog = dog > 0
+print(f"The mask contains values of type: {mask_dog.dtype}\n")
+
+show_image(mask_dog)
+```
+
+## Loading a Second Image
+
+Now, let's load another image, this time of a beach. We will later superimpose our dog image onto this beach image.
+
+```{python}
+# Link to the image
+url_beach = "https://wallpaperset.com/w/full/1/4/e/13026.jpg"
+
+# Load and display the image
+beach = load_image(url_beach)
+print(f"The array has dimension: {beach.ndim}")
+print(f"The array contains values of type: {beach.dtype}\n")
+show_image(beach)
+```
+
+```{python}
+mask = np.zeros(beach.shape)
+
+show_image(mask)
+```
+
+```{python}
+print(mask.dtype)
+```
+
+```{python}
+#| eval: false
+mask = mask.astype(bool)
+
+# Change the type to boolean
+...
+
+print(mask.dtype)
+```
+
+## Creating a Mask for the Beach Image
+
+We'll create an initial mask for the beach image, initialized to all zeros (or `False`). This represents that no part of the beach image is currently masked.
+
+```{python}
+mask_beach = np.zeros(beach.shape)  # type: int (0)
+mask_beach = mask_beach.astype(bool)  # type: bool (False)
+print(f"The mask has dimension: {mask_beach.ndim}")
+print(f"The mask contains values of type: {mask_beach.dtype}\n")
+
+show_image(mask_beach)
+```
+
+```{python}
+ls = [1, 2, 3]
+# change 2 to 4
+ls[1] = 4
+print(ls)
+```
+
+## Positioning the Dog Mask on the Beach Mask
+
+Our goal is to superimpose the dog onto the beach image. To do this, we'll first position the dog mask at the bottom right corner of the beach mask.
+
+```{python}
+# Get the width and height of the dog image
+h, w = mask_dog.shape
+print(f"The dog mask has shape ({h}, {w})")
+
+# Use clever indexing to replace a part of the beach mask with the dog
+mask_beach[-h:, -w:] = mask_dog
+print(f"The mask has dimension: {mask_beach.ndim}")
+print(f"The mask contains values of type: {mask_beach.dtype}\n")
+
+show_image(mask_beach)
+```
+
+```{python}
+# Get the width and height of the dog image
+h, w = mask_dog.shape
+print(f"The dog mask has shape ({h}, {w})")
+
+# Use clever indexing to replace a part of the beach mask with the dog
+mask_beach[:h, :w] = mask_dog
+print(f"The mask has dimension: {mask_beach.ndim}")
+print(f"The mask contains values of type: {mask_beach.dtype}\n")
+
+show_image(mask_beach)
+```
+
+## Superimposing the Dog Image onto the Beach Image
+
+With our masks ready, we can now superimpose the dog image onto the beach image. By using the masks, we ensure that only the region with the dog gets overlaid onto the beach image.
+
+```{python}
+beach[mask_beach] = dog[mask_dog]
+
+show_image(beach)
+```
+
+```{python}
+# Link to the image
+url_dog = "https://www.freeiconspng.com/thumbs/dog-png/dog-png-30.png"
+dog = load_image(url_dog)
+
+# Flip the dog
+dog = dog[:, ::-1]
+
+mask_dog = dog > 0
+
+# Link to the image
+url_beach = "https://wallpaperset.com/w/full/1/4/e/13026.jpg"
+beach = load_image(url_beach)
+
+mask_beach = np.zeros(beach.shape)  # type: int (0)
+mask_beach = mask_beach.astype(bool)  # type: bool (False)
+
+# Get the width and height of the dog image
+h, w = mask_dog.shape
+
+# Use clever indexing to replace a part of the beach mask with the dog
+mask_beach[-(h+100):-100, 100:(w+100)] = mask_dog
+
+beach[mask_beach] = dog[mask_dog] * 0.6
+show_image(beach)
+```
+
+```{python}
+x = np.arange(0, 16)
+x = x.reshape(4, 4)
+print(x)
+```
+
+---
+
+## Exercise 0: Adjusting Color and Size
+
+Try to do the same thing using this other image. You will realise two issues:
+1. There is a white border around the image! How can you use masking to get rid of it?
+2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?
+
+
+```{python}
+url_dog_2 = "https://a.pinatafarm.com/1139x1138/f55da91a83/cheems.jpg"
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+
+
+```{python}
+# Load and display the image
+dog_2 = load_image(url_dog_2)
+
+show_image(dog_2)
+# Problem: We have to take away both black and white rectangle
+```
+
+```{python}
+# Solution:
+# Combine masks using "&" (and), similar to how we do "if" clauses
+mask_dog_2 = (dog_2 > 0) & (dog_2 < 255)
+
+show_image(mask_dog_2)
+```
+
+```{python}
+# Reload the beach
+beach_2 = load_image(url_beach)
+
+mask_beach_2 = np.zeros(beach_2.shape)  # type: int (0)
+mask_beach_2 = mask_beach_2.astype(bool)  # type: bool (False)
+
+# Get the width and height of the dog image
+h, w = mask_dog_2.shape
+
+# Use clever indexing to replace a part of the beach mask with the dog
+mask_beach_2[-h:, -w:] = mask_dog_2
+
+show_image(mask_beach_2)
+# Problem: the dog is too big
+```
+
+```{python}
+# Solution:
+# Use clever slicing to take one of every two pixels
+dog_smol = dog_2[::2, ::2]
+
+mask_smol = (dog_smol > 0) & (dog_smol < 255)
+
+mask_beach_smol = np.zeros(beach_2.shape)  # type: int (0)
+mask_beach_smol = mask_beach_smol.astype(bool)  # type: bool (False)
+
+# Get the width and height of the dog image
+h, w = mask_smol.shape
+
+# Use clever indexing to replace a part of the beach mask with the dog
+mask_beach_smol[-h:, -w:] = mask_smol
+
+show_image(mask_beach_smol)
+```
+
+```{python}
+# Finally, we add the dog using masking
+beach_2[mask_beach_smol] = dog_smol[mask_smol]
+
+show_image(beach_2)
+```
+
+:::
+
+---
+
+## Exercise 1: 3D Array
+
+Call the function `load_image` setting the argument `color=True`. This will load the images in color!
+
+Repeat the exercise but now using 3D arrays, i.e. RGB images.
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=1f7BPWmgheYVFMY8GA7D5w1X82k9-a3Pd" width="300" />
+</p>
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+## Exercise 2: Different Position
+
+Now try to insert the puppy on the bottom left corner.
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=10vrFfW0Zls-2jjr3-6hcQhwPHC1UGRNS" width="300" />
+</p>
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+## Exercise 3: Flipping Arrays
+
+The puppy would rather look at the beach. Can you flip it?
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=1GbaBEoZdwe_aHYKBBJ9vau_g0WmwnYCX" width="300" />
+</p>
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+## Exercise 4: Green Dog
+
+Can you change the dog's color to green?
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=14QLrn4VuY3eM7ON4iR1vZVYTrLCVTYQn" width="300" />
+</p>
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+## Exercise 5: Harder Masking
+
+Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=1XOP8a1xOaeSmXFuczE6iZDRlGzxJbg03" width="300" />
+</p>
+
+
+
+```{python}
+url_cat = "https://img.freepik.com/premium-photo/cute-little-grey-white-fluffy-kitten-green-background_548832-7905.jpg"
+```
+
+---
+
+## Exercise 6: Invert Colors
+
+Lets finish with something easier. Invert the colors of the image.
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=16qRn0MD3zg4-O3WrzarcTo5-prRWXKjC" width="300" />
+</p>
+
+```{python}
+#| eval: false
+
+```
+
+---
+
+## Advanced Challenge: Image Superposition with Schrödinger's Cat
+
+In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a scenario where a cat is simultaneously both alive and dead until it is observed. As a nod to this concept, let's create an image representation where both a live cat and a skeletal cat are superimposed.
+
+### Objective:
+Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.
+
+<p align="center">
+<img src="https://s3.amazonaws.com/cms.ipressroom.com/401/files/202306/cats300.jpg" width="300" />
+</p>
+
+
+### Instructions:
+1. Consider two images: one representing a live cat (denoted by 'a') and the other representing a skeletal cat (denoted by 'd').
+2. To superimpose the images, alternate the pixels such that each pixel from one image is surrounded by pixels from the other image. This will give the effect of both images being merged into one.
+   
+For instance, your pixel arrangement might look like this:
+
+```
+[
+  [a, d, a],
+  [d, a, d],
+  [a, d, a]
+]
+```
+
+Here, 'a' represents a pixel from the live cat image, and 'd' represents a pixel from the skeletal cat image. The resulting image will have an even distribution of pixels from both images.
+
+### Note:
+This method effectively reduces the resolution of each image by half, but when viewed from a distance, the viewer should be able to discern both images superimposed upon each other.
+
+
+```{python}
+# Start with this image
+url_schro = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-841990410-64481f99d3e11.jpg"
+schrodinger = load_image(url_schro)
+
+show_image(schrodinger)
+```
+
+```{python}
+# Your first step is to split that image into two (the skelleton and the cat)
+# Then you will have to flip one of them so that both look at the same direction
+```

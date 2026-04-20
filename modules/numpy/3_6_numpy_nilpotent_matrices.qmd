@@ -1,0 +1,222 @@
+---
+title: "Numpy Nilpotent Matrices"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+# Nilpotent matrices with NumPy
+
+```{python}
+import numpy as np
+```
+
+## Definition
+
+A square matrix $A$ is nilpotent if there exists a positive integer $k$ such that $A^k$ is the zero matrix. The smallest such $k$ is called the index of nilpotency (or nilpotency index). All eigenvalues of a nilpotent matrix are 0.
+
+::: {.callout-note}
+## Exercise
+
+Create a function that checks if an input matrix is nilpotent, returning True / False.
+
+```{python}
+def is_nilpotent(A: np.ndarray, tol: float=1e-12) -> bool:
+    """Return True if A^k is (approximately) zero for some k <= n.
+    Uses successive powers up to n (matrix size).
+    """
+    n = A.shape[0]
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("A must be square")
+    B = np.eye(n)
+    for k in range(1, n + 1):
+        B = B.dot(A)  # B = A^k
+        if np.linalg.norm(B, ord="fro") < tol: # uses Frobenius norm
+            return True
+    return False
+```
+
+```{python}
+# Start with the standard 2x2 nilpotent Jordan block and show powers
+J2 = np.array([[0., 1.], [0., 0.]])
+
+print("J2 =")
+print(J2)
+
+print("J2^2 =")
+print(np.linalg.matrix_power(J2, 2))
+
+print("Is nilpotent?", is_nilpotent(J2))
+```
+
+```{python}
+# Test another matrix
+ones = np.ones((3, 3))
+
+print("Is nilpotent?", is_nilpotent(ones))
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Create a function that returns the nilpotency index of a matrix. If the matrix is not nilpotent, return None.
+
+```{python}
+def nilpotency_index(A: np.ndarray, tol: float=1e-12) -> np.ndarray:
+    """Return the smallest k such that A^k == 0 (within tol), or None if not found up to n."""
+    n = A.shape[0]
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("A must be square")
+    B = np.eye(n)
+    for k in range(1, n + 1):
+        B = B.dot(A)  # B = A^k
+        if np.linalg.norm(B, ord="fro") < tol:
+            return k
+    return None
+```
+
+```{python}
+# Start with the standard 2x2 nilpotent Jordan block
+J2 = np.array([[0., 1.], [0., 0.]])
+
+print("Nilpotency index:", nilpotency_index(J2))
+```
+
+```{python}
+# Test another matrix
+ones = np.ones((2, 2))
+
+print("O =")
+print(ones)
+
+print("O^2 =")
+print(np.linalg.matrix_power(ones, 2))
+
+print("Nilpotency index:", nilpotency_index(ones))
+```
+
+:::
+
+## Jordan blocks
+A standard nilpotent Jordan block of size $n$ has ones on the superdiagonal and zeros elsewhere; its nilpotency index equals $n$.
+
+::: {.callout-note}
+## Exercise
+
+Define a function that creates a Jordan block of size $n$ (chosen by the user).
+
+```{python}
+def jordan_nilpotent(n: int) -> np.ndarray:
+    A = np.zeros((n, n), dtype=float)
+    for i in range(n-1):
+        A[i, i+1] = 1.0
+    return A
+```
+
+```{python}
+# Examples
+J3 = jordan_nilpotent(3)
+
+print("J3 =")
+print(J3)
+
+print("J3^2 =")
+print(np.linalg.matrix_power(J3, 2))
+
+print("J3^3 =")
+print(np.linalg.matrix_power(J3, 3))
+
+print("Nilpotency index J3:", nilpotency_index(J3))
+```
+
+:::
+
+## General constructions
+
+Another easy way to produce nilpotent matrices is to take any strictly upper-triangular matrix (zeros on and below diagonal). These are always nilpotent with index $\leq n$.
+
+::: {.callout-note}
+## Exercise
+
+Define a function that creates a random strictly upper-triangular matrix (nilpotent) of size $n$ (chosen by the user).
+
+```{python}
+def random_strict_upper(n: int, seed: int=None) -> np.ndarray:
+    "Create a random strictly upper-triangular matrix (nilpotent)"
+    rng = np.random.default_rng(seed)
+    A = np.zeros((n, n), dtype=float)
+    for i in range(n):
+        for j in range(i+1, n):
+            A[i, j] = rng.normal()
+    return A
+```
+
+```{python}
+# Examples
+R4 = random_strict_upper(4, seed=0)
+
+print('Random strictly upper triangular 4x4 (nilpotent):')
+print(R4)
+
+print('nilpotency index R4:', nilpotency_index(R4))
+```
+
+:::
+
+## Eigenvalues and spectral properties
+All eigenvalues of a nilpotent matrix are zero. We'll compute eigenvalues for the examples above.
+
+> Note: numerical eigenvalue computations may return very small values close to zero instead of exact zero due to floating-point arithmetic.
+
+```{python}
+for name, M in [("J2", J2), ("J3", J3), ("R4", R4)]:
+    vals = np.linalg.eigvals(M)
+    print(f"{name} eigenvalues: {vals}")
+```
+
+## Invertibility of I - A and explicit inverse formula
+If A is nilpotent with $A^m = 0$, then $(I - A)$ is invertible and its inverse is the finite sum $I + A + A^2 + \dots + A^{m-1}$.
+
+$$(I - A)^{-1} = I + \sum_{n=1}^m A^n$$
+
+We'll verify this numerically for an example.
+
+```{python}
+A = J3.copy()  # J3 is nilpotent with index 3
+m = nilpotency_index(A)
+I = np.eye(A.shape[0])  # creates a diagonal matrix
+inv_series = sum(np.linalg.matrix_power(A, k) for k in range(0, m))
+inv_direct = np.linalg.inv(I - A)
+print('Inverse by finite series:')
+print(inv_series)
+print('Inverse by numpy.linalg.inv(I-A):')
+print(inv_direct)
+print('Difference (fro norm):', np.linalg.norm(inv_series - inv_direct))
+```
+
+## Final exercise
+1) Construct a $5 \times 5$ strictly upper-triangular random matrix and compute its nilpotency index.
+2) Verify that all eigenvalues are (numerically) zero.
+3) Verify that $(I - A)^{-1} = I + \sum_{n=1}^{5} A^n$.
+
+Try changing the random seed or creating particular Jordan block combinations to see different nilpotency indices.
+
+```{python}
+# Quick run for the exercise
+A5 = random_strict_upper(5, seed=42)
+print("A5 =")
+print(A5)
+print("Nilpotency index A5:", nilpotency_index(A5))
+print("Eigenvalues A5:", np.linalg.eigvals(A5))
+m5 = nilpotency_index(A5)
+I5 = np.eye(5)
+inv_series_5 = sum(np.linalg.matrix_power(A5, k) for k in range(0, m5))
+inv_direct_5 = np.linalg.inv(I5 - A5)
+print("Difference (fro norm) A5 series vs direct:", np.linalg.norm(inv_series_5 - inv_direct_5))
+```
+
+## Notes and further reading
+- Jordan normal form: nilpotent matrices are conjugate to a block-diagonal matrix with Jordan blocks that each have zero on the diagonal. The sizes of these Jordan blocks determine the nilpotency index (largest block size).
+- Many properties of nilpotent matrices are easier to show symbolically; for symbolic experiments you can use SymPy. This notebook focuses on numerical demonstrations with NumPy.
+- For large matrices, computing high powers may be numerically unstable; consider analytic properties (block structure) to reason about nilpotency index instead of brute-force powering.

@@ -1,0 +1,265 @@
+---
+title: "Numpy Load"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+# 🎃 Happy Halloween! 🎃
+
+Instead of our regular lesson today, we are embarking on a _chilling_ adventure: **Ghost Hunting!**
+
+## The House of the Seven Chimneys
+
+A mysterious mansion in the heart of Madrid has caught our attention. Although it stands proudly near the Plaza del Rey and has seen centuries of history, locals whisper of a restless spirit said to wander through its six rooms, forever bound to the shadows beneath its seven chimneys.
+
+
+<p align="center">
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisD1FyBEP1rsT_IqnBHAxh-j5UcS4cDCHF2Ma0SpohTX90HVz9FKEJb4ZDPbbNAEbDPcJWmNOCDk_y7m4MiT0_saPMUtQIlXaxzH8xCCmmc76YdaxApOHK5L_Box7h6FN8JRLqLhd_q3_p/s1600/casa-siete-chimeneas-antigua_02.jpg" width="600" />
+</p>
+
+For our safety, we'll be monitoring the house remotely. Here's what we did:
+
+1. **Visited during broad daylight:** To ensure safety, we set up our monitoring devices during mid-day.
+2. **Placed three monitoring devices in each room:**
+    - **EMF (Electro-Magnetic Frequency) Reader:** Ghosts are believed to have a unique electromagnetic field around them. This device detects intensity levels ranging from 0 to 5. An intensity above 3 is considered a potential ghostly presence.
+    - **Microphone:** Let's capture those ghostly whispers! This will measure noise levels in decibels. We now that background noise in the house is about 20 dB.
+    - **Thermometer:** Legend has it that a ghost's presence can drastically drop room temperatures, sometimes even below 0 degrees!
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=13UDr7EDvj9ihHptHEAmhQRp5oJDjTOH7" width="400" />
+</p>
+
+### How Do We Identify a Ghost?
+
+The ghost can occasionally cause paranormal disturbances. However, a genuine manifestation occurs when two or more anomalies are detected simultaneously. That's our signal!
+
+For instance, the ghost is in a room if the temperature there drops below 0 degrees and the EMF detects a signal above 4.
+
+### Recording Details
+
+We set our devices to record from 9 pm to 8 am. After setting everything up, we headed back to the safety of our homes. The next morning, we collected our equipment and now have recordings sampled every second. You can identify each recording by its name format: `Device-Room-Time.txt`.
+
+Ready to unravel the mysteries? Let's go! 🕵🏻‍♂️👻
+
+---
+
+## Downloading the Ghostly Records
+
+To begin our analysis, let's first download the recorded data into our Colaboratory session.
+
+Execute the cell below to start the download.
+
+> 🛑 **Troubleshooting Tip:**
+> If you encounter any issues while executing the cell, try the following steps:
+> 1. Navigate to **"Runtime"** in the menu.
+> 2. Select **"Disconnect and delete runtime"**.
+> 3. After doing so, attempt to execute the cell once more.
+
+```{python}
+# Download the ZIP file from the provided Google Drive link
+!wget 'https://drive.google.com/uc?export=download&id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ' -O myfile.zip
+
+# Extract the ZIP file
+!unzip -o myfile.zip
+```
+
+---
+
+## Setting Up Our Toolkit
+
+Before we dive into the analysis, let's gather the tools we'll need. It's a best practice to import all the libraries at the beginning to ensure we have everything ready and to avoid any disruptions later on.
+
+```{python}
+import matplotlib.pyplot as plt  # To plot the recordings
+import numpy as np
+import os  # This library will help us load the files
+```
+
+## Working with Files using `os`
+
+For our ghost hunting analysis, we need to process multiple recorded data files. The Python `os` library will come in handy for this! It provides a way to use operating system-dependent functionality, like reading or writing to the file system.
+
+### What are we using `os` for?
+**Looping Over Files:** The `os` library allows us to iterate over all the files in a directory, making it much simpler to process large sets of data.
+
+```{python}
+def list_txt_files_from_directory(directory: str) -> list[str]:
+  """
+  List all the TXT files from the specified directory.
+
+  Parameters
+  ----------
+  directory : str
+      The path to the directory containing the TXT files.
+
+  Returns
+  -------
+  list[str]
+      A list of filenames of the TXT files in the directory.
+  """
+  # Initialize the list where filenames will be stored
+  filenames = []
+
+  # Loop through the directory
+  for filename in os.listdir(directory):
+    # Check if the file is a TXT file
+    if filename.endswith(".txt"):
+      # Add the filename to the list
+      filenames.append(filename)
+
+  return sorted(filenames)
+
+list_files = list_txt_files_from_directory(".")
+
+print(list_files[:5])
+```
+
+---
+
+## Loading Data into NumPy Arrays
+
+Now that we've listed all our files, it's time to dive into the data they contain. To efficiently handle and process this data, we'll be using **NumPy**.
+
+### How do we load the data?
+
+NumPy provides the `np.loadtxt()` function, which allows us to quickly load data from a text file directly into a NumPy array.
+
+```{python}
+# Load one txt file
+filename = "emf-Hall-1am.txt"
+x = np.loadtxt(filename)
+
+print(filename)
+print(x)
+```
+
+Given that our files contain dense, second-by-second recordings, simply reading the data won't be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.
+
+To assist us in this visualization process, we've prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!
+
+```{python}
+def plot_recordings(arr: np.ndarray, units: str=""):
+  """Plots any given recordings defined in a numpy array"""
+  x = np.arange(len(arr)) / 60
+  plt.figure(figsize=(x.max() / 10, 2))
+  plt.plot(x, arr)
+
+  # Add the units if any
+  units = units.lower()
+  if units == "emf":
+    plt.ylabel("EMF intensity")
+    plt.ylim(0, 5)
+  elif (units == "noise") or (units == "db"):
+    plt.ylabel("Noise (dB)")
+    plt.ylim(15, 45)
+  elif units.startswith("temp") or units.startswith("deg"):
+    plt.ylabel("Temperature (ºC)")
+    plt.ylim(-2, 10)
+
+  plt.xlabel("Minutes")
+  plt.show()
+  plt.close()
+
+plot_recordings(x, units="emf")
+```
+
+The graph you just observed represents the EMF readings from just one room (the hall), spanning a mere hour. There seems to be no activity there.
+
+Let's extend our analysis. By plotting the EMF records for the subsequent two hours, we can get a more comprehensive view of the paranormal activity in that room.
+
+```{python}
+# Load one txt file
+filename = "emf-Hall-1am.txt"
+y = np.loadtxt(filename)
+
+print(filename)
+plot_recordings(y, units="emf")
+```
+
+```{python}
+# Load one txt file
+filename = "emf-Hall-2am.txt"
+z = np.loadtxt(filename)
+
+print(filename)
+plot_recordings(z, units="emf")
+```
+
+---
+
+## Combining Data: Joining Arrays
+
+For a comprehensive analysis, it's beneficial to have consecutive records combined into one cohesive array. This will allow us to examine data trends over extended periods without interruptions.
+
+We'll use the `np.concatenate(<list_of_arrays>)` function, which stitches together arrays from a given list into a single unified array.
+
+```{python}
+# Concatenate all numpy arrays together
+emf = np.concatenate((x, y, z))
+
+plot_recordings(emf, units="emf")
+```
+
+With the EMF recordings from the hall between 0am and 2am in hand, we've witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.
+
+Thus, solely relying on EMF spikes won't confirm their presence. We need to corroborate these findings with our other sensors.
+
+Let's examine the data from the microphone. Will these readings confirm the ghostly suspicions raised by the EMF?
+
+```{python}
+ls_noise = []
+
+for hour in range(0, 3):
+  filename = f"noise-Hall-{hour}am.txt"
+  arr = np.loadtxt(filename)
+  ls_noise.append(arr)
+
+noise = np.concatenate(ls_noise)
+plot_recordings(noise, units="noise")
+```
+
+Our microphone has picked up some uncanny noises emanating from the hall. While there appear to be overlaps in activity across our devices, these instances are very short. Our quest isn't for momentary glitches, we're on the lookout for undeniable evidence of the supernatural.
+
+We are going to check the thermometer. If chilling temperatures accompany the auditory anomalies, we could be onto something truly spine-tingling!
+
+```{python}
+ls_temp = []
+
+for hour in range(0, 3):
+  filename = f"temp-Hall-{hour}am.txt"
+  arr = np.loadtxt(filename)
+  ls_temp.append(arr)
+
+temp = np.concatenate(ls_temp)
+plot_recordings(temp, units="temp")
+```
+
+The thermometer shows some chilling temperatures here and there. And what is more relevant, these temperatures match with the noise at 1:15. There was a real ghost manifesting at the hall during that time!
+
+To visualize these simultaneous activities more clearly, let's follow a strategic approach:
+
+1. **Binary Transformation:** Convert each recording into a binary array. If there's activity detected by a particular sensor, mark it as "yes" (1), and if not, "no" (0).
+2. **Summing the Arrays:** By adding up the values from our three binary arrays for each timestamp, we can measure the intensity of paranormal activity.
+3. **The Ghostly Threshold:** An accumulated value exceeding 1 at any given time is our clue! This indicates that multiple devices registered activity simultaneously, signaling the presence of our elusive ghost.
+
+```{python}
+# We sum the binary activity values
+# It is important to turn them into integer values
+activity = (emf > 3).astype(int) + (temp < 0).astype(int) + (noise > 30).astype(int)
+
+plot_recordings(activity)
+```
+
+Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we'll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.
+
+## The Next Steps
+
+To ensure thoroughness, we need to extend our investigation to every room. Manual analysis for each room would be time-consuming, so automation is the way to go!
+
+**Our Objective:**
+- Automate the analysis process for each room.
+- Generate a list detailing ghost sightings, including the room in which the manifestation occurred and the corresponding timestamps.
+
+---
+
+Choose a partner and start the ghost hunting! 👻

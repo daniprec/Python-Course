@@ -1,0 +1,688 @@
+---
+title: "Numpy Vectorization"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://colab.research.google.com/drive/1Ep9_yYetKbD2ECl7u_5jEWm9kS6HTdmU?usp=sharing)
+
+---
+
+# NumPy: Vectorization & Masking
+
+In this notebook, we will explore how vectorization and masking can help optimize code by reducing the need for loops and replacing them with efficient NumPy operations. This will dramatically improve the performance of our computations.
+
+```{python}
+import numpy as np
+```
+
+---
+
+## Vectorization (Review)
+
+**Vectorization** is the process of applying operations to entire arrays at once, rather than using loops to operate on individual elements. NumPy makes this easy by allowing us to perform element-wise operations on entire arrays, which is much faster than traditional loops.
+
+We have been applying vectorization during our past classes already.
+
+**Example.** Add two arrays element-wise.
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print(a + b)
+```
+
+```{python}
+a = [1, 2, 3]
+b = [4, 5, 6]
+
+for i in range(len(a)):
+  a[i] += b[i]
+
+print(a)
+```
+
+```{python}
+a = [1, 2, 3]
+b = [4, 5, 6]
+
+# First, turn this into arrays
+a2 = np.array(a)
+b2 = np.array(b)
+
+# If we need list, numpy can convert from array to list
+result = a2 + b2
+result = result.tolist()
+print(result)
+```
+
+```{python}
+# Without Vectorization (Using loops)
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+result = np.zeros(3)  # Initializes 0 as floats = 0.0
+
+for i in range(3):
+  result[i] = a[i] + b[i]
+
+print(result)
+```
+
+```{python}
+# With Vectorization
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+result = a + b
+
+print(result)
+```
+
+### Broadcasting Functions
+
+When we define a function, sometimes it is able to be applied to the whole array directly, thanks to **NumPy's inherent broadcasting** capabilities. This allows NumPy to automatically apply the function element-wise to each element in the array without needing loops.
+
+::: {.callout-note}
+## Exercise
+
+Define a function $f(x) = x^2+2x+1$, and apply it to each element of the array `[1, 2, 3, 4, 5]`.
+
+```{python}
+def f(x):
+  return x**2 + 2*x + 1
+
+y = np.array([1, 2, 3, 4, 5])
+print(f(y))
+```
+
+```{python}
+def softmax(x):
+  if x > 0:
+    return x
+  else:
+    return 0
+
+softmax_vectorized = np.vectorize(softmax)
+
+y = np.array([[-1, 0], [1, 2]])
+print(softmax_vectorized(y))  # [0, 0, 1, 2]
+```
+
+```{python}
+ls_names = ["zoya", "nacho", "tamara", "pablo"]
+
+arr_names = np.array(ls_names)
+
+def uppercase(s):
+  s_new = s[0].upper() + s[1:]
+  return s_new
+
+uppercase(arr_names)
+
+uppercase_vectorized = np.vectorize(uppercase)
+
+print(uppercase_vectorized(arr_names))
+```
+
+```{python}
+ls_names = ["zoya", "nacho", "tamara", "pablo"]
+
+arr_names = np.array(ls_names)
+
+def uppercase(s):
+  s_new = s[0].upper() + s[1:]
+  return s_new
+
+uppercase(arr_names)
+```
+
+```{python}
+np.vectorize(fun)
+
+for element in array:
+  fun(element)
+```
+
+```{python}
+def fernandos(x):
+  for i in range(len(x)):
+    if x[i] > 0:
+      yield x[i]
+    else:
+      yield 0
+
+y = np.array([-1, 0, 1, 2])
+y = np.array([[-2, -1], [1, 2]])
+print(np.array(list(fernandos(y))))
+```
+
+```{python}
+# Solution 1:
+# flatten the array to 1D
+# apply with a for loop
+# reshape to its original dimensions
+```
+
+```{python}
+x = np.array([
+    [1, 2, -1],
+    [-3, 0, 1]
+])
+
+# Create a mask (boolean array)
+below_zero = x < 0
+print(below_zero)
+
+# Masking
+x[below_zero] = 0
+
+print(x)
+```
+
+```{python}
+# Without vectorization
+
+# Define the function
+def f(x):
+  return x**2 + 2*x + 1
+
+# Array to apply the function to
+arr = np.array([1, 2, 3, 4, 5])
+
+# Initialize an empty result array
+result = np.zeros(arr.shape)
+
+# Apply the function to each element using a loop
+for i in range(len(arr)):
+  result[i] = f(arr[i])
+
+print(result)
+```
+
+```{python}
+# How can we vectorize the function?
+# We do not need to do anything special because the arithmetic
+# inside the function can be applied to a NumPy array as is!
+arr = np.array([1, 2, 3, 4, 5])
+result = arr**2 + 2*arr + 1
+print(result)
+```
+
+```{python}
+# With vectorization
+
+# Define the function
+def f(x):
+  return x**2 + 2*x + 1
+
+# Array to apply the function to
+arr = np.array([1, 2, 3, 4, 5])
+
+# Apply the function directly to the array using vectorization
+result = f(arr)
+
+print(result)
+```
+
+:::
+
+But what happens when we have an `if` clause? That does not work for arrays.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+if arr > 0:
+  print("its higher")
+```
+
+Why? Because `if` cannot interpret a sequence of booleans! It needs a single one:
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+mask = arr > 1
+print(mask)  # This is a NumPy boolean array
+```
+
+```{python}
+# We cannot use a "not" with boolean arrays!
+print(not mask)
+```
+
+```{python}
+# A "not" for a boolean array is a "~"
+print(~mask)
+```
+
+```{python}
+# We can convert the array to a single boolean
+# with the following methods
+
+print(mask.all())
+# Same as using "(a == True) and (b == True) and (c == True) ..."
+
+print(mask.any())
+# Same as using "(a == True) or (b == True) or (c == True) ..."
+
+print(not mask.all())
+# Same as using "(a == False) or (b == False) or (c == False) ..."
+
+print(not mask.any())
+# Same as using "(a == False) and (b == False) and (c == False) ..."
+```
+
+Some other functions cannot broadcast. This happens, for instance, when using conditions inside the function that rely on scalar comparisons (like `if` statements), which are not inherently compatible with array inputs. In these cases, NumPy cannot apply the function to the entire array at once because the function was designed to handle only one value at a time.
+
+For such cases, we use `np.vectorize` to convert the scalar function into one that can be applied element-wise across an array.
+
+**Example.** You are given two NumPy arrays, `numerators` and `denominators`. Your task is to write a function that performs element-wise division between the arrays, but handle cases where the denominator is zero. If the denominator is zero, return $10^{10}$, instead of causing an error.
+
+```{python}
+numerator = np.array([0, 1, 2, 3])
+denominator = np.array([0, 5, 0, 6])
+```
+
+```{python}
+def safe_division(numerator, denominator):
+  if denominator == 0:
+    return 1e10
+  else:
+    return numerator / denominator
+
+safe_division_vec = np.vectorize(safe_division)
+
+numerator = np.array([0, 1, 2, 3])
+denominator = np.array([0, 5, 0, 6])
+
+print(safe_division_vec(numerator, denominator))
+```
+
+```{python}
+def safe_division(numerator, denominator):
+  if denominator == 0:
+    return 100
+  else:
+    return numerator / denominator
+
+# Vectorize the safe_division
+fun = np.vectorize(safe_division)
+
+numerators = np.array([1, 2, 3])
+denominators = np.array([0, 1, 2])
+
+print(fun(numerators, denominators))
+```
+
+```{python}
+def safe_division(numerator, denominator):
+  if denominator == 0:
+    return 1e10  # Python understand 10^10
+  else:
+    return numerator / denominator
+
+# Vectorize the safe_division
+fun = np.vectorize(safe_division)
+
+numerators = np.array([1, 2, 3])
+denominators = np.array([0, 1, 2])
+
+print(fun(numerators, denominators))
+```
+
+---
+
+## Masking
+
+**Masking** allows us to filter or operate on specific elements of an array based on conditions. We create a boolean mask—an array of `True` or `False` values—and apply it to another array to select or modify elements where the condition is true.
+
+**Example.** you have an array of numbers. Find all elements greater than 2.
+
+```{python}
+# Without masking, without storing them
+
+arr = np.array([1, 2, 3, 4, 5])
+
+for val in arr:
+  if val > 2:
+    print(val)
+```
+
+```{python}
+# Without masking, storing them
+
+arr = np.array([1, 2, 3, 4, 5])
+result = []
+
+for val in arr:
+  if val > 2:
+    result.append(val)
+
+print(result)
+```
+
+```{python}
+# Using masking
+
+arr = np.array([1, 2, 3, 4, 5])
+
+# Create a mask where the condition is True for elements > 2
+mask = arr > 2
+
+print(mask)
+
+# Use the mask to filter the array
+filtered = arr[mask]
+
+print(filtered)
+```
+
+::: {.callout-note}
+## Exercise
+
+Given the array below, use masking to create a new array that only contains values greater than 5.
+
+```{python}
+arr = np.array([2, 5, 7, 9, 3])
+
+# Your solution here
+apple = arr > 5  # mask named "apple"
+print(apple)
+
+arr_new = arr[apple]
+print(arr_new)
+```
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+y = np.array([0, 3])
+print(x > y)
+```
+
+```{python}
+x = np.array([1, 2, 3, 4])
+y = np.array([0, 3])
+print(x > y)
+```
+
+```{python}
+x = np.array([1, 2, 3, 4])
+mask = np.array([True, False])
+print(x[mask])
+```
+
+:::
+
+### Replacing Array Values with a Mask
+
+We can use **masking** to selectively replace values in an array based on a specific condition, similar to how we would use an `if` statement. By creating a **boolean mask**, we can identify elements that meet the condition and apply operations or assignments only to those elements. This method provides an efficient way to modify arrays without using loops.
+
+**Example.** Given a 2D array, find all 0s and replace them with 2s.
+
+```{python}
+arr = np.array([
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 1, 0]
+])
+
+# Create a boolean mask where 0 is True
+mask = arr == 0  # "mask" is a new array different than "arr"
+print(mask)
+
+# Use the mask to replace 0s with 2s
+# Here we use broadcasting
+# (a single value is assigned to a whole piece of the array)
+arr[mask] = 2  # We are modifying the original "arr"
+# The masked array is a 1D array
+print(arr[mask])
+
+print(arr)
+```
+
+**Example.** Given an array, find the odd numbers and raise them to their closest even.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+
+mask_odd = arr % 2 == 1
+
+arr[mask_odd] = arr[mask_odd] + 1
+
+print(arr)
+```
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+
+# Create a boolean mask where the condition (arr % 2 == 1)
+# is True for odd numbers
+mask_odd = arr % 2 == 1
+print(mask_odd)
+
+# Use the mask to select only the odd numbers and add 1 to them
+arr[mask_odd] = arr[mask_odd] + 1
+
+print(arr)
+```
+
+As we have seen, replacing values in an array using a mask can be done in two ways:
+
+1. **Broadcasting**: This involves replacing all selected elements with a single value.
+   
+2. **Element-wise Replacement**: This involves replacing the selected elements with values from another array, but the two arrays (the original and the one you're assigning) must have matching shapes.
+
+**Important:** If the shape of the array you are trying to assign doesn’t match the shape of the mask, NumPy will throw an error!
+
+
+
+**Example.** Given a 1D array, replace all negative values $x$ with $x^2$.
+
+```{python}
+# Define a 1D array
+arr = np.array([-3, -2, -1, 0, 1, 2, 3])
+
+# Create a mask for negative numbers
+mask_neg = arr < 0
+print(mask_neg)
+
+# Try to replace negative numbers with an array that has a different shape
+replacement_values = np.array([10, 20])
+print(replacement_values)
+
+# This will raise a ValueError because the shapes don't match
+arr[mask_neg] = replacement_values
+
+print(arr)
+```
+
+::: {.callout-note}
+## Exercise
+
+Given a 1D array, change all negative values with positive random integers between 1 and 10.
+
+```{python}
+arr = np.array([1, -1, 2, -2, 3, -3])
+
+# Create a boolean mask where the condition
+# (arr < 0) is True for negative elements
+mask_neg = arr < 0
+print(mask_neg)
+
+# Generate random integers between 1 and 10,
+# with the same number of values as there are negatives
+# np.sum(mask_neg) counts how many True values there are in the mask
+# (i.e., the number of negative values in arr)
+randvals = np.random.randint(1, 11, np.sum(mask_neg))
+
+# Replace the negative values in 'arr' (indicated by the mask)
+# with the generated random integers
+arr[mask_neg] = randvals
+print(arr)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Given two arrays, one of numerators and one of denominators, perform a safe division. when a denominator is 0, the result is $10^{10}$.
+
+```{python}
+numerators = np.array([1, 2, 3])
+denominators = np.array([0, 1, 2])
+
+# Initialize the array of results
+result = np.zeros(len(numerators))
+
+# Create a mask to find the 0s in the denominator array
+mask_zeros = denominators == 0
+
+# Assign 1e10 to the zeros, compute division for the rest
+result[mask_zeros] = 1e10
+result[~mask_zeros] = numerators[~mask_zeros] / denominators[~mask_zeros]
+
+print(result)
+```
+
+:::
+
+---
+
+### Want to Practice More?
+
+[In this notebook](https://drive.google.com/file/d/1Rth92pp2echsRSDEMgXY_Ej-lDlOyK7S/view?usp=sharing), you will find a complete masking exercise involving images. The goal: using masking techniques, take the image of a dog and seamlessly place it onto a beach picture!
+
+This exercise will help you apply the concept of masking in a more creative and visual way, improving your understanding of how to manipulate arrays in practical scenarios.
+
+---
+
+## Remember The Monty Hall problem?
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Monty_open_door.svg/640px-Monty_open_door.svg.png"  width="600">
+
+[Take a look back at that session!](https://drive.google.com/file/d/1ZbT7W2MLAfPhNroglsUa2g_tQufGnZwU/view?usp=sharing)
+
+```{python}
+def monty_hall_init(n_games: int, verbose: bool=False) -> np.ndarray:
+  # Initialize the matrix of doors, containing all goats
+  x = np.zeros((n_games, 3)).astype(int)
+
+  # Indexes of games can be generated through arange
+  ls_id_game = np.arange(n_games)
+  # Indexes of cars are chosen randomly between (0, 1, 2)
+  ls_id_car = np.random.randint(0, 3, size=n_games)
+
+  if verbose:
+    print("List of index for games:", ls_id_game)
+    print("List of index for cars: ", ls_id_car)
+
+  # Assign cars through list indexing
+  x[ls_id_game, ls_id_car] = 1
+
+  return x
+```
+
+```{python}
+# Start the game
+game = monty_hall_init(10000)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Initialize the number of times we find the car, as 0
+sum_car = 0
+
+# Loop through every game
+for id_game in range(n_games):
+  # Make a random choice between the doors (0, 1, 2)
+  id_guest = np.random.randint(0, 2)
+
+  # Where is the car? Check our array with car indexes
+  id_car = np.argmax(game[id_game])
+
+  # Choose the ID for the host
+  id_host = (3 - id_guest - id_car) % 3
+  if id_host == id_car:
+    id_host += np.random.randint(1, 3)
+    id_host %= 3
+
+  # Apply the same logic to choose the door we swap to
+  id_swap = (3 - id_guest - id_host) % 3
+
+  # If we found the car, `sum_car` will increase by 1
+  sum_car += game[id_game, id_swap]
+
+print("Win probability:", sum_car / n_games)
+```
+
+The code we have above works fine, but it takes some time to compute one million simulations. We can speed up this process by being clever with NumPy.
+
+<p align="center">
+<img src="https://www.sciencenews.org/wp-content/uploads/2022/11/117122_no_50YA-Speed-of-light_feat-1030x580.jpg" width="400" height="auto" />
+</p>
+
+Our key goal: remove for loops and replace it with NumPy broadcasting.
+
+---
+
+### First Attempt: Keep the Initial Pick
+
+```{python}
+# Start the game
+game = monty_hall_init(10)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Indexes of games can be generated through arange
+ls_id_game = np.arange(n_games)
+
+# Indexes of the guest are chosen randomly between (0, 1, 2)
+ls_id_guest = np.random.randint(0, 3, size=n_games)
+
+# Resolve all games at once with list indexing
+x_guest = game[ls_id_game, ls_id_guest]
+
+print("Guest choices:         ", ls_id_guest[:10])
+print("Result of their choice:", x_guest[:10])
+print("Win probability:", np.mean(x_guest))
+```
+
+---
+
+### Second Attempt: Switching Doors
+
+In our loop implementation, the host intervention was handled with sets. This cannot be done in numpy so we must use some "coding hack".
+
+```{python}
+# Start the game
+game = monty_hall_init(10000)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Guest's initial choice
+id_guest = np.random.randint(0, n_doors, size=n_games)
+
+# Identify where the car is located
+id_car = np.argmax(game, axis=1)
+
+# Host's choice (one of the doors that the guest didn't choose and doesn't have the car)
+# We can use (3 - id_guest - id_car) % 3 to find the door that is neither the guest's choice nor has the car
+id_host = (3 - id_guest - id_car) % 3
+# Adjust cases where guest's choice and car are the same
+mask_same = id_guest == id_car
+id_host[mask_same] += np.random.randint(1, 3, mask_same.sum())
+id_host[mask_same] %= 3
+
+# Guest's swap choice (the remaining door)
+# Since there are 3 doors (0, 1, 2), the swapped door is (3 - id_guest - id_host) % 3
+id_swap = (3 - id_guest - id_host) % 3
+
+# Calculate wins
+sum_car = np.sum(game[np.arange(n_games), id_swap])
+
+print("Win probability:", sum_car / n_games)
+```
+
+---

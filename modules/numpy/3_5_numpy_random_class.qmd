@@ -1,0 +1,801 @@
+---
+title: "Numpy Random"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://drive.google.com/file/d/18tl_5f4400Jrw3Fkfsy0LpK3FBRXPg3r/view?usp=drive_link)
+
+---
+
+# NumPy: Random Number Generation & Advanced Indexing
+
+# The Monty Hall problem
+
+Suppose you are on a game show, and you are given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what is behind the doors, opens another door, say No. 3, which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it to your advantage to switch your choice?
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Monty_open_door.svg/640px-Monty_open_door.svg.png"  width="600">
+
+To answer this question, we can simulate the game a big number of times. In the first run of simulations we keep the door we chose, in the second run we switch doors. Then we compare our winning percentage.
+
+---
+
+## Setup
+
+For this lesson we will only need NumPy.
+
+```{python}
+import numpy as np
+```
+
+---
+
+## Preparing the Game
+
+### Initializing the Matrix
+
+We can use `numpy` arrays to represent the doors on each game, in the form of a matrix $\boldsymbol{x}$ with shape $(N, 3)$ where $N$ is the number of games we play. Values $x=0$ represent a goat, while $x=1$ represents the car.
+
+```{python}
+n_games = 100
+
+game = np.zeros((n_games, 3))  # quiz question?
+game = game.astype(int)
+
+print(game)
+```
+
+```{python}
+x = 3.0
+
+x = int(x)
+# .astype(int)
+
+print(x)
+```
+
+```{python}
+x = np.array([1, 2.0])
+x = int(x)
+
+print(x)
+```
+
+```{python}
+x = [1.0, 2.0]
+x = int(x)
+
+print(x)
+```
+
+```{python}
+# Let us start with a low number of games
+n_games = 10
+
+# Initialize the matrix, filled with zeros (only goats)
+x = np.zeros((n_games, 3))
+
+print(x)
+```
+
+What is the shape of `x`?
+
+```{python}
+print("Shape of the x:", x.shape)
+```
+
+What is the type of variable `x`?
+
+```{python}
+print("Type of x:", type(x))
+```
+
+What about the type of its elements?
+
+```{python}
+print("Types inside the x:", x.dtype)
+```
+
+By default, `numpy` initializes matrices with type `float` (floating point number). This is an unnecesay use of memory, we can change the type to `int` (integer).
+
+```{python}
+x = x.astype(int)
+
+print("Types inside x:", x.dtype)
+
+print(x)
+```
+
+```{python}
+print(game)
+```
+
+```{python}
+idx_0 = np.arange(0, n_games)
+
+print(idx_0)
+```
+
+```{python}
+idx_1 = [0] * n_games
+
+print(idx_1)
+```
+
+```{python}
+game[idx_0, idx_1] = 1
+
+print(game)
+```
+
+```{python}
+games = np.zeros((n_games, 3))
+
+# games[:, 1] += 10  # for every row, column 1
+games[1, :] += 10  # for every column, row 1
+
+print(games)
+```
+
+Lets review some basic concepts:
+- Show the first row of the array.
+- Show the first column.
+- Show the first element.
+
+Knowing how to do this will help in the next steps.
+
+```{python}
+print("First row of x (doors of the first game):   ", x[0, :])
+```
+
+```{python}
+print("First column of x (first door of each game):", x[:, 0])
+```
+
+```{python}
+print("First element of x (first door of first game): ", x[0, 0])
+```
+
+As of now, all doors have a goat behind (a `0`).
+
+As numpy arrays are mutable objects, we can easily assign new values to their elements.
+
+```{python}
+# Add a car to the first door of the first game
+x[0, 0] = 1
+
+print(x)
+```
+
+```{python}
+# Add a car to the first door of every game
+x[:, 0] = 1
+# This is the same as saying
+# For each row `:` in `x`
+# Change the first value (index `0`) to `1`
+
+print(x)
+```
+
+Now there is a car for each game, but all cars are always at the first door.
+
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Monty-LeftCar.svg/1280px-Monty-LeftCar.svg.png"  width="400">
+
+### Advanced Indexing
+
+If we want the car to be placed randomly, we must use advanced indexing.
+
+Numpy arrays can be indexed using lists, as long as all lists have the same length.
+
+```python
+list_0 = [a0, b0, c0]
+list_1 = [a1, b1, c1]
+
+# Being x a 2D array
+x[list_0, list_1]
+
+# Is the same as indexing the following elements
+x[a0, a1], x[b0, b1], x[c0, c1]
+```
+
+```{python}
+# Sample matrix
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Take elements (0, 0), (1, 1) and (2, 2)
+idx = [0, 1, 2]
+idy = [0, 1, 2]
+
+print(y[idx, idy])
+```
+
+If the list does not have the same length, this will fail.
+
+```{python}
+# Sample matrix
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Take elements (0, 0), (1, 1) and (2, 2)
+idx = [0, 1]
+idy = [0, 1, 2]
+
+print(y[idx, idy])
+```
+
+Pay attention to the structure of advanced indexing:
+
+```python
+# Good
+x[[a0, b0, c0], [a1, b1, c1]]
+
+# Bad
+x[[a0, a1], [b0, b1], [c0, c1]]
+```
+
+```{python}
+# Sample matrix
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Wrong indexing
+print(y[(0, 0), (1, 1), (2, 2)])
+```
+
+```{python}
+# Sample matrix
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Take elements (0, 0), (1, 1) and (2, 2)
+idx = [0, 1, 2]
+idy = [0, 1, 2]
+
+# List cannot be negative
+print(y[-idx, -idy])
+```
+
+```{python}
+# Sample matrix
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Take elements (0, 0), (1, 1) and (2, 2)
+idx = [-1, -2, -3]
+idy = [0, 1, 2]
+
+# List cannot be negative, but indices inside can!
+print(y[idx, idy])
+```
+
+### Random Integer Generator
+
+The advanced indexing will allow us to choose one index per row, and fill it with "1" (a car).
+
+We just need to generate these indices randomly. For this we can use `np.random` module.
+
+```{python}
+#| eval: false
+
+```
+
+```{python}
+#| eval: false
+# Generate a random integer in the range [0, 2)
+n = np.random.randint(0, 3)
+
+print(n)
+```
+
+```{python}
+#| eval: false
+# Generate a random integer in the range [0, 2)
+n = np.random.randint(0, 3, 100)
+
+print(n)
+```
+
+```{python}
+# You could import the subpackage, but it is not necessary
+
+import numpy.random as rn
+
+print(rn.randint(0, 10))
+```
+
+```{python}
+#| eval: false
+# Generate 10 random integers in the range [0, 2)
+n = np.random.randint(0, 3, size=10)
+
+print(n)
+```
+
+```{python}
+# Setting a random seed ensures reproducibility of results
+np.random.seed(14)  # You can use any integer here
+
+# Generate an array of 10 random integers between 0 and 99
+n = np.random.randint(0, 100, size=10)
+# With the seed set, this will produce the same array every time you run it
+
+print(n)
+```
+
+```{python}
+# Different seeds produce different outcomes
+np.random.seed(20)
+n = np.random.randint(0, 100, size=10)
+print(n)
+```
+
+```{python}
+# Initialize the games matrix
+n_games = 10
+games = np.zeros((n_games, 3))
+games = games.astype(int)
+
+# Index each row once
+idx_0 = np.arange(0, n_games)
+
+# Index each column randomly
+idx_1 = np.random.randint(0, 3, n_games)
+
+# Advanced indexing to place a car
+games[idx_0, idx_1] = 1
+
+print(games)
+```
+
+```{python}
+ls = [
+    [1, 2],
+ [3, 4],
+  [5, 6]]
+
+print(len(ls))
+```
+
+```{python}
+print(len(games))
+```
+
+```{python}
+# Make Python choose door number 2
+print(games[:, 1])
+
+# Compute our avg. gains
+print(np.sum(games) / len(games))
+# Quiz question!
+```
+
+```{python}
+# Make Python choose door number 2
+choice = games[:, 1]
+print(choice)
+
+# Compute our avg. gains
+print(np.sum(choice) / len(choice))
+print(np.mean(choice))
+# Quiz question!
+```
+
+Knowing this information, lets create a function that generates any number $N$ of Monty Hall games, represented by a matrix $N x 3$:
+
+```{python}
+def monty_hall_init(n_games: int, verbose: bool=False) -> np.ndarray:
+  # Initialize the matrix of doors, containing all goats
+  x = np.zeros((n_games, 3)).astype(int)
+
+  # Indexes of games can be generated through arange
+  ls_id_game = np.arange(n_games)
+  # Indexes of cars are chosen randomly between (0, 1, 2)
+  ls_id_car = np.random.randint(0, 3, size=n_games)
+
+  if verbose:
+    print("List of index for games:", ls_id_game)
+    print("List of index for cars: ", ls_id_car)
+
+  # Assign cars through list indexing
+  x[ls_id_game, ls_id_car] = 1
+
+  return x
+
+x = monty_hall_init(1000000, verbose=False)
+print(x)
+```
+
+Review time! To make sure the array we generated is right, we want to check:
+- The minimum and maximum values, which should be 0 and 1 respectively.
+- The total number of cars. Should be the same as the number of games (10).
+- The average number of cars in total. Should be 33%.
+- The average number of cars per door.
+- The number of cars per game. Should be 1 in all cases.
+
+```{python}
+print("Range of values: ", x.min(), "to", x.max())
+```
+
+```{python}
+print("Total number of cars:", x.sum())
+```
+
+```{python}
+print("Average of cars in total:", x.mean())
+```
+
+```{python}
+print("Average of cars per door:  ", x.mean(axis=0))
+```
+
+```{python}
+print("Number of cars per attempt:", x.sum(axis=1))
+```
+
+---
+
+## Playing the Game
+
+Time to play the Monty Hall game!
+
+### First Attempt: Keep the Initial Pick
+
+In this first run, we (the guest) will pick one door and stick to it. There is no need to simulate what the host reveals.
+
+```{python}
+# Reinitialize the matrix of doors, this time with 10,000 games
+game = monty_hall_init(1000000)
+
+print(game.mean(axis=0))
+```
+
+```{python}
+choice = game[:, 1]
+
+print(np.mean(choice))
+```
+
+```{python}
+# Reinitialize the matrix of doors, this time with 10,000 games
+game = monty_hall_init(1000000)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Initialize the number of times we find the car, as 0
+sum_car = 0
+
+# Loop through every game
+for id_game in range(n_games):
+  # Make a random choice between the doors (0, 1, 2)
+  id_guest = np.random.randint(0, 3)
+  # If we found the car, `sum_car` will increase by 1
+  sum_car += game[id_game, id_guest]
+
+print("Win probability:", sum_car / n_games)
+```
+
+---
+
+### Second Attempt: Switching Doors
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Monty-RightCarSwitch.svg/1920px-Monty-RightCarSwitch.svg.png"  width="400">
+
+To handle the host intervention, we will use sets:
+- There are three doors: {1, 2, 3}
+- Car is in door A.
+- Guest chooses door B, in 33% of cases B=A.
+- Host must reveal a door in the subset {1, 2, 3} - {A, B}. This subset may have one or two elements. We name the revealed door C.
+- Guest swaps to the only door available in subset {1, 2, 3} - {B, C}.
+
+```{python}
+#| eval: false
+# Create the doors with goats
+game = [0, 0, 0]
+
+# Places the car at random
+idx_car = np.random.randint(0, 3)
+game[idx_car] = 1
+print(f"The car is placed in {idx_car}")
+
+# Participant chooses a door
+idx_participant = np.random.randint(0, 3)
+print(f"The participant chooses {idx_participant}")
+
+# The host can open a door that is NOT
+# a) the car
+# b) the participant's choice
+original_options = {0, 1, 2}
+options_left = original_options - {idx_car} - {idx_participant}
+
+print("The host can open", options_left)
+
+# The host will always open the first door available
+options_left = list(options_left)
+host_door = options_left[0]
+print(f"Host opens {host_door}")
+
+participant_switch = original_options - {idx_participant, host_door}
+participant_switch = list(participant_switch)[0]
+print(f"Partipant switches to {participant_switch}")
+```
+
+```{python}
+#| eval: false
+number_wins = 0
+
+for _ in range(1000000):
+  # Create the doors with goats
+  game = [0, 0, 0]
+
+  # Places the car at random
+  idx_car = np.random.randint(0, 3)
+  game[idx_car] = 1
+  # Participant chooses a door
+  idx_participant = np.random.randint(0, 3)
+
+  # The host can open a door that is NOT
+  # a) the car
+  # b) the participant's choice
+  original_options = {0, 1, 2}
+  options_left = original_options - {idx_car} - {idx_participant}
+
+  # The host will always open the first door available
+  options_left = list(options_left)
+  host_door = options_left[0]
+
+  participant_switch = original_options - {idx_participant, host_door}
+  participant_switch = list(participant_switch)[0]
+
+  number_wins += game[participant_switch]
+
+print(f"I won {number_wins}")
+```
+
+```{python}
+game = [0, 0, 1]
+my_pick = input("Pick a door:  ")  # Im picking door 1 (index 0)
+my_pick = int(my_pick)
+# How can presenter pick door 3 (index 2)?
+
+doors = {0, 1, 2}
+
+# Find the index of the value "1" in a list
+idx_car = game.index(1)
+doors = doors - {idx_car, my_pick}
+
+print(doors)
+```
+
+```{python}
+game = [0, 0, 0]
+idx_car = np.random.randint(0, 3)
+game[idx_car] = 1
+print(game)
+
+my_pick = input("Pick a door:  ")  # Im picking door 1 (index 0)
+my_pick = int(my_pick)
+# How can presenter pick door 3 (index 2)?
+
+doors = {0, 1, 2}
+
+# Find the index of the value "1" in a list
+idx_car = game.index(1)
+doors = doors - {idx_car, my_pick}
+
+print(doors)
+```
+
+```{python}
+# Lets start with just one game
+game = monty_hall_init(1)
+
+print(game)
+```
+
+We guess one door at random. How can we make the host reveal one of the other two doors that have a goat?
+
+```{python}
+# Make a random choice between the doors (0, 1, 2)
+id_guest = np.random.randint(0, 2)
+print(f"Our choice: {id_guest}")
+```
+
+`np.argmax(x)` returns the indices of the maximum values along an axis.
+
+```{python}
+# Where is the car? Check our array with car indexes
+id_car = np.argmax(game[0])
+
+print(f"The car is here: {id_car}")
+```
+
+The host must reveal a door that is neither what we picked, nor the door with the car. This is a subset operation!
+
+```{python}
+# The host can open the door that:
+# - Has not been choseen by the guest
+# - Does not have the car
+ls_id_host = list(set([0, 1, 2]) - set([id_guest, id_car]))
+
+print(f"The doors that the host can show are: {ls_id_host}")
+```
+
+Actually, this set operation can be performed in NumPy using `setdiff1d`:
+
+```{python}
+# The host can open the door that:
+# - Has not been choseen by the guest
+# - Does not have the car
+ls_id_host = np.setdiff1d([0, 1, 2], [id_guest, id_car])
+
+print(f"The doors that the host can show are: {ls_id_host}")
+```
+
+In order to choose between the list of options, we can use `np.random.choice`.
+
+```{python}
+id_host = np.random.choice(ls_id_host)
+
+print(f"The host reveals door: {id_host}")
+```
+
+Finally, we have to choose the door that was picked neither by us nor by the host.
+
+```{python}
+# After the host reveals the door, we (the guest) change our choice
+ls_id_swap = np.setdiff1d([0, 1, 2], [id_guest, id_host])
+
+print(f"Our options to swap are: {ls_id_swap}")
+```
+
+```{python}
+id_swap = ls_id_swap[0]
+
+print(f"We swap to: {id_swap}")
+```
+
+```{python}
+# Did we won?
+is_car = game[0, id_swap]
+
+print(is_car)
+```
+
+Now we can implement this logic inside a for loop:
+
+```{python}
+# Start the game
+game = monty_hall_init(10000)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Initialize the number of times we find the car, as 0
+sum_car = 0
+
+# Loop through every game
+for id_game in range(n_games):
+  # Make a random choice between the doors (0, 1, 2)
+  id_guest = np.random.randint(0, 2)
+
+  # Where is the car? Check our array with car indexes
+  id_car = np.argmax(game[id_game])
+
+  # The host can open the door that:
+  # - Has not been choseen by the guest
+  # - Does not have the car
+  ls_id_host = np.setdiff1d([0, 1, 2], [id_guest, id_car])
+  id_host = np.random.choice(ls_id_host)
+
+  # After the host reveals the door, we (the guest) change our choice
+  ls_id_swap = np.setdiff1d([0, 1, 2], [id_guest, id_host])
+  id_swap = ls_id_swap[0]
+
+  # If we found the car, `sum_car` will increase by 1
+  sum_car += game[id_game, id_swap]
+
+print("Win probability:", sum_car / n_games)
+```
+
+```{python}
+ls = [2]
+
+print(ls[0])
+```
+
+---
+
+**Alternative:** To find which door should the host open, instead of set difference, we can apply the following logic.
+
+**(A)** Assuming the guest chooses wrong the first time, we have two doors that the host cannot open, `id_guest` and `id_host`. We can see that the following operation will always get us that door:
+
+```
+id_host = (3 - id_guest - id_car)
+```
+
+Cases:
+
+- When guest picks 0 and car is in 1: `(3 - 0 - 1) = 2` → `2 % 3 = 2`
+- When guest picks 0 and car is in 2: `(3 - 0 - 2) = 1` → `1 % 3 = 1`
+- When guest picks 1 and car is in 2: `(3 - 1 - 2) = 0` → `0 % 3 = 0`
+
+Why add `% 3`? Is our way to ensure the ID stays in the interval (0, 2). In the cases above it is not required but will be necessary for the following scenario.
+
+**(B)** What if the guest first choice was right?
+
+- When guest picks 0: `(3 - 0 - 0) = 3` → `3 % 3 = 0`
+- When guest picks 1: `(3 - 1 - 1) = 1` → `1 % 3 = 1`
+- When guest picks 2: `(3 - 2 - 2) = -1` → `0 % 3 = 2`
+
+Then we can adjust by randomly adding 1 or 2 so that the host picks one of the other two doors.
+
+```
+if id_host == id_car:
+  id_host = id_host + np.random.randint(1, 3)
+  id_host = id_host % 3
+```
+
+```{python}
+# Start the game
+game = monty_hall_init(10000)
+
+# Get the number of games
+n_games, n_doors = game.shape
+
+# Initialize the number of times we find the car, as 0
+sum_car = 0
+
+# Loop through every game
+for id_game in range(n_games):
+  # Make a random choice between the doors (0, 1, 2)
+  id_guest = np.random.randint(0, 2)
+
+  # Where is the car? Check our array with car indexes
+  id_car = np.argmax(game[id_game])
+
+  # Choose the ID for the host
+  id_host = (3 - id_guest - id_car) % 3
+  if id_host == id_car:
+    id_host += np.random.randint(1, 3)
+    id_host %= 3
+
+  # Apply the same logic to choose the door we swap to
+  id_swap = (3 - id_guest - id_host) % 3
+
+  # If we found the car, `sum_car` will increase by 1
+  sum_car += game[id_game, id_swap]
+
+print("Win probability:", sum_car / n_games)
+```
+
+---
+
+## A Look into the Future
+
+The code we have above works fine, but it takes some time to compute one million simulations. We can speed up this process by being clever with NumPy.
+
+<p align="center">
+<img src="https://www.sciencenews.org/wp-content/uploads/2022/11/117122_no_50YA-Speed-of-light_feat-1030x580.jpg" width="400" height="auto" />
+</p>
+
+By the end of module 3, we will see how to write faster NumPy code! Our key goal: remove for loops and replace it with NumPy broadcasting.
+
+---

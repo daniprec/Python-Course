@@ -1,0 +1,1034 @@
+---
+title: "Review Numpy"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Before We Begin
+
+This code is designed to test your intuition. Try to understand the code without running it first. I suggest clicking **"Edit -> Clear all outputs"** in the menu bar at the top of your notebook before you begin. Afterward, you can run the code to check your understanding.
+
+The quiz will include similar exercises to the ones below (adding multiple-choice answers).
+
+For every question, assume NumPy is already imported with:
+
+```{python}
+import numpy as np
+```
+
+## Review of Session 3.1: Fundamentals
+
+::: {.callout-note}
+## Exercise
+
+What is going to be the final value of `x`?
+
+```{python}
+#| eval: false
+np = 4
+
+arr = np.array([2, 3, np, 5])
+
+print(arr)
+
+# a) [2, 3, 4, 5]
+# b) numpy.ndarray([2, 3, 4, 5])
+```
+
+:::
+
+Remember that Python will only remember the last variable declaration with the same name. Doing the code above with `np` is similar to:
+
+```{python}
+x = 10
+x = 2
+print(x)
+```
+
+The code fails because `np` ceases to be NumPy!
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+How would you replace the for loop in the code below, for a 1D NumPy array?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+result = 0
+for i in arr:
+  result = result + i
+
+print(result)
+```
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Option A
+result = np.cumsum(arr)
+
+# Option B
+result = np.sum(arr)
+
+# Option C
+result = np.loop(arr)
+```
+
+:::
+
+When we do `cumsum` to a higher dimensional array, NumPy first flattens that array.
+
+```{python}
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+print(np.cumsum(arr))
+```
+
+::: {.callout-note}
+## Exercise
+
+How do you check the number of dimensions of a NumPy array?
+
+```{python}
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Option A
+print(arr.shape)
+
+# Option B
+print(arr.ndim)
+
+# Option C
+print(arr.ndim())
+
+# Option D
+print(np.arr.ndim)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+I have a colored image represented by a 3D array `img`. I want to know its width and height. Which one of the following lines of code will give me that information?
+
+```{python}
+img = np.array([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]])
+
+# Option A
+height, width = img.shape
+
+# Option B
+height, width, _ = img.shape
+
+# Option C
+height, width = img.shape(:2)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+An empty array is a NumPy array with no elements inside. What of the following lines will NOT initialize an empty array?
+
+```{python}
+# Option A
+x = np.array()
+
+# Option B
+x = np.array([])
+
+# Option C
+x = np.zeros(0).astype(int)
+
+# Option D
+# All of the above fail.
+```
+
+:::
+
+---
+
+## Session 3.2: Arithmetics
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+Which symbol should I use to compute the matrix multiplication of 2D NumPy arrays?
+
+```{python}
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+
+# Option A
+result = a * b
+
+# Option B
+result = a.b
+
+# Option C
+result = a @ b
+
+# Option D
+result = np.matmul(a, b)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What is going to be the final value of `x`?
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = 0
+
+print(x)
+```
+
+:::
+
+In the example above, NumPy performs **broadcasting**: it assigns the value 0 to every element of the first row.
+
+Similarly, we can assign a value per element of the row, using an iterable:
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = [9, 8]
+
+print(x)
+```
+
+Another example of **broadcasting** occurs when we add 1 to the whole array:
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = 0
+x = x + 1
+
+print(x)
+```
+
+**Broadcasting** is a property of NumPy arrays, you cannot do it with lists!
+
+```{python}
+x = [[1, 2], [3, 4]]
+x[0] = 0
+# The line above does not broadcast!
+# It replaces the nested list [1, 2] with the integer 0
+print(x)
+```
+
+```{python}
+x = [[1, 2], [3, 4]]
+x = x + 1
+# List cannot add the value 1 to every element,
+# because it does not broadcast!
+print(x)
+```
+
+::: {.callout-note}
+## Exercise
+
+You want to add the vectors $[1, 2, 3]$ and $[4, 5, 6]$. The code raises an error on the first line `TypeError: array() takes from 1 to 2 positional arguments but 3 were given`. Explain and fix all the errors in the code.
+
+```{python}
+x = np.array(1, 2, 3)
+y = np.arange(4, 6, 1)
+
+print(x + y)
+```
+
+```{python}
+#| eval: false
+# Fixing the code above
+x = np.array([1, 2, 3])
+y = np.arange(4, 6, 1)
+print(y)
+
+# But this fails. Do you understand why?
+print(x + y)
+```
+
+:::
+
+---
+
+## Session 3.4: Array Manipulation
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+How would you join the two NumPy arrays `a` and `b` together into a single 1-D array?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# Option A
+c = np.concatenate([a, b], axis=0)
+
+# Option B
+c = np.append(a, b, how="join")
+
+# Option C
+c = np.join(a, b)
+
+# Option D
+c = a + b
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What does the following code do?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+reshaped = arr.reshape(2, 3)
+```
+
+:::
+
+a) Reshapes the array into 2 rows and 3 columns.
+
+b) Flattens the array.
+
+c) Causes an error.
+
+::: {.callout-note}
+## Exercise
+
+How would you stack two arrays `a = [1, 2, 3]` and `b = [4, 5, 6]` vertically?
+
+a) `np.vstack([a, b])`
+
+b) `np.hstack([a, b])`
+
+c) `np.concatenate([a, b], axis=0)`
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Consider an array $Z = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]$, how to generate an array $R = [[1,2,3,4], [2,3,4,5], [3,4,5,6], ..., [11,12,13,14]]$?
+
+```{python}
+# Solution with errors - Fix them!
+# The following code outputs
+# [[2,3,4],[3,4,5],[4,5,6],...,[12,13,14]]
+z = np.arange(1, 15)  # Output: [1, 2, 3, ..., 14, 15]
+# Initialize empty list
+ls = []
+for idx in range(1, len(z) - 3):
+  # Fill the list with sub-sets of the array
+  # For example, the first one will be [1, 2, 3, 4]
+  ls.append(z[idx:idx+3])
+# Turn the list of arrays into a 2D array
+r = np.array(ls)
+print(r)
+```
+
+```{python}
+# Solution
+z = np.arange(1, 15)
+# Initialize empty list
+ls = []
+for idx in range(len(z) - 3):
+  # Fill the list with sub-sets of the array
+  # For example, the first one will be [1, 2, 3, 4]
+  ls.append(z[idx:idx+4])
+# Turn the list of arrays into a 2D array
+r = np.array(ls)
+print(r)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+I want to create the matrix
+$$
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 0 & 6 \\
+7 & 8 & 9
+\end{bmatrix}
+$$
+But the code below raises the error `IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed` on line 3. Explain the errors of the code and fix them.
+
+```{python}
+x = np.linspace(1, 9, 9)
+x.reshape((3, 3))
+x[1, 1] = 0
+
+print(x)
+```
+
+```{python}
+#| eval: false
+# Fixing the code: "x.reshape()" does not modify the array "x" in place
+# we need to catch its output into a new variable
+x = np.linspace(1, 9, 9)
+y = x.reshape((3, 3))
+y[1, 1] = 0
+
+print(x)
+print(y)
+```
+
+```{python}
+# Again, notice how "x" does NOT change
+x = np.array([1, 2, 3, 4])
+y = x.reshape((2, 2))  # numpy method: <array>.<method()>
+
+# The original array "x" remains unchanged
+print(x)
+# The method "array.reshape()" outputs the new array
+print(y)
+```
+
+```{python}
+# Compare the code above with a list
+# The ".append()" method changes the list in place
+x = [1, 2, 3]
+y = x.append(4)  # list method: <list>.<method()>
+
+# The original list "x" has changed
+print(x)
+# The method "list.append()" outputs nothing
+print(y)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following function is failing in line 3: `TypeError: array() missing required argument 'object' (pos 0)`. Explain the error(s) and fix the code.
+
+```{python}
+def fibonacci_sequence(n: int):
+  # Initialize an empty array
+  arr = np.array()
+
+  for i in range(n):
+    if i <= 1:
+      # The first two elements of Fibonacci are 1
+      new_element = 1
+    else:
+      # Sum the last two elements of the sequence
+      new_element = arr[-2] + arr[-1]
+    # Add the element to the sequence
+    arr = np.append(arr, new_element)
+  # Ensure the array contains integer values
+  return int(arr)
+
+print(fibonacci_sequence(10))
+```
+
+:::
+
+---
+
+## Session 3.5: Random Number Generation & Fancy Indexing
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+I want my code below to print the message "Welcome" with a 50% chance. Which condition should I use?
+
+```{python}
+p = np.random.uniform(0, 100)
+
+# Option A
+condition = p >= 50
+
+# Option B
+condition = p >= np.random.uniform(50)
+
+# Option C
+condition = p >= np.random.seed(50)
+
+if condition:
+  print("Welcome")
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below is designed to assign random dice rolls (between 1 and 6) to each player from the list players. Fix the code so that each player receives a random integer between 1 and 6 (inclusive), as would be expected from rolling a die.
+
+```{python}
+players = ["A", "B", "C"]
+results = np.random.uniform(1, 6, size=3)
+
+dict_results = {}
+for i in range(len(players)):
+  dict_results[players[i]] = results[i]
+
+print(dict_results)
+```
+
+```{python}
+# Solution
+
+players = ["A", "B", "C"]
+results = np.random.randint(1, 7, size=3)
+
+dict_results = {}
+for i in range(len(players)):
+  dict_results[players[i]] = results[i]
+
+print(dict_results)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below is supposed to replace the first and last elements of the array arr with the value 100. However, it doesn't work as intended. Explain the error, and fix the code to correctly replace the first and last elements.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Attempt to replace the first and last elements
+arr[0, -1] = 100  # This raises an error
+
+print(arr)
+```
+
+```{python}
+# Solution 1: Fancy indexing
+
+arr = np.array([1, 2, 3, 4, 5])
+
+# Attempt to replace the first and last elements
+arr[[0, -1]] = 100
+
+print(arr)
+```
+
+```{python}
+# Solution 2: One element at a time
+arr = np.array([1, 2, 3, 4, 5])
+
+# Attempt to replace the first and last elements
+arr[0] = 100
+arr[-1] = 100
+
+print(arr)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What will be the output of the following code?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+print(arr[[0, 0, 1]])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below is designed to extract the third row and the second column from a 3x3 matrix matrix. However, it produces an error. Fix the code to correctly extract the row and column.
+
+```{python}
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+# Attempt to extract the third row and second column
+third_row = matrix[3, :]  # This causes an indexing error
+second_column = matrix[:, 2]
+
+print("Third row:", third_row)
+print("Second column:", second_column)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below attempts to extract the diagonal elements of the 4x4 matrix matrix. However, it produces incorrect results. Fix the code so that it correctly extracts the diagonal.
+
+```{python}
+matrix = np.array([[10, 20, 30, 40],
+                   [50, 60, 70, 80],
+                   [90, 100, 110, 120],
+                   [130, 140, 150, 160]])
+
+# Attempt to extract the diagonal elements
+diagonal = matrix[:, :]  # This selects the whole matrix, not the diagonal
+
+print("Diagonal elements:", diagonal)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below is supposed to reverse the elements of arr using slicing, but it doesn't work as expected. Fix the code so that the elements of the array are reversed.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Attempt to reverse the array
+arr[::-1, :]  # This raises an error
+
+print(arr)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code below is designed to extract a 2x2 subarray from the top-left corner of the 3x3 matrix matrix. However, the code is incorrect. Fix the indexing to extract the correct subarray.
+
+```{python}
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+# Attempt to extract the top-left 2x2 subarray
+subarray = matrix[0:2, 0:3]  # This includes an extra column
+
+print(subarray)
+```
+
+:::
+
+---
+
+## Session 3.6: Statistics
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+The following code should compute the mean of each row of `arr`, and print their values as integers. When we run the code, it outputs a single value, `5`. Fix it to output `[2, 5, 8]`.
+
+```{python}
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Compute the mean of each row
+mean = int(np.mean(arr))
+
+print(mean)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should compute the mean of `arr` along every axis. When we run the code, it raises `AxisError: axis 3 is out of bounds for array of dimension 2`. Explain the error(s) and fix this code. We want the output:
+```
+{
+  "mean_0": [1.0, 4.0],
+  "mean_1": [1.5, 2.0, 4.0]
+}
+```
+
+```{python}
+arr = np.array([
+    [1, 2],
+    [1, 3],
+    [1, 7]
+])
+
+# Get the dimensions of this array
+axes = arr.shape  # Expected tuple: (0, 1)
+
+# Initialize an empty dictionary
+dict_means = {}
+
+# Loop through the different stats
+for axis in axes:
+  key = f"mean_{axis}"
+  value = np.mean(arr, axis=axis)
+  # Use the stat name to call the specific NumPy function
+  dict_new = {key: value}
+  # Insert the key-value pair into the original dictionary
+  dict_stats.append(dict_new)
+
+print(dict_stats)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+A vector $\mathbf{x}$ can be normalized to $\mathbf{\hat{x}}$ by applying the following formula:
+$$\mathbf{\hat{x}} = \frac{\mathbf{x} - \mu_x}{\sigma_x}$$
+where $\mu_x$ is the mean of $\mathbf{x}$ and $\sigma_x$ its standard deviation.
+
+A property of any normalized vector is that its mean is always 0. However the output of the code below is $3.06$ instead of $0$. Explain the error(s) and fix this code.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+mean = np.mean(arr, axis=0)  # Output is 4.5
+std = np.std(arr, axis=0)  # Output is 2.58
+# Normalize the vector and compute its new mean
+arr_norm = arr - mean / std
+norm_mean = np.mean(arr_norm, axis=0)
+print(norm_mean)  # Expected: 0
+```
+
+:::
+
+---
+
+## Session 3.7: Linear Algebra
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `z` be?
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+y = np.linalg.inv(x)
+z = np.dot(x, y)
+
+print(z)
+```
+
+:::
+
+`z` is the unitary matrix, but due to floating errors, a 0 appears as a very low number instead.
+
+How would you fix that?
+
+```{python}
+# Option A: convert z to integer
+print(z.astype(int))
+```
+
+```{python}
+# Bad choice, remember int does not round, just cuts the decimals!
+print(int(0.999999999))
+```
+
+```{python}
+x = np.array([1.2, 3.4])
+
+# In addition, remember that you need to use "x.astype(int)"
+# to convert every element of the array
+# If you simply call "int(x)", you will be trying to convert a
+# whole array into a single integer. That is not possible!
+print(int(x))
+```
+
+```{python}
+# Option B: Using the round method instead
+print(z.round(0))
+```
+
+```{python}
+print(x.astype(int))
+```
+
+a) The identity matrix.
+
+b) A zero matrix.
+
+c) The code will cause an error.
+
+::: {.callout-note}
+## Exercise
+
+How to find the eigenvalues of a square matrix X?
+
+```{python}
+X = np.array([[1, 2], [3, 4]])
+
+# Option A
+print(np.eigen(X))
+
+# Option B
+print(np.eigvals(X))
+
+# Option C
+print(np.linalg.eig(X))
+```
+
+:::
+
+---
+
+## Session 3.8: Vectorization & Masking
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+c = a > b
+```
+
+:::
+
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([[1], [2], [3]])
+b = np.array([4, 5, 6])
+c = a > b
+```
+
+:::
+
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+
+<font color='red'>This works because of NumPy's broadcasting rules. When you compare arrays of different shapes, NumPy tries to make their shapes compatible by "broadcasting" them to a common shape.</font>
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6, 7])
+c = a > b
+```
+
+:::
+
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+
+<font color='red'>The error occurs because the shapes of a and b are not compatible for broadcasting in this case.</font>
+
+::: {.callout-note}
+## Exercise
+
+Given any array `arr`, how would you filter out all elements greater than 3 without a for loop?
+
+```{python}
+# Example
+arr = np.array([1, 2, 3, 4, 5])
+# Output: [1, 2, 3]
+
+# Option A
+print(arr[arr > 3])
+
+# Option B
+print(arr[arr <= 3])
+
+# Option C
+print(arr[:3])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What will be the output of the following code?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+mask = arr % 2 == 0
+print(arr[mask])
+```
+
+:::
+
+a) [2, 4]
+
+b) [1, 3, 5]
+
+c) [0, 2, 4]
+
+::: {.callout-note}
+## Exercise
+
+How would you replace values greater than 3 in an array with the value 10?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Option A
+arr[>3] = 10
+
+# Option B
+for value in arr:
+  if value > 3:
+    value = 10
+
+# Option C
+arr[arr > 3] = 10
+```
+
+```{python}
+# How would we do this with a list?
+ls = [1, 2, 3, 4, 5]
+
+for value in ls:
+  if value > 3:
+    value = 10
+
+print(ls)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Which line of code below correctly filters all odd numbers from the array?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+
+# Option A
+evens = arr[arr % 2 != 0]
+
+# Option B
+evens = arr[arr == 2]
+
+# Option C
+evens = arr[arr != 0]
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should output the positive odd numbers. In the example, we expect `[1, 3]`. When we run the code, it raises `IndexError: boolean index did not match indexed array along dimension 0`. Explain the error(s) and fix this code.
+
+```{python}
+arr = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4])
+mask_odd = arr % 2 != 0
+mask_positive = arr[mask_odd] > 0
+result = arr[mask_positive]
+print(result)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should return the elements of the array that are numbers higher than 2. When we run it, it raises `UFuncTypeError: ufunc 'greater' did not contain a loop with signature matching types`. What is wrong? (No need to fix this)
+
+```{python}
+arr = np.array(["a", 1, "b", 2, "c", 3, "d", 4])
+mask_int = arr.dtype == int
+mask_positive = arr > 2
+mask = mask_int & mask_positive
+result = arr[mask]
+print(result)
+```
+
+```{python}
+# Remember: "np.array()" will change all elements to be the same type
+arr = np.array(["a", 1, "b", 2, "c", 3, "d", 4])
+
+print(arr)
+```
+
+```{python}
+# A list does not change its content's types
+ls = ["a", 1, "b", 2, "c", 3, "d", 4]
+
+# This for loop works for a list, but not for an array
+for element in ls:
+  if type(element) == int:
+    if element > 2:
+      print(element)
+```
+
+:::
+
+---
+
+# Want More?
+
+- Try out this collection of 100 NumPy exercises:
+[NumPy-100](https://github.com/rougier/numpy-100)
+
+- [From Python to NumPy by Nicolas P. Rougier](https://www.labri.fr/perso/nrougier/from-python-to-numpy/) - Very complete guide to NumPy, also contains exercises.
+
+- [Project Euler](https://projecteuler.net/) - A collection of math-oriented coding challenges. You can try to solve them using all we have learnt.
+
+- [Advent of Code](https://adventofcode.com/) - Like an advent calendar, but instead of chocolate there are coding exercises!
+
+---

@@ -1,0 +1,336 @@
+---
+title: "Numpy Linalg"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://colab.research.google.com/drive/1Ep9_yYetKbD2ECl7u_5jEWm9kS6HTdmU?usp=sharing)
+
+---
+
+# NumPy: Linear Algebra
+
+In this class we will see a particular application of NumPy: compressing and reconstructing images. To do this we use Linear Algebra: we will compute eigenvalues, eigenvectors, and Singular Value Decomposition (SVD).
+
+Understanding these concepts with the visual aid of images can be both fun and insightful. Let's embark on this journey!
+
+---
+
+
+## Setting Up
+
+To get started, we'll be importing several libraries:
+
+```{python}
+import cv2  # for image processing tasks
+import matplotlib.pyplot as plt  # to display images
+import numpy as np  # for numerical operations on arrays
+import requests  # to fetch images from the internet
+```
+
+---
+
+## Loading and Displaying Images
+
+I have set up a couple of utility functions to make our exploration smoother:
+- `load_image`: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color.
+- `show_image`: A simple function to display images from their NumPy array representations.
+
+```{python}
+def load_image(url: str, color: bool=False) -> np.ndarray:
+  """
+  Fetch and return an image from the provided URL as a grayscale
+  NumPy array.
+
+  Parameters
+  ----------
+  url : str
+    The URL of the image to be fetched.
+  color : bool, optional
+    If True, loads the image in color. If False, loads the image in grayscale.
+    Default is False.
+
+  Returns
+  -------
+  np.ndarray
+    If `color` is False, returns a grayscale image represented as a 2D NumPy
+    array with values ranging from 0 to 255. If `color` is True,
+    returns a color image in RGB format.
+  """
+  response = requests.get(url)
+  image_array = np.asarray(bytearray(response.content), dtype="uint8")
+
+  if color:
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
+  else:
+    image = cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)
+  return image
+
+def show_image(img: np.ndarray):
+  """
+  Display the provided NumPy array as an image.
+
+  Parameters
+  ----------
+  img : np.ndarray
+    The image data represented as either a 2D NumPy array for grayscale images
+    or a 3D NumPy array for color images.
+  """
+  # Check if the image is color (3D) or grayscale (2D)
+  if img.ndim == 3:  # Color image
+    if img.max() > 1:  # Real image
+      plt.imshow(img, vmax=255)
+    else: # Binary mask
+      img = np.mean(img, axis=2)
+      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
+  else:  # Grayscale image
+    if img.max() > 1:  # Real image
+      plt.imshow(img, cmap="gray", vmin=0, vmax=255)
+    else:  # Binary mask
+      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
+
+  plt.show()
+  plt.close()
+```
+
+We can load our image just as we did last class.
+
+```{python}
+# Link to the image
+url_dog = "https://drive.google.com/uc?export=view&id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"
+
+# Load and display the image
+dog = load_image(url_dog)
+print(f"The array has dimension: {dog.ndim}")
+print(f"The array contains values of type: {dog.dtype}\n")
+show_image(dog)
+```
+
+---
+
+## Image Preprocessing
+
+For some of our mathematical operations, especially eigen decomposition, it's important that our matrices (or in this case, images) are square. That means the width and height should be the same. We'll preprocess our image to ensure this condition is met.
+
+```{python}
+# Get the dimensions (width and height) of the 'dog' image
+w, h = dog.shape
+
+# Ensure the image is square for eigen decomposition:
+# If width is greater than height, truncate the width to match the height
+# Otherwise, truncate the height to match the width
+if w > h:
+  img = dog[:h, :]  # Retain all rows up to height 'h' and all columns
+else:
+  img = dog[:, :w]  # Retain all columns up to width 'w' and all rows
+
+# Print the shape of the processed image to confirm its dimensions
+print(img.shape)
+
+# Display the square image
+show_image(img)
+```
+
+## Eigen Decomposition
+
+Now, onto the main topic! Eigen decomposition involves breaking down a matrix into its eigenvalues and eigenvectors. When applied to images, this can allow for compression by representing the image with fewer values.
+
+We'll compute the eigenvalues and eigenvectors for our image, and then use them to reconstruct the image. This reconstructed image will be a compressed version of the original, showcasing the power and utility of eigen decomposition in image processing.
+
+```{python}
+# Compute the eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(img)
+
+print(eigenvalues.shape)
+```
+
+Using eigen decomposition on our image $A$ with size $N \times N$, we have derived two arrays:
+- An array of eigenvalues $\lambda$ with a size of $N$.
+- An array of eigenvectors $Q$ with dimensions $N \times N$.
+
+We can reconstruct the original image from these components. The reconstruction can be achieved with the following operation:
+
+$$A = Q\ \Lambda\ Q^{-1}$$
+
+> Note: We can perform matrix multiplication in Numpy by either calling the `np.matmul()` function or using the `@` operator.
+
+```{python}
+# Reconstruct the compressed image
+compressed_image = eigenvectors @ np.diag(eigenvalues) @ eigenvectors.T
+
+# Display the compressed image
+show_image(compressed_image)
+```
+
+We have encountered an error! The reason? Our eigenvalues and eigenvectors contain imaginary values, which are not suitable for our image reconstruction process.
+
+How can we make the eigenvalues real? We can use a simple linear algebra theorem.
+
+**The eigenvalues of symmetric matrices are real.**
+
+## Making a Symmetric Matrix
+
+To address the challenges posed by the eigenvalue decomposition, we can craft a symmetric matrix by placing our original image in the bottom-left corner of a larger matrix. This larger matrix will have mirrored content, ensuring its symmetry.
+
+Steps:
+1. Create a zero-filled matrix of double the size of our original image.
+2. Place the original image into the bottom-left corner of this new matrix.
+3. Reflect the content of the original image to the upper-right corner to achieve symmetry.
+
+Once we have this symmetric matrix, we can proceed with the `eig` or similar operations designed for symmetric matrices. Post-processing, we'll extract the bottom-left corner as our reconstructed image.
+
+```{python}
+# Given the original dimensions (width and height) of the 'img'
+w, h = img.shape
+
+# Create a zero-filled matrix of double the size of the original image
+m = np.zeros((w*2, h*2))
+
+# Place the original image into the bottom-left corner of the new matrix
+m[w:, :h] = img
+
+# Reflect the content of the original image to the upper-right corner
+m[:w, h:] = img.T
+
+# Display the symmetric image
+show_image(m)
+```
+
+---
+
+### Beyond Applied Mathematics: The Importance of Symmetric Matrices
+
+Symmetric matrices, like the one we've just constructed from our image, play a pivotal role in various areas of science and engineering. One of the most notable fields where they are very relevent is **quantum mechanics**.
+
+In quantum mechanics, observables (quantities that can be measured) are represented by operators, and these operators are often expressed as **Hermitian matrices**. A Hermitian matrix is a complex square matrix that is equal to its conjugate transpose. For real-valued matrices, being Hermitian is equivalent to being symmetric. The reason these matrices are used is that their eigenvalues are always real, which corresponds to the possible outcomes of quantum measurements.
+
+Ensuring that matrices are Hermitian (or symmetric, in the case of real-valued matrices) is crucial because it guarantees that the physical predictions made using these matrices are consistent with observable phenomena. Specifically, the eigenvalues of these matrices correspond to the possible results of a measurement, and it's essential for these results to be real numbers (as opposed to complex numbers) to align with physical reality.
+
+In our image processing scenario, we are using the properties of symmetric matrices for computational convenience. However, in quantum mechanics, the use of Hermitian matrices is rooted deeply in the foundational principles of the theory, underscoring their fundamental importance in describing the nature of our universe.
+
+---
+
+Lets try again to decompose this new matrix, and re-construct it.
+
+```{python}
+# Compute the eigenvalues and eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(m)
+
+# Reconstruct the compressed image
+compressed_image = eigenvectors @ np.diag(eigenvalues) @ eigenvectors.T
+
+# Display the compressed image
+show_image(compressed_image)
+```
+
+It works like a charm!
+
+---
+
+## Image Compression with Eigen Decomposition
+
+Until now, we have utilized the full set of eigenvalues and eigenvectors to represent our image. However, the essence of compression lies in using less data without significantly compromising quality. By retaining only the most significant eigenvalues and their corresponding eigenvectors, we can approximate the original image with fewer components.
+
+```{python}
+# Retain only the top-k eigenvalues and eigenvectors
+k = 20  # You can choose a different value for k based on the desired compression level
+top_k_eigenvalues = eigenvalues[:k]
+top_k_eigenvectors = eigenvectors[:, :k]
+
+print(img.size)
+print(top_k_eigenvalues.size + top_k_eigenvectors.size)
+
+# Reconstruct the compressed image
+compressed_image = top_k_eigenvectors @ np.diag(top_k_eigenvalues) @ top_k_eigenvectors.T
+
+# Display the compressed image
+show_image(compressed_image)
+```
+
+```{python}
+# Crop the bottom left corner
+show_image(compressed_image[w:, :h])
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Calculate the reduction in data size. How many values have we effectively eliminated through this compression technique?
+
+```{python}
+#| eval: false
+
+```
+
+:::
+
+---
+
+## Singular Value Decomposition (SVD)
+
+SVD is another powerful matrix decomposition technique. Like eigen decomposition, SVD breaks down a matrix into constituent parts, but this time into singular values and two unitary matrices.
+
+<p align="center">
+<img src="https://drive.google.com/uc?export=view&id=1ERAIFmEtAXG3eXkDXgzVVUTPImXiGTNO" width="300" />
+</p>
+
+In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.
+
+The strenght of SVD lies in that it does not need a square matrix. Matrices of any size are valid!
+
+```{python}
+# Compute the SVD of the grayscale image
+U, S, Vt = np.linalg.svd(dog, full_matrices=False)
+
+print(f"Shape of image: {dog.shape}")
+print(f"Shape of U: {U.shape}")
+print(f"Shape of Sigma: {S.shape}")
+print(f"Shape of V*: {Vt.shape}")
+```
+
+```{python}
+# Reconstruct the image
+compressed_image = np.matmul(U, np.matmul(np.diag(S), Vt))
+
+# Display the compressed image
+show_image(compressed_image)
+```
+
+```{python}
+# Retain only the top-k singular values and vectors
+k = 50  # You can adjust k based on the desired compression level
+U_k = U[:, :k]
+S_k = np.diag(S[:k])
+Vt_k = Vt[:k, :]
+```
+
+```{python}
+# Reconstruct the compressed image
+compressed_image = np.matmul(U_k, np.matmul(S_k, Vt_k))
+
+# Display the compressed image
+show_image(compressed_image)
+```
+
+---
+
+## Exercise: RGB Image
+
+Now you want to compress a RGB image. How would you do it?
+
+```{python}
+# Link to the image
+url_dog = "https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"
+
+# Load and display the image
+dog_color = load_image(url_dog, color=True)
+print(f"The array has dimension: {dog_color.ndim}")
+print(f"The array contains values of type: {dog_color.dtype}\n")
+show_image(dog_color)
+```
+
+```{python}
+#| eval: false
+
+```

@@ -1,6 +1,16 @@
 project:
   type: website
   output-dir: _site
+  execute-dir: project
+  render:
+    - index.qmd
+    - syllabus.qmd
+    - modules/**
+
+execute:
+  freeze: auto # re-render only when source changes
+  enabled: false # don't execute code during render
+  error: true # show errors if code does execute
 
 website:
   title: "Computer Programming I (Python)"
@@ -11,32 +21,12 @@ website:
   
   page-navigation: true
   
-  navbar:
-    background: primary
-    search: true
-    left:
-      - text: "Home"
-        href: index.qmd
-      - text: "Syllabus"
-        href: syllabus.qmd
-      - text: "Modules"
-        menu:
-          - text: "Python fundamentals"
-            href: modules/python-fundamentals/_index.qmd
-          - text: "Structures"
-            href: modules/structures/_index.qmd
-          - text: "NumPy"
-            href: modules/numpy/_index.qmd
-          - text: "IDEs & Tools"
-            href: modules/ides/_index.qmd
-    right:
-      - icon: github
-        href: https://github.com/daniprec/Python-Course
-        aria-label: GitHub
+  navbar: false
 
   sidebar:
     style: "docked"
-    search: true
+    search: false
+    collapse-level: 1
     contents:
       - section: "Getting Started"
         contents:
@@ -45,50 +35,88 @@ website:
           - text: "Syllabus"
             href: syllabus.qmd
       
-      - section: "Module 1 — Python fundamentals"
+      - section: "Module 1: Python Fundamentals"
+        href: modules/python-fundamentals/index.qmd
         contents:
-          - text: "Overview"
-            href: modules/python-fundamentals/_index.qmd
-          - text: "01 — Variables"
-            href: modules/python-fundamentals/variables.qmd
-          - text: "02 — Flow"
-            href: modules/python-fundamentals/flow.qmd
-          - text: "03 — Loops"
-            href: modules/python-fundamentals/loops.qmd
-          - text: "04 — Functions"
-            href: modules/python-fundamentals/functions.qmd
-          - text: "05 — Recursion"
-            href: modules/python-fundamentals/recursion.qmd
-          - text: "06 — Scope"
-            href: modules/python-fundamentals/scope.qmd
+          - text: "Variables & Data Types"
+            href: modules/python-fundamentals/1_1_fundamentals_variables.qmd
+          - text: "Control Flow"
+            href: modules/python-fundamentals/1_2_fundamentals_flow.qmd
+          - text: "Loops"
+            href: modules/python-fundamentals/1_3_fundamentals_loop.qmd
+          - text: "Functions"
+            href: modules/python-fundamentals/1_4_fundamentals_functions.qmd
+          - text: "Recursion"
+            href: modules/python-fundamentals/1_5_fundamentals_recursion.qmd
+          - text: "Scope"
+            href: modules/python-fundamentals/1_6_fundamentals_scope.qmd
+          - text: "Review"
+            href: modules/python-fundamentals/review_fundamentals.qmd
 
-      - section: "Module 2 — Structures"
+      - section: "Module 2: Data Structures"
+        href: modules/structures/index.qmd
         contents:
-          - text: "Overview"
-            href: modules/structures/_index.qmd
-          - text: "01 — Lists & Tuples"
-            href: modules/structures/list_tuples.qmd
-          - text: "02 — Sets"
-            href: modules/structures/sets.qmd
-          - text: "03 — Dictionaries"
-            href: modules/structures/dictionaries.qmd
-          - text: "04 — Iterables & Loops"
-            href: modules/structures/loops.qmd
-          - text: "05 — Mutability"
-            href: modules/structures/mutability.qmd
+          - text: "Lists & Tuples"
+            href: modules/structures/2_1_structures_list_tuples.qmd
+          - text: "Sets"
+            href: modules/structures/2_2_structures_set.qmd
+          - text: "Dictionaries"
+            href: modules/structures/2_3_structures_dictionary.qmd
+          - text: "Iterables"
+            href: modules/structures/2_4_structures_iterables.qmd
+          - text: "Mutability"
+            href: modules/structures/2_5_structures_mutability.qmd
+          - text: "Assignment: Recommendation System"
+            href: modules/structures/ex01_recommendation_system.qmd
+          - text: "Assignment: Traveling Salesman"
+            href: modules/structures/ex02_traveling_salesman.qmd
+          - text: "Assignment: Parrondo's Paradox"
+            href: modules/structures/ex03_parrondos_paradox.qmd
+          - text: "Assignment: Sudoku"
+            href: modules/structures/ex04_sudoku.qmd
+          - text: "Review"
+            href: modules/structures/review_structures.qmd
 
-      - section: "Module 3 — NumPy"
+      - section: "Module 3: NumPy"
+        href: modules/numpy/index.qmd
         contents:
-          - text: "Overview"
-            href: modules/numpy/_index.qmd
+          - text: "Introduction to NumPy"
+            href: modules/numpy/3_1_numpy_introduction.qmd
+          - text: "Array Arithmetics"
+            href: modules/numpy/3_2_numpy_arithmetics.qmd
+          - text: "Loading Data"
+            href: modules/numpy/3_3_numpy_load.qmd
+          - text: "Array Manipulation"
+            href: modules/numpy/3_4_numpy_manipulation.qmd
+          - text: "Masking"
+            href: modules/numpy/3_4_numpy_masking_dog.qmd
+          - text: "Random & Fancy Indexing"
+            href: modules/numpy/3_5_numpy_random_fancy_indexing.qmd
+          - text: "Statistics"
+            href: modules/numpy/3_6_numpy_statistics.qmd
+          - text: "Linear Algebra"
+            href: modules/numpy/3_7_numpy_linalg.qmd
+          - text: "Vectorization"
+            href: modules/numpy/3_8_numpy_vectorization.qmd
+          - text: "Application: Linear Algebra"
+            href: modules/numpy/numpy_algebra.qmd
+          - text: "Application: MNIST"
+            href: modules/numpy/numpy_mnist.qmd
+          - text: "Application: Snell's Law"
+            href: modules/numpy/numpy_snell.qmd
+          - text: "Review"
+            href: modules/numpy/review_numpy.qmd
 
-      - section: "Module 4 — IDEs & Tools"
+      - section: "Module 4: IDEs & Tools"
+        href: modules/ides/index.qmd
         contents:
-          - text: "Overview"
-            href: modules/ides/_index.qmd
+          - text: "General Review"
+            href: modules/ides/review_general.qmd
+          - text: "Application: RSA Encryption"
+            href: modules/ides/rsa.qmd
 
   page-footer:
-    left: "Copyright 2024"
+    left: "Copyright 2024, Computer Programming I"
     right: 
       - icon: github
         href: https://github.com/daniprec/Python-Course

@@ -1,0 +1,313 @@
+---
+title: "Random Homework"
+subtitle: "Module 2: Data Structures"
+format: html
+---
+
+```{python}
+import numpy as np
+import random
+```
+
+```{python}
+ls_exercises = [
+    "1.6",
+    "1.10",
+    "1.15",
+    "2.5",
+    "2.6",
+    "2.7",
+    "3.5",
+    "3.7",
+    "3.8",
+    "3.9"
+]
+```
+
+```{python}
+ls_students = [
+    "MATISSE VALENTINA RITA STEPHAN AAFTINK-DE LUCA",
+    #"MATHIAS ANDRES ALVAREZ MORALES",
+    #"ADAM HENRYK BAJER",
+    "PAUL ANDRE PLERRE CHABERT",
+    "FERNANDO CORDERO MARTÍN-CARO",
+    "LUIS FERNANDO DIEZ JORRETO",
+    "QIN YU EGUÍA FERNÁNDEZ",
+    #"MIGUEL FERNÁNDEZ ORTIZ",
+    "PABLO GARMA TARDÍO",
+    #"IGNACIO GIMENO ALEMANY",
+    #"ZOYA INAARA HAIDER",
+    "EVA JU?NA",
+    "PANAGIOTIS KAMARINOS",
+    "NOA KESERI",
+    #"DONOVAN LOWE",
+    "SEBASTIAN ALEXANDER LUBCZONOK ALEXANDER",
+    #"MARIAM MOHAMED ESMAT EZZAT",
+    #"OMAR MOHAMED KAMAL",
+    #"DARIUS-LUCA PETRUTI",
+    #"MARÍA RIVERA LÓPEZ",
+    "CARLOS SALDAÑA TEJERA",
+    #"ANA SANTOS ESCORIAL",
+    #"TAMARA SHOPOVA",
+    "PABLO TORRES COLOMINA",
+    "ZIPENG YANG"
+]
+
+print(len(ls_students))
+```
+
+```{python}
+# Pick a random student
+student = random.choice(ls_students)
+# Remove the student from list
+ls_students.remove(student)
+# Print the student
+print(student)
+
+# Pick a random exercise
+exercise = random.choice(ls_exercises)
+# Remove the exercise from list
+ls_exercises.remove(exercise)
+# Print the exercise
+print(exercise)
+```
+
+```{python}
+score = [1, 1, 1, 1, 1]
+
+print(np.mean(score))
+```
+
+```{python}
+# Exercise 1.15: Tuple Sorting
+
+
+n = int(input("How many people's ages do you want to enter: "))
+
+name_age = []
+
+
+
+for i in range(n):
+
+  name_ = input(f"Enter the name of person {i + 1}: ")
+
+  age_ = int(input("Enter his / her age: "))
+
+  name_age.append((name_, age_))
+
+
+name_age.sort(key = lambda item: item[1])
+
+
+print(name_age)
+```
+
+```{python}
+lines=[["line1", 0], ["line2", 1], ["line3", 2]]
+
+
+#calcul de la moyenne
+
+total=0
+
+for x in lines:
+
+  total=total+x[1]# on prend le temps dans la chaine [ligne, Temps]
+
+moyenne=total/len(lines) #calcul de la moyenne
+
+
+# def distance(x):
+
+#  return(abs(x[1]-moyenne), x[1]) #distance puis temps
+
+
+lines.sort(key=distance) # trie la liste selon le resultat de distance(x) dans l'ordre croissant
+
+
+print("Résultat:", lines)
+```
+
+```{python}
+Math = ["John", "Luca", "Greta"]
+
+Biology = ["John", "Mary"]
+
+
+
+def total_students(math, biology):
+
+    result = math[:]  # copies the list
+
+    for name1 in biology:
+
+        find_duplicates = False
+
+        for name2 in result:
+
+            if name1 == name2:
+
+                find_duplicates = True
+
+                break
+
+        if find_duplicates:
+
+            continue
+
+        else:
+
+            result.append(name1)
+
+    return result
+
+print(total_students(Math, Biology))
+print(Math)
+```
+
+```{python}
+Math = ["John", "Luca", "Greta"]
+
+Biology = ["John", "Mary"]
+
+
+
+def total_students(math, biology):
+
+    result = math[:]
+
+    for name1 in biology:
+
+        find_duplicates = False
+
+        for name2 in result:
+
+            if name1 == name2:
+
+                find_duplicates = True
+
+                break
+
+        if find_duplicates:
+
+            continue
+
+        else:
+
+            result.append(name1)
+
+    return result
+
+# print(total_students(Math, Biology))
+
+
+def common_students(math, biology):
+
+    result = []
+
+    for name1 in biology:
+
+        for name2 in math:
+
+            if name1 == name2:
+
+                result.append(name2)
+
+    return result
+
+
+# print(common_students(Math, Biology))
+
+
+def unique_names(math, biology):
+
+    result = []
+
+    for name1 in biology:
+
+        duplicates = False # initialization
+
+
+
+        for name2 in math:
+
+            if name1 == name2:
+
+                duplicates = True
+
+                break # break the for loop name2 in math
+
+
+
+        if duplicates:
+
+            continue
+
+        else:
+
+            result.append(name1)
+
+    return result
+
+
+# print(unique_names(Math, Biology))
+
+# print(unique_names(Biology, Math))
+
+
+def list_students(math, biology):
+
+    return total_students(math, biology), common_students(math, biology), unique_names(biology, math), unique_names(math, biology)
+
+
+print(list_students(Math, Biology))
+```
+
+```{python}
+# Exercise 1.6: Function as a List Transformer
+
+
+def list_transformer(lst, func):
+
+  return [func(x) for x in lst]
+
+
+list_transformer([1, 2, 3], lambda x: x ** 2)
+```
+
+```{python}
+message = "jimmq yqtmf" #we use a dictonary to create the secret pattern of letters for the code
+
+rules = {
+
+  "j": "h",
+
+  "i": "e",
+
+  "m": "l",
+
+  "q": "o",
+
+  "y": "w",
+
+  "t": "r",
+
+  "f": "d",
+
+}
+
+
+def decrypt_message(message, rules): #message are the key
+
+  decrypted = ""
+
+  for char in message: #rules -> a dictionary that tells how to replace each character
+
+    decrypted += rules.get(char, char) #we loop inside the list to get all "translations"
+
+  return decrypted
+
+
+print(decrypt_message(message, rules))
+```

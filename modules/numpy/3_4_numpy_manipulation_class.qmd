@@ -1,0 +1,505 @@
+---
+title: "Numpy Manipulation"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+[Review time!](https://drive.google.com/file/d/18tl_5f4400Jrw3Fkfsy0LpK3FBRXPg3r/view?usp=drive_link)
+
+---
+
+# NumPy: Array Manipulation
+
+```{python}
+import numpy as np
+```
+
+## Reshape Arrays
+
+Any NumPy array has access to the `reshape()` method. This method creates a new NumPy array with the specified shape.
+
+```{python}
+# We create an array of length 6
+x = np.arange(0, 6, 1)
+print(x)
+```
+
+```{python}
+# Reshape array to 2 x 3
+reshaped = x.reshape(2, 3)
+print(reshaped)
+print(reshaped.shape)
+```
+
+```{python}
+x = np.arange(1, 8, 1)
+
+x_new = x.reshape(2, 4)
+
+print(x_new)
+```
+
+The method `reshape()` creates a new array, it does not modify the original!
+
+```{python}
+print(f"Original:\n{x}")
+print(f"Reshaped:\n{reshaped}")
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Create the following matrix without using the function `np.array`.
+
+$\begin{pmatrix}
+1 & 2\\
+3 & 4\\
+5 & 6
+\end{pmatrix}$
+
+```{python}
+x = np.arange(1, 7, 1)
+
+x_new =  x.reshape(3, 2)
+
+print(x_new)
+```
+
+```{python}
+# Try it!
+arr = np.arange(1, 7).reshape(3, 2)
+
+print(arr)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Create the following matrix without using the function `np.array`.
+
+$\begin{pmatrix}
+1 & 4\\
+2 & 5\\
+3 & 6
+\end{pmatrix}$
+
+```{python}
+x = np.arange(1, 7, 1)
+
+x_new =  x.reshape(2, 3)
+
+x_trans = x_new.T
+
+print(x_trans)
+```
+
+```{python}
+arr = np.arange(1, 7).reshape(2, 3).T
+
+print(arr)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+**Exercise:** Create the following matrix without using the function `np.array`.
+
+$\begin{pmatrix}
+0 & 1 & 2 & 3\\
+4 & 5 & 6 & 7\\
+8 & 9 & 10 & 11\\
+12 & 13 & 14 & 15\\
+\end{pmatrix}$
+
+And then, using that matrix, extract:
+
+$\begin{pmatrix}
+6 & 7\\
+10 & 11\\
+\end{pmatrix}$
+
+```{python}
+# Try it!
+arr = np.arange(0, 16).reshape(4, 4)
+print(arr)
+print(arr[1:3, 2:4])
+```
+
+:::
+
+---
+
+## Flatten Arrays
+
+Another useful method is `flatten()`. It will create a one-dimensional array from a multi-dimensional array, effectively collapsing all the dimensions into a single dimension.
+
+```{python}
+# We create a matrix 3x3
+x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(f"Original:\n{x}")
+```
+
+```{python}
+# Flatten array
+flattened = x.flatten()
+print(f"Flattened:\n{flattened}")
+```
+
+---
+
+## Joinning Arrays
+
+In data processing and analysis, you often need to combine arrays. This can be done in several ways depending on the structure and the desired outcome. Below, we'll explore some common methods for joining arrays using NumPy.
+
+### Concatenation
+
+Concatenation is the process of joining two or more arrays along an existing axis.
+
+**Concatenation on axis 0**:
+
+$\text{concat}_0(\mathbf{a}, \mathbf{b}) =
+[a_0, a_1, b_0, b_1]$
+
+$\text{concat}_0(A, B) =
+\begin{pmatrix}
+a_{00} & a_{01} \\
+a_{10} & a_{11} \\
+b_{00} & b_{01} \\
+b_{10} & b_{11} \\
+\end{pmatrix}
+$
+
+```{python}
+# Create two 2-D arrays
+array1 = np.array([[1, 2], [3, 4]])
+array2 = np.array([[5, 6], [7, 8]])
+print("Original shapes", array1.shape, "&", array2.shape)
+
+# Concatenate along rows (axis=0)
+concatenated_rows = np.concatenate((array1, array2), axis=0)
+print("\nConcatenated along rows:\n", concatenated_rows)
+print("\nConcatenated shape:", concatenated_rows.shape)
+```
+
+When you use `np.concatenate(a, b, axis=0)`, it combines two arrays by stacking them vertically, one on top of the other. Imagine you have two bricks, and you place one brick directly on top of the other.
+
+Now, let's compare this to `np.sum(a, axis=0)`. When you sum an array along `axis=0`, you are adding up the elements in each column. It's like pressing down on the columns and "squeezing" the values together into a single row.
+
+```{python}
+array1 = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print("Original array:\n", array1)
+
+result = np.sum(array1, axis=0)
+print("We 'squeeze' the values down:\n  |  |  |\n  V  V  V\n", result)
+```
+
+**Concatenation on axis 1**:
+
+$\text{concat}_1(\mathbf{a}, \mathbf{b}) =
+\text{ERROR}$
+
+$\text{concat}_1(A, B) =
+\begin{pmatrix}
+a_{00} & a_{01} & b_{00} & b_{01} \\
+a_{10} & a_{11} & b_{10} & b_{11} \\
+\end{pmatrix}
+$
+
+```{python}
+# Create two 2-D arrays
+array1 = np.array([[1, 2], [3, 4]])
+array2 = np.array([[5, 6], [7, 8]])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# Concatenate along columns (axis=1)
+concatenated_columns = np.concatenate((array1, array2), axis=1)
+print("\nConcatenated along columns:\n", concatenated_columns)
+print("\nConcatenated shape:", concatenated_columns.shape)
+```
+
+When you use `np.concatenate(a, b, axis=1)`, it combines two arrays by stacking them horizontally, side to side. Imagine you have two bricks, and you place one brick at the left of the other.
+
+Compare this to `np.sum(a, axis=1)`. When you sum an array along `axis=1`, you are adding up the elements in each row. It's like "squeezing" the values together into a single column.
+
+```{python}
+array1 = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print("Original array:\n", array1)
+
+result = np.sum(array1, axis=1)
+print("We 'squeeze' the values sideways:\n  ->\n  -> \n  ->\n", result)
+```
+
+Pay attention to the following errors:
+
+```{python}
+# You cannot concatenate on a non-existing axis
+array1 = np.array([[1, 2], [3, 4]])
+array2 = np.array([[5, 6], [7, 8]])
+arr = np.concatenate((array1, array2), axis=2)
+```
+
+```{python}
+# The arrays must have the same number of dimensions
+arr1 = np.array([[1, 2, 3], [4, 5, 6]])
+arr2 = np.array([7, 8, 9])
+arr = np.concatenate((arr1, arr2), axis=0)
+print(arr)
+```
+
+### Stacking
+
+Stacking is another way to join arrays, but it can add an extra dimension to the result.
+
+**Horizontal stack:** Stack arrays in sequence horizontally (column wise).
+
+$\text{hstack}(\mathbf{a}, \mathbf{b}) =
+[a_0, a_1, b_0, b_1]$
+
+$\text{hstack}(A, B) =
+\begin{pmatrix}
+a_{00} & a_{01} & b_{00} & b_{01} \\
+a_{10} & a_{11} & b_{10} & b_{11} \\
+\end{pmatrix}
+$
+
+This is equivalent to concatenation along the second axis, except for 1-D arrays where it concatenates along the first axis.
+
+```{python}
+# Create two 1-D arrays
+array1 = np.array([1, 2, 3, 4])
+array2 = np.array([5, 6, 7, 8])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# Horizontal stacking
+hstacked = np.hstack((array1, array2))
+print("\nHorizontally stacked:\n", hstacked)
+print("\nHorizontally stacked shape:", hstacked.shape)
+```
+
+```{python}
+# Create two 2-D arrays
+array1 = np.array([[1, 2], [3, 4]])
+array2 = np.array([[5, 6], [7, 8]])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# Horizontal stacking
+hstacked = np.hstack((array1, array2))
+print("\nHorizontally stacked:\n", hstacked)
+print("\nHorizontally stacked shape:", hstacked.shape)
+```
+
+**Vertical stack:** Stack arrays in sequence vertically (row wise).
+
+$\text{vstack}(\mathbf{a}, \mathbf{b}) =
+\begin{pmatrix}
+a_0 & a_1 \\
+b_0 & b_1 \\
+\end{pmatrix}$
+
+$\text{vstack}(A, B) =
+\begin{pmatrix}
+a_{00} & a_{01} \\
+a_{10} & a_{11} \\
+b_{00} & b_{01} \\
+b_{10} & b_{11} \\
+\end{pmatrix}
+$
+
+This is equivalent to concatenation along the first axis after 1-D arrays of shape _(N,)_ have been reshaped to _(1,N)_.
+
+```{python}
+# Create two 1-D arrays
+array1 = np.array([1, 2, 3, 4])
+array2 = np.array([5, 6, 7, 8])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# Vertical stacking
+vstacked = np.vstack((array1, array2))
+print("\nVertically stacked:\n", vstacked)
+print("\nVertically stacked shape:", vstacked.shape)
+```
+
+```{python}
+# Create two 2-D arrays
+array1 = np.array([[1, 2], [3, 4]])
+array2 = np.array([[5, 6], [7, 8]])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# Horizontal stacking
+vstacked = np.vstack((array1, array2))
+print("\nVertically stacked:\n", vstacked)
+print("\nVertically stacked shape:", vstacked.shape)
+```
+
+```{python}
+# vstack is equilavent to ...
+
+# Create two 1-D arrays
+array1 = np.array([1, 2, 3, 4])
+array2 = np.array([5, 6, 7, 8])
+print("Original shapes", array1.shape, "+", array2.shape)
+
+# -1 in the shape means "figure it out" to NumPy
+# (1, -1) = Add an extra axis and figure out the rest
+array1 = array1.reshape(1, -1)
+array2 = array2.reshape(1, -1)
+print("Reshaped", array1.shape, "+", array2.shape)
+
+# Concatenate along axis 1
+concatenated_columns = np.concatenate((array1, array2), axis=0)
+print("\nConcatenated along columns:\n", concatenated_columns)
+print("\nConcatenated shape:", concatenated_columns.shape)
+```
+
+::: {.callout-note}
+## Exercise
+
+**Exercise. Rouché-Frobenius Theorem**
+
+A non-homogeneous system of linear equations $Ax=b$ with $n$ variables has a solution if and only if the rank of its coefficient matrix $A$ is equal to the rank of its augmented matrix $[A|b]$. If there are solutions, we can find that:
+- if $rank(A) = n$, the solution is unique,
+- if $rank(A) < n$, there are infinite solutions.
+
+```{python}
+def rouche_frobenius_theorem(A, b):
+  # We need to turn vector `b` (N) into a matrix `B` (1 x N)
+  B = b.reshape(-1, 1)
+  # Use the horizontal stack
+  Ab = np.hstack((A, B))
+  rank_A = np.linalg.matrix_rank(A)
+  rank_Ab = np.linalg.matrix_rank(Ab)
+
+  if rank_A == rank_Ab:
+    if rank_A == A.shape:
+      return "The system is consistent and has a unique solution."
+    else:
+      return "The system is consistent and has infinitely many solutions."
+  else:
+    return "The system is inconsistent."
+
+# Example usage
+A = np.array([[2, 1, -1], [1, 3, 2], [1, -1, 2]])
+b = np.array([8, 13, 3])
+
+result = rouche_frobenius_theorem(A, b)
+print(result)
+```
+
+:::
+
+### Stack
+
+**Column stacking** is used to stack 1-D arrays as columns into a 2-D array.
+
+$\text{column_stack}(\mathbf{a}, \mathbf{b}) =
+\begin{pmatrix}
+a_0 & b_0 \\
+a_1 & b_1 \\
+\end{pmatrix}$
+
+Take a sequence of 1-D arrays and stack them as columns to make a single 2-D array. 2-D arrays are stacked as-is, just like with hstack. 1-D arrays are turned into 2-D columns first.
+
+```{python}
+# Create two 1-D arrays
+array1 = np.array([1, 2, 3])
+array2 = np.array([4, 5, 6])
+
+# Column stack
+column_stacked = np.column_stack((array1, array2))
+print("Column stacked:\n", column_stacked)
+```
+
+**Row stacking** is used to stack 1-D arrays as rows into a 2-D array.
+
+$\text{row_stack}(\mathbf{a}, \mathbf{b}) =
+\begin{pmatrix}
+a_0 & a_1 \\
+b_0 & b_1 \\
+\end{pmatrix}$
+
+This is equivalent to concatenation along the first axis after 1-D arrays of shape _(N,)_ have been reshaped to _(1,N)_.
+
+```{python}
+# Create two 1-D arrays
+array1 = np.array([1, 2, 3])
+array2 = np.array([4, 5, 6])
+
+# Row stack
+row_stacked = np.row_stack((array1, array2))
+print("Row stacked:\n", row_stacked)
+```
+
+---
+
+## Splitting Arrays
+
+Splitting arrays is the process of dividing an array into multiple sub-arrays. This can be useful for various data manipulation tasks. Below, we'll explore some common methods for splitting arrays using NumPy.
+
+### Split
+
+The `np.split()` function splits an array into multiple sub-arrays along a specified axis.
+
+```{python}
+# Create an array
+arr = np.array([1, 2, 3, 4, 5, 6])
+
+# Split the array into 3 equal parts
+split_array = np.split(arr, 3)
+
+for idx in range(len(split_array)):
+  print(f"Split {idx+1}:\n{split_array[idx]}")
+```
+
+### Array Split
+
+The `np.array_split()` function allows you to split an array into unequal parts if needed.
+
+```{python}
+# Split the array into 4 parts (unequal)
+split_array_unequal = np.array_split(arr, 4)
+
+for idx in range(len(split_array_unequal)):
+  print(f"Split {idx+1}:\n{split_array_unequal[idx]}")
+```
+
+### Horizontal Split
+
+The `np.hsplit()` function splits an array horizontally (column-wise).
+
+
+```{python}
+# Create a 2D array
+array_2d = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Split the 2D array into 3 columns
+hsplit_array = np.hsplit(array_2d, 3)
+
+for idx in range(len(hsplit_array)):
+  print(f"Split {idx+1}:\n{hsplit_array[idx]}")
+```
+
+### Vertical Split
+
+The `np.vsplit()` function splits an array vertically (row-wise).
+
+```{python}
+# Split the 2D array into 2 rows
+vsplit_array = np.vsplit(array_2d, 2)
+
+for idx in range(len(vsplit_array)):
+  print(f"Split {idx+1}:\n{vsplit_array[idx]}")
+```
+
+---
+
+## Summary
+
+Today, we explored various methods for reshaping, joining, and splitting arrays. Remember, you don't need to memorize all these methods: your coding tools and AI are here to help with that.
+
+What's important is to **understand** that these operations exist in NumPy and to develop an intuition for how they work. Pay special attention to reshaping and joining arrays, as these are fundamental skills for any data-related tasks! And remember how the choice of axis affects the concatenation operations.
+
+---

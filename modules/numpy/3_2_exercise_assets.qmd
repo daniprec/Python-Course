@@ -1,0 +1,243 @@
+---
+title: "Exercise Assets"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+# Studying Financial Time Series
+
+## Preprocessing
+
+We have daily closing prices for a financial asset stored in a `txt` file called `cs.txt`.
+
+As we are in a Google Colab environment, we can easily upload this file and read its contents using the following libraries.
+
+```{python}
+from google.colab import files  # For uploading files in Colab
+import os, shutil  # For file operations
+```
+
+The following code will ask you to upload the "cs_data.txt" file. Before running it, download the file to your local computer from here:
+
+https://drive.google.com/file/d/1qcSNq_XhKzDGZWscPFPVayVzoZ_1P7dk/view?usp=sharing
+
+```{python}
+# Delete existing "cs_data.txt" files, to avoid duplication
+for f in os.listdir("/content"):
+    path = os.path.join("/content", f)
+    if f.endswith("cs_data.txt"):
+        os.unlink(path)
+
+# Upload files from your local machine
+uploaded = files.upload()
+```
+
+---
+
+## Exercise
+
+As always, we start by importing the necessary libraries.
+
+```{python}
+import numpy as np  # For numerical operations
+import matplotlib.pyplot as plt  # For plotting
+```
+
+NumPy has a built-in function to read data from text files, which we will use to load the prices data.
+
+```{python}
+y = np.loadtxt("cs_data.txt")
+
+print(y)
+```
+
+```{python}
+# The following code plots the data
+plt.plot(y)
+plt.grid()
+plt.show()
+```
+
+I want to see only the last month worth of data. How can I do this in NumPy?
+
+```{python}
+# The following code plots the data
+plt.plot(y[(len(y) - 31):len(y)])
+plt.grid()
+plt.show()
+```
+
+```{python}
+# We can use array slicing to get the last 31 entries
+plt.plot(y[-31:])
+plt.grid()
+plt.show()
+```
+
+I know this series starts on August 17th 2021. How can I show the dates in the x-axis?
+
+```{python}
+# Tip 1: Create a datetime type in NumPy
+start_date = np.datetime64("2021-08-17")
+# Tip 2: You can add days to the starting date using timedeltas
+# .astype("timedelta64[D]")
+
+# Example: How would we do this with a list?
+
+first = 17  # "first day"
+ls = []
+
+for n in range(1000):
+  ls.append(first + n)
+
+print(ls)
+```
+
+```{python}
+# We can use NumPy's datetime64 and timedelta64 to create date labels
+start_date = np.datetime64("2021-08-17")
+n_days = len(y)
+x = start_date + np.arange(n_days).astype("timedelta64[D]")
+
+plt.plot(x[-31:], y[-31:])
+plt.grid()
+plt.xticks(rotation=45)
+plt.show()
+```
+
+**Daily returns** measure the percentage change in the asset's price from one day to the next. They represent the gain or loss made on the asset within a single trading day. This metric is crucial for understanding the day-to-day volatility of the asset.
+
+Calculation of Daily Returns:
+$$
+\text{Daily Return} (t) = \frac{\text{Price}(t)}{\text{Price}(t -1 )} - 1
+$$
+
+```{python}
+# How would we do it with a single value?
+
+t = -5
+# y = array
+
+daily_return = y[t] / y[t-1] - 1
+
+print(daily_return)
+```
+
+```{python}
+# How would we approach this with a list?
+
+daily_returns = []
+
+for idx in range(1, len(y)):
+  daily_returns.append(y[idx] / y[idx-1] - 1)
+
+print(np.array(daily_returns))
+```
+
+```{python}
+# Using NumPy slicing we generate the arays
+# idx = [1, 2, ..., t] and idx = [0, 1, ..., t-1]
+# Then divide one by the other
+daily_return = y[1:] / y[:-1] - 1
+
+plt.plot(x[1:], daily_return)
+plt.grid()
+plt.xticks(rotation=45)
+plt.show()
+```
+
+Daily returns help investors and analysts assess the short-term performance of an asset, evaluate risk, and make informed trading decisions.
+
+Ideally, you want your daily returns to average out to a positive number over time, indicating that the asset is generally appreciating in value.
+
+To compute the average daily return, you can use the following formula:
+
+$$
+\mu_{\text{daily}} = \frac{1}{N} \sum_{t=1}^{N} \text{Daily Return}(t)
+$$
+
+```{python}
+# Example: Using lists and for loops
+
+result = 0
+
+for element in daily_returns:
+  result += element
+
+print(result / len(y))
+```
+
+```{python}
+# Numpy has a built-in function to compute the mean
+avg_daily_return = np.mean(daily_return)
+
+print(f"Average Daily Return: {avg_daily_return:.6f}")
+```
+
+```{python}
+# Numpy has a built-in function to compute the mean
+avg_daily_return_year = np.mean(daily_return[-365:])
+
+print(f"Average Daily Return (last year): {avg_daily_return_year:.6f}")
+```
+
+Standard deviation of daily returns is often used as a measure of volatility, indicating how much the asset's price fluctuates on a daily basis.
+
+Formula for Standard Deviation of Daily Returns:
+$$
+\sigma_{\text{daily}} = \sqrt{\frac{1}{N-1} \sum_{t=1}^{N} \left( \text{Daily Return}(t) - \mu\right)^2}
+$$
+
+```{python}
+# Numpy has a built-in function to compute the standard deviation
+std_daily_return = np.std(daily_return)
+
+print(f"Standard Deviation of Daily Return: {std_daily_return:.6f}")
+```
+
+```{python}
+# Numpy has a built-in function to compute the standard deviation
+std_daily_return_year = np.std(daily_return[-365:])
+
+print(f"Standard Deviation of Daily Return (last year): {std_daily_return_year:.6f}")
+```
+
+Let's see the distribution of daily returns for our asset.
+
+```{python}
+plt.hist(daily_return, bins=100)
+plt.grid()
+plt.show()
+```
+
+The distribution is centered around 0 but has long **fat tails**, indicating that while most daily returns are small, there are occasional large swings in price. This is typical for financial assets, which can experience sudden market movements due to news or events.
+
+---
+
+**Logarithmic returns**, also known as continuously compounded returns, are used to measure the rate of return over time. They are calculated by taking the natural logarithm of the ratio of subsequent prices. This measure is particularly useful in financial analysis due to its time-additivity property and better handling of compounding effects.
+
+Calculation of Logarithmic Returns:
+$$
+\text{Logarithmic Return} (t) = \log\left(\frac{\text{Price}(t)}{\text{Price} (t-1)}\right)
+$$
+
+```{python}
+log_return = np.log(y[1:] / y[:-1])
+
+plt.plot(x[1:], log_return)
+plt.grid()
+plt.xticks(rotation=45)
+plt.show()
+```
+
+To visualize the time-additivity, see how the cumulative sum of the logarithmic returns shows the same aspect as the original closing prices.
+
+
+```{python}
+logcum_return = np.cumsum(log_return)
+
+plt.plot(x[1:], logcum_return)
+plt.grid()
+plt.xticks(rotation=45)
+plt.show()
+```

@@ -1,0 +1,477 @@
+---
+title: "Numpy Algebra"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+```{python}
+import numpy as np
+```
+
+---
+
+## Centering Matrix
+
+Given a matrix, write a function `center_matrix(matrix)` to "center" it by subtracting the mean of each column from every entry in that column.
+
+For instance:
+
+$$
+A=
+\begin{pmatrix}
+1 & 1 & 2 \\
+1 & 0 & 4 \\
+1 & -1 & 6 \\
+\end{pmatrix}
+\rightarrow
+A'=
+\begin{pmatrix}
+0 & 1 & -2 \\
+0 & 0 & 0 \\
+0 & -1 & 2 \\
+\end{pmatrix}
+$$
+
+
+```{python}
+# Example usage
+arr = np.array([
+  [1, 1, 2],
+  [1, 0, 4],
+  [1, -1, 6]
+])
+
+# print(center_matrix(arr))
+```
+
+### Solution
+
+```{python}
+def center_matrix(matrix: np.ndarray) -> np.ndarray:
+  """
+  Center the input matrix by subtracting the column means.
+
+  Parameters
+  ----------
+  matrix : np.ndarray
+    The input matrix to be centered.
+
+  Returns
+  -------
+  np.ndarray
+    The centered matrix.
+  """
+  return matrix - np.mean(matrix, axis=0)
+
+print(center_matrix(arr))
+```
+
+---
+
+## Gram-Schmidt Method
+
+Write a function `gram_schmidt(V)` that takes a set of linearly independent vectors $ V = \{v_1, v_2, \dots, v_n\} $ and returns an orthonormal set $ U = \{u_1, u_2, \dots, u_n\} $ using the Gram-Schmidt process.
+
+- **Input:** A NumPy array `V` of shape `(n, m)`, where each row represents a vector in $ \mathbb{R}^m $.
+- **Output:** A NumPy array `U` of the same shape, containing orthonormal vectors.
+
+### Step by Step
+
+For each vector $ \mathbf{v}_k $ in the original set, compute $ \mathbf{u}_k $ as follows:
+
+1. **Initialize**:
+
+   $$
+   \mathbf{w}_k = \mathbf{v}_k
+   $$
+
+2. **Orthogonalize** against all previous $ \mathbf{u}_j $ vectors:
+
+   $$
+   \mathbf{w}_k = \mathbf{v}_k - \sum_{j=1}^{k-1} \text{proj}_{\mathbf{u}_j} \mathbf{v}_k
+   $$
+
+   where the projection $ \text{proj}_{\mathbf{u}_j} \mathbf{v}_k $ is given by:
+
+   $$
+   \text{proj}_{\mathbf{u}_j} \mathbf{v}_k = \frac{\langle \mathbf{v}_k, \mathbf{u}_j \rangle}{\langle \mathbf{u}_j, \mathbf{u}_j \rangle} \mathbf{u}_j
+   $$
+
+3. **Normalize** to obtain $ \mathbf{u}_k $:
+
+   $$
+   \mathbf{u}_k = \frac{\mathbf{w}_k}{\| \mathbf{w}_k \|}
+   $$
+
+   where $ \| \mathbf{w}_k \| = \sqrt{\langle \mathbf{w}_k, \mathbf{w}_k \rangle} $.
+
+The notation is:
+
+- $ \mathbf{v}_k $: Original vectors.
+- $ \mathbf{u}_k $: Orthonormal vectors obtained after applying Gram-Schmidt.
+- $ \mathbf{w}_k $: Intermediate vectors during the process.
+- $ \langle \mathbf{a}, \mathbf{b} \rangle $: Inner product (dot product) of vectors $ \mathbf{a} $ and $ \mathbf{b} $.
+- $ \| \mathbf{a} \| $: Norm (magnitude) of vector $ \mathbf{a} $.
+
+```{python}
+# Example usage
+
+v = np.array([
+  [1, 1],
+  [1, 0]
+])
+
+# u = gram_schmidt(v)
+# print("Orthonormal Vectors:\n", u)
+# Expected output:
+#  [[ 0.70710678  0.70710678]
+#  [ 0.70710678 -0.70710678]]
+```
+
+### Solution
+
+```{python}
+def gram_schmidt(v: np.ndarray) -> np.ndarray:
+  """
+  Compute an orthonormal basis using the Gram-Schmidt process.
+
+  Parameters
+  ----------
+  V : np.ndarray
+    The input matrix of vectors.
+
+  Returns
+  -------
+  np.ndarray
+    The orthonormal basis.
+  """
+  u = v.astype(float).copy()
+  for i in range(v.shape[0]):
+    for j in range(i):
+      # Subtract all previous vectors (inner product)
+      u[i] -= np.dot(u[j], v[i]) * u[j]
+    # Divide by the norm
+    u[i] /= np.linalg.norm(u[i])
+  return u
+
+u = gram_schmidt(v)
+print("Orthonormal Vectors:\n", u)
+```
+
+---
+
+## Conjugate Gradient Method
+
+Write a function `conjugate_gradient(A, b, x0, tol, max_iter)` that solves the system $ Ax = b $ where $ A $ is a symmetric positive-definite matrix, using the conjugate gradient method.
+
+- **Input:**
+  - `A`: Symmetric positive-definite matrix of shape `(n, n)`.
+  - `b`: Right-hand side vector of shape `(n,)`.
+  - `x0`: Initial guess for the solution, vector of shape `(n,)`.
+  - `tol`: Tolerance for convergence (a small positive value).
+  - `max_iter`: Maximum number of iterations.
+
+- **Output:**
+  - `x`: Approximate solution to $ Ax = b $.
+
+### Step by Step
+
+The conjugate gradient method iteratively refines an approximate solution $ x_k $ to the linear system $ Ax = b $, using the following steps:
+
+1. **Initialize:**
+
+   - Set initial guess $ x_0 $ (provided).
+   - Compute the initial residual:
+
+ 	$$
+ 	r_0 = b - A x_0
+ 	$$
+
+   - Set the initial search direction:
+
+ 	$$
+ 	p_0 = r_0
+ 	$$
+
+   - Compute the initial residual norm squared:
+
+ 	$$
+ 	\delta_0 = r_0^T r_0
+ 	$$
+
+   - Set iteration counter $ k = 0 $.
+
+2. **Iterate:**
+
+   While $ \sqrt{\delta_k} > \text{tol} $ and $ k < \text{max_iter} $, perform the following steps:
+
+   1. **Compute $ A p_k $:**
+
+  	$$
+  	q_k = A p_k
+  	$$
+
+   2. **Compute step size $ \alpha_k $:**
+
+  	$$
+  	\alpha_k = \frac{\delta_k}{p_k^T q_k}
+  	$$
+
+   3. **Update solution estimate $ x_{k+1} $:**
+
+  	$$
+  	x_{k+1} = x_k + \alpha_k p_k
+  	$$
+
+   4. **Update residual $ r_{k+1} $:**
+
+  	$$
+  	r_{k+1} = r_k - \alpha_k q_k
+  	$$
+
+   5. **Compute new residual norm squared:**
+
+  	$$
+  	\delta_{k+1} = r_{k+1}^T r_{k+1}
+  	$$
+
+   6. **Check for convergence:**
+
+  	- If $ \sqrt{\delta_{k+1}} \leq \text{tol} $, stop and return $ x_{k+1} $.
+
+   7. **Compute $ \beta_k $:**
+
+  	$$
+  	\beta_k = \frac{\delta_{k+1}}{\delta_k}
+  	$$
+
+   8. **Update search direction $ p_{k+1} $:**
+
+  	$$
+  	p_{k+1} = r_{k+1} + \beta_k p_k
+  	$$
+
+   9. **Increment iteration counter:**
+
+  	$$
+  	k = k + 1
+  	$$
+
+3. **Output:**
+
+   - Return $ x_{k+1} $ as the approximate solution.
+
+The notation is:
+
+- $ A $: Symmetric positive-definite matrix.
+- $ b $: Right-hand side vector.
+- $ x_k $: Approximate solution at iteration $ k $.
+- $ r_k $: Residual at iteration $ k $, $ r_k = b - A x_k $.
+- $ p_k $: Search direction at iteration $ k $.
+- $ q_k $: Product $ A p_k $ at iteration $ k $.
+- $ \delta_k $: Residual norm squared at iteration $ k $, $ \delta_k = r_k^T r_k $.
+- $ \alpha_k $: Step size at iteration $ k $.
+- $ \beta_k $: Coefficient used to update the search direction.
+- $ \text{tol} $: Tolerance for convergence.
+- $ \text{max_iter} $: Maximum number of iterations allowed.
+
+```{python}
+# Example usage
+
+A = np.array([
+    [4, 1],
+    [1, 3]
+], dtype=float)
+
+b = np.array([1, 2], dtype=float)
+x0 = np.zeros_like(b)
+tol = 1e-6
+max_iter = 1000
+
+# x = conjugate_gradient(A, b, x0, tol, max_iter)
+# print("Solution x:", x)
+```
+
+### Solution
+
+```{python}
+def conjugate_gradient(A: np.ndarray, b: np.ndarray, x0: np.ndarray, tol: float, max_iter: int) -> np.ndarray:
+  """
+  Solve the system Ax = b using the conjugate gradient method.
+
+  Parameters
+  ----------
+  A : np.ndarray
+    The coefficient matrix.
+  b : np.ndarray
+    The right-hand side vector.
+  x0 : np.ndarray
+    The initial guess for the solution.
+  tol : float
+    The tolerance for convergence.
+  max_iter : int
+    The maximum number of iterations.
+
+  Returns
+  -------
+  np.ndarray
+    The solution to the system.
+  """
+  # Initialize the solution vector with the initial guess
+  x = x0.copy()
+  # Compute the initial residual r0 = b - A x0
+  r = b - A @ x
+  # Set the initial search direction p0 = r0
+  p = r.copy()
+  # Compute the initial residual norm squared (r0^T r0)
+  rsold = np.dot(r, r)
+  for i in range(max_iter):
+    # Compute the matrix-vector product Ap = A p_k
+    Ap = A @ p
+    # Compute the step size alpha_k = (r_k^T r_k) / (p_k^T A p_k)
+    alpha = rsold / np.dot(p, Ap)
+    # Update the solution x_{k+1} = x_k + alpha_k * p_k
+    x = x + alpha * p
+    # Update the residual r_{k+1} = r_k - alpha_k * A p_k
+    r = r - alpha * Ap
+    # Compute the new residual norm squared (r_{k+1}^T r_{k+1})
+    rsnew = np.dot(r, r)
+    # Check for convergence: if the residual norm is below the tolerance, stop
+    if np.sqrt(rsnew) < tol:
+      print(f"Converged at iteration {i+1}")
+      break
+    # Compute the coefficient beta_k = (r_{k+1}^T r_{k+1}) / (r_k^T r_k)
+    beta = rsnew / rsold
+    # Update the search direction p_{k+1} = r_{k+1} + beta_k * p_k
+    p = r + beta * p
+    # Update rsold for the next iteration
+    rsold = rsnew
+  return x
+
+x = conjugate_gradient(A, b, x0, tol, max_iter)
+print("Solution x:", x)
+```
+
+---
+
+## The Power Method
+
+Write a function `power_method(A, num_iterations)` that estimates the largest eigenvalue and its corresponding eigenvector of a square matrix $A$ using the power method.
+
+- **Input:**
+  - `A`: Square matrix of shape `(n, n)`.
+  - `num_iterations`: Number of iterations to perform.
+
+- **Output:**
+  - `eigenvalue`: Estimated largest eigenvalue of $A$.
+  - `eigenvector`: Corresponding eigenvector.
+
+
+
+### Step by Step
+
+The power method iteratively refines an approximate eigenvector corresponding to the dominant eigenvalue (the eigenvalue of largest magnitude) of the matrix $A$, using the following steps:
+
+1. **Initialize:**
+
+   - Start with an initial non-zero vector $b^{(0)}$ (can be random).
+   - Normalize $b^{(0)}$ to have unit length:
+
+     $$
+     b^{(0)} = \frac{b^{(0)}}{\| b^{(0)} \|}
+     $$
+
+2. **Iterate:**
+
+   For $k = 1$ to `num_iterations`, perform the following steps:
+
+   1. **Compute the matrix-vector product:**
+
+      $$
+      b^{(k)} = A b^{(k-1)}
+      $$
+
+   2. **Normalize the vector:**
+
+      $$
+      b^{(k)} = \frac{b^{(k)}}{\| b^{(k)} \|}
+      $$
+
+3. **Estimate the eigenvalue:**
+
+   After the iterations, estimate the dominant eigenvalue $\lambda$ as:
+
+   $$
+   \lambda = \left( b^{(k)} \right)^T A b^{(k)}
+   $$
+
+   Since $b^{(k)}$ is a unit vector (normalized), this simplifies to:
+
+   $$
+   \lambda = b^{(k)} \cdot \left(A b^{(k)} \right)
+   $$
+
+The notation is:
+
+- $A$: Square matrix.
+- $b^{(k)}$: Approximate eigenvector at iteration $k$.
+- $\lambda$: Approximate dominant eigenvalue.
+- $\| b \|$: Norm (magnitude) of vector $b$, typically the Euclidean norm.
+d other eigenvalues.
+
+```{python}
+# Example usage
+
+A = np.array([
+    [2, 1],
+    [1, 2]
+], dtype=float)
+
+# eigenvalue, eigenvector = power_method(A, num_iterations=10)
+# print("Estimated Largest Eigenvalue:", eigenvalue)
+# print("Corresponding Eigenvector:", eigenvector)
+```
+
+### Solution
+
+```{python}
+def power_method(A: np.ndarray, num_iterations: int) -> tuple[float, np.ndarray]:
+  """
+  Estimate the largest eigenvalue and its corresponding eigenvector using
+  the power method.
+
+  Parameters
+  ----------
+  A : np.ndarray
+    The square matrix.
+  num_iterations : int
+    The number of iterations.
+
+  Returns
+  -------
+  tuple
+    The estimated largest eigenvalue and its corresponding eigenvector.
+  """
+  # Initialize a random vector 'x' with the same dimension as the matrix A
+  x = np.random.rand(A.shape[0])
+  # Normalize the initial vector to have a unit norm
+  x = x / np.linalg.norm(x)
+
+  # Perform the power iteration for the specified number of iterations
+  for _ in range(num_iterations):
+    # Multiply the current vector 'x' by the matrix 'A' to get a new vector 'y'
+    y = A @ x
+    # Normalize the new vector 'y' to prevent numerical overflow or underflow
+    x = y / np.linalg.norm(y)
+
+  # After the iterations, estimate the eigenvalue using the Rayleigh quotient
+  # This computes the scalar projection of 'A @ x' onto 'x'
+  eigenvalue = np.dot(A @ x, x) / np.dot(x, x)
+
+  # Return the estimated largest eigenvalue and the corresponding eigenvector
+  return eigenvalue, x
+
+eigenvalue, eigenvector = power_method(A, num_iterations=100)
+print("Estimated Largest Eigenvalue:", eigenvalue)
+print("Corresponding Eigenvector:", eigenvector)
+```

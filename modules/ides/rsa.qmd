@@ -1,0 +1,233 @@
+---
+title: "Rsa"
+subtitle: "Module 4: IDEs & Tools"
+format: html
+---
+
+# RSA
+
+
+```{python}
+import numpy as np
+```
+
+As a starting point for RSA, choose two prime numbers $p$ and $q$. We need a function that generates prime numbers.
+
+```{python}
+def generate_primes_lower_than(stop: int, start: int = 0) -> list[int]:
+  """
+  Generate all prime numbers lower than the input `stop`
+
+  Parameters
+  ----------
+  stop : int
+    Upper limit of the range
+  start : int, optional
+    Lower limit of the range, by default 0
+
+  Returns
+  -------
+  int
+    List of all prime numbers lower than `stop`
+  """
+  ls_primes = []
+
+  for n in range(2, stop):
+    for p in ls_primes:
+      if n % p == 0:
+        break
+    else:
+      ls_primes.append(n)
+
+  # Filter out all numbers lower than `start`
+  ls_primes = [p for p in ls_primes if p >= start]
+
+  return ls_primes
+```
+
+```{python}
+ls_primes = generate_primes_lower_than(1000)
+# See the ten highest primes we have generated
+print(ls_primes[-10:])
+```
+
+As a starting point for RSA, choose two prime numbers $p$ and $q$. For the algorithm to work, the two prime numbers must be different.
+
+```{python}
+def choose_prime_numbers(ls_primes: list[int]) -> tuple[int]:
+  """
+  Choose two primes from the list, ensuring they are not the same.
+
+  Parameters
+  ----------
+  ls_primes : list
+    List of primes
+
+  Returns
+  -------
+  tuple[int]
+    Two random prime numbers.
+  """
+  # Choose randomly using Numpy
+  p = np.random.choice(ls_primes)
+  q = np.random.choice(ls_primes)
+  # Ensure p and q are not the same
+  while p == q:
+    q = np.random.choice(ls_primes)
+  return (p, q)
+```
+
+```{python}
+p, q = choose_prime_numbers(ls_primes)
+print(f"Prime p = {p}")
+print(f"Prime q = {q}")
+```
+
+The next steps will calculate the two keys.
+
+Both consist of two numbers, one of which is equal.
+
+- Private key: $(n, d)$
+- Public key: $(n, e)$
+
+To calculate $n$ simply multiply $p$ and $q$.
+
+To get the further values $e$ and $d$ the Euler phi function $\phi$ is used.
+It calculates how many of the numbers less than or equal to $n$ are coprime to $n$.
+**Coprime** means that two numbers have no common divisor except $1$.
+
+Since $p$ and $q$ are different, we can use the simplified calculation formula:
+
+$$
+\phi(n) = (p-1) \cdot (q-1)
+$$
+
+The number $e$ can now be chosen freely. To check this, we can use the gcd function. It finds the "greatest common divisor".
+
+The following condition must be true:
+
+$$
+\text{gcd}\left(e, \phi(n)\right) = 1
+$$
+
+The number $d$ is the multiplicative inverse to $e$.
+This means that $d \cdot e$ results in 1 again if we compute $\text{mod}\ \phi(n)$.
+
+The modulo function $\text{mod}$ calculates the remainder of a division.
+
+Expressed in formulas, the following must apply:
+
+$$
+(e \cdot d)\ \text{mod}\ \phi (n) = 1
+$$
+
+$d$ can be calculated with the extended Euclidean algorithm.
+
+
+```{python}
+def gcd(a: int, b: int) -> int:
+  """
+  Calculate the greatest common divisor of two numbers,
+  using the extended Euclidean algorithm.
+  """
+  r0 = a if a > b else b
+  r1 = b if a > b else a
+  while r0 % r1 != 0:
+    r2 = r0 % r1
+    r0 = r1
+    r1 = r2
+  return r1
+```
+
+```{python}
+# Test the gcd
+print(gcd(17, 120))
+```
+
+```{python}
+def generate_rsa_keys(p: int, q: int) -> tuple[int]:
+  n = p * q
+  phi = (p - 1) * (q - 1)
+  # Choose e. It must comprime to phi(n)
+  e = np.random.randint(1, phi)
+  while gcd(e, phi) != 1:
+    e = np.random.randint(1, phi)
+  # Choose d. It must meet (e * d) mod phi(n) = 1
+  d = np.random.randint(1, phi)
+  while (e * d) % phi != 1:
+    d = np.random.randint(1, phi)
+  return (n, e), (n, d)
+```
+
+```{python}
+(n, e), (n, d) = generate_rsa_keys(p, q)
+print(f"Public key: ({n}, {e})")
+print(f"Private key: ({n}, {d})")
+```
+
+To encrypt a number $m$ to ciphertext $c$ the following formula is applied.
+It uses the numbers of the public key:
+
+$$
+c = m^e\ \text{mod}\ n
+$$
+
+RSA encrypts only numbers. These must be greater-equal $0$ and less than $n$.
+
+```{python}
+def encrypt_number(m: int, pub: tuple[int]) -> int:
+  n, e = pub
+  # To ensure m**e can be computed, we change the variable type
+  c = int(m)**int(e) % int(n)
+  return c
+```
+
+```{python}
+c = encrypt_number(88, (n, e))
+print(f"Encrypted number: {c}")
+```
+
+For decryption the inverse formula is applied.
+It uses the numbers of the private key:
+
+$$
+m' = c^d\ \text{mod}\ n
+$$
+
+```{python}
+def decrypt_number(c: int, priv: tuple[int]) -> int:
+  n, d = priv
+  # To ensure c**d can be computed, we change the variable type
+  m = int(c)**int(d) % int(n)
+  return m
+```
+
+```{python}
+m = decrypt_number(c, (n, d))
+print(f"Decrypted number: {m}")
+```
+
+If we did not have the private key, we can try to find it via brute force.
+
+Choose three numbers, encrypt them using the known public key, then find a private key that decrypts them properly.
+
+```{python}
+# Initialize private key at 1
+dd = 1
+
+while True:
+  m1, m2, m3 = 10, 25, 50
+  c1 = encrypt_number(m1, (n, e))
+  c2 = encrypt_number(m2, (n, e))
+  c3 = encrypt_number(m3, (n, e))
+  d1 = decrypt_number(c1, (n, dd))
+  d2 = decrypt_number(c2, (n, dd))
+  d3 = decrypt_number(c3, (n, dd))
+  if d1 == m1 and d2 == m2 and d3 == m3:
+    print(f"Private key found: {dd}")
+    break
+  else:
+    print(f"Private key not valid: {dd}")
+    # Try the next private key
+    dd += 1
+```
