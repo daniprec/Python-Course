@@ -481,7 +481,7 @@ window.Quarto = {
 <section id="setting-up" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up">Setting Up</h2>
 <p>To get started, we’ll be importing several libraries:</p>
-<div id="8b59032e" class="cell">
+<div id="9779fe43" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2  <span class="co"># for image processing tasks</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># to display images</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># for numerical operations on arrays</span></span>
@@ -496,7 +496,7 @@ window.Quarto = {
 <li><code>load_image</code>: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color.</li>
 <li><code>show_image</code>: A simple function to display images from their NumPy array representations.</li>
 </ul>
-<div id="dcd2ca9a" class="cell">
+<div id="1615646c" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
@@ -554,7 +554,7 @@ window.Quarto = {
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can load our image just as we did last class.</p>
-<div id="5cfb918d" class="cell">
+<div id="36b0d91d" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://drive.google.com/uc?export=view&amp;id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -569,7 +569,7 @@ window.Quarto = {
 <section id="image-preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="image-preprocessing">Image Preprocessing</h2>
 <p>For some of our mathematical operations, especially eigen decomposition, it’s important that our matrices (or in this case, images) are square. That means the width and height should be the same. We’ll preprocess our image to ensure this condition is met.</p>
-<div id="ca32bd76" class="cell">
+<div id="e8d02b6f" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the dimensions (width and height) of the 'dog' image</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> dog.shape</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -592,7 +592,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="eigen-decomposition">Eigen Decomposition</h2>
 <p>Now, onto the main topic! Eigen decomposition involves breaking down a matrix into its eigenvalues and eigenvectors. When applied to images, this can allow for compression by representing the image with fewer values.</p>
 <p>We’ll compute the eigenvalues and eigenvectors for our image, and then use them to reconstruct the image. This reconstructed image will be a compressed version of the original, showcasing the power and utility of eigen decomposition in image processing.</p>
-<div id="b696117f" class="cell">
+<div id="6dce0d00" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(img)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -608,7 +608,7 @@ window.Quarto = {
 <blockquote class="blockquote">
 <p>Note: We can perform matrix multiplication in Numpy by either calling the <code>np.matmul()</code> function or using the <code>@</code> operator.</p>
 </blockquote>
-<div id="ee9b3b65" class="cell">
+<div id="175e4a95" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -624,7 +624,7 @@ window.Quarto = {
 <p>To address the challenges posed by the eigenvalue decomposition, we can craft a symmetric matrix by placing our original image in the bottom-left corner of a larger matrix. This larger matrix will have mirrored content, ensuring its symmetry.</p>
 <p>Steps: 1. Create a zero-filled matrix of double the size of our original image. 2. Place the original image into the bottom-left corner of this new matrix. 3. Reflect the content of the original image to the upper-right corner to achieve symmetry.</p>
 <p>Once we have this symmetric matrix, we can proceed with the <code>eig</code> or similar operations designed for symmetric matrices. Post-processing, we’ll extract the bottom-left corner as our reconstructed image.</p>
-<div id="84a2a93d" class="cell">
+<div id="13fb7614" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Given the original dimensions (width and height) of the 'img'</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> img.shape</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -649,7 +649,7 @@ window.Quarto = {
 <p>In our image processing scenario, we are using the properties of symmetric matrices for computational convenience. However, in quantum mechanics, the use of Hermitian matrices is rooted deeply in the foundational principles of the theory, underscoring their fundamental importance in describing the nature of our universe.</p>
 <hr>
 <p>Lets try again to decompose this new matrix, and re-construct it.</p>
-<div id="18111fc6" class="cell">
+<div id="e619abba" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(m)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -666,7 +666,7 @@ window.Quarto = {
 <section id="image-compression-with-eigen-decomposition" class="level2">
 <h2 class="anchored" data-anchor-id="image-compression-with-eigen-decomposition">Image Compression with Eigen Decomposition</h2>
 <p>Until now, we have utilized the full set of eigenvalues and eigenvectors to represent our image. However, the essence of compression lies in using less data without significantly compromising quality. By retaining only the most significant eigenvalues and their corresponding eigenvectors, we can approximate the original image with fewer components.</p>
-<div id="35f07fa4" class="cell">
+<div id="a9effe52" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k eigenvalues and eigenvectors</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">20</span>  <span class="co"># You can choose a different value for k based on the desired compression level</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>top_k_eigenvalues <span class="op">=</span> eigenvalues[:k]</span>
@@ -681,7 +681,7 @@ window.Quarto = {
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="36f02740" class="cell">
+<div id="9c251c8d" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop the bottom left corner</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image[w:, :h])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -708,7 +708,7 @@ Exercise
 </p>
 <p>In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.</p>
 <p>The strenght of SVD lies in that it does not need a square matrix. Matrices of any size are valid!</p>
-<div id="1b0b5c88" class="cell">
+<div id="4a967ee7" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the SVD of the grayscale image</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(dog, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -717,21 +717,21 @@ Exercise
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of Sigma: </span><span class="sc">{</span>S<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of V*: </span><span class="sc">{</span>Vt<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9a0a26d8" class="cell">
+<div id="9ede8e1b" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the image</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U, np.matmul(np.diag(S), Vt))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="16fe9e81" class="cell">
+<div id="ff581ca0" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k singular values and vectors</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">50</span>  <span class="co"># You can adjust k based on the desired compression level</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>U_k <span class="op">=</span> U[:, :k]</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>S_k <span class="op">=</span> np.diag(S[:k])</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Vt_k <span class="op">=</span> Vt[:k, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="d13eed9d" class="cell">
+<div id="62ec39c1" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U_k, np.matmul(S_k, Vt_k))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -743,7 +743,7 @@ Exercise
 <section id="exercise-rgb-image" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-rgb-image">Exercise: RGB Image</h2>
 <p>Now you want to compress a RGB image. How would you do it?</p>
-<div id="a3460085" class="cell">
+<div id="c0afca34" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
