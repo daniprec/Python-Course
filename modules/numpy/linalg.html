@@ -481,7 +481,7 @@ window.Quarto = {
 <section id="setting-up" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up">Setting Up</h2>
 <p>To get started, we’ll be importing several libraries:</p>
-<div id="403857ba" class="cell">
+<div id="1724d897" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2  <span class="co"># for image processing tasks</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># to display images</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># for numerical operations on arrays</span></span>
@@ -491,8 +491,12 @@ window.Quarto = {
 </section>
 <section id="loading-and-displaying-images" class="level2">
 <h2 class="anchored" data-anchor-id="loading-and-displaying-images">Loading and Displaying Images</h2>
-<p>I have set up a couple of utility functions to make our exploration smoother: - <code>load_image</code>: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color. - <code>show_image</code>: A simple function to display images from their NumPy array representations.</p>
-<div id="b8e19408" class="cell">
+<p>I have set up a couple of utility functions to make our exploration smoother:</p>
+<ul>
+<li><code>load_image</code>: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color.</li>
+<li><code>show_image</code>: A simple function to display images from their NumPy array representations.</li>
+</ul>
+<div id="4e8c3cd1" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
@@ -550,7 +554,7 @@ window.Quarto = {
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can load our image just as we did last class.</p>
-<div id="371e5478" class="cell">
+<div id="c2ede6b2" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://drive.google.com/uc?export=view&amp;id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -565,7 +569,7 @@ window.Quarto = {
 <section id="image-preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="image-preprocessing">Image Preprocessing</h2>
 <p>For some of our mathematical operations, especially eigen decomposition, it’s important that our matrices (or in this case, images) are square. That means the width and height should be the same. We’ll preprocess our image to ensure this condition is met.</p>
-<div id="3a74182d" class="cell">
+<div id="9203b4a6" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the dimensions (width and height) of the 'dog' image</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> dog.shape</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,19 +592,23 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="eigen-decomposition">Eigen Decomposition</h2>
 <p>Now, onto the main topic! Eigen decomposition involves breaking down a matrix into its eigenvalues and eigenvectors. When applied to images, this can allow for compression by representing the image with fewer values.</p>
 <p>We’ll compute the eigenvalues and eigenvectors for our image, and then use them to reconstruct the image. This reconstructed image will be a compressed version of the original, showcasing the power and utility of eigen decomposition in image processing.</p>
-<div id="e7cc4a08" class="cell">
+<div id="93a44ab3" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(img)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(eigenvalues.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Using eigen decomposition on our image <span class="math inline">\(A\)</span> with size <span class="math inline">\(N \times N\)</span>, we have derived two arrays: - An array of eigenvalues <span class="math inline">\(\lambda\)</span> with a size of <span class="math inline">\(N\)</span>. - An array of eigenvectors <span class="math inline">\(Q\)</span> with dimensions <span class="math inline">\(N \times N\)</span>.</p>
+<p>Using eigen decomposition on our image <span class="math inline">\(A\)</span> with size <span class="math inline">\(N \times N\)</span>, we have derived two arrays:</p>
+<ul>
+<li>An array of eigenvalues <span class="math inline">\(\lambda\)</span> with a size of <span class="math inline">\(N\)</span>.</li>
+<li>An array of eigenvectors <span class="math inline">\(Q\)</span> with dimensions <span class="math inline">\(N \times N\)</span>.</li>
+</ul>
 <p>We can reconstruct the original image from these components. The reconstruction can be achieved with the following operation:</p>
 <p><span class="math display">\[A = Q\ \Lambda\ Q^{-1}\]</span></p>
 <blockquote class="blockquote">
 <p>Note: We can perform matrix multiplication in Numpy by either calling the <code>np.matmul()</code> function or using the <code>@</code> operator.</p>
 </blockquote>
-<div id="ff2c0615" class="cell">
+<div id="a6968764" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -616,7 +624,7 @@ window.Quarto = {
 <p>To address the challenges posed by the eigenvalue decomposition, we can craft a symmetric matrix by placing our original image in the bottom-left corner of a larger matrix. This larger matrix will have mirrored content, ensuring its symmetry.</p>
 <p>Steps: 1. Create a zero-filled matrix of double the size of our original image. 2. Place the original image into the bottom-left corner of this new matrix. 3. Reflect the content of the original image to the upper-right corner to achieve symmetry.</p>
 <p>Once we have this symmetric matrix, we can proceed with the <code>eig</code> or similar operations designed for symmetric matrices. Post-processing, we’ll extract the bottom-left corner as our reconstructed image.</p>
-<div id="c455c7b4" class="cell">
+<div id="865b09cc" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Given the original dimensions (width and height) of the 'img'</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> img.shape</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -641,7 +649,7 @@ window.Quarto = {
 <p>In our image processing scenario, we are using the properties of symmetric matrices for computational convenience. However, in quantum mechanics, the use of Hermitian matrices is rooted deeply in the foundational principles of the theory, underscoring their fundamental importance in describing the nature of our universe.</p>
 <hr>
 <p>Lets try again to decompose this new matrix, and re-construct it.</p>
-<div id="1e45f8a9" class="cell">
+<div id="aee9a099" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(m)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -658,7 +666,7 @@ window.Quarto = {
 <section id="image-compression-with-eigen-decomposition" class="level2">
 <h2 class="anchored" data-anchor-id="image-compression-with-eigen-decomposition">Image Compression with Eigen Decomposition</h2>
 <p>Until now, we have utilized the full set of eigenvalues and eigenvectors to represent our image. However, the essence of compression lies in using less data without significantly compromising quality. By retaining only the most significant eigenvalues and their corresponding eigenvectors, we can approximate the original image with fewer components.</p>
-<div id="9886c9dd" class="cell">
+<div id="f51c1a79" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k eigenvalues and eigenvectors</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">20</span>  <span class="co"># You can choose a different value for k based on the desired compression level</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>top_k_eigenvalues <span class="op">=</span> eigenvalues[:k]</span>
@@ -673,7 +681,7 @@ window.Quarto = {
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="d84717d2" class="cell">
+<div id="129b75ce" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop the bottom left corner</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image[w:, :h])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -700,7 +708,7 @@ Exercise
 </p>
 <p>In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.</p>
 <p>The strenght of SVD lies in that it does not need a square matrix. Matrices of any size are valid!</p>
-<div id="3540f72c" class="cell">
+<div id="097aef02" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the SVD of the grayscale image</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(dog, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -709,21 +717,21 @@ Exercise
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of Sigma: </span><span class="sc">{</span>S<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of V*: </span><span class="sc">{</span>Vt<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="8bb4319b" class="cell">
+<div id="17af0a33" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the image</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U, np.matmul(np.diag(S), Vt))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="61ca7dc9" class="cell">
+<div id="88375efe" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k singular values and vectors</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">50</span>  <span class="co"># You can adjust k based on the desired compression level</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>U_k <span class="op">=</span> U[:, :k]</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>S_k <span class="op">=</span> np.diag(S[:k])</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Vt_k <span class="op">=</span> Vt[:k, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="561b4fc6" class="cell">
+<div id="e6790f9c" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U_k, np.matmul(S_k, Vt_k))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -735,7 +743,7 @@ Exercise
 <section id="exercise-rgb-image" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-rgb-image">Exercise: RGB Image</h2>
 <p>Now you want to compress a RGB image. How would you do it?</p>
-<div id="b810b0f4" class="cell">
+<div id="4c47980a" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1238,307 +1246,309 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading and Displaying Images</span></span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>I have set up a couple of utility functions to make our exploration smoother:</span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`load_image`</span>: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color.</span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show_image`</span>: A simple function to display images from their NumPy array representations.</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co">  NumPy array.</span></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="co">  url : str</span></span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="co">    The URL of the image to be fetched.</span></span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co">  color : bool, optional</span></span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co">    If True, loads the image in color. If False, loads the image in grayscale.</span></span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="co">    Default is False.</span></span>
-<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
-<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
-<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="co">  np.ndarray</span></span>
-<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="co">    If `color` is False, returns a grayscale image represented as a 2D NumPy</span></span>
-<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a><span class="co">    array with values ranging from 0 to 255. If `color` is True,</span></span>
-<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a><span class="co">    returns a color image in RGB format.</span></span>
-<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>  response <span class="op">=</span> requests.get(url)</span>
-<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>  image_array <span class="op">=</span> np.asarray(<span class="bu">bytearray</span>(response.content), dtype<span class="op">=</span><span class="st">"uint8"</span>)</span>
-<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> color:</span>
-<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_COLOR)</span>
-<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  <span class="co"># Convert from BGR to RGB</span></span>
-<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
-<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)</span>
-<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image</span>
-<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(img: np.ndarray):</span>
-<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a><span class="co">  Display the provided NumPy array as an image.</span></span>
-<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
-<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
-<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a><span class="co">  img : np.ndarray</span></span>
-<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a><span class="co">    The image data represented as either a 2D NumPy array for grayscale images</span></span>
-<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a><span class="co">    or a 3D NumPy array for color images.</span></span>
-<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the image is color (3D) or grayscale (2D)</span></span>
-<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> img.ndim <span class="op">==</span> <span class="dv">3</span>:  <span class="co"># Color image</span></span>
-<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
-<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, vmax<span class="op">=</span><span class="dv">255</span>)</span>
-<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># Binary mask</span></span>
-<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>      img <span class="op">=</span> np.mean(img, axis<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:  <span class="co"># Grayscale image</span></span>
-<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
-<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">255</span>)</span>
-<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  <span class="co"># Binary mask</span></span>
-<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
-<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
-<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a>We can load our image just as we did last class.</span>
-<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
-<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://drive.google.com/uc?export=view&amp;id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"</span></span>
-<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
-<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a>dog <span class="op">=</span> load_image(url_dog)</span>
-<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a>show_image(dog)</span>
-<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## Image Preprocessing</span></span>
-<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a>For some of our mathematical operations, especially eigen decomposition, it's important that our matrices (or in this case, images) are square. That means the width and height should be the same. We'll preprocess our image to ensure this condition is met.</span>
-<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the dimensions (width and height) of the 'dog' image</span></span>
-<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> dog.shape</span>
-<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure the image is square for eigen decomposition:</span></span>
-<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a><span class="co"># If width is greater than height, truncate the width to match the height</span></span>
-<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Otherwise, truncate the height to match the width</span></span>
-<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> w <span class="op">&gt;</span> h:</span>
-<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> dog[:h, :]  <span class="co"># Retain all rows up to height 'h' and all columns</span></span>
-<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> dog[:, :w]  <span class="co"># Retain all columns up to width 'w' and all rows</span></span>
-<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the shape of the processed image to confirm its dimensions</span></span>
-<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.shape)</span>
-<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the square image</span></span>
-<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a>show_image(img)</span>
-<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigen Decomposition</span></span>
-<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a>Now, onto the main topic! Eigen decomposition involves breaking down a matrix into its eigenvalues and eigenvectors. When applied to images, this can allow for compression by representing the image with fewer values.</span>
-<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a>We'll compute the eigenvalues and eigenvectors for our image, and then use them to reconstruct the image. This reconstructed image will be a compressed version of the original, showcasing the power and utility of eigen decomposition in image processing.</span>
-<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
-<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(img)</span>
-<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(eigenvalues.shape)</span>
-<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a>Using eigen decomposition on our image $A$ with size $N \times N$, we have derived two arrays:</span>
-<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An array of eigenvalues $\lambda$ with a size of $N$.</span>
-<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An array of eigenvectors $Q$ with dimensions $N \times N$.</span>
-<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a>We can reconstruct the original image from these components. The reconstruction can be achieved with the following operation:</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`load_image`</span>: Grabs an image from a URL and returns it as a NumPy array. We can choose to load in grayscale or color.</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show_image`</span>: A simple function to display images from their NumPy array representations.</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="co">  NumPy array.</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="co">  url : str</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co">    The URL of the image to be fetched.</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co">  color : bool, optional</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="co">    If True, loads the image in color. If False, loads the image in grayscale.</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="co">    Default is False.</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="co">  np.ndarray</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a><span class="co">    If `color` is False, returns a grayscale image represented as a 2D NumPy</span></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a><span class="co">    array with values ranging from 0 to 255. If `color` is True,</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a><span class="co">    returns a color image in RGB format.</span></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>  response <span class="op">=</span> requests.get(url)</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>  image_array <span class="op">=</span> np.asarray(<span class="bu">bytearray</span>(response.content), dtype<span class="op">=</span><span class="st">"uint8"</span>)</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> color:</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_COLOR)</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  <span class="co"># Convert from BGR to RGB</span></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(img: np.ndarray):</span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a><span class="co">  Display the provided NumPy array as an image.</span></span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a><span class="co">  img : np.ndarray</span></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a><span class="co">    The image data represented as either a 2D NumPy array for grayscale images</span></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a><span class="co">    or a 3D NumPy array for color images.</span></span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the image is color (3D) or grayscale (2D)</span></span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> img.ndim <span class="op">==</span> <span class="dv">3</span>:  <span class="co"># Color image</span></span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># Binary mask</span></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>      img <span class="op">=</span> np.mean(img, axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:  <span class="co"># Grayscale image</span></span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  <span class="co"># Binary mask</span></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a>We can load our image just as we did last class.</span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://drive.google.com/uc?export=view&amp;id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"</span></span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a>dog <span class="op">=</span> load_image(url_dog)</span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a>show_image(dog)</span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Image Preprocessing</span></span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a>For some of our mathematical operations, especially eigen decomposition, it's important that our matrices (or in this case, images) are square. That means the width and height should be the same. We'll preprocess our image to ensure this condition is met.</span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the dimensions (width and height) of the 'dog' image</span></span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> dog.shape</span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure the image is square for eigen decomposition:</span></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a><span class="co"># If width is greater than height, truncate the width to match the height</span></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Otherwise, truncate the height to match the width</span></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> w <span class="op">&gt;</span> h:</span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> dog[:h, :]  <span class="co"># Retain all rows up to height 'h' and all columns</span></span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> dog[:, :w]  <span class="co"># Retain all columns up to width 'w' and all rows</span></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the shape of the processed image to confirm its dimensions</span></span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.shape)</span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the square image</span></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a>show_image(img)</span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigen Decomposition</span></span>
+<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a>Now, onto the main topic! Eigen decomposition involves breaking down a matrix into its eigenvalues and eigenvectors. When applied to images, this can allow for compression by representing the image with fewer values.</span>
+<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a>We'll compute the eigenvalues and eigenvectors for our image, and then use them to reconstruct the image. This reconstructed image will be a compressed version of the original, showcasing the power and utility of eigen decomposition in image processing.</span>
+<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(img)</span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(eigenvalues.shape)</span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a>Using eigen decomposition on our image $A$ with size $N \times N$, we have derived two arrays:</span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An array of eigenvalues $\lambda$ with a size of $N$.</span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An array of eigenvectors $Q$ with dimensions $N \times N$.</span>
 <span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a>$$A = Q\ \Lambda\ Q^{-1}$$</span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a>We can reconstruct the original image from these components. The reconstruction can be achieved with the following operation:</span>
 <span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: We can perform matrix multiplication in Numpy by either calling the </span><span class="in">`np.matmul()`</span><span class="at"> function or using the </span><span class="in">`@`</span><span class="at"> operator.</span></span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a>$$A = Q\ \Lambda\ Q^{-1}$$</span>
 <span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-170"><a href="#cb16-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-171"><a href="#cb16-171" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
-<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
-<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
-<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
-<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a>We have encountered an error! The reason? Our eigenvalues and eigenvectors contain imaginary values, which are not suitable for our image reconstruction process.</span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: We can perform matrix multiplication in Numpy by either calling the </span><span class="in">`np.matmul()`</span><span class="at"> function or using the </span><span class="in">`@`</span><span class="at"> operator.</span></span>
+<span id="cb16-169"><a href="#cb16-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
+<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb16-179"><a href="#cb16-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-180"><a href="#cb16-180" aria-hidden="true" tabindex="-1"></a>How can we make the eigenvalues real? We can use a simple linear algebra theorem.</span>
+<span id="cb16-180"><a href="#cb16-180" aria-hidden="true" tabindex="-1"></a>We have encountered an error! The reason? Our eigenvalues and eigenvectors contain imaginary values, which are not suitable for our image reconstruction process.</span>
 <span id="cb16-181"><a href="#cb16-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a>**The eigenvalues of symmetric matrices are real.**</span>
+<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a>How can we make the eigenvalues real? We can use a simple linear algebra theorem.</span>
 <span id="cb16-183"><a href="#cb16-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-184"><a href="#cb16-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Making a Symmetric Matrix</span></span>
+<span id="cb16-184"><a href="#cb16-184" aria-hidden="true" tabindex="-1"></a>**The eigenvalues of symmetric matrices are real.**</span>
 <span id="cb16-185"><a href="#cb16-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a>To address the challenges posed by the eigenvalue decomposition, we can craft a symmetric matrix by placing our original image in the bottom-left corner of a larger matrix. This larger matrix will have mirrored content, ensuring its symmetry.</span>
+<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a><span class="fu">## Making a Symmetric Matrix</span></span>
 <span id="cb16-187"><a href="#cb16-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a>Steps:</span>
-<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create a zero-filled matrix of double the size of our original image.</span>
-<span id="cb16-190"><a href="#cb16-190" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Place the original image into the bottom-left corner of this new matrix.</span>
-<span id="cb16-191"><a href="#cb16-191" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Reflect the content of the original image to the upper-right corner to achieve symmetry.</span>
-<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-193"><a href="#cb16-193" aria-hidden="true" tabindex="-1"></a>Once we have this symmetric matrix, we can proceed with the <span class="in">`eig`</span> or similar operations designed for symmetric matrices. Post-processing, we'll extract the bottom-left corner as our reconstructed image.</span>
+<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a>To address the challenges posed by the eigenvalue decomposition, we can craft a symmetric matrix by placing our original image in the bottom-left corner of a larger matrix. This larger matrix will have mirrored content, ensuring its symmetry.</span>
+<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-190"><a href="#cb16-190" aria-hidden="true" tabindex="-1"></a>Steps:</span>
+<span id="cb16-191"><a href="#cb16-191" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create a zero-filled matrix of double the size of our original image.</span>
+<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Place the original image into the bottom-left corner of this new matrix.</span>
+<span id="cb16-193"><a href="#cb16-193" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Reflect the content of the original image to the upper-right corner to achieve symmetry.</span>
 <span id="cb16-194"><a href="#cb16-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-197"><a href="#cb16-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-198"><a href="#cb16-198" aria-hidden="true" tabindex="-1"></a><span class="co"># Given the original dimensions (width and height) of the 'img'</span></span>
-<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> img.shape</span>
-<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-201"><a href="#cb16-201" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a zero-filled matrix of double the size of the original image</span></span>
-<span id="cb16-202"><a href="#cb16-202" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> np.zeros((w<span class="op">*</span><span class="dv">2</span>, h<span class="op">*</span><span class="dv">2</span>))</span>
-<span id="cb16-203"><a href="#cb16-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-204"><a href="#cb16-204" aria-hidden="true" tabindex="-1"></a><span class="co"># Place the original image into the bottom-left corner of the new matrix</span></span>
-<span id="cb16-205"><a href="#cb16-205" aria-hidden="true" tabindex="-1"></a>m[w:, :h] <span class="op">=</span> img</span>
-<span id="cb16-206"><a href="#cb16-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-207"><a href="#cb16-207" aria-hidden="true" tabindex="-1"></a><span class="co"># Reflect the content of the original image to the upper-right corner</span></span>
-<span id="cb16-208"><a href="#cb16-208" aria-hidden="true" tabindex="-1"></a>m[:w, h:] <span class="op">=</span> img.T</span>
-<span id="cb16-209"><a href="#cb16-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-210"><a href="#cb16-210" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the symmetric image</span></span>
-<span id="cb16-211"><a href="#cb16-211" aria-hidden="true" tabindex="-1"></a>show_image(m)</span>
-<span id="cb16-212"><a href="#cb16-212" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-213"><a href="#cb16-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-214"><a href="#cb16-214" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-195"><a href="#cb16-195" aria-hidden="true" tabindex="-1"></a>Once we have this symmetric matrix, we can proceed with the <span class="in">`eig`</span> or similar operations designed for symmetric matrices. Post-processing, we'll extract the bottom-left corner as our reconstructed image.</span>
+<span id="cb16-196"><a href="#cb16-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a><span class="co"># Given the original dimensions (width and height) of the 'img'</span></span>
+<span id="cb16-201"><a href="#cb16-201" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> img.shape</span>
+<span id="cb16-202"><a href="#cb16-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-203"><a href="#cb16-203" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a zero-filled matrix of double the size of the original image</span></span>
+<span id="cb16-204"><a href="#cb16-204" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> np.zeros((w<span class="op">*</span><span class="dv">2</span>, h<span class="op">*</span><span class="dv">2</span>))</span>
+<span id="cb16-205"><a href="#cb16-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-206"><a href="#cb16-206" aria-hidden="true" tabindex="-1"></a><span class="co"># Place the original image into the bottom-left corner of the new matrix</span></span>
+<span id="cb16-207"><a href="#cb16-207" aria-hidden="true" tabindex="-1"></a>m[w:, :h] <span class="op">=</span> img</span>
+<span id="cb16-208"><a href="#cb16-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-209"><a href="#cb16-209" aria-hidden="true" tabindex="-1"></a><span class="co"># Reflect the content of the original image to the upper-right corner</span></span>
+<span id="cb16-210"><a href="#cb16-210" aria-hidden="true" tabindex="-1"></a>m[:w, h:] <span class="op">=</span> img.T</span>
+<span id="cb16-211"><a href="#cb16-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-212"><a href="#cb16-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the symmetric image</span></span>
+<span id="cb16-213"><a href="#cb16-213" aria-hidden="true" tabindex="-1"></a>show_image(m)</span>
+<span id="cb16-214"><a href="#cb16-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb16-215"><a href="#cb16-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-216"><a href="#cb16-216" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beyond Applied Mathematics: The Importance of Symmetric Matrices</span></span>
+<span id="cb16-216"><a href="#cb16-216" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb16-217"><a href="#cb16-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-218"><a href="#cb16-218" aria-hidden="true" tabindex="-1"></a>Symmetric matrices, like the one we've just constructed from our image, play a pivotal role in various areas of science and engineering. One of the most notable fields where they are very relevent is **quantum mechanics**.</span>
+<span id="cb16-218"><a href="#cb16-218" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beyond Applied Mathematics: The Importance of Symmetric Matrices</span></span>
 <span id="cb16-219"><a href="#cb16-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-220"><a href="#cb16-220" aria-hidden="true" tabindex="-1"></a>In quantum mechanics, observables (quantities that can be measured) are represented by operators, and these operators are often expressed as **Hermitian matrices**. A Hermitian matrix is a complex square matrix that is equal to its conjugate transpose. For real-valued matrices, being Hermitian is equivalent to being symmetric. The reason these matrices are used is that their eigenvalues are always real, which corresponds to the possible outcomes of quantum measurements.</span>
+<span id="cb16-220"><a href="#cb16-220" aria-hidden="true" tabindex="-1"></a>Symmetric matrices, like the one we've just constructed from our image, play a pivotal role in various areas of science and engineering. One of the most notable fields where they are very relevent is **quantum mechanics**.</span>
 <span id="cb16-221"><a href="#cb16-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-222"><a href="#cb16-222" aria-hidden="true" tabindex="-1"></a>Ensuring that matrices are Hermitian (or symmetric, in the case of real-valued matrices) is crucial because it guarantees that the physical predictions made using these matrices are consistent with observable phenomena. Specifically, the eigenvalues of these matrices correspond to the possible results of a measurement, and it's essential for these results to be real numbers (as opposed to complex numbers) to align with physical reality.</span>
+<span id="cb16-222"><a href="#cb16-222" aria-hidden="true" tabindex="-1"></a>In quantum mechanics, observables (quantities that can be measured) are represented by operators, and these operators are often expressed as **Hermitian matrices**. A Hermitian matrix is a complex square matrix that is equal to its conjugate transpose. For real-valued matrices, being Hermitian is equivalent to being symmetric. The reason these matrices are used is that their eigenvalues are always real, which corresponds to the possible outcomes of quantum measurements.</span>
 <span id="cb16-223"><a href="#cb16-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-224"><a href="#cb16-224" aria-hidden="true" tabindex="-1"></a>In our image processing scenario, we are using the properties of symmetric matrices for computational convenience. However, in quantum mechanics, the use of Hermitian matrices is rooted deeply in the foundational principles of the theory, underscoring their fundamental importance in describing the nature of our universe.</span>
+<span id="cb16-224"><a href="#cb16-224" aria-hidden="true" tabindex="-1"></a>Ensuring that matrices are Hermitian (or symmetric, in the case of real-valued matrices) is crucial because it guarantees that the physical predictions made using these matrices are consistent with observable phenomena. Specifically, the eigenvalues of these matrices correspond to the possible results of a measurement, and it's essential for these results to be real numbers (as opposed to complex numbers) to align with physical reality.</span>
 <span id="cb16-225"><a href="#cb16-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-226"><a href="#cb16-226" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-226"><a href="#cb16-226" aria-hidden="true" tabindex="-1"></a>In our image processing scenario, we are using the properties of symmetric matrices for computational convenience. However, in quantum mechanics, the use of Hermitian matrices is rooted deeply in the foundational principles of the theory, underscoring their fundamental importance in describing the nature of our universe.</span>
 <span id="cb16-227"><a href="#cb16-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-228"><a href="#cb16-228" aria-hidden="true" tabindex="-1"></a>Lets try again to decompose this new matrix, and re-construct it.</span>
+<span id="cb16-228"><a href="#cb16-228" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb16-229"><a href="#cb16-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-232"><a href="#cb16-232" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-233"><a href="#cb16-233" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
-<span id="cb16-234"><a href="#cb16-234" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(m)</span>
-<span id="cb16-235"><a href="#cb16-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-236"><a href="#cb16-236" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
-<span id="cb16-237"><a href="#cb16-237" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
-<span id="cb16-238"><a href="#cb16-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-239"><a href="#cb16-239" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
-<span id="cb16-240"><a href="#cb16-240" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
-<span id="cb16-241"><a href="#cb16-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-242"><a href="#cb16-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-243"><a href="#cb16-243" aria-hidden="true" tabindex="-1"></a>It works like a charm!</span>
+<span id="cb16-230"><a href="#cb16-230" aria-hidden="true" tabindex="-1"></a>Lets try again to decompose this new matrix, and re-construct it.</span>
+<span id="cb16-231"><a href="#cb16-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-234"><a href="#cb16-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-235"><a href="#cb16-235" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the eigenvalues and eigenvectors</span></span>
+<span id="cb16-236"><a href="#cb16-236" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eig(m)</span>
+<span id="cb16-237"><a href="#cb16-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-238"><a href="#cb16-238" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
+<span id="cb16-239"><a href="#cb16-239" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> eigenvectors <span class="op">@</span> np.diag(eigenvalues) <span class="op">@</span> eigenvectors.T</span>
+<span id="cb16-240"><a href="#cb16-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-241"><a href="#cb16-241" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
+<span id="cb16-242"><a href="#cb16-242" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
+<span id="cb16-243"><a href="#cb16-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb16-244"><a href="#cb16-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-245"><a href="#cb16-245" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-245"><a href="#cb16-245" aria-hidden="true" tabindex="-1"></a>It works like a charm!</span>
 <span id="cb16-246"><a href="#cb16-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-247"><a href="#cb16-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Image Compression with Eigen Decomposition</span></span>
+<span id="cb16-247"><a href="#cb16-247" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb16-248"><a href="#cb16-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-249"><a href="#cb16-249" aria-hidden="true" tabindex="-1"></a>Until now, we have utilized the full set of eigenvalues and eigenvectors to represent our image. However, the essence of compression lies in using less data without significantly compromising quality. By retaining only the most significant eigenvalues and their corresponding eigenvectors, we can approximate the original image with fewer components.</span>
+<span id="cb16-249"><a href="#cb16-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Image Compression with Eigen Decomposition</span></span>
 <span id="cb16-250"><a href="#cb16-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-253"><a href="#cb16-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-254"><a href="#cb16-254" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k eigenvalues and eigenvectors</span></span>
-<span id="cb16-255"><a href="#cb16-255" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">20</span>  <span class="co"># You can choose a different value for k based on the desired compression level</span></span>
-<span id="cb16-256"><a href="#cb16-256" aria-hidden="true" tabindex="-1"></a>top_k_eigenvalues <span class="op">=</span> eigenvalues[:k]</span>
-<span id="cb16-257"><a href="#cb16-257" aria-hidden="true" tabindex="-1"></a>top_k_eigenvectors <span class="op">=</span> eigenvectors[:, :k]</span>
-<span id="cb16-258"><a href="#cb16-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-259"><a href="#cb16-259" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.size)</span>
-<span id="cb16-260"><a href="#cb16-260" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top_k_eigenvalues.size <span class="op">+</span> top_k_eigenvectors.size)</span>
-<span id="cb16-261"><a href="#cb16-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-262"><a href="#cb16-262" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
-<span id="cb16-263"><a href="#cb16-263" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> top_k_eigenvectors <span class="op">@</span> np.diag(top_k_eigenvalues) <span class="op">@</span> top_k_eigenvectors.T</span>
-<span id="cb16-264"><a href="#cb16-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-265"><a href="#cb16-265" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
-<span id="cb16-266"><a href="#cb16-266" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
-<span id="cb16-267"><a href="#cb16-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-268"><a href="#cb16-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-271"><a href="#cb16-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-272"><a href="#cb16-272" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop the bottom left corner</span></span>
-<span id="cb16-273"><a href="#cb16-273" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image[w:, :h])</span>
-<span id="cb16-274"><a href="#cb16-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-275"><a href="#cb16-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-276"><a href="#cb16-276" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb16-277"><a href="#cb16-277" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb16-278"><a href="#cb16-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-279"><a href="#cb16-279" aria-hidden="true" tabindex="-1"></a>**Exercise:** Calculate the reduction in data size. How many values have we effectively eliminated through this compression technique?</span>
+<span id="cb16-251"><a href="#cb16-251" aria-hidden="true" tabindex="-1"></a>Until now, we have utilized the full set of eigenvalues and eigenvectors to represent our image. However, the essence of compression lies in using less data without significantly compromising quality. By retaining only the most significant eigenvalues and their corresponding eigenvectors, we can approximate the original image with fewer components.</span>
+<span id="cb16-252"><a href="#cb16-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-255"><a href="#cb16-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-256"><a href="#cb16-256" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k eigenvalues and eigenvectors</span></span>
+<span id="cb16-257"><a href="#cb16-257" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">20</span>  <span class="co"># You can choose a different value for k based on the desired compression level</span></span>
+<span id="cb16-258"><a href="#cb16-258" aria-hidden="true" tabindex="-1"></a>top_k_eigenvalues <span class="op">=</span> eigenvalues[:k]</span>
+<span id="cb16-259"><a href="#cb16-259" aria-hidden="true" tabindex="-1"></a>top_k_eigenvectors <span class="op">=</span> eigenvectors[:, :k]</span>
+<span id="cb16-260"><a href="#cb16-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-261"><a href="#cb16-261" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.size)</span>
+<span id="cb16-262"><a href="#cb16-262" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top_k_eigenvalues.size <span class="op">+</span> top_k_eigenvectors.size)</span>
+<span id="cb16-263"><a href="#cb16-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-264"><a href="#cb16-264" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
+<span id="cb16-265"><a href="#cb16-265" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> top_k_eigenvectors <span class="op">@</span> np.diag(top_k_eigenvalues) <span class="op">@</span> top_k_eigenvectors.T</span>
+<span id="cb16-266"><a href="#cb16-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-267"><a href="#cb16-267" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
+<span id="cb16-268"><a href="#cb16-268" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
+<span id="cb16-269"><a href="#cb16-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-270"><a href="#cb16-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-273"><a href="#cb16-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-274"><a href="#cb16-274" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop the bottom left corner</span></span>
+<span id="cb16-275"><a href="#cb16-275" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image[w:, :h])</span>
+<span id="cb16-276"><a href="#cb16-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-277"><a href="#cb16-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-278"><a href="#cb16-278" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb16-279"><a href="#cb16-279" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
 <span id="cb16-280"><a href="#cb16-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-283"><a href="#cb16-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-284"><a href="#cb16-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb16-285"><a href="#cb16-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-286"><a href="#cb16-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-281"><a href="#cb16-281" aria-hidden="true" tabindex="-1"></a>**Exercise:** Calculate the reduction in data size. How many values have we effectively eliminated through this compression technique?</span>
+<span id="cb16-282"><a href="#cb16-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-285"><a href="#cb16-285" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-286"><a href="#cb16-286" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb16-287"><a href="#cb16-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-288"><a href="#cb16-288" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-288"><a href="#cb16-288" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb16-289"><a href="#cb16-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-290"><a href="#cb16-290" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-290"><a href="#cb16-290" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb16-291"><a href="#cb16-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-292"><a href="#cb16-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Singular Value Decomposition (SVD)</span></span>
+<span id="cb16-292"><a href="#cb16-292" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb16-293"><a href="#cb16-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-294"><a href="#cb16-294" aria-hidden="true" tabindex="-1"></a>SVD is another powerful matrix decomposition technique. Like eigen decomposition, SVD breaks down a matrix into constituent parts, but this time into singular values and two unitary matrices.</span>
+<span id="cb16-294"><a href="#cb16-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Singular Value Decomposition (SVD)</span></span>
 <span id="cb16-295"><a href="#cb16-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-296"><a href="#cb16-296" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
-<span id="cb16-297"><a href="#cb16-297" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://drive.google.com/uc?export=view&amp;id=1ERAIFmEtAXG3eXkDXgzVVUTPImXiGTNO" width="300" /&gt;</span>
-<span id="cb16-298"><a href="#cb16-298" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
-<span id="cb16-299"><a href="#cb16-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-300"><a href="#cb16-300" aria-hidden="true" tabindex="-1"></a>In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.</span>
+<span id="cb16-296"><a href="#cb16-296" aria-hidden="true" tabindex="-1"></a>SVD is another powerful matrix decomposition technique. Like eigen decomposition, SVD breaks down a matrix into constituent parts, but this time into singular values and two unitary matrices.</span>
+<span id="cb16-297"><a href="#cb16-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-298"><a href="#cb16-298" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb16-299"><a href="#cb16-299" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://drive.google.com/uc?export=view&amp;id=1ERAIFmEtAXG3eXkDXgzVVUTPImXiGTNO" width="300" /&gt;</span>
+<span id="cb16-300"><a href="#cb16-300" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
 <span id="cb16-301"><a href="#cb16-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-302"><a href="#cb16-302" aria-hidden="true" tabindex="-1"></a>The strenght of SVD lies in that it does not need a square matrix. Matrices of any size are valid!</span>
+<span id="cb16-302"><a href="#cb16-302" aria-hidden="true" tabindex="-1"></a>In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.</span>
 <span id="cb16-303"><a href="#cb16-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-306"><a href="#cb16-306" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-307"><a href="#cb16-307" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the SVD of the grayscale image</span></span>
-<span id="cb16-308"><a href="#cb16-308" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(dog, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb16-309"><a href="#cb16-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of image: </span><span class="sc">{</span>dog<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-311"><a href="#cb16-311" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of U: </span><span class="sc">{</span>U<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-312"><a href="#cb16-312" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of Sigma: </span><span class="sc">{</span>S<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-313"><a href="#cb16-313" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of V*: </span><span class="sc">{</span>Vt<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-314"><a href="#cb16-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-315"><a href="#cb16-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-318"><a href="#cb16-318" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-319"><a href="#cb16-319" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the image</span></span>
-<span id="cb16-320"><a href="#cb16-320" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U, np.matmul(np.diag(S), Vt))</span>
-<span id="cb16-321"><a href="#cb16-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-322"><a href="#cb16-322" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
-<span id="cb16-323"><a href="#cb16-323" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
-<span id="cb16-324"><a href="#cb16-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-325"><a href="#cb16-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-328"><a href="#cb16-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-329"><a href="#cb16-329" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k singular values and vectors</span></span>
-<span id="cb16-330"><a href="#cb16-330" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">50</span>  <span class="co"># You can adjust k based on the desired compression level</span></span>
-<span id="cb16-331"><a href="#cb16-331" aria-hidden="true" tabindex="-1"></a>U_k <span class="op">=</span> U[:, :k]</span>
-<span id="cb16-332"><a href="#cb16-332" aria-hidden="true" tabindex="-1"></a>S_k <span class="op">=</span> np.diag(S[:k])</span>
-<span id="cb16-333"><a href="#cb16-333" aria-hidden="true" tabindex="-1"></a>Vt_k <span class="op">=</span> Vt[:k, :]</span>
-<span id="cb16-334"><a href="#cb16-334" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-335"><a href="#cb16-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-338"><a href="#cb16-338" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-339"><a href="#cb16-339" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
-<span id="cb16-340"><a href="#cb16-340" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U_k, np.matmul(S_k, Vt_k))</span>
-<span id="cb16-341"><a href="#cb16-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-342"><a href="#cb16-342" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
-<span id="cb16-343"><a href="#cb16-343" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
-<span id="cb16-344"><a href="#cb16-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-345"><a href="#cb16-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-346"><a href="#cb16-346" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb16-304"><a href="#cb16-304" aria-hidden="true" tabindex="-1"></a>The strenght of SVD lies in that it does not need a square matrix. Matrices of any size are valid!</span>
+<span id="cb16-305"><a href="#cb16-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-308"><a href="#cb16-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-309"><a href="#cb16-309" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the SVD of the grayscale image</span></span>
+<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(dog, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-311"><a href="#cb16-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-312"><a href="#cb16-312" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of image: </span><span class="sc">{</span>dog<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-313"><a href="#cb16-313" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of U: </span><span class="sc">{</span>U<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-314"><a href="#cb16-314" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of Sigma: </span><span class="sc">{</span>S<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-315"><a href="#cb16-315" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of V*: </span><span class="sc">{</span>Vt<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-316"><a href="#cb16-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-317"><a href="#cb16-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-320"><a href="#cb16-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-321"><a href="#cb16-321" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the image</span></span>
+<span id="cb16-322"><a href="#cb16-322" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U, np.matmul(np.diag(S), Vt))</span>
+<span id="cb16-323"><a href="#cb16-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-324"><a href="#cb16-324" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
+<span id="cb16-325"><a href="#cb16-325" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
+<span id="cb16-326"><a href="#cb16-326" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-327"><a href="#cb16-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-330"><a href="#cb16-330" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-331"><a href="#cb16-331" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the top-k singular values and vectors</span></span>
+<span id="cb16-332"><a href="#cb16-332" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">50</span>  <span class="co"># You can adjust k based on the desired compression level</span></span>
+<span id="cb16-333"><a href="#cb16-333" aria-hidden="true" tabindex="-1"></a>U_k <span class="op">=</span> U[:, :k]</span>
+<span id="cb16-334"><a href="#cb16-334" aria-hidden="true" tabindex="-1"></a>S_k <span class="op">=</span> np.diag(S[:k])</span>
+<span id="cb16-335"><a href="#cb16-335" aria-hidden="true" tabindex="-1"></a>Vt_k <span class="op">=</span> Vt[:k, :]</span>
+<span id="cb16-336"><a href="#cb16-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-337"><a href="#cb16-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-340"><a href="#cb16-340" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-341"><a href="#cb16-341" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruct the compressed image</span></span>
+<span id="cb16-342"><a href="#cb16-342" aria-hidden="true" tabindex="-1"></a>compressed_image <span class="op">=</span> np.matmul(U_k, np.matmul(S_k, Vt_k))</span>
+<span id="cb16-343"><a href="#cb16-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-344"><a href="#cb16-344" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the compressed image</span></span>
+<span id="cb16-345"><a href="#cb16-345" aria-hidden="true" tabindex="-1"></a>show_image(compressed_image)</span>
+<span id="cb16-346"><a href="#cb16-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb16-347"><a href="#cb16-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-348"><a href="#cb16-348" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: RGB Image</span></span>
+<span id="cb16-348"><a href="#cb16-348" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb16-349"><a href="#cb16-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-350"><a href="#cb16-350" aria-hidden="true" tabindex="-1"></a>Now you want to compress a RGB image. How would you do it?</span>
+<span id="cb16-350"><a href="#cb16-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: RGB Image</span></span>
 <span id="cb16-351"><a href="#cb16-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-354"><a href="#cb16-354" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-355"><a href="#cb16-355" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
-<span id="cb16-356"><a href="#cb16-356" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"</span></span>
-<span id="cb16-357"><a href="#cb16-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-358"><a href="#cb16-358" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
-<span id="cb16-359"><a href="#cb16-359" aria-hidden="true" tabindex="-1"></a>dog_color <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-360"><a href="#cb16-360" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog_color<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-361"><a href="#cb16-361" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog_color<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb16-362"><a href="#cb16-362" aria-hidden="true" tabindex="-1"></a>show_image(dog_color)</span>
-<span id="cb16-363"><a href="#cb16-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-364"><a href="#cb16-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-367"><a href="#cb16-367" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-368"><a href="#cb16-368" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb16-369"><a href="#cb16-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-370"><a href="#cb16-370" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-352"><a href="#cb16-352" aria-hidden="true" tabindex="-1"></a>Now you want to compress a RGB image. How would you do it?</span>
+<span id="cb16-353"><a href="#cb16-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-356"><a href="#cb16-356" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-357"><a href="#cb16-357" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb16-358"><a href="#cb16-358" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"</span></span>
+<span id="cb16-359"><a href="#cb16-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-360"><a href="#cb16-360" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb16-361"><a href="#cb16-361" aria-hidden="true" tabindex="-1"></a>dog_color <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-362"><a href="#cb16-362" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog_color<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-363"><a href="#cb16-363" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog_color<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb16-364"><a href="#cb16-364" aria-hidden="true" tabindex="-1"></a>show_image(dog_color)</span>
+<span id="cb16-365"><a href="#cb16-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-366"><a href="#cb16-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-369"><a href="#cb16-369" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb16-370"><a href="#cb16-370" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb16-371"><a href="#cb16-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-372"><a href="#cb16-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
