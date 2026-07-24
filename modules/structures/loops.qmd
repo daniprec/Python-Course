@@ -34,12 +34,17 @@ for fruit in fruits:
 
 **Exercise.** Print the amount of letters in each element of `fruits`, using a message like "apple has 5 letters."
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 fruits = ["apple", "banana", "cherry"]
 
 for fruit in fruits:
-    print(f"{fruit} has {len(fruit)} letters.")
+  print(f"{fruit} has {len(fruit)} letters.")
 ```
+
+:::
 
 As list are indexable, we can retrieve not only each element but also its associated index, using the generation funcion `enumerate()`.
 
@@ -170,18 +175,19 @@ for loop:
 
 **Exercise.** Create a list called `powers` containing the first ten powers of 2, starting at $2^1$.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
-# We first initialize an empty list
 powers = []
 
-# We create a for loop that goes from 0 to 10
 for n in range(1, 11):
-  # List are mutable. Thanks to that property,
-  # we can append new elements to them
   powers.append(2**n)
 
 print(powers)
 ```
+
+:::
 
 We can do the same using **while loops**.
 
@@ -206,26 +212,20 @@ print(powers)
 
 **Exercise.** Generate a list with the first 100 elements of the Fibonacci sequence.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
-# We can initialize the list with the first two elements of the series
 fibonacci = [1, 1]
 
-# As we want to reach 100 elements, we can implement a while loop,
-# looking at the size of our sequence. The loop continues until we
-# reach the desired amount of elements
 while len(fibonacci) < 100:
-  # Any Fibonacci element is equal to the sum of the previous two
-  # How can we take the last two elements of our Fibonacci list?
-  # We can use negative indices: -1 is the last element,
-  # -2 is the second to last
   new = fibonacci[-2] + fibonacci[-1]
-  # Finally, we append the new value into our sequence
-  # This means that, in the next iteration of this loop,
-  # the -1 index will take this "new" value (because it is now the last)
   fibonacci.append(new)
 
 print(fibonacci)
 ```
+
+:::
 
 **Exercise.** A diagonal matrix is a squared matrix full of zeros, except the diagonal, which are ones.
 
@@ -239,23 +239,24 @@ $$
 
 Define a function that builds a diagonal matrix of any size, using lists.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 def diagonal_matrix(size: int) -> list[list]:
-  # Initialize the empty matrix
   matrix = []
-  # Loop through each row
   for position in range(size):
-    # Initialize the row full of zeros
     row = [0] * size
-    # Place a one in the current position
     row[position] = 1
-    # Add the row to our matrix
     matrix.append(row)
   return matrix
+
 
 diag = diagonal_matrix(4)
 print(diag)
 ```
+
+:::
 
 ⚠ Never update the same list you are iterating over in a for loop!
 
@@ -332,21 +333,19 @@ dict_marks = {
 # We will store our solutions there
 dict_solution = {}
 
-# Loop trough the dictionary containing (names, ids)
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+dict_solution = {}
+
 for name, id in dict_ids.items():
-  # We use the ID to access the dictionary with the marks
-  # And we store each mark with its associated name
   dict_solution[name] = dict_marks[id]
 
 print(dict_solution)
 ```
 
----
-
-
-## List Comprehension
-
-Instead of building a list using a `for` loop and `append`, we can often write the same logic in a single line using a list comprehension.
+:::
 
 The structure of a list comprehension is:
 
@@ -377,34 +376,45 @@ This is not only shorter but also more readable for simple transformations.
 
 **Exercise.** Use a list comprehension to create a list of the first ten even numbers.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 ls_even = [2*n for n in range(1, 11)]
 print(ls_even)
 ```
 
+:::
+
 **Exercise.** Generate the list of the first ten values of the function $f(x) = (-1)^x · x^2$.
 
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
-# Using a list comprehension
 values = [(-1)**x * x**2 for x in range(1, 11)]
 print(values)
 ```
+
+:::
 
 We can apply list comprehensions not just over ranges, but over any existing list. This is especially powerful when we want to **transform**, **filter**, or **extract** data from another list.
 
 **Exercise.** You have a list of raw measurements, named `data`. Apply a **linear transformation** to rescale them to the [0, 1] interval.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 data = [3.5, 7.2, 1.8, 5.0, 6.3]
-
-# Normalize the data using list comprehension
 min_val = min(data)
 max_val = max(data)
 
 normalized = [(x - min_val) / (max_val - min_val) for x in data]
 print(normalized)
 ```
+
+:::
 
 List comprehensions don't just allow us to **transform** data. We can also **filter** it using conditions, just like in set-builder notation in math.
 
@@ -419,25 +429,30 @@ This is similar to $\{ f(x) : x \in A, x\ \text{satisfies some condition} \}$
 
 **Exercise.** Given a list of numbers, write a list comprehension to return the squares of all values above the mean.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 numbers = [1, 2, 3, 5, 6, 7]
-
-# We can estimate the mean using two build-in functions
 mean = sum(numbers) / len(numbers)
-
-# Apply list comprehension with conditions
 squares = [n**2 for n in numbers if n > mean]
 print(squares)
 ```
 
+:::
+
 **Exercise.** Given a list of integers, create a new list that contains the squares of all the odd numbers.
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 numbers = [1, 2, 3, 4, 5, 6, 7, 8]
-
 odd_squared = [n**2 for n in numbers if n % 2 == 1]
 print(odd_squared)
 ```
+
+:::
 
 ---
 

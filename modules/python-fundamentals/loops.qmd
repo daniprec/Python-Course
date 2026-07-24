@@ -97,23 +97,31 @@ for num in range(1, 101, 3):
   print(num)
 ```
 
-**Exercise.** Write a program to compute the factorial of any number.
+::: {.callout-note}
+## Exercise
+
+Write a program to compute the factorial of any number.
 
 $$5! = 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1$$
 
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 num = 5
-
-# Initialize the result
 result = 1
 
-# Loop from 1 to the number (included)
 for value in range(1, num + 1):
-  # Update result by multiplication
   result = result * value
 
 print(result)
 ```
+
+:::
 
 ---
 
@@ -137,7 +145,29 @@ for word in list_words:
   print(sentence)
 ```
 
-**Exercise.** How would you add spaces to that sentence?
+::: {.callout-note}
+## Exercise
+
+How would you add spaces to that sentence?
+
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+list_words = ["Hello", "my", "name", "is", "Daniel"]
+sentence = ""
+
+for word in list_words:
+  sentence = sentence + word + " "
+
+print(sentence.strip())
+```
+
+:::
 
 ---
 
@@ -147,13 +177,40 @@ We can include a loop inside another.
 
 <img src="https://media.geeksforgeeks.org/wp-content/uploads/20220801153940/Nestedloop.png" style="height: 100px"/>
 
-**Exercise.** What is the output you expect from this loop?
+::: {.callout-note}
+## Exercise
+
+What is the output you expect from this loop?
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
+#| eval: false
 for number in range(3):
   for letter in ["a", "b", "c"]:
     print(number, letter)
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The loop prints every combination of the numbers `0`, `1`, `2` with the letters `a`, `b`, `c`, in that order.
+
+```text
+0 a
+0 b
+0 c
+1 a
+1 b
+1 c
+2 a
+2 b
+2 c
+```
+
+:::
 
 ---
 
@@ -169,17 +226,29 @@ for number in [-2, -1, 0, 1, 2]:
     print(f"{number} is zero or positive")
 ```
 
-**Exercise.** Write a code that finds all factors of any given number.
+::: {.callout-note}
+## Exercise
+
+Write a code that finds all factors of any given number.
 
 A factor is a number that divides the given number without any remainder.
+
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 num = 52
 
-for factor in range(2, num):
-  if (num % factor) == 0:
+for factor in range(1, num + 1):
+  if num % factor == 0:
     print(f"{factor} is a factor of {num}")
 ```
+
+:::
 
 ---
 
@@ -208,15 +277,39 @@ for num in range(5):
   print(f"{num} x 2 = {num * 2}")
 ```
 
-**Exercise.** Read the code below and, without running it, guess what messages will be printed.
+::: {.callout-note}
+## Exercise
+
+Read the code below and, without running it, guess what messages will be printed.
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
+#| eval: false
 for n in range(1, 10):
   sqn = n ** (1/2)
   if sqn % 1 == 0:
     continue
   print(n)
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Perfect squares are skipped, so the loop prints:
+
+```text
+2
+3
+5
+6
+7
+8
+```
+
+:::
 
 ---
 
@@ -252,20 +345,25 @@ for number in range(5):
       break
 ```
 
-**Exercise.** Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
+::: {.callout-note}
+## Exercise
+
+Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
+
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 list_numbers = [1, 3, 4, 5, 7, 9]
 threshold = 10
-
-# Initialize the result in 0
 result = 0
 
-# Loop through the list of numbers
 for number in list_numbers:
-  # Update the result
   result = number + result
-  # Check if the result reached the threshold
   if result >= threshold:
     print(f"Stopped at {number}. Result is {result}")
     break
@@ -273,9 +371,17 @@ for number in list_numbers:
 print(result)
 ```
 
-**Exercise.** Fix the following cells of code.
+:::
+
+::: {.callout-note}
+## Exercise
+
+Fix the following cell of code.
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
+#| eval: false
 # Multiply all odd numbers until the result is higher than "n"
 n = 1000
 result = 0
@@ -288,6 +394,28 @@ for i in range(n):
 
 print(result)
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The loop never gets started correctly because multiplying by `0` keeps the result at `0`. Start from `1`, and only multiply odd numbers from `1` upward.
+
+```{python}
+n = 1000
+result = 1
+
+for i in range(1, n):
+  if i % 2 == 1:
+    result = result * i
+  if result > n:
+    break
+
+print(result)
+```
+
+:::
 
 ---
 
@@ -308,26 +436,33 @@ while num <= 5:
     num = num + 1
 ```
 
-**Exercise.** Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
+::: {.callout-note}
+## Exercise
+
+Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
+
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 list_numbers = [1, 3, 4, 5, 7, 9]
 threshold = 10
-
-# Initialize the result in 0
 result = 0
-# Initialize the list index in 0
 index = 0
 
-# Loop through the list of numbers
 while result < threshold:
-  # Update the result
   result = list_numbers[index] + result
-  # Move the index forward
+  current_number = list_numbers[index]
   index = index + 1
 
-print(f"Stopped at {list_numbers[index]}. Result is {result}")
+print(f"Stopped at {current_number}. Result is {result}")
 ```
+
+:::
 
 Bear in mind that, if the condition never updates, the While loop will run forever! If you run into this case, you can stop the execution by clicking on the "stop" button at the left of the cell.
 
@@ -340,7 +475,10 @@ while num > 0:
   print(num)
 ```
 
-**Exercise.** Read the following problems and answer: would you use a FOR loop or a WHILE loop?
+::: {.callout-note}
+## Exercise
+
+Read the following problems and answer: would you use a FOR loop or a WHILE loop?
 
 1. Calculate the sum of the first 50 even numbers.
 
@@ -358,7 +496,10 @@ while num > 0:
 
 8. Generate and print the first 15 square numbers (1, 4, 9, 16, ...).
 
-**Answer.**
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 1. You know exactly how many even numbers you need (50), so a FOR loop is suitable.
 
@@ -376,13 +517,20 @@ while num > 0:
 
 8. The number of square numbers is fixed (15), making a FOR loop ideal.
 
+:::
+
 Now try to code those exercises on your own! Feel free to use Gemini if you get stuck.
 
 ```{python}
 # Code the exercises
 ```
 
-**Exercise.** Why are the following WHILE loops never ending?
+::: {.callout-note}
+## Exercise
+
+Why are the following WHILE loops never ending?
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```python
 i = 1
@@ -405,5 +553,14 @@ while i > 0:
     print(f"i is now: {i}")
     i += 1
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The first loop keeps increasing `i`, so it never becomes `0`. The second loop keeps doubling an even number, so it always stays even. The third loop resets `i` to `0` and immediately adds `1`, so the condition `i > 0` stays true forever.
+
+:::
 
 ---

@@ -90,6 +90,13 @@ You might expect that `sample_list` remains `[1, 2, 3]`, but if you check its va
 
 **Exercise.** What will be the outputs of this cell?
 
+::: {.callout-note}
+## Exercise
+
+What will be the outputs of this cell?
+
+Copy the code into your own notebook first and run it there before opening the solution.
+
 ```{python}
 def add_element(my_list: list) -> list:
   my_list.append("New Element")
@@ -102,11 +109,14 @@ print("Modified list:", modified_list)
 print("Original list after function:", sample_list)
 ```
 
-See the difference: `add_element()` does not have a return statement.
+:::
 
-When we do `x = fun()`, if the function lacks a `return`, then `x = None`.
+::: {.callout-tip collapse="true"}
+## Solution
 
-`my_list` is still being changed. The function `add_element()` applies the method `append()` to `my_list`.
+`modified_list` is `None` because the function has no `return` statement. `sample_list` is still modified in place, so the last print shows the extra element.
+
+:::
 
 The same logic applies to **sets** and **dictionaries**. And with any other **mutable** object.
 
@@ -158,9 +168,15 @@ print("Original list after function:", sample_list)
 
 **Exercise.** What will be the outputs of this cell?
 
+::: {.callout-note}
+## Exercise
+
+What will be the outputs of this cell?
+
+Copy the code into your own notebook first and run it there before opening the solution.
+
 ```{python}
 def add_element(my_list: list) -> list:
-  # We perform a copy to avoid modifying the original input
   copied_list = my_list.copy()
   copied_list.append("New Element")
 
@@ -170,6 +186,15 @@ modified_list = add_element(sample_list)
 print("Modified list:", modified_list)
 print("Original list after function:", sample_list)
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`modified_list` is still `None`, but now the original list stays unchanged because the function appends to a copied list instead of the input list.
+
+:::
 
 ---
 
@@ -205,23 +230,24 @@ As seen in the example above, the `default_list` keeps accumulating values acros
 
 **Exercise.** How many different keys will `dict_animals` have?
 
+::: {.callout-note}
+## Exercise
+
+How many different keys will `dict_animals` have?
+
+Copy the code into your own notebook first and run it there before opening the solution.
+
 ```{python}
 def update_dict(key, value, dict_base: dict={}) -> dict:
-  """
-  Update a dictionary with a key-value pair.
-  If no dictionary is provided, create a new one.
-  """
   dict_base[key] = value
   return dict_base
 
-# First test: Create a dictionary with clotes
 dict_clothes = update_dict("shirt", "blue")
 dict_clothes = update_dict("pants", "green", dict_clothes)
 
 print("Dictionary with clothes")
 print(dict_clothes)
 
-# Second test: Create a dictionary with animals
 dict_animals = update_dict("dog", "woof")
 dict_animals = update_dict("cat", "meow", dict_animals)
 
@@ -229,14 +255,26 @@ print("Dictionary with animals")
 print(dict_animals)
 ```
 
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`dict_animals` ends up with four keys, because the default dictionary created for `dict_base` is shared across calls. The animal entries are added to the same dictionary that already contains the clothing entries.
+
+:::
+
 **Exercise.** How long will be the set `st_evens`?
+
+::: {.callout-note}
+## Exercise
+
+How long will be the set `st_evens`?
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
 def add_even_numbers(n: int, myset: set = {}) -> set:
-  """
-  Adds `n` even numbers higher than any number in the original set.
-  If no set is provided, creates a new one starting by 0.
-  """
   if len(myset) == 0:
     maxnum = 0
   else:
@@ -245,19 +283,25 @@ def add_even_numbers(n: int, myset: set = {}) -> set:
     myset.add(i * 2)
   return myset
 
-# First test: Add two even numbers to an existing set
 st_numbers = {1, 2}
 st_evens = add_even_numbers(2, st_numbers)
 print("Set with 2 even numbers:", st_evens)
 
-# Second test: The function creates a new set with five numbers
 st_evens = add_even_numbers(5)
 print("Set with 5 even numbers:", st_evens)
 
-# Third test: The function creates a new set with ten numbers
 st_evens = add_even_numbers(10)
 print("Set with 10 even numbers:", st_evens)
 ```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The final `st_evens` has `15` elements, because the same default set is reused and grows between the second and third calls.
+
+:::
 
 ---
 
@@ -288,8 +332,19 @@ print(add_to_list(4))  # [4]
 
 **Exercise.** Fix the function `update_dict()`.
 
-```{python}
+Try it in your notebook before opening the solution.
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def update_dict(key, value, dict_base: dict=None) -> dict:
+  if dict_base is None:
+    dict_base = {}
+  dict_base[key] = value
+  return dict_base
 ```
+
+:::
 
 ---

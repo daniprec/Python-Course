@@ -139,7 +139,13 @@ print(square_root(9))
 # Extra Exercises
 
 ## Function Without Return
-What they expect the value of variable to be after the function call?
+
+::: {.callout-note}
+## Exercise
+
+What do you expect the value of `variable` to be after the function call?
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
 def modify_variable(x: int):
@@ -150,11 +156,23 @@ modify_variable(variable)
 print(variable)
 ```
 
-The value of `variable` remains unchanged even after calling the `modify_variable` function. This is because integers are immutable in Python, and when we pass `variable` to the function, it creates a new local variable `x` inside the function's scope. Any changes made to `x` do not affect the global `variable`. So, the output will be `10`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The output is `10`. Integers are immutable, so the function only changes its local copy of the value.
+
+:::
 
 ## Variable Shadowing
 
+::: {.callout-note}
+## Exercise
+
 Before running the code below, take a moment to think about what you expect to happen with the variable `x` when we call the `factorial` function. Will it change its value? Why or why not?
+
+Copy the code into your own notebook first and run it there before opening the solution.
 
 ```{python}
 def factorial(num: int) -> int:
@@ -162,28 +180,31 @@ def factorial(num: int) -> int:
   This is a function to calculate the factorial of a number.
   It takes an integer 'num' as input and returns its factorial.
   """
-  # Store the original value of 'num' in 'x'
   x = num
-  # Initialize the result variable to 1
   result = 1
-  # Start a loop while 'x' is greater than 1
   while x > 1:
     result = result * x
     x = x - 1
   return result
 
 x = 10
-# Call the 'factorial' function with 'x' as input and print the result
 print(factorial(x))
-# Print `x`
 print(x)
 ```
 
-After examining the code, you might have noticed that the function `factorial` performs operations on its local variables, such as `num` and `result`. It does not modify the variable `x` defined outside the function.
+:::
 
-When we call `factorial(x)` and print the result, it will display the factorial of 10, but it will not change the value of `x`. This behavior illustrates the concept of variable scope in Python.
+::: {.callout-tip collapse="true"}
+## Solution
+
+The function prints the factorial of `10`, and then it prints `10` again. The outer variable `x` does not change because the function works with its own local variables.
+
+:::
 
 ## Decimal to Binary Conversion
+
+::: {.callout-note}
+## Exercise
 
 Write a Python function `decimal_to_binary(decimal)` that takes a decimal number as input and returns its binary representation as a string.
 
@@ -200,34 +221,20 @@ You can use the following steps to perform the conversion:
 
 Test your function with various decimal inputs to ensure it correctly converts them to binary.
 
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 def decimal_to_binary(decimal: int) -> str:
-  """
-  Convert a decimal number to its binary representation.
-
-  Parameters
-  ----------
-  decimal : int
-    The decimal number to convert.
-
-  Returns
-  -------
-  str
-    The binary representation of the decimal number as a string.
-  """
-
-  # Initialize an empty string to store the binary representation.
   binary_str = ""
 
-  # Perform the conversion using a while loop.
   while decimal > 0:
-    # Calculate the remainder of the decimal when divided by 2.
     remainder = decimal % 2
-
-    # Add the remainder to the beginning of the binary string.
     binary_str = str(remainder) + binary_str
-
-    # Update the decimal number by performing integer division by 2.
     decimal //= 2
 
   return binary_str
@@ -239,7 +246,12 @@ for number in range(10):
   print(f"The binary representation of {number} is {binary}")
 ```
 
+:::
+
 ## Binary to Decimal Conversion
+
+::: {.callout-note}
+## Exercise
 
 Write a Python function `binary_to_decimal(binary)` that converts a binary number represented as a string to its decimal equivalent.
 
@@ -253,28 +265,20 @@ You can use the following steps to perform the conversion:
    - Add the integer value of the current binary digit (0 or 1) to the `decimal`.
 5. After processing all characters in `binary_str`, return the `decimal` as the result.
 
-Ensure that your function works correctly for different binary strings of varying lengths. You can use `decimal_to_binary` to check the results are right!
+Ensure that your function works correctly for different binary strings of varying lengths. You can use `decimal_to_binary` to check the results are right.
+
+Try it in your notebook before opening the solution.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 def binary_to_decimal(binary: str) -> int:
-  """
-  Converts a binary number represented as a string to its decimal equivalent.
-
-  Parameters
-  ----------
-  binary : str
-    A binary number represented as a string.
-
-  Returns
-  -------
-  int
-    The decimal equivalent of the binary number.
-  """
   decimal = 0
 
-  # Iterate through each character in binary
   for digit in binary:
-    # Multiply the current decimal by 2 and add the current binary digit
     decimal = decimal * 2 + int(digit)
 
   return decimal
@@ -291,3 +295,5 @@ for number in range(5):
   else:
     print("We did something wrong...")
 ```
+
+:::
