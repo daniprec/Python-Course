@@ -489,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>🛑 <strong>Troubleshooting Tip:</strong> If you encounter any issues while executing the cell, try the following steps: 1. Navigate to <strong>“Runtime”</strong> in the menu. 2. Select <strong>“Disconnect and delete runtime”</strong>. 3. After doing so, attempt to execute the cell once more.</p>
 </blockquote>
-<div id="fe7b3efa" class="cell">
+<div id="8a991cb1" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the ZIP file from the provided Google Drive link</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="st">'https://drive.google.com/uc?export=download&amp;id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ'</span> <span class="op">-</span>O myfile.<span class="bu">zip</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -501,7 +501,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setting-up-our-toolkit" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-our-toolkit">Setting Up Our Toolkit</h2>
 <p>Before we dive into the analysis, let’s gather the tools we’ll need. It’s a best practice to import all the libraries at the beginning to ensure we have everything ready and to avoid any disruptions later on.</p>
-<div id="424b8cb6" class="cell">
+<div id="e5a8650c" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># To plot the recordings</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># This library will help us load the files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -513,7 +513,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="what-are-we-using-os-for" class="level3">
 <h3 class="anchored" data-anchor-id="what-are-we-using-os-for">What are we using <code>os</code> for?</h3>
 <p><strong>Looping Over Files:</strong> The <code>os</code> library allows us to iterate over all the files in a directory, making it much simpler to process large sets of data.</p>
-<div id="b4ec3540" class="cell">
+<div id="d6883793" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> list_txt_files_from_directory(directory: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">  List all the TXT files from the specified directory.</span></span>
@@ -553,7 +553,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="how-do-we-load-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-we-load-the-data">How do we load the data?</h3>
 <p>NumPy provides the <code>np.loadtxt()</code> function, which allows us to quickly load data from a text file directly into a NumPy array.</p>
-<div id="024c240e" class="cell">
+<div id="34c28aa5" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.loadtxt(filename)</span>
@@ -563,7 +563,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Given that our files contain dense, second-by-second recordings, simply reading the data won’t be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.</p>
 <p>To assist us in this visualization process, we’ve prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!</p>
-<div id="2a4dfde7" class="cell">
+<div id="d738709e" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_recordings(arr: np.ndarray, units: <span class="bu">str</span><span class="op">=</span><span class="st">""</span>):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""Plots any given recordings defined in a numpy array"""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.arange(<span class="bu">len</span>(arr)) <span class="op">/</span> <span class="dv">60</span></span>
@@ -590,7 +590,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The graph you just observed represents the EMF readings from just one room (the hall), spanning a mere hour. There seems to be no activity there.</p>
 <p>Let’s extend our analysis. By plotting the EMF records for the subsequent two hours, we can get a more comprehensive view of the paranormal activity in that room.</p>
-<div id="71d9ec60" class="cell">
+<div id="5d08c5b1" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.loadtxt(filename)</span>
@@ -598,7 +598,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plot_recordings(y, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5a4e6669" class="cell">
+<div id="07ea83f0" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-2am.txt"</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.loadtxt(filename)</span>
@@ -613,7 +613,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="combining-data-joining-arrays">Combining Data: Joining Arrays</h2>
 <p>For a comprehensive analysis, it’s beneficial to have consecutive records combined into one cohesive array. This will allow us to examine data trends over extended periods without interruptions.</p>
 <p>We’ll use the <code>np.concatenate(&lt;list_of_arrays&gt;)</code> function, which stitches together arrays from a given list into a single unified array.</p>
-<div id="3051df58" class="cell">
+<div id="faa0353f" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all numpy arrays together</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>emf <span class="op">=</span> np.concatenate((x, y, z))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -622,7 +622,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>With the EMF recordings from the hall between 0am and 2am in hand, we’ve witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.</p>
 <p>Thus, solely relying on EMF spikes won’t confirm their presence. We need to corroborate these findings with our other sensors.</p>
 <p>Let’s examine the data from the microphone. Will these readings confirm the ghostly suspicions raised by the EMF?</p>
-<div id="84d1de3c" class="cell">
+<div id="09346c2c" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ls_noise <span class="op">=</span> []</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
@@ -635,7 +635,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Our microphone has picked up some uncanny noises emanating from the hall. While there appear to be overlaps in activity across our devices, these instances are very short. Our quest isn’t for momentary glitches, we’re on the lookout for undeniable evidence of the supernatural.</p>
 <p>We are going to check the thermometer. If chilling temperatures accompany the auditory anomalies, we could be onto something truly spine-tingling!</p>
-<div id="40ed3eab" class="cell">
+<div id="4c274304" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ls_temp <span class="op">=</span> []</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
@@ -653,7 +653,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Summing the Arrays:</strong> By adding up the values from our three binary arrays for each timestamp, we can measure the intensity of paranormal activity.</li>
 <li><strong>The Ghostly Threshold:</strong> An accumulated value exceeding 1 at any given time is our clue! This indicates that multiple devices registered activity simultaneously, signaling the presence of our elusive ghost.</li>
 </ol>
-<div id="08e857cc" class="cell">
+<div id="d2e756f6" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We sum the binary activity values</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It is important to turn them into integer values</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>activity <span class="op">=</span> (emf <span class="op">&gt;</span> <span class="dv">3</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (temp <span class="op">&lt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (noise <span class="op">&gt;</span> <span class="dv">30</span>).astype(<span class="bu">int</span>)</span>
