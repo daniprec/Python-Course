@@ -1,0 +1,73 @@
+---
+title: "Review: Quadratic Regression"
+subtitle: "Module 4: IDEs & Tools"
+format: html
+---
+
+## Linear Regression (Cuadratic)
+
+What if you wanted to fit a cuadratic expression? You would need to change arrays $X$ and $\mathbf{b}$ inside the Normal Equation of the previous exercise:
+
+$$\mathbf{Y} = (y_1, ..., y_N)$$
+
+$$X = \begin{pmatrix}
+1 & x_1 & x_1^2\\
+...\\
+1 & x_N & x_N^2
+\end{pmatrix}
+$$
+
+$$\mathbf{b} = (b_0, b_1, b_2)$$
+
+**Exercise 1.** Generate any number of $(x, y)$ points following the expression $y = 2x - x^2$. Then add some noise to the values of $y$. You can, for instance, add a random value from a normal distribution: $\hat{y} = y + \text{N}(0, 1)$.
+
+**Exercise 2.** Finally, do a linear regression on $(x, \hat{y})$.
+
+```{python}
+# Solution (part 1)
+
+# Generate 10 values of (x, y)
+x = np.linspace(-2, 2, 10)
+y = 2 * x - np.power(x, 2)
+
+# Add noise to y
+y_hat = y + np.random.normal(0, 1, len(x))
+
+# Plot both original and noise points
+# The following code uses matplotlib
+# You will learn about it in the 2nd semester
+plt.plot(x, y, 'bo', label="Original")
+plt.plot(x, y_hat, 'ro', label="Noisy")
+plt.legend()
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+```
+
+```{python}
+# Solution (part 2)
+
+# Generate the matrix X
+ones = np.ones(len(x))
+x2 = np.power(x, 2)
+X = np.vstack([ones, x, x2]).T
+
+# Compute the matrix b
+b = np.linalg.inv(X.T @ X) @ X.T @ y_hat
+
+# Now we can use the vector b to estimate any value of y
+# Lets visuallize the line defined by b
+x_line = np.linspace(x[0], x[-1], 100)
+y_line = b[0] + b[1] * x_line + b[2] * np.power(x_line, 2)
+
+# The following code uses matplotlib
+# You will learn about it in the 2nd semester
+plt.plot(x, y, 'ro', label="Data (Noisy)")
+plt.plot(x_line, y_line, 'b-', label="Line")
+plt.legend()
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+```
+
+---

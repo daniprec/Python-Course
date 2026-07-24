@@ -1,0 +1,229 @@
+---
+title: "Review: Debugging Questions"
+subtitle: "Module 4: IDEs & Tools"
+format: html
+---
+
+# Debugging Questions
+
+::: {.callout-note}
+## Exercise
+
+The following code is intended to remove duplicates from a list while preserving the original order of elements. However, it raises the error `AttributeError: 'dict' object has no attribute 'add'`. Identify and fix the error(s).
+
+```{python}
+def remove_duplicates(seq: list) -> list:
+  seen = {}
+  result = []
+  for item in seq:
+    if item in seen:
+      continue
+    else:
+      seen.add(item)  # Error
+    result.append(item)
+    return result
+
+original_list = [5, 4, 3, 4, 5, 2, 1]
+new_list = remove_duplicates(original_list)
+print("New List:", new_list)  # Expected: [5, 4, 3, 2, 1]
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Fix:
+
+```{python}
+def remove_duplicates(seq: list) -> list:
+  seen = set()
+  result = []
+  for item in seq:
+    if item in seen:
+      continue
+    else:
+      seen.add(item)  # Error
+    result.append(item)
+  return result
+
+original_list = [5, 4, 3, 4, 5, 2, 1]
+new_list = remove_duplicates(original_list)
+print("New List:", new_list)  # Expected: [5, 4, 3, 2, 1]
+```
+:::
+::: {.callout-note}
+## Exercise
+
+This code attempts to swap the values of two variables stored in a tuple without using a temporary variable. However, it results in an error `TypeError: 'tuple' object does not support item assignment`. Identify and fix the issue(s).
+
+```{python}
+def swap_values(tup: tuple) -> tuple:
+  tup[0], tup[1] = tup[1], tup[0]  # Error
+
+my_tuple = (10, 20)
+swapped_tuple = swap_values(my_tuple)
+print("Swapped Tuple:", swapped_tuple)  # Expected: (20, 10)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Fix:
+
+```{python}
+def swap_values(tup: tuple) -> tuple:
+  ls = list(tup)
+  ls[0], ls[1] = ls[1], ls[0]  # Error
+  return tuple(ls)
+
+my_tuple = (10, 20)
+swapped_tuple = swap_values(my_tuple)
+print("Swapped Tuple:", swapped_tuple)  # Expected: (20, 10)
+```
+:::
+::: {.callout-note}
+## Exercise
+
+This code tries to modify a list while iterating over it to remove all occurrences of a specific value. However, it raises an error `IndexError: list index out of range`. Identify and fix the error(s).
+
+```{python}
+def remove_value(lst: list, val: int) -> list:
+  for i in range(len(lst)):
+    if lst[i] == val:  # Error
+      lst.pop(i)
+  return lst
+
+numbers = [1, 2, 3, 2, 4, 2, 5]
+updated_numbers = remove_value(numbers, 2)
+print("Updated Numbers:", updated_numbers)  # Expected: [1, 3, 4, 5]
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Fix:
+
+```{python}
+def remove_value(lst: list, val: int) -> list:
+  result = []
+  for i in range(len(lst)):
+    if lst[i] != val:
+      result.append(lst[i])
+  return result
+
+numbers = [1, 2, 3, 2, 4, 2, 5]
+updated_numbers = remove_value(numbers, 2)
+print("Updated Numbers:", updated_numbers)  # Expected: [1, 3, 4, 5]
+```
+:::
+::: {.callout-note}
+## Exercise
+
+This code tries to modify a list while iterating over it to remove all occurrences of a specific value. However, it doesn't remove all instances as intended. Identify and fix the error(s).
+
+```{python}
+def remove_value(lst: list, val: int) -> list:
+  for item in lst:
+    if item == val:
+      lst.remove(item)
+  return lst
+
+numbers = [1, 2, 3, 2, 4, 2, 2, 5]
+updated_numbers = remove_value(numbers, 2)
+print("Updated Numbers:", updated_numbers)
+# Expected: [1, 3, 4, 5]
+# Output: [1, 3, 4, 2, 5]
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Fix:
+
+```{python}
+:::
+# NEVER modify the iterable you are looping through!
+```
+
+::: {.callout-note}
+## Exercise
+
+This code is supposed to flatten a list of lists into a single list. However, it raises an error `TypeError: 'int' object is not iterable`. Find and fix the error(s).
+
+```{python}
+def flatten(lst: list[list]) -> list:
+  flat_list = []
+  for sublist in lst:
+    flat_list.extend(sublist)  # Error
+  return flat_list
+
+nested_list = [1, [2, 3], [4, [5, 6]], 7]
+flattened = flatten(nested_list)
+print("Flattened List:", flattened)
+# Expected: [1, 2, 3, 4, 5, 6, 7]
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The code aims to count the frequency of each character in a string using a dictionary. However, it raises an exception when run `KeyError: 'h'`. Find and correct the error(s).
+
+```{python}
+def char_frequency(s: str) -> int:
+  freq = dict()
+  for char in s:
+    if char.isalpha():
+      freq[char] += 1  # Error
+  return freq
+
+text = "hello world"
+frequency = char_frequency(text)
+print("Character Frequency:", frequency)
+# Expected: {'h': 1, 'e': 1, 'l': 3, 'o': 2, 'w': 1, 'r': 1, 'd': 1}
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code is meant to merge two dictionaries, summing the values of common keys. However, it doesn't produce the expected result. Identify and fix the error(s).
+
+```{python}
+def merge_dicts(d1: dict, d2: dict) -> dict:
+  merged = d1.copy()
+  for key in d2.keys():
+    if not (key in d1.keys()):
+      continue
+    merged[key] = d1.get(key, 0) + d2[key]
+  return merged
+
+dict_a = {'apple': 10, 'banana': 5}
+dict_b = {'banana': 15, 'cherry': 20}
+merged_dict = merge_dicts(dict_a, dict_b)
+print("Merged Dictionary:", merged_dict)
+# Expected: {'apple': 10, 'banana': 20, 'cherry': 20}
+# Output: {'apple': 10, 'banana': 20}
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+This code attempts to create a set of tuples from a list of lists, intending to remove duplicate lists. However, it raises an error `TypeError: unhashable type: 'list'`. Identify and fix the issue(s).
+
+```{python}
+list_of_lists = [[1, 2], [3, 4], [1, 2]]
+unique_sets = set(list_of_lists)  # Error
+print("Unique Sets:", unique_sets)  # Expected: {(1, 2), (3, 4)}
+```
+
+:::
+
+---

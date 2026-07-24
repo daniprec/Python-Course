@@ -1,0 +1,238 @@
+---
+title: "Review: Vectorization and Masking"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Session 3.8: Vectorization & Masking
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+c = a > b
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+:::
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([[1], [2], [3]])
+b = np.array([4, 5, 6])
+c = a > b
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+
+<font color='red'>This works because of NumPy's broadcasting rules. When you compare arrays of different shapes, NumPy tries to make their shapes compatible by "broadcasting" them to a common shape.</font>
+:::
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `c` be?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6, 7])
+c = a > b
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+a) `[0, 0, 0]`
+
+b) `[False, False, False]`
+
+c) The code will cause an error.
+
+<font color='red'>The error occurs because the shapes of a and b are not compatible for broadcasting in this case.</font>
+:::
+::: {.callout-note}
+## Exercise
+
+Given any array `arr`, how would you filter out all elements greater than 3 without a for loop?
+
+```{python}
+# Example
+arr = np.array([1, 2, 3, 4, 5])
+# Output: [1, 2, 3]
+
+# Option A
+print(arr[arr > 3])
+
+# Option B
+print(arr[arr <= 3])
+
+# Option C
+print(arr[:3])
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What will be the output of the following code?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+mask = arr % 2 == 0
+print(arr[mask])
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+a) [2, 4]
+
+b) [1, 3, 5]
+
+c) [0, 2, 4]
+:::
+::: {.callout-note}
+## Exercise
+
+How would you replace values greater than 3 in an array with the value 10?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Option A
+arr[>3] = 10
+
+# Option B
+for value in arr:
+  if value > 3:
+    value = 10
+
+# Option C
+arr[arr > 3] = 10
+```
+
+```{python}
+# How would we do this with a list?
+ls = [1, 2, 3, 4, 5]
+
+for value in ls:
+  if value > 3:
+    value = 10
+
+print(ls)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Which line of code below correctly filters all odd numbers from the array?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+
+# Option A
+evens = arr[arr % 2 != 0]
+
+# Option B
+evens = arr[arr == 2]
+
+# Option C
+evens = arr[arr != 0]
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should output the positive odd numbers. In the example, we expect `[1, 3]`. When we run the code, it raises `IndexError: boolean index did not match indexed array along dimension 0`. Explain the error(s) and fix this code.
+
+```{python}
+arr = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4])
+mask_odd = arr % 2 != 0
+mask_positive = arr[mask_odd] > 0
+result = arr[mask_positive]
+print(result)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should return the elements of the array that are numbers higher than 2. When we run it, it raises `UFuncTypeError: ufunc 'greater' did not contain a loop with signature matching types`. What is wrong? (No need to fix this)
+
+```{python}
+arr = np.array(["a", 1, "b", 2, "c", 3, "d", 4])
+mask_int = arr.dtype == int
+mask_positive = arr > 2
+mask = mask_int & mask_positive
+result = arr[mask]
+print(result)
+```
+
+```{python}
+# Remember: "np.array()" will change all elements to be the same type
+arr = np.array(["a", 1, "b", 2, "c", 3, "d", 4])
+
+print(arr)
+```
+
+```{python}
+# A list does not change its content's types
+ls = ["a", 1, "b", 2, "c", 3, "d", 4]
+
+# This for loop works for a list, but not for an array
+for element in ls:
+  if type(element) == int:
+    if element > 2:
+      print(element)
+```
+
+:::
+
+---
+
+# Want More?
+
+- Try out this collection of 100 NumPy exercises:
+[NumPy-100](https://github.com/rougier/numpy-100)
+
+- [From Python to NumPy by Nicolas P. Rougier](https://www.labri.fr/perso/nrougier/from-python-to-numpy/) - Very complete guide to NumPy, also contains exercises.
+
+- [Project Euler](https://projecteuler.net/) - A collection of math-oriented coding challenges. You can try to solve them using all we have learnt.
+
+- [Advent of Code](https://adventofcode.com/) - Like an advent calendar, but instead of chocolate there are coding exercises!
+
+---

@@ -1,0 +1,90 @@
+---
+title: "Review: NumPy Linear Algebra"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Session 3.7: Linear Algebra
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+We run this code. What will `z` be?
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+y = np.linalg.inv(x)
+z = np.dot(x, y)
+
+print(z)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+`z` is the unitary matrix, but due to floating errors, a 0 appears as a very low number instead.
+
+How would you fix that?
+
+```{python}
+:::
+# Option A: convert z to integer
+print(z.astype(int))
+```
+
+```{python}
+# Bad choice, remember int does not round, just cuts the decimals!
+print(int(0.999999999))
+```
+
+```{python}
+x = np.array([1.2, 3.4])
+
+# In addition, remember that you need to use "x.astype(int)"
+# to convert every element of the array
+# If you simply call "int(x)", you will be trying to convert a
+# whole array into a single integer. That is not possible!
+print(int(x))
+```
+
+```{python}
+# Option B: Using the round method instead
+print(z.round(0))
+```
+
+```{python}
+print(x.astype(int))
+```
+
+a) The identity matrix.
+
+b) A zero matrix.
+
+c) The code will cause an error.
+
+::: {.callout-note}
+## Exercise
+
+How to find the eigenvalues of a square matrix X?
+
+```{python}
+X = np.array([[1, 2], [3, 4]])
+
+# Option A
+print(np.eigen(X))
+
+# Option B
+print(np.eigvals(X))
+
+# Option C
+print(np.linalg.eig(X))
+```
+
+:::
+
+---

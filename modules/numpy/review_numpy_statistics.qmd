@@ -1,0 +1,92 @@
+---
+title: "Review: NumPy Statistics"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Session 3.6: Statistics
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+The following code should compute the mean of each row of `arr`, and print their values as integers. When we run the code, it outputs a single value, `5`. Fix it to output `[2, 5, 8]`.
+
+```{python}
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Compute the mean of each row
+mean = int(np.mean(arr))
+
+print(mean)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following code should compute the mean of `arr` along every axis. When we run the code, it raises `AxisError: axis 3 is out of bounds for array of dimension 2`. Explain the error(s) and fix this code. We want the output:
+```
+{
+  "mean_0": [1.0, 4.0],
+  "mean_1": [1.5, 2.0, 4.0]
+}
+```
+
+```{python}
+arr = np.array([
+    [1, 2],
+    [1, 3],
+    [1, 7]
+])
+
+# Get the dimensions of this array
+axes = arr.shape  # Expected tuple: (0, 1)
+
+# Initialize an empty dictionary
+dict_means = {}
+
+# Loop through the different stats
+for axis in axes:
+  key = f"mean_{axis}"
+  value = np.mean(arr, axis=axis)
+  # Use the stat name to call the specific NumPy function
+  dict_new = {key: value}
+  # Insert the key-value pair into the original dictionary
+  dict_stats.append(dict_new)
+
+print(dict_stats)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+A vector $\mathbf{x}$ can be normalized to $\mathbf{\hat{x}}$ by applying the following formula:
+$$\mathbf{\hat{x}} = \frac{\mathbf{x} - \mu_x}{\sigma_x}$$
+where $\mu_x$ is the mean of $\mathbf{x}$ and $\sigma_x$ its standard deviation.
+
+A property of any normalized vector is that its mean is always 0. However the output of the code below is $3.06$ instead of $0$. Explain the error(s) and fix this code.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+mean = np.mean(arr, axis=0)  # Output is 4.5
+std = np.std(arr, axis=0)  # Output is 2.58
+# Normalize the vector and compute its new mean
+arr_norm = arr - mean / std
+norm_mean = np.mean(arr_norm, axis=0)
+print(norm_mean)  # Expected: 0
+```
+
+:::
+
+---

@@ -1,0 +1,118 @@
+---
+title: "Review: NumPy Arithmetics"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Session 3.2: Arithmetics
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+Which symbol should I use to compute the matrix multiplication of 2D NumPy arrays?
+
+```{python}
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+
+# Option A
+result = a * b
+
+# Option B
+result = a.b
+
+# Option C
+result = a @ b
+
+# Option D
+result = np.matmul(a, b)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What is going to be the final value of `x`?
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = 0
+
+print(x)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+In the example above, NumPy performs **broadcasting**: it assigns the value 0 to every element of the first row.
+
+Similarly, we can assign a value per element of the row, using an iterable:
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = [9, 8]
+
+print(x)
+```
+
+Another example of **broadcasting** occurs when we add 1 to the whole array:
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = 0
+x = x + 1
+
+print(x)
+```
+
+**Broadcasting** is a property of NumPy arrays, you cannot do it with lists!
+
+```{python}
+x = [[1, 2], [3, 4]]
+x[0] = 0
+:::
+# The line above does not broadcast!
+# It replaces the nested list [1, 2] with the integer 0
+print(x)
+```
+
+```{python}
+x = [[1, 2], [3, 4]]
+x = x + 1
+# List cannot add the value 1 to every element,
+# because it does not broadcast!
+print(x)
+```
+
+::: {.callout-note}
+## Exercise
+
+You want to add the vectors $[1, 2, 3]$ and $[4, 5, 6]$. The code raises an error on the first line `TypeError: array() takes from 1 to 2 positional arguments but 3 were given`. Explain and fix all the errors in the code.
+
+```{python}
+x = np.array(1, 2, 3)
+y = np.arange(4, 6, 1)
+
+print(x + y)
+```
+
+```{python}
+#| eval: false
+# Fixing the code above
+x = np.array([1, 2, 3])
+y = np.arange(4, 6, 1)
+print(y)
+
+# But this fails. Do you understand why?
+print(x + y)
+```
+
+:::
+
+---

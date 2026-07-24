@@ -1,0 +1,108 @@
+---
+title: "Review: Card Dealer"
+subtitle: "Module 4: IDEs & Tools"
+format: html
+---
+
+## Card Dealer
+
+Create a Python function to simulate dealing cards from a deck. The function should perform the following tasks:
+
+1. Generate a full deck of poker cards. Represent each card as a tuple, where the first element is the number or figure (e.g., ÔÇ£KingÔÇØ, ÔÇ£3ÔÇØ), and the second element is the suit (e.g., ÔÇ£HeartsÔÇØ, ÔÇ£SpadesÔÇØ). The deck should include all standard cards (13 cards per suit) and two jokers, resulting in a total of 54 cards. For example, the 10 of Hearts is represented as (10, "Hearts").
+2. Shuffle the deck. The function should randomize the order of the cards in the deck.
+3. Deal cards to players. The function should accept two parameters: the list of player names and the number of cards to deal to each player. Distribute the specified number of cards from the shuffled deck to each player.
+
+The output should be a dictionary of lists, like {ÔÇ£DanielÔÇØ: [(ÔÇ£3ÔÇØ, ÔÇ£DiamondsÔÇØ), (ÔÇ£JackÔÇØ, ÔÇ£CloversÔÇØ)]}
+
+
+```{python}
+# Write your code here
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+Try the exercise on your own first, then compare with the worked solution below.
+
+```{python}
+# Solution 1
+
+import numpy as np
+
+def create_deck():
+  """
+  Creates a full deck of poker cards including two jokers.
+  Each card is represented as a tuple (value, suit).
+  """
+  suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
+  values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+  deck = [(value, suit) for suit in suits for value in values]
+
+  # Add two Jokers
+  deck.extend([("Joker", "Red"), ("Joker", "Black")])
+
+  return deck
+
+def shuffle_deck(deck):
+    """
+    Shuffles the given deck of cards.
+    """
+    np.random.shuffle(deck)
+    return deck
+
+def deal_cards(deck, players, cards_per_player):
+  """
+  Deals a specified number of cards to each player.
+  """
+  if len(players) * cards_per_player > len(deck):
+    raise ValueError("Not enough cards in the deck to deal to all players.")
+
+  hands = {player: [] for player in players}
+  for _ in range(cards_per_player):
+    for player in players:
+      hands[player].append(deck.pop())
+
+  return hands
+
+# Example usage
+deck = create_deck()
+shuffled_deck = shuffle_deck(deck)
+player_hands = deal_cards(shuffled_deck, ["Daniel", "Emma", "Lucas", "Sophia"], 2)  # 4 players, 2 cards each
+
+print(player_hands)
+```
+
+```{python}
+# Solution 2
+
+import numpy as np
+
+def create_deck() -> list:
+  ls_suits = ["hearts", "diamonds", "clubs", "spades"]
+  ls_values = np.arange(2, 11)
+  ls_values = np.append(ls_values, ["J", "Q", "K", "A"])
+
+  ls_deck = []
+
+  for suit in ls_suits:
+      for value in ls_values:
+          ls_deck.append((value, suit))
+  return ls_deck
+
+
+def deal_random_hand(ls_deck: list, num_cards: int = 5) -> list:
+  """
+  Deals a random hand of cards from a deck.
+  The function removes the dealt cards from the deck.
+  """
+  ls_hand = []
+
+  while len(ls_hand) < num_cards:
+      idx = np.random.randint(0, len(ls_deck))
+      card = ls_deck.pop(idx)
+      ls_hand.append(card)
+
+  return ls_hand
+```
+
+---
+:::

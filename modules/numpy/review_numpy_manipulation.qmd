@@ -1,0 +1,192 @@
+---
+title: "Review: Array Manipulation"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Session 3.4: Array Manipulation
+
+```{python}
+import numpy as np
+```
+
+::: {.callout-note}
+## Exercise
+
+How would you join the two NumPy arrays `a` and `b` together into a single 1-D array?
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# Option A
+c = np.concatenate([a, b], axis=0)
+
+# Option B
+c = np.append(a, b, how="join")
+
+# Option C
+c = np.join(a, b)
+
+# Option D
+c = a + b
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+What does the following code do?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+reshaped = arr.reshape(2, 3)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+a) Reshapes the array into 2 rows and 3 columns.
+
+b) Flattens the array.
+
+c) Causes an error.
+:::
+::: {.callout-note}
+## Exercise
+
+How would you stack two arrays `a = [1, 2, 3]` and `b = [4, 5, 6]` vertically?
+
+a) `np.vstack([a, b])`
+
+b) `np.hstack([a, b])`
+
+c) `np.concatenate([a, b], axis=0)`
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+Consider an array $Z = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]$, how to generate an array $R = [[1,2,3,4], [2,3,4,5], [3,4,5,6], ..., [11,12,13,14]]$?
+
+```{python}
+# Solution with errors - Fix them!
+# The following code outputs
+# [[2,3,4],[3,4,5],[4,5,6],...,[12,13,14]]
+z = np.arange(1, 15)  # Output: [1, 2, 3, ..., 14, 15]
+# Initialize empty list
+ls = []
+for idx in range(1, len(z) - 3):
+  # Fill the list with sub-sets of the array
+  # For example, the first one will be [1, 2, 3, 4]
+  ls.append(z[idx:idx+3])
+# Turn the list of arrays into a 2D array
+r = np.array(ls)
+print(r)
+```
+
+```{python}
+# Solution
+z = np.arange(1, 15)
+# Initialize empty list
+ls = []
+for idx in range(len(z) - 3):
+  # Fill the list with sub-sets of the array
+  # For example, the first one will be [1, 2, 3, 4]
+  ls.append(z[idx:idx+4])
+# Turn the list of arrays into a 2D array
+r = np.array(ls)
+print(r)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+I want to create the matrix
+$$
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 0 & 6 \\
+7 & 8 & 9
+\end{bmatrix}
+$$
+But the code below raises the error `IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed` on line 3. Explain the errors of the code and fix them.
+
+```{python}
+x = np.linspace(1, 9, 9)
+x.reshape((3, 3))
+x[1, 1] = 0
+
+print(x)
+```
+
+```{python}
+#| eval: false
+# Fixing the code: "x.reshape()" does not modify the array "x" in place
+# we need to catch its output into a new variable
+x = np.linspace(1, 9, 9)
+y = x.reshape((3, 3))
+y[1, 1] = 0
+
+print(x)
+print(y)
+```
+
+```{python}
+# Again, notice how "x" does NOT change
+x = np.array([1, 2, 3, 4])
+y = x.reshape((2, 2))  # numpy method: <array>.<method()>
+
+# The original array "x" remains unchanged
+print(x)
+# The method "array.reshape()" outputs the new array
+print(y)
+```
+
+```{python}
+# Compare the code above with a list
+# The ".append()" method changes the list in place
+x = [1, 2, 3]
+y = x.append(4)  # list method: <list>.<method()>
+
+# The original list "x" has changed
+print(x)
+# The method "list.append()" outputs nothing
+print(y)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+The following function is failing in line 3: `TypeError: array() missing required argument 'object' (pos 0)`. Explain the error(s) and fix the code.
+
+```{python}
+def fibonacci_sequence(n: int):
+  # Initialize an empty array
+  arr = np.array()
+
+  for i in range(n):
+    if i <= 1:
+      # The first two elements of Fibonacci are 1
+      new_element = 1
+    else:
+      # Sum the last two elements of the sequence
+      new_element = arr[-2] + arr[-1]
+    # Add the element to the sequence
+    arr = np.append(arr, new_element)
+  # Ensure the array contains integer values
+  return int(arr)
+
+print(fibonacci_sequence(10))
+```
+
+:::
+
+---

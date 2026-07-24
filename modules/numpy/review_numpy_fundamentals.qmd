@@ -1,0 +1,151 @@
+---
+title: "Review: NumPy Fundamentals"
+subtitle: "Module 3: NumPy"
+format: html
+---
+
+## Review of Session 3.1: Fundamentals
+
+::: {.callout-note}
+## Exercise
+
+What is going to be the final value of `x`?
+
+```{python}
+#| eval: false
+np = 4
+
+arr = np.array([2, 3, np, 5])
+
+print(arr)
+
+# a) [2, 3, 4, 5]
+# b) numpy.ndarray([2, 3, 4, 5])
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Remember that Python will only remember the last variable declaration with the same name. Doing the code above with `np` is similar to:
+
+```{python}
+x = 10
+x = 2
+print(x)
+```
+
+The code fails because `np` ceases to be NumPy!
+
+```{python}
+import numpy as np
+```
+:::
+::: {.callout-note}
+## Exercise
+
+How would you replace the for loop in the code below, for a 1D NumPy array?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+result = 0
+for i in arr:
+  result = result + i
+
+print(result)
+```
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+# Option A
+result = np.cumsum(arr)
+
+# Option B
+result = np.sum(arr)
+
+# Option C
+result = np.loop(arr)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+When we do `cumsum` to a higher dimensional array, NumPy first flattens that array.
+
+```{python}
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+print(np.cumsum(arr))
+```
+:::
+::: {.callout-note}
+## Exercise
+
+How do you check the number of dimensions of a NumPy array?
+
+```{python}
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Option A
+print(arr.shape)
+
+# Option B
+print(arr.ndim)
+
+# Option C
+print(arr.ndim())
+
+# Option D
+print(np.arr.ndim)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+I have a colored image represented by a 3D array `img`. I want to know its width and height. Which one of the following lines of code will give me that information?
+
+```{python}
+img = np.array([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]])
+
+# Option A
+height, width = img.shape
+
+# Option B
+height, width, _ = img.shape
+
+# Option C
+height, width = img.shape(:2)
+```
+
+:::
+
+::: {.callout-note}
+## Exercise
+
+An empty array is a NumPy array with no elements inside. What of the following lines will NOT initialize an empty array?
+
+```{python}
+# Option A
+x = np.array()
+
+# Option B
+x = np.array([])
+
+# Option C
+x = np.zeros(0).astype(int)
+
+# Option D
+# All of the above fail.
+```
+
+:::
+
+---
