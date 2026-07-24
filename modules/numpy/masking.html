@@ -460,7 +460,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setting-up" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up">Setting Up</h2>
 <p>Before we dive into the main content, let’s import the required libraries.</p>
-<div id="7b4037d3" class="cell">
+<div id="6ccb3334" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2  <span class="co"># for image processing tasks</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># to display images</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># for numerical operations on arrays</span></span>
@@ -475,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>load_image</code>: This function fetches an image from a given URL.</li>
 <li><code>show_image</code>: Displays the provided NumPy array as an image.</li>
 </ul>
-<div id="db829712" class="cell">
+<div id="8f4c0ff4" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
@@ -533,7 +533,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s start by loading an image of a puppy and displaying it.</p>
-<div id="ee629e67" class="cell">
+<div id="e5964887" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://www.freeiconspng.com/thumbs/dog-png/dog-png-30.png"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -548,7 +548,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="masking-the-basics">Masking: The Basics</h2>
 <p>Masking is a technique where we create a boolean array (mask) of the same shape as our data. Here, we will create a mask for the dog image to identify regions with the dog’s presence.</p>
 <p>In our case, any pixel value greater than 0 in the grayscale image indicates the presence of the dog, so we will use this criterion to generate our mask.</p>
-<div id="2f96ffef" class="cell">
+<div id="986a89b2" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mask_dog <span class="op">=</span> dog <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -558,7 +558,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="loading-a-second-image" class="level2">
 <h2 class="anchored" data-anchor-id="loading-a-second-image">Loading a Second Image</h2>
 <p>Now, let’s load another image, this time of a beach. We will later superimpose our dog image onto this beach image.</p>
-<div id="f4177c12" class="cell">
+<div id="ec989890" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>url_beach <span class="op">=</span> <span class="st">"https://wallpaperset.com/w/full/1/4/e/13026.jpg"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -572,7 +572,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="creating-a-mask-for-the-beach-image" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-mask-for-the-beach-image">Creating a Mask for the Beach Image</h2>
 <p>We’ll create an initial mask for the beach image, initialized to all zeros (or <code>False</code>). This represents that no part of the beach image is currently masked.</p>
-<div id="57bfdf4c" class="cell">
+<div id="56101278" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> np.zeros(beach.shape)  <span class="co"># type: int (0)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> mask_beach.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask has dimension: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -584,7 +584,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="positioning-the-dog-mask-on-the-beach-mask" class="level2">
 <h2 class="anchored" data-anchor-id="positioning-the-dog-mask-on-the-beach-mask">Positioning the Dog Mask on the Beach Mask</h2>
 <p>Our goal is to superimpose the dog onto the beach image. To do this, we’ll first position the dog mask at the bottom right corner of the beach mask.</p>
-<div id="82d03b9c" class="cell">
+<div id="e6d79fc4" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog.shape</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The dog mask has shape (</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">)"</span>)</span>
@@ -600,7 +600,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="superimposing-the-dog-image-onto-the-beach-image" class="level2">
 <h2 class="anchored" data-anchor-id="superimposing-the-dog-image-onto-the-beach-image">Superimposing the Dog Image onto the Beach Image</h2>
 <p>With our masks ready, we can now superimpose the dog image onto the beach image. By using the masks, we ensure that only the region with the dog gets overlaid onto the beach image.</p>
-<div id="f1b452f9" class="cell">
+<div id="5b3d750f" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>beach[mask_beach] <span class="op">=</span> dog[mask_dog]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>show_image(beach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -610,7 +610,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="exercise-0-adjusting-color-and-size" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-0-adjusting-color-and-size">Exercise 0: Adjusting Color and Size</h2>
 <p>Try to do the same thing using this other image. You will realise two issues: 1. There is a white border around the image! How can you use masking to get rid of it? 2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?</p>
-<div id="0fb8e9e7" class="cell">
+<div id="aa7652e2" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>url_dog_2 <span class="op">=</span> <span class="st">"https://a.pinatafarm.com/1139x1138/f55da91a83/cheems.jpg"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -625,21 +625,21 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="d1bec104" class="cell">
+<div id="90931458" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dog_2 <span class="op">=</span> load_image(url_dog_2)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>show_image(dog_2)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: We have to take away both black and white rectangle</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="67bff624" class="cell">
+<div id="2b246f18" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine masks using "&amp;" (and), similar to how we do "if" clauses</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mask_dog_2 <span class="op">=</span> (dog_2 <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (dog_2 <span class="op">&lt;</span> <span class="dv">255</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>show_image(mask_dog_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0267f6a1" class="cell">
+<div id="aa92b6ef" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload the beach</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>beach_2 <span class="op">=</span> load_image(url_beach)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -655,7 +655,7 @@ Solution
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_2)</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: the dog is too big</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="2774fcc9" class="cell">
+<div id="19a8e7fb" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever slicing to take one of every two pixels</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dog_smol <span class="op">=</span> dog_2[::<span class="dv">2</span>, ::<span class="dv">2</span>]</span>
@@ -673,7 +673,7 @@ Solution
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_smol)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a21d2d5a" class="cell">
+<div id="2264b340" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, we add the dog using masking</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>beach_2[mask_beach_smol] <span class="op">=</span> dog_smol[mask_smol]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -723,7 +723,7 @@ Solution
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&amp;id=1XOP8a1xOaeSmXFuczE6iZDRlGzxJbg03" width="300">
 </p>
-<div id="f830a490" class="cell">
+<div id="f4a52e6b" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>url_cat <span class="op">=</span> <span class="st">"https://img.freepik.com/premium-photo/cute-little-grey-white-fluffy-kitten-green-background_548832-7905.jpg"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
@@ -763,14 +763,14 @@ Solution
 <section id="note" class="level3">
 <h3 class="anchored" data-anchor-id="note">Note:</h3>
 <p>This method effectively reduces the resolution of each image by half, but when viewed from a distance, the viewer should be able to discern both images superimposed upon each other.</p>
-<div id="b42ef5e7" class="cell">
+<div id="3378834d" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with this image</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>url_schro <span class="op">=</span> <span class="st">"https://hips.hearstapps.com/hmg-prod/images/gettyimages-841990410-64481f99d3e11.jpg"</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>schrodinger <span class="op">=</span> load_image(url_schro)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>show_image(schrodinger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b91b2971" class="cell">
+<div id="94b3ae21" class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your first step is to split that image into two (the skelleton and the cat)</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Then you will have to flip one of them so that both look at the same direction</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
