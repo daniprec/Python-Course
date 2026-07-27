@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computer Programming I (Python) - Strings in Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../modules/python-fundamentals/flow.html" rel="next">
+<link href="../../modules/python-fundamentals/variables.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/python-fundamentals/index.html">Module 1: Python Fundamentals</a></li><li class="breadcrumb-item"><a href="../../modules/python-fundamentals/strings.html">Strings</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Computer Programming I (Python)</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/python-fundamentals/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 1: Python Fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Variables &amp; Data Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/strings.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Strings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/recursion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/scope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Scope</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/review_fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Review</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/structures/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 2: Data Structures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/list_tuples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lists &amp; Tuples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/dictionaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dictionaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/mutability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mutability</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/ex01_recommendation_system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment: Recommendation System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/ex02_traveling_salesman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment: Traveling Salesman</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/ex03_parrondos_paradox.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment: Parrondo’s Paradox</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/ex04_sudoku.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment: Sudoku</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/review_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Review</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/numpy/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 3: NumPy</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to NumPy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/arithmetics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Arithmetics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/load.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loading Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Manipulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/masking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Masking</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/random_fancy_indexing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random &amp; Fancy Indexing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/statistics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/linalg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vectorization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/numpy_algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/numpy_mnist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/numpy_snell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: Snell’s Law</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/review_numpy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Review</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/ides/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 4: IDEs &amp; Tools</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/review_general.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">General Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/rsa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: RSA Encryption</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#fundamentals-strings-in-python" id="toc-fundamentals-strings-in-python" class="nav-link active" data-scroll-target="#fundamentals-strings-in-python">Fundamentals: Strings in Python</a>
+  <ul class="collapse">
+  <li><a href="#mixing-strings-with-computations-or-data-f-strings" id="toc-mixing-strings-with-computations-or-data-f-strings" class="nav-link" data-scroll-target="#mixing-strings-with-computations-or-data-f-strings">Mixing strings with computations or data: f-Strings</a></li>
+  <li><a href="#operations-with-strings" id="toc-operations-with-strings" class="nav-link" data-scroll-target="#operations-with-strings">Operations with Strings</a></li>
+  <li><a href="#string-methods" id="toc-string-methods" class="nav-link" data-scroll-target="#string-methods">String Methods</a>
+  <ul class="collapse">
+  <li><a href="#string-formatting" id="toc-string-formatting" class="nav-link" data-scroll-target="#string-formatting">String Formatting</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/python-fundamentals/strings.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/python-fundamentals/index.html">Module 1: Python Fundamentals</a></li><li class="breadcrumb-item"><a href="../../modules/python-fundamentals/strings.html">Strings</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Strings in Python</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="fundamentals-strings-in-python" class="level1">
+<h1>Fundamentals: Strings in Python</h1>
+<p>Strings are used to store and manipulate text. As you see here, strings are written inside of quotes and can contain letters, numbers, punctuation marks, and other special characters. A string is contained within two quotes <code>"</code> or single quotes <code>'</code>.</p>
+<p>Run the following cells to print these four different strings.</p>
+<div id="2c509799" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>text_only <span class="op">=</span> <span class="st">"This string is only text"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(text_only)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="9b25b6e4" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>text_with_special_chars <span class="op">=</span> <span class="st">"This -string- has $pecial characters..."</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(text_with_special_chars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="eb3d0737" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>emoji_string <span class="op">=</span> <span class="st">"¯\_(ツ)_/¯"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(emoji_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7fbaee93" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>number_string <span class="op">=</span> <span class="st">"2.99"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(number_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you use triple quotation marks, you can store a <strong>multiline string</strong>. These strings can span more than one line. When you run the following cell, you will see how the spaces in the second line are actually read as characters for the string.</p>
+<div id="8d68d6b0" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"""This is a long string</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">      that spans multiple lines."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fix this code.</p>
+<div id="a9ad367f" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"Why is this</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="er">      not working?!"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The code fails because a normal string cannot continue onto the next line without being closed first.</p>
+<div id="fae8a9f8" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"""Why is this</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">      not working?!"""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<section id="mixing-strings-with-computations-or-data-f-strings" class="level2">
+<h2 class="anchored" data-anchor-id="mixing-strings-with-computations-or-data-f-strings">Mixing strings with computations or data: f-Strings</h2>
+<p>In Python, you can utilize f-strings, which stand for formatted string literals. These allow you to seamlessly insert expressions into string literals by enclosing them with curly braces <code>{}</code> and adding an ‘f’ prefix to the string. F-strings offer an easily readable method for string formatting as they calculate expressions and incorporate their results directly into the string.</p>
+<div id="5f30267e" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span><span class="sc">}</span><span class="ss"> years old."</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In a new cell, enter your favorite number and store it in a variable called <code>fav_num</code>. Print out a message telling you what your favorite number is.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="5aef9a82" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fav_num <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"My favorite number is </span><span class="sc">{</span>fav_num<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>We can perform arithmetic operations inside f-strings.</p>
+<div id="63e3a74c" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">}</span><span class="ss"> dog years old."</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can avoid decimals by specifying the format of the number.</p>
+<div id="68dd938a" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">:.0f}</span><span class="ss"> dog years old."</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In <code>f"{23 / 7:.0f}"</code>, the <code>:.0f</code> part tells Python to display the result of <code>23 / 7</code> without any decimal places. The <code>f</code> in <code>:.0f</code> indicates that the number is a floating-point number and should be formatted accordingly. This means it will be rounded to the nearest whole number and displayed without any decimal part.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write a code that prints the message “NAME is X dog years old.” where NAME is a person’s name and X is the result of dividing their age by 7. Format the result to display no decimal places.</p>
+<div id="03efa3c4" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Michael"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>age <span class="op">=</span> <span class="dv">54</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="6829a3c1" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>age <span class="op">/</span> <span class="dv">7</span><span class="sc">:.0f}</span><span class="ss"> dog years old."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Remember: a variable stores the most updated score value. See what happens when we reassign the variable <code>name</code>. Run the cell bellow and then re-run the cell above you!</p>
+<div id="18efa84e" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Tina"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute a cubic root inside a f-string and display the result with three decimal digits.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="fc27607b" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"The cubic root of 23 is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">**</span> (<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="sc">:.3f}</span><span class="ss">."</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fix the following line of code.</p>
+<div id="fcabfaee" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="dv">365</span><span class="op">/</span><span class="dv">7</span> weeks <span class="kw">in</span> a year<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The f-string is missing the closing brace for the expression and the closing quote for the string.</p>
+<div id="c5c52a70" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="dv">365</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">:.2f}</span><span class="ss"> weeks in a year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Complete this line of code.</p>
+<div id="f57cc7bb" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The area of a square with side 5 cm is </span><span class="sc">{}</span><span class="ss"> cm squared."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="ee9cca44" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The area of a square with side 5 cm is </span><span class="sc">{</span><span class="dv">5</span> <span class="op">**</span> <span class="dv">2</span><span class="sc">}</span><span class="ss"> cm squared."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Complete the code below to perform this Math’s “party trick”:</p>
+<ul>
+<li>Pick a number between 20 and 100.</li>
+<li>Now add your digits together.</li>
+<li>Now subtract the total from your original number.</li>
+<li>Finally, add the digits of the new number together.</li>
+<li>Your answer will always be 9</li>
+</ul>
+<div id="50611034" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_number <span class="op">=</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now add your digits together: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now subtract the total from your original number: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Finally, add the digits of the new number together: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Your answer is 9."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="d7a4bf39" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_number <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>digit_sum <span class="op">=</span> <span class="dv">4</span> <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>new_number <span class="op">=</span> my_number <span class="op">-</span> digit_sum</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>final_sum <span class="op">=</span> (new_number <span class="op">//</span> <span class="dv">10</span>) <span class="op">+</span> (new_number <span class="op">%</span> <span class="dv">10</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now add your digits together: </span><span class="sc">{</span>digit_sum<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now subtract the total from your original number: </span><span class="sc">{</span>new_number<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Finally, add the digits of the new number together: </span><span class="sc">{</span>final_sum<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Your answer is 9."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="operations-with-strings" class="level2">
+<h2 class="anchored" data-anchor-id="operations-with-strings">Operations with Strings</h2>
+<p>We can concatenate or combine strings by using the addition symbols <code>+</code>, and the result is a new string that is a combination of both:</p>
+<div id="2f80deab" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"World"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s <span class="op">+</span> w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>How would we form the sentence “Hello World”, including the space?</p>
+<div id="943dfd75" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"World"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>However, you cannot concatenate strings and numbers.</p>
+<div id="27cff3a2" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">+</span> <span class="st">"3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>However, we can multiply strings and whole numbers! This will replicate the string</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://preview.redd.it/97p4ob5aebj51.png?auto=webp&amp;s=cd5ac8340657442b4099903a2aa3fe23ab184365" class="img-fluid figure-img"></p>
+<figcaption>image</figcaption>
+</figure>
+</div>
+<div id="db09af27" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">4</span> <span class="op">*</span> <span class="st">"Hello"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Replicate the word “Hello” leaving a space between each word.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="7ba17ad7" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">4</span> <span class="op">*</span> (s <span class="op">+</span> <span class="st">" "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="string-methods" class="level2">
+<h2 class="anchored" data-anchor-id="string-methods">String Methods</h2>
+<p>Strings are not just simple variables, they are <strong>objects</strong>. Objects in Python come with built-in functions, called <strong>methods</strong>. We can think of methods as special tools that objects have, and these tools allow us to perform various operations on strings, such as manipulating, searching, or formatting text. We are going to use some basic string methods.</p>
+<section id="case-conversion" class="level4">
+<h4 class="anchored" data-anchor-id="case-conversion">Case Conversion</h4>
+<p>Let’s try the method <code>s.upper()</code>, that returns a <strong>copy</strong> of <code>s</code> with all alphabetic characters converted to uppercase.</p>
+<p>A “copy” means that the original variable remains the same.</p>
+<div id="be44afa9" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"hello"</span>  <span class="co"># original variable</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s.upper()  <span class="co"># new variable</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_old)  <span class="co"># original variable remains unchanged</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)  <span class="co"># new variable created with `upper`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are some other methods for case conversion. All methods return a copy of the original string.</p>
+<div id="fb31270d" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.lower())  <span class="co"># Turns all characters to lower case</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.capitalize())  <span class="co"># Turns uppercase the first letter only</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.swapcase())  <span class="co"># Swaps lowercase with uppercase and viceversa</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.title())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="find-and-replace" class="level4">
+<h4 class="anchored" data-anchor-id="find-and-replace">Find and Replace</h4>
+<p>These methods offer different ways to search for a specified substring within the target string.</p>
+<p>Some methods require us to input <strong>arguments</strong>. For instance, the method <code>s.replace(&lt;old&gt;, &lt;new&gt;)</code> takes two arguments, <code>&lt;old&gt;</code> and <code>&lt;new&gt;</code>. This method replaces a segment of the string, i.e.&nbsp;a substring with a new string. - The first argument <code>&lt;old&gt;</code> defines the part of the string we would like to change. - The second argument <code>&lt;new&gt;</code> is what we would like to exchange the <code>&lt;old&gt;</code> segment with.</p>
+<p>The result is a new string with the segment changed:</p>
+<div id="1a24fd5c" class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s_old.replace(<span class="st">"world"</span>, <span class="st">"amigo"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the optional <code>&lt;count&gt;</code> argument is specified, in the form of <code>s.replace(&lt;old&gt;, &lt;new&gt;, &lt;count&gt;)</code> a maximum of <code>&lt;count&gt;</code> replacements are performed, starting at the left end of <code>s</code>.</p>
+<div id="22bf21e3" class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"foo bar foo baz foo qux"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s_old.replace(<span class="st">"foo"</span>, <span class="st">"grault"</span>, <span class="dv">2</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The method <code>s.count(&lt;sub&gt;)</code> returns the number of non-overlapping occurrences of substring <code>&lt;sub&gt;</code>.</p>
+<div id="c7a3e40d" class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"pizza pizza pizza"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> s.count(<span class="st">"pizza"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The method <code>s.startswith(&lt;sub)&gt;</code> returns <code>True</code> if our string starts with the specified <code>&lt;sub&gt;</code> and <code>False</code> otherwise.</p>
+<div id="31b0df88" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"football"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>s_starts <span class="op">=</span> s.startswith(<span class="st">"foot"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>s_ends <span class="op">=</span> s.endswith(<span class="st">"ball"</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_starts)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_ends)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The method <code>s.find(&lt;sub&gt;)</code> finds a sub-string <code>&lt;sub&gt;</code>. The argument is the substring you would like to find, and the output is the first index of the sequence.</p>
+<div id="a7bcdbe3" class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s.find(<span class="st">"am"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="9e8963e3" class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s.find(<span class="st">"am"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s[index])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the sub-string is not in the string then the output is a negative one.</p>
+<div id="849aa5e0" class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s.find(<span class="st">"Waldo"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>s.rfind(&lt;sub&gt;)</code> returns the highest index in <code>s</code> where substring <code>&lt;sub&gt;</code> is found.</p>
+<div id="dcd607b3" class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s.rfind(<span class="st">"am"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="character-classification" class="level4">
+<h4 class="anchored" data-anchor-id="character-classification">Character Classification</h4>
+<p>Methods within this category classify a string according to its character composition.</p>
+<p><code>s.isalnum()</code> returns a Boolean value, <code>True</code>, if <code>s</code> is not empty and comprises solely alphanumeric characters (which can be either letters or numbers); otherwise, it returns <code>False</code>.</p>
+<div id="cdf4032b" class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"hello123"</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> s.isalnum()</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>s.isalpha()</code> returns a Boolean value, <code>True</code>, if <code>s</code> is not empty and consists entirely of alphabetic characters; otherwise, it returns <code>False</code>.</p>
+<p><code>s.isdigit()</code> returns a Boolean value, <code>True</code>, if <code>s</code> is not empty and consists entirely of numeric digits; otherwise, it returns <code>False</code>.</p>
+</section>
+<section id="string-formatting" class="level3">
+<h3 class="anchored" data-anchor-id="string-formatting">String Formatting</h3>
+<p>The methods in this category are used to alter or improve the formatting of a string.</p>
+<p>The <code>s.center(&lt;width&gt;, &lt;fill&gt;)</code> method generates a string where the content of <code>s</code> is centered within a field of specified total width <code>&lt;width&gt;</code>. The <code>&lt;fill&gt;</code> argument is optional, and if provided, it’s used as the padding character.</p>
+<div id="df7ad757" class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"hello"</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>s_centered <span class="op">=</span> s.center(<span class="dv">10</span>, <span class="st">"-"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_centered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>s.strip()</code> method removes any leading and trailing whitespace characters from a string.</p>
+<div id="2772cb65" class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">" hey you "</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>w_stripped <span class="op">=</span> w.strip()</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w_stripped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can use the optional argument <code>&lt;chars&gt;</code> in the form <code>s.strip(&lt;chars&gt;)</code>. This argument should be a string that specifies the set of characters to be removed from the leading and trailing ends of the string <code>s</code>.</p>
+<div id="d19ad421" class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"eeeeeeh Macarena"</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.strip(<span class="st">"e"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Alternatively, we can use <code>s.lstrip()</code> to remove leading whitespaces or <code>s.rstrip()</code> to remove trailing whitespaces from the string <code>s</code>.</p>
+<div id="46dc467c" class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"  hola amigos  "</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.lstrip())</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.rstrip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, the method <code>split(&lt;sep&gt;)</code> returns a <strong>list</strong> of the substrings in the string, using <code>&lt;sep&gt;</code> as the separator value.</p>
+<div id="63413d64" class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"How are you doing today?"</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>ls <span class="op">=</span> s.split(<span class="st">" "</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>What is a list? We will learn about them later in the course. List are sequences, just like strings, meaning we can index them.</em></p>
+<div id="158603bc" class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"How are you doing today?"</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>ls <span class="op">=</span> s.split(<span class="st">" "</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ls[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="chaining-methods" class="level4">
+<h4 class="anchored" data-anchor-id="chaining-methods">Chaining Methods</h4>
+<p>Methods can be chained one after the other!</p>
+<p>What would this do?</p>
+<div id="a77e67d2" class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"cHaNgE Me"</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.lower().upper())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b69a7869" class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"This statement is false."</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.upper().replace(<span class="st">"false"</span>, <span class="st">"true"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="9fc68457" class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"This statement is false."</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.replace(<span class="st">"false"</span>, <span class="st">"true"</span>).upper())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Too many methods?!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://media.tenor.com/QdAU5GjF5wsAAAAM/brain-explosion.gif" class="img-fluid figure-img"></p>
+<figcaption>image</figcaption>
+</figure>
+</div>
+<p>Don’t worry, you won’t need to memorize them all - AI and Google have you covered!</p>
+<hr>
+
+
+<!-- -->
+
+</section>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../modules/python-fundamentals/variables.html" class="pagination-link  aria-label=" variables="" &amp;="" data="" types"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Variables &amp; Data Types</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../modules/python-fundamentals/flow.html" class="pagination-link" aria-label="Control Flow">
+        <span class="nav-page-text">Control Flow</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb47" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Strings in Python"</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Fundamentals: Strings in Python</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>Strings are used to store and manipulate text. As you see here, strings are written inside of quotes and can contain letters, numbers, punctuation marks, and other special characters. A string is contained within two quotes <span class="in">`"`</span> or single quotes <span class="in">`'`</span>.</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>Run the following cells to print these four different strings.</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>text_only <span class="op">=</span> <span class="st">"This string is only text"</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(text_only)</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>text_with_special_chars <span class="op">=</span> <span class="st">"This -string- has $pecial characters..."</span></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(text_with_special_chars)</span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>emoji_string <span class="op">=</span> <span class="st">"¯\_(ツ)_/¯"</span></span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(emoji_string)</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>number_string <span class="op">=</span> <span class="st">"2.99"</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(number_string)</span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>If you use triple quotation marks, you can store a **multiline string**. These strings can span more than one line. When you run the following cell, you will see how the spaces in the second line are actually read as characters for the string.</span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"""This is a long string</span></span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a><span class="st">      that spans multiple lines."""</span></span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a>Fix this code.</span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"Why is this</span></span>
+<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a><span class="er">      not working?!"</span></span>
+<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span>
+<span id="cb47-64"><a href="#cb47-64" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-65"><a href="#cb47-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-66"><a href="#cb47-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-67"><a href="#cb47-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-68"><a href="#cb47-68" aria-hidden="true" tabindex="-1"></a>::: {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-69"><a href="#cb47-69" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-70"><a href="#cb47-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-71"><a href="#cb47-71" aria-hidden="true" tabindex="-1"></a>The code fails because a normal string cannot <span class="cf">continue</span> onto the <span class="bu">next</span> line without being closed first.</span>
+<span id="cb47-72"><a href="#cb47-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-75"><a href="#cb47-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-76"><a href="#cb47-76" aria-hidden="true" tabindex="-1"></a>long_string <span class="op">=</span> <span class="st">"""Why is this</span></span>
+<span id="cb47-77"><a href="#cb47-77" aria-hidden="true" tabindex="-1"></a><span class="st">      not working?!"""</span></span>
+<span id="cb47-78"><a href="#cb47-78" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_string)</span>
+<span id="cb47-79"><a href="#cb47-79" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-80"><a href="#cb47-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-81"><a href="#cb47-81" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-82"><a href="#cb47-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-83"><a href="#cb47-83" aria-hidden="true" tabindex="-1"></a><span class="op">---</span></span>
+<span id="cb47-84"><a href="#cb47-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-85"><a href="#cb47-85" aria-hidden="true" tabindex="-1"></a><span class="co">## Mixing strings with computations or data: f-Strings</span></span>
+<span id="cb47-86"><a href="#cb47-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-87"><a href="#cb47-87" aria-hidden="true" tabindex="-1"></a>In Python, you can utilize f<span class="op">-</span>strings, which stand <span class="cf">for</span> formatted string literals. These allow you to seamlessly insert expressions into string literals by enclosing them <span class="cf">with</span> curly braces `{}` <span class="kw">and</span> adding an <span class="st">'f'</span> prefix to the string. F<span class="op">-</span>strings offer an easily readable method <span class="cf">for</span> string formatting <span class="im">as</span> they calculate expressions <span class="kw">and</span> incorporate their results directly into the string.</span>
+<span id="cb47-88"><a href="#cb47-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-91"><a href="#cb47-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-92"><a href="#cb47-92" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span><span class="sc">}</span><span class="ss"> years old."</span></span>
+<span id="cb47-93"><a href="#cb47-93" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span>
+<span id="cb47-94"><a href="#cb47-94" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-95"><a href="#cb47-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-96"><a href="#cb47-96" aria-hidden="true" tabindex="-1"></a>::: {.callout<span class="op">-</span>note}</span>
+<span id="cb47-97"><a href="#cb47-97" aria-hidden="true" tabindex="-1"></a><span class="co">## Exercise</span></span>
+<span id="cb47-98"><a href="#cb47-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-99"><a href="#cb47-99" aria-hidden="true" tabindex="-1"></a>In a new cell, enter your favorite number <span class="kw">and</span> store it <span class="kw">in</span> a variable called `fav_num`. Print out a message telling you what your favorite number <span class="kw">is</span>.</span>
+<span id="cb47-100"><a href="#cb47-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-101"><a href="#cb47-101" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-102"><a href="#cb47-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-103"><a href="#cb47-103" aria-hidden="true" tabindex="-1"></a>::: {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-104"><a href="#cb47-104" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-105"><a href="#cb47-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-108"><a href="#cb47-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-109"><a href="#cb47-109" aria-hidden="true" tabindex="-1"></a>fav_num <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb47-110"><a href="#cb47-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"My favorite number is </span><span class="sc">{</span>fav_num<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb47-111"><a href="#cb47-111" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-112"><a href="#cb47-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-113"><a href="#cb47-113" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-114"><a href="#cb47-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-115"><a href="#cb47-115" aria-hidden="true" tabindex="-1"></a>We can perform arithmetic operations inside f<span class="op">-</span>strings.</span>
+<span id="cb47-116"><a href="#cb47-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-119"><a href="#cb47-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-120"><a href="#cb47-120" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">}</span><span class="ss"> dog years old."</span></span>
+<span id="cb47-121"><a href="#cb47-121" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span>
+<span id="cb47-122"><a href="#cb47-122" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-123"><a href="#cb47-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-124"><a href="#cb47-124" aria-hidden="true" tabindex="-1"></a>We can avoid decimals by specifying the <span class="bu">format</span> of the number.</span>
+<span id="cb47-125"><a href="#cb47-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-128"><a href="#cb47-128" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-129"><a href="#cb47-129" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Louis is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">:.0f}</span><span class="ss"> dog years old."</span></span>
+<span id="cb47-130"><a href="#cb47-130" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span>
+<span id="cb47-131"><a href="#cb47-131" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-132"><a href="#cb47-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-133"><a href="#cb47-133" aria-hidden="true" tabindex="-1"></a>In `<span class="ss">f"</span><span class="sc">{</span><span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">:.0f}</span><span class="ss">"</span>`, the `:<span class="fl">.0</span><span class="er">f</span>` part tells Python to display the result of `<span class="dv">23</span> <span class="op">/</span> <span class="dv">7</span>` without <span class="bu">any</span> decimal places. The `f` <span class="kw">in</span> `:<span class="fl">.0</span><span class="er">f</span>` indicates that the number <span class="kw">is</span> a floating<span class="op">-</span>point number <span class="kw">and</span> should be formatted accordingly. This means it will be rounded to the nearest whole number <span class="kw">and</span> displayed without <span class="bu">any</span> decimal part.</span>
+<span id="cb47-134"><a href="#cb47-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-135"><a href="#cb47-135" aria-hidden="true" tabindex="-1"></a>::: {.callout<span class="op">-</span>note}</span>
+<span id="cb47-136"><a href="#cb47-136" aria-hidden="true" tabindex="-1"></a><span class="co">## Exercise</span></span>
+<span id="cb47-137"><a href="#cb47-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-138"><a href="#cb47-138" aria-hidden="true" tabindex="-1"></a>Write a code that prints the message <span class="st">"NAME is X dog years old."</span> where NAME <span class="kw">is</span> a person<span class="st">'s name and X is the result of dividing their age by 7. Format the result to display no decimal places.</span></span>
+<span id="cb47-139"><a href="#cb47-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-142"><a href="#cb47-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-143"><a href="#cb47-143" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Michael"</span></span>
+<span id="cb47-144"><a href="#cb47-144" aria-hidden="true" tabindex="-1"></a>age <span class="op">=</span> <span class="dv">54</span></span>
+<span id="cb47-145"><a href="#cb47-145" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb47-146"><a href="#cb47-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-147"><a href="#cb47-147" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-148"><a href="#cb47-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-149"><a href="#cb47-149" aria-hidden="true" tabindex="-1"></a>::: {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-150"><a href="#cb47-150" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-151"><a href="#cb47-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-154"><a href="#cb47-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-155"><a href="#cb47-155" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>age <span class="op">/</span> <span class="dv">7</span><span class="sc">:.0f}</span><span class="ss"> dog years old."</span>)</span>
+<span id="cb47-156"><a href="#cb47-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-157"><a href="#cb47-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-158"><a href="#cb47-158" aria-hidden="true" tabindex="-1"></a>Remember: a variable stores the most updated score value. See what happens when we reassign the variable <span class="in">`name`</span>. Run the cell bellow and then re-run the cell above you!</span>
+<span id="cb47-159"><a href="#cb47-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-162"><a href="#cb47-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-163"><a href="#cb47-163" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Tina"</span></span>
+<span id="cb47-164"><a href="#cb47-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-165"><a href="#cb47-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-166"><a href="#cb47-166" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-167"><a href="#cb47-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-168"><a href="#cb47-168" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-169"><a href="#cb47-169" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb47-170"><a href="#cb47-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-171"><a href="#cb47-171" aria-hidden="true" tabindex="-1"></a>Compute a cubic root inside a f-string and display the result with three decimal digits.</span>
+<span id="cb47-172"><a href="#cb47-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-173"><a href="#cb47-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-174"><a href="#cb47-174" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-175"><a href="#cb47-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-176"><a href="#cb47-176" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-177"><a href="#cb47-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-178"><a href="#cb47-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-181"><a href="#cb47-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-182"><a href="#cb47-182" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"The cubic root of 23 is </span><span class="sc">{</span><span class="dv">23</span> <span class="op">**</span> (<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="sc">:.3f}</span><span class="ss">."</span></span>
+<span id="cb47-183"><a href="#cb47-183" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span>
+<span id="cb47-184"><a href="#cb47-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-185"><a href="#cb47-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-186"><a href="#cb47-186" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-187"><a href="#cb47-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-188"><a href="#cb47-188" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-189"><a href="#cb47-189" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb47-190"><a href="#cb47-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-191"><a href="#cb47-191" aria-hidden="true" tabindex="-1"></a>Fix the following line of code.</span>
+<span id="cb47-192"><a href="#cb47-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-193"><a href="#cb47-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-196"><a href="#cb47-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-197"><a href="#cb47-197" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-198"><a href="#cb47-198" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="dv">365</span><span class="op">/</span><span class="dv">7</span> weeks <span class="kw">in</span> a year<span class="st">")</span></span>
+<span id="cb47-199"><a href="#cb47-199" aria-hidden="true" tabindex="-1"></a><span class="er">```</span></span>
+<span id="cb47-200"><a href="#cb47-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-201"><a href="#cb47-201" aria-hidden="true" tabindex="-1"></a><span class="er">:::</span></span>
+<span id="cb47-202"><a href="#cb47-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-203"><a href="#cb47-203" aria-hidden="true" tabindex="-1"></a><span class="er">::: {.callout-tip collapse="true"}</span></span>
+<span id="cb47-204"><a href="#cb47-204" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-205"><a href="#cb47-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-206"><a href="#cb47-206" aria-hidden="true" tabindex="-1"></a>The f<span class="op">-</span>string <span class="kw">is</span> missing the closing brace <span class="cf">for</span> the expression <span class="kw">and</span> the closing quote <span class="cf">for</span> the string<span class="sc">.</span></span>
+<span id="cb47-207"><a href="#cb47-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-210"><a href="#cb47-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-211"><a href="#cb47-211" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="dv">365</span> <span class="op">/</span> <span class="dv">7</span><span class="sc">:.2f}</span><span class="ss"> weeks in a year"</span>)</span>
+<span id="cb47-212"><a href="#cb47-212" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-213"><a href="#cb47-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-214"><a href="#cb47-214" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-215"><a href="#cb47-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-216"><a href="#cb47-216" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>note}</span>
+<span id="cb47-217"><a href="#cb47-217" aria-hidden="true" tabindex="-1"></a><span class="co">## Exercise</span></span>
+<span id="cb47-218"><a href="#cb47-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-219"><a href="#cb47-219" aria-hidden="true" tabindex="-1"></a>Complete this line of code<span class="sc">.</span></span>
+<span id="cb47-220"><a href="#cb47-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-223"><a href="#cb47-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-224"><a href="#cb47-224" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-225"><a href="#cb47-225" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The area of a square with side 5 cm is </span><span class="sc">{}</span><span class="ss"> cm squared."</span>)</span>
+<span id="cb47-226"><a href="#cb47-226" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-227"><a href="#cb47-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-228"><a href="#cb47-228" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-229"><a href="#cb47-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-230"><a href="#cb47-230" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-231"><a href="#cb47-231" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-232"><a href="#cb47-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-235"><a href="#cb47-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-236"><a href="#cb47-236" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The area of a square with side 5 cm is </span><span class="sc">{</span><span class="dv">5</span> <span class="op">**</span> <span class="dv">2</span><span class="sc">}</span><span class="ss"> cm squared."</span>)</span>
+<span id="cb47-237"><a href="#cb47-237" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-238"><a href="#cb47-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-239"><a href="#cb47-239" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-240"><a href="#cb47-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-241"><a href="#cb47-241" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>note}</span>
+<span id="cb47-242"><a href="#cb47-242" aria-hidden="true" tabindex="-1"></a><span class="co">## Exercise</span></span>
+<span id="cb47-243"><a href="#cb47-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-244"><a href="#cb47-244" aria-hidden="true" tabindex="-1"></a>Complete the code below to perform this Math<span class="st">'s "party trick":</span></span>
+<span id="cb47-245"><a href="#cb47-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-246"><a href="#cb47-246" aria-hidden="true" tabindex="-1"></a><span class="er">- Pick a number between 20 and 100.</span></span>
+<span id="cb47-247"><a href="#cb47-247" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> Now add your digits together<span class="sc">.</span></span>
+<span id="cb47-248"><a href="#cb47-248" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> Now subtract the total <span class="im">from</span> your original number<span class="sc">.</span></span>
+<span id="cb47-249"><a href="#cb47-249" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> Finally<span class="sc">,</span> add the digits of the new number together<span class="sc">.</span></span>
+<span id="cb47-250"><a href="#cb47-250" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> Your answer will always be <span class="dv">9</span></span>
+<span id="cb47-251"><a href="#cb47-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-254"><a href="#cb47-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-255"><a href="#cb47-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-256"><a href="#cb47-256" aria-hidden="true" tabindex="-1"></a>my_number <span class="op">=</span></span>
+<span id="cb47-257"><a href="#cb47-257" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now add your digits together: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb47-258"><a href="#cb47-258" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now subtract the total from your original number: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb47-259"><a href="#cb47-259" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Finally, add the digits of the new number together: </span><span class="sc">{}</span><span class="ss">"</span>)</span>
+<span id="cb47-260"><a href="#cb47-260" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Your answer is 9."</span>)</span>
+<span id="cb47-261"><a href="#cb47-261" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-262"><a href="#cb47-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-263"><a href="#cb47-263" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-264"><a href="#cb47-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-265"><a href="#cb47-265" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-266"><a href="#cb47-266" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-267"><a href="#cb47-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-270"><a href="#cb47-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-271"><a href="#cb47-271" aria-hidden="true" tabindex="-1"></a>my_number <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb47-272"><a href="#cb47-272" aria-hidden="true" tabindex="-1"></a>digit_sum <span class="op">=</span> <span class="dv">4</span> <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb47-273"><a href="#cb47-273" aria-hidden="true" tabindex="-1"></a>new_number <span class="op">=</span> my_number <span class="op">-</span> digit_sum</span>
+<span id="cb47-274"><a href="#cb47-274" aria-hidden="true" tabindex="-1"></a>final_sum <span class="op">=</span> (new_number <span class="op">//</span> <span class="dv">10</span>) <span class="op">+</span> (new_number <span class="op">%</span> <span class="dv">10</span>)</span>
+<span id="cb47-275"><a href="#cb47-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-276"><a href="#cb47-276" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now add your digits together: </span><span class="sc">{</span>digit_sum<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-277"><a href="#cb47-277" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Now subtract the total from your original number: </span><span class="sc">{</span>new_number<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-278"><a href="#cb47-278" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Finally, add the digits of the new number together: </span><span class="sc">{</span>final_sum<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-279"><a href="#cb47-279" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Your answer is 9."</span>)</span>
+<span id="cb47-280"><a href="#cb47-280" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-281"><a href="#cb47-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-282"><a href="#cb47-282" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-283"><a href="#cb47-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-284"><a href="#cb47-284" aria-hidden="true" tabindex="-1"></a><span class="op">---</span></span>
+<span id="cb47-285"><a href="#cb47-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-286"><a href="#cb47-286" aria-hidden="true" tabindex="-1"></a><span class="co">## Operations with Strings</span></span>
+<span id="cb47-287"><a href="#cb47-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-288"><a href="#cb47-288" aria-hidden="true" tabindex="-1"></a>We can concatenate <span class="kw">or</span> combine strings by using the addition symbols <span class="sc">`</span><span class="op">+</span><span class="sc">`,</span> <span class="kw">and</span> the result <span class="kw">is</span> a new string that <span class="kw">is</span> a combination of both<span class="sc">:</span></span>
+<span id="cb47-289"><a href="#cb47-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-292"><a href="#cb47-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-293"><a href="#cb47-293" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb47-294"><a href="#cb47-294" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"World"</span></span>
+<span id="cb47-295"><a href="#cb47-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-296"><a href="#cb47-296" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s <span class="op">+</span> w)</span>
+<span id="cb47-297"><a href="#cb47-297" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-298"><a href="#cb47-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-299"><a href="#cb47-299" aria-hidden="true" tabindex="-1"></a>How would we form the sentence <span class="st">"Hello World"</span><span class="sc">,</span> including the space<span class="sc">?</span></span>
+<span id="cb47-300"><a href="#cb47-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-303"><a href="#cb47-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-304"><a href="#cb47-304" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb47-305"><a href="#cb47-305" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"World"</span></span>
+<span id="cb47-306"><a href="#cb47-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-307"><a href="#cb47-307" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> w)</span>
+<span id="cb47-308"><a href="#cb47-308" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-309"><a href="#cb47-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-310"><a href="#cb47-310" aria-hidden="true" tabindex="-1"></a>However<span class="sc">,</span> you cannot concatenate strings <span class="kw">and</span> numbers<span class="sc">.</span></span>
+<span id="cb47-311"><a href="#cb47-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-314"><a href="#cb47-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-315"><a href="#cb47-315" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">+</span> <span class="st">"3"</span>)</span>
+<span id="cb47-316"><a href="#cb47-316" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-317"><a href="#cb47-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-318"><a href="#cb47-318" aria-hidden="true" tabindex="-1"></a>However<span class="sc">,</span> we can multiply strings <span class="kw">and</span> whole numbers<span class="op">!</span> This will replicate the string</span>
+<span id="cb47-319"><a href="#cb47-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-320"><a href="#cb47-320" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[image](https:<span class="op">//</span>preview.redd.it<span class="op">/</span><span class="dv">97</span><span class="er">p4ob5aebj51</span>.png?auto<span class="op">=</span>webp<span class="op">&amp;</span>s<span class="op">=</span>cd5ac8340657442b4099903a2aa3fe23ab184365)</span>
+<span id="cb47-321"><a href="#cb47-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-322"><a href="#cb47-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-325"><a href="#cb47-325" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-326"><a href="#cb47-326" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">4</span> <span class="op">*</span> <span class="st">"Hello"</span>)</span>
+<span id="cb47-327"><a href="#cb47-327" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-328"><a href="#cb47-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-329"><a href="#cb47-329" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>note}</span>
+<span id="cb47-330"><a href="#cb47-330" aria-hidden="true" tabindex="-1"></a><span class="co">## Exercise</span></span>
+<span id="cb47-331"><a href="#cb47-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-332"><a href="#cb47-332" aria-hidden="true" tabindex="-1"></a>Replicate the word <span class="st">"Hello"</span> leaving a space between each word<span class="sc">.</span></span>
+<span id="cb47-333"><a href="#cb47-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-334"><a href="#cb47-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-335"><a href="#cb47-335" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-336"><a href="#cb47-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-337"><a href="#cb47-337" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {.callout<span class="op">-</span>tip collapse<span class="op">=</span><span class="st">"true"</span>}</span>
+<span id="cb47-338"><a href="#cb47-338" aria-hidden="true" tabindex="-1"></a><span class="co">## Solution</span></span>
+<span id="cb47-339"><a href="#cb47-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-342"><a href="#cb47-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-343"><a href="#cb47-343" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello"</span></span>
+<span id="cb47-344"><a href="#cb47-344" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">4</span> <span class="op">*</span> (s <span class="op">+</span> <span class="st">" "</span>))</span>
+<span id="cb47-345"><a href="#cb47-345" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-346"><a href="#cb47-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-347"><a href="#cb47-347" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span>
+<span id="cb47-348"><a href="#cb47-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-349"><a href="#cb47-349" aria-hidden="true" tabindex="-1"></a><span class="op">---</span></span>
+<span id="cb47-350"><a href="#cb47-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-351"><a href="#cb47-351" aria-hidden="true" tabindex="-1"></a><span class="co">## String Methods</span></span>
+<span id="cb47-352"><a href="#cb47-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-353"><a href="#cb47-353" aria-hidden="true" tabindex="-1"></a>Strings are <span class="kw">not</span> just simple variables<span class="sc">,</span> they are <span class="op">**</span>objects<span class="op">**</span><span class="sc">.</span> Objects <span class="kw">in</span> Python come <span class="cf">with</span> built<span class="op">-</span><span class="kw">in</span> functions<span class="sc">,</span> called <span class="op">**</span>methods<span class="op">**</span><span class="sc">.</span> We can think of methods <span class="im">as</span> special tools that objects have<span class="sc">,</span> <span class="kw">and</span> these tools allow us to perform various operations on strings<span class="sc">,</span> such <span class="im">as</span> manipulating<span class="sc">,</span> searching<span class="sc">,</span> <span class="kw">or</span> formatting text<span class="sc">.</span> We are going to use some basic string methods<span class="sc">.</span></span>
+<span id="cb47-354"><a href="#cb47-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-355"><a href="#cb47-355" aria-hidden="true" tabindex="-1"></a><span class="co">#### Case Conversion</span></span>
+<span id="cb47-356"><a href="#cb47-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-357"><a href="#cb47-357" aria-hidden="true" tabindex="-1"></a>Let<span class="st">'s try the method `s.upper()`, that returns a **copy** of `s` with all alphabetic characters converted to uppercase.</span></span>
+<span id="cb47-358"><a href="#cb47-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-359"><a href="#cb47-359" aria-hidden="true" tabindex="-1"></a><span class="er">A "copy" means that the original variable remains the same.</span></span>
+<span id="cb47-360"><a href="#cb47-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-363"><a href="#cb47-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-364"><a href="#cb47-364" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"hello"</span>  <span class="co"># original variable</span></span>
+<span id="cb47-365"><a href="#cb47-365" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s<span class="sc">.</span>upper()  <span class="co"># new variable</span></span>
+<span id="cb47-366"><a href="#cb47-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-367"><a href="#cb47-367" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_old)  <span class="co"># original variable remains unchanged</span></span>
+<span id="cb47-368"><a href="#cb47-368" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)  <span class="co"># new variable created with `upper`</span></span>
+<span id="cb47-369"><a href="#cb47-369" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-370"><a href="#cb47-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-371"><a href="#cb47-371" aria-hidden="true" tabindex="-1"></a>Here are some other methods <span class="cf">for</span> case conversion<span class="sc">.</span> All methods <span class="cf">return</span> a copy of the original string<span class="sc">.</span></span>
+<span id="cb47-372"><a href="#cb47-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-375"><a href="#cb47-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-376"><a href="#cb47-376" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb47-377"><a href="#cb47-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-378"><a href="#cb47-378" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.lower())  <span class="co"># Turns all characters to lower case</span></span>
+<span id="cb47-379"><a href="#cb47-379" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.capitalize())  <span class="co"># Turns uppercase the first letter only</span></span>
+<span id="cb47-380"><a href="#cb47-380" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.swapcase())  <span class="co"># Swaps lowercase with uppercase and viceversa</span></span>
+<span id="cb47-381"><a href="#cb47-381" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.title())</span>
+<span id="cb47-382"><a href="#cb47-382" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-383"><a href="#cb47-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-384"><a href="#cb47-384" aria-hidden="true" tabindex="-1"></a><span class="co">#### Find and Replace</span></span>
+<span id="cb47-385"><a href="#cb47-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-386"><a href="#cb47-386" aria-hidden="true" tabindex="-1"></a>These methods offer different ways to search <span class="cf">for</span> a specified substring within the target string<span class="sc">.</span></span>
+<span id="cb47-387"><a href="#cb47-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-388"><a href="#cb47-388" aria-hidden="true" tabindex="-1"></a>Some methods require us to <span class="bu">input</span> <span class="op">**</span>arguments<span class="op">**</span><span class="sc">.</span> For instance<span class="sc">,</span> the method <span class="sc">`</span>s<span class="sc">.</span>replace(<span class="op">&lt;</span>old<span class="op">&gt;</span>, <span class="op">&lt;</span>new<span class="op">&gt;</span>)<span class="sc">`</span> takes two arguments<span class="sc">,</span> <span class="sc">`</span><span class="op">&lt;</span>old<span class="op">&gt;</span><span class="sc">`</span> <span class="kw">and</span> <span class="sc">`</span><span class="op">&lt;</span>new<span class="op">&gt;</span><span class="sc">`.</span> This method replaces a segment of the string<span class="sc">,</span> i<span class="sc">.</span>e<span class="sc">.</span> a substring <span class="cf">with</span> a new string<span class="sc">.</span></span>
+<span id="cb47-389"><a href="#cb47-389" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> The first argument <span class="sc">`</span><span class="op">&lt;</span>old<span class="op">&gt;</span><span class="sc">`</span> defines the part of the string we would like to change<span class="sc">.</span></span>
+<span id="cb47-390"><a href="#cb47-390" aria-hidden="true" tabindex="-1"></a><span class="op">-</span> The second argument <span class="sc">`</span><span class="op">&lt;</span>new<span class="op">&gt;</span><span class="sc">`</span> <span class="kw">is</span> what we would like to exchange the <span class="sc">`</span><span class="op">&lt;</span>old<span class="op">&gt;</span><span class="sc">`</span> segment <span class="cf">with</span><span class="sc">.</span></span>
+<span id="cb47-391"><a href="#cb47-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-392"><a href="#cb47-392" aria-hidden="true" tabindex="-1"></a>The result <span class="kw">is</span> a new string <span class="cf">with</span> the segment changed<span class="sc">:</span></span>
+<span id="cb47-393"><a href="#cb47-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-396"><a href="#cb47-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-397"><a href="#cb47-397" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb47-398"><a href="#cb47-398" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s_old<span class="sc">.</span>replace(<span class="st">"world"</span>, <span class="st">"amigo"</span>)</span>
+<span id="cb47-399"><a href="#cb47-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-400"><a href="#cb47-400" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)</span>
+<span id="cb47-401"><a href="#cb47-401" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-402"><a href="#cb47-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-403"><a href="#cb47-403" aria-hidden="true" tabindex="-1"></a>If the optional <span class="sc">`</span><span class="op">&lt;</span>count<span class="op">&gt;</span><span class="sc">`</span> argument <span class="kw">is</span> specified<span class="sc">,</span> <span class="kw">in</span> the form of  <span class="sc">`</span>s<span class="sc">.</span>replace(<span class="op">&lt;</span>old<span class="op">&gt;</span>, <span class="op">&lt;</span>new<span class="op">&gt;</span>, <span class="op">&lt;</span>count<span class="op">&gt;</span>)<span class="sc">`</span> a maximum of <span class="sc">`</span><span class="op">&lt;</span>count<span class="op">&gt;</span><span class="sc">`</span> replacements are performed<span class="sc">,</span> starting at the left end of <span class="sc">`</span>s<span class="sc">`.</span></span>
+<span id="cb47-404"><a href="#cb47-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-407"><a href="#cb47-407" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-408"><a href="#cb47-408" aria-hidden="true" tabindex="-1"></a>s_old <span class="op">=</span> <span class="st">"foo bar foo baz foo qux"</span></span>
+<span id="cb47-409"><a href="#cb47-409" aria-hidden="true" tabindex="-1"></a>s_new <span class="op">=</span> s_old<span class="sc">.</span>replace(<span class="st">"foo"</span>, <span class="st">"grault"</span>, <span class="dv">2</span>)</span>
+<span id="cb47-410"><a href="#cb47-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-411"><a href="#cb47-411" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_new)</span>
+<span id="cb47-412"><a href="#cb47-412" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-413"><a href="#cb47-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-414"><a href="#cb47-414" aria-hidden="true" tabindex="-1"></a>The method <span class="sc">`</span>s<span class="sc">.</span>count(<span class="op">&lt;</span>sub<span class="op">&gt;</span>)<span class="sc">`</span>  returns the number of non<span class="op">-</span>overlapping occurrences of substring <span class="sc">`</span><span class="op">&lt;</span>sub<span class="op">&gt;</span><span class="sc">`.</span></span>
+<span id="cb47-415"><a href="#cb47-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-418"><a href="#cb47-418" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-419"><a href="#cb47-419" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"pizza pizza pizza"</span></span>
+<span id="cb47-420"><a href="#cb47-420" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> s<span class="sc">.</span>count(<span class="st">"pizza"</span>)</span>
+<span id="cb47-421"><a href="#cb47-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-422"><a href="#cb47-422" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(n)</span>
+<span id="cb47-423"><a href="#cb47-423" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-424"><a href="#cb47-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-425"><a href="#cb47-425" aria-hidden="true" tabindex="-1"></a>The method <span class="sc">`</span>s<span class="sc">.</span>startswith(<span class="op">&lt;</span>sub)<span class="op">&gt;</span><span class="sc">`</span> returns <span class="sc">`</span>True<span class="sc">`</span> <span class="cf">if</span> our string starts <span class="cf">with</span> the specified <span class="sc">`</span><span class="op">&lt;</span>sub<span class="op">&gt;</span><span class="sc">`</span> <span class="kw">and</span> <span class="sc">`</span>False<span class="sc">`</span> otherwise<span class="sc">.</span></span>
+<span id="cb47-426"><a href="#cb47-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-429"><a href="#cb47-429" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-430"><a href="#cb47-430" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"football"</span></span>
+<span id="cb47-431"><a href="#cb47-431" aria-hidden="true" tabindex="-1"></a>s_starts <span class="op">=</span> s<span class="sc">.</span>startswith(<span class="st">"foot"</span>)</span>
+<span id="cb47-432"><a href="#cb47-432" aria-hidden="true" tabindex="-1"></a>s_ends <span class="op">=</span> s<span class="sc">.</span>endswith(<span class="st">"ball"</span>)</span>
+<span id="cb47-433"><a href="#cb47-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-434"><a href="#cb47-434" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_starts)</span>
+<span id="cb47-435"><a href="#cb47-435" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_ends)</span>
+<span id="cb47-436"><a href="#cb47-436" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-437"><a href="#cb47-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-438"><a href="#cb47-438" aria-hidden="true" tabindex="-1"></a>The method <span class="sc">`</span>s<span class="sc">.</span>find(<span class="op">&lt;</span>sub<span class="op">&gt;</span>)<span class="sc">`</span> finds a sub<span class="op">-</span>string <span class="sc">`</span><span class="op">&lt;</span>sub<span class="op">&gt;</span><span class="sc">`.</span> The argument <span class="kw">is</span> the substring you would like to find<span class="sc">,</span> <span class="kw">and</span> the output <span class="kw">is</span> the first index of the sequence<span class="sc">.</span></span>
+<span id="cb47-439"><a href="#cb47-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-442"><a href="#cb47-442" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-443"><a href="#cb47-443" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb47-444"><a href="#cb47-444" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s<span class="sc">.</span>find(<span class="st">"am"</span>)</span>
+<span id="cb47-445"><a href="#cb47-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-446"><a href="#cb47-446" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span>
+<span id="cb47-447"><a href="#cb47-447" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-448"><a href="#cb47-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-451"><a href="#cb47-451" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-452"><a href="#cb47-452" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb47-453"><a href="#cb47-453" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s<span class="sc">.</span>find(<span class="st">"am"</span>)</span>
+<span id="cb47-454"><a href="#cb47-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-455"><a href="#cb47-455" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s[index])</span>
+<span id="cb47-456"><a href="#cb47-456" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-457"><a href="#cb47-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-458"><a href="#cb47-458" aria-hidden="true" tabindex="-1"></a>If the sub<span class="op">-</span>string <span class="kw">is</span> <span class="kw">not</span> <span class="kw">in</span> the string then the output <span class="kw">is</span> a negative one<span class="sc">.</span></span>
+<span id="cb47-459"><a href="#cb47-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-462"><a href="#cb47-462" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-463"><a href="#cb47-463" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"Hello world"</span></span>
+<span id="cb47-464"><a href="#cb47-464" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s<span class="sc">.</span>find(<span class="st">"Waldo"</span>)</span>
+<span id="cb47-465"><a href="#cb47-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-466"><a href="#cb47-466" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span>
+<span id="cb47-467"><a href="#cb47-467" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-468"><a href="#cb47-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-469"><a href="#cb47-469" aria-hidden="true" tabindex="-1"></a><span class="sc">`</span>s<span class="sc">.</span>rfind(<span class="op">&lt;</span>sub<span class="op">&gt;</span>)<span class="sc">`</span> returns the highest index <span class="kw">in</span> <span class="sc">`</span>s<span class="sc">`</span> where substring <span class="sc">`</span><span class="op">&lt;</span>sub<span class="op">&gt;</span><span class="sc">`</span> <span class="kw">is</span> found<span class="sc">.</span></span>
+<span id="cb47-470"><a href="#cb47-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-473"><a href="#cb47-473" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-474"><a href="#cb47-474" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"I am Daniel and I am your teacher"</span></span>
+<span id="cb47-475"><a href="#cb47-475" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> s<span class="sc">.</span>rfind(<span class="st">"am"</span>)</span>
+<span id="cb47-476"><a href="#cb47-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-477"><a href="#cb47-477" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(index)</span>
+<span id="cb47-478"><a href="#cb47-478" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-479"><a href="#cb47-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-480"><a href="#cb47-480" aria-hidden="true" tabindex="-1"></a><span class="co">#### Character Classification</span></span>
+<span id="cb47-481"><a href="#cb47-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-482"><a href="#cb47-482" aria-hidden="true" tabindex="-1"></a>Methods within this category classify a string according to its character composition<span class="sc">.</span></span>
+<span id="cb47-483"><a href="#cb47-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-484"><a href="#cb47-484" aria-hidden="true" tabindex="-1"></a><span class="sc">`</span>s<span class="sc">.</span>isalnum()<span class="sc">`</span> returns a Boolean value<span class="sc">,</span> <span class="sc">`</span>True<span class="sc">`,</span> <span class="cf">if</span> <span class="sc">`</span>s<span class="sc">`</span> <span class="kw">is</span> <span class="kw">not</span> empty <span class="kw">and</span> comprises solely alphanumeric characters (which can be either letters <span class="kw">or</span> numbers)<span class="op">;</span> otherwise<span class="sc">,</span> it returns <span class="sc">`</span>False<span class="sc">`.</span></span>
+<span id="cb47-485"><a href="#cb47-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-488"><a href="#cb47-488" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-489"><a href="#cb47-489" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"hello123"</span></span>
+<span id="cb47-490"><a href="#cb47-490" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> s<span class="sc">.</span>isalnum()</span>
+<span id="cb47-491"><a href="#cb47-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-492"><a href="#cb47-492" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b)</span>
+<span id="cb47-493"><a href="#cb47-493" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-494"><a href="#cb47-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-495"><a href="#cb47-495" aria-hidden="true" tabindex="-1"></a><span class="sc">`</span>s<span class="sc">.</span>isalpha()<span class="sc">`</span> returns a Boolean value<span class="sc">,</span> <span class="sc">`</span>True<span class="sc">`,</span> <span class="cf">if</span> <span class="sc">`</span>s<span class="sc">`</span> <span class="kw">is</span> <span class="kw">not</span> empty <span class="kw">and</span> consists entirely of alphabetic characters<span class="op">;</span> otherwise<span class="sc">,</span> it returns <span class="sc">`</span>False<span class="sc">`.</span></span>
+<span id="cb47-496"><a href="#cb47-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-497"><a href="#cb47-497" aria-hidden="true" tabindex="-1"></a><span class="sc">`</span>s<span class="sc">.</span>isdigit()<span class="sc">`</span> returns a Boolean value<span class="sc">,</span> <span class="sc">`</span>True<span class="sc">`,</span> <span class="cf">if</span> <span class="sc">`</span>s<span class="sc">`</span> <span class="kw">is</span> <span class="kw">not</span> empty <span class="kw">and</span> consists entirely of numeric digits<span class="op">;</span> otherwise<span class="sc">,</span> it returns <span class="sc">`</span>False<span class="sc">`.</span></span>
+<span id="cb47-498"><a href="#cb47-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-499"><a href="#cb47-499" aria-hidden="true" tabindex="-1"></a><span class="co">### String Formatting</span></span>
+<span id="cb47-500"><a href="#cb47-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-501"><a href="#cb47-501" aria-hidden="true" tabindex="-1"></a>The methods <span class="kw">in</span> this category are used to alter <span class="kw">or</span> improve the formatting of a string<span class="sc">.</span></span>
+<span id="cb47-502"><a href="#cb47-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-503"><a href="#cb47-503" aria-hidden="true" tabindex="-1"></a>The <span class="sc">`</span>s<span class="sc">.</span>center(<span class="op">&lt;</span>width<span class="op">&gt;</span>, <span class="op">&lt;</span>fill<span class="op">&gt;</span>)<span class="sc">`</span> method generates a string where the content of <span class="sc">`</span>s<span class="sc">`</span> <span class="kw">is</span> centered within a field of specified total width <span class="sc">`</span><span class="op">&lt;</span>width<span class="op">&gt;</span><span class="sc">`.</span> The <span class="sc">`</span><span class="op">&lt;</span>fill<span class="op">&gt;</span><span class="sc">`</span> argument <span class="kw">is</span> optional<span class="sc">,</span> <span class="kw">and</span> <span class="cf">if</span> provided<span class="sc">,</span> it<span class="st">'s used as the padding character.</span></span>
+<span id="cb47-504"><a href="#cb47-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-507"><a href="#cb47-507" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-508"><a href="#cb47-508" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"hello"</span></span>
+<span id="cb47-509"><a href="#cb47-509" aria-hidden="true" tabindex="-1"></a>s_centered <span class="op">=</span> s<span class="sc">.</span>center(<span class="dv">10</span>, <span class="st">"-"</span>)</span>
+<span id="cb47-510"><a href="#cb47-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-511"><a href="#cb47-511" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s_centered)</span>
+<span id="cb47-512"><a href="#cb47-512" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-513"><a href="#cb47-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-514"><a href="#cb47-514" aria-hidden="true" tabindex="-1"></a>The <span class="sc">`</span>s<span class="sc">.</span>strip()<span class="sc">`</span> method removes <span class="bu">any</span> leading <span class="kw">and</span> trailing whitespace characters <span class="im">from</span> a string<span class="sc">.</span></span>
+<span id="cb47-515"><a href="#cb47-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-518"><a href="#cb47-518" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-519"><a href="#cb47-519" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">" hey you "</span></span>
+<span id="cb47-520"><a href="#cb47-520" aria-hidden="true" tabindex="-1"></a>w_stripped <span class="op">=</span> w<span class="sc">.</span>strip()</span>
+<span id="cb47-521"><a href="#cb47-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-522"><a href="#cb47-522" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w_stripped)</span>
+<span id="cb47-523"><a href="#cb47-523" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-524"><a href="#cb47-524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-525"><a href="#cb47-525" aria-hidden="true" tabindex="-1"></a>We can use the optional argument <span class="sc">`</span><span class="op">&lt;</span>chars<span class="op">&gt;</span><span class="sc">`</span> <span class="kw">in</span> the form <span class="sc">`</span>s<span class="sc">.</span>strip(<span class="op">&lt;</span>chars<span class="op">&gt;</span>)<span class="sc">`.</span> This argument should be a string that specifies the <span class="bu">set</span> of characters to be removed <span class="im">from</span> the leading <span class="kw">and</span> trailing ends of the string <span class="sc">`</span>s<span class="sc">`.</span></span>
+<span id="cb47-526"><a href="#cb47-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-529"><a href="#cb47-529" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-530"><a href="#cb47-530" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"eeeeeeh Macarena"</span></span>
+<span id="cb47-531"><a href="#cb47-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-532"><a href="#cb47-532" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.strip(<span class="st">"e"</span>))</span>
+<span id="cb47-533"><a href="#cb47-533" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-534"><a href="#cb47-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-535"><a href="#cb47-535" aria-hidden="true" tabindex="-1"></a>Alternatively<span class="sc">,</span> we can use <span class="sc">`</span>s<span class="sc">.</span>lstrip()<span class="sc">`</span> to remove leading whitespaces <span class="kw">or</span> <span class="sc">`</span>s<span class="sc">.</span>rstrip()<span class="sc">`</span> to remove trailing whitespaces <span class="im">from</span> the string <span class="sc">`</span>s<span class="sc">`.</span></span>
+<span id="cb47-536"><a href="#cb47-536" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-539"><a href="#cb47-539" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-540"><a href="#cb47-540" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="st">"  hola amigos  "</span></span>
+<span id="cb47-541"><a href="#cb47-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-542"><a href="#cb47-542" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.lstrip())</span>
+<span id="cb47-543"><a href="#cb47-543" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.rstrip())</span>
+<span id="cb47-544"><a href="#cb47-544" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-545"><a href="#cb47-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-546"><a href="#cb47-546" aria-hidden="true" tabindex="-1"></a>Finally<span class="sc">,</span> the method <span class="sc">`</span>split(<span class="op">&lt;</span>sep<span class="op">&gt;</span>)<span class="sc">`</span> returns a <span class="op">**</span><span class="bu">list</span><span class="op">**</span> of the substrings <span class="kw">in</span> the string<span class="sc">,</span> using <span class="sc">`</span><span class="op">&lt;</span>sep<span class="op">&gt;</span><span class="sc">`</span> <span class="im">as</span> the separator value<span class="sc">.</span></span>
+<span id="cb47-547"><a href="#cb47-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-550"><a href="#cb47-550" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-551"><a href="#cb47-551" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"How are you doing today?"</span></span>
+<span id="cb47-552"><a href="#cb47-552" aria-hidden="true" tabindex="-1"></a>ls <span class="op">=</span> s<span class="sc">.</span>split(<span class="st">" "</span>)</span>
+<span id="cb47-553"><a href="#cb47-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-554"><a href="#cb47-554" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ls)</span>
+<span id="cb47-555"><a href="#cb47-555" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-556"><a href="#cb47-556" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-557"><a href="#cb47-557" aria-hidden="true" tabindex="-1"></a>_What <span class="kw">is</span> a <span class="bu">list</span><span class="sc">?</span> We will learn about them later <span class="kw">in</span> the course<span class="sc">.</span> List are sequences<span class="sc">,</span> just like strings<span class="sc">,</span> meaning we can index them<span class="sc">.</span>_</span>
+<span id="cb47-558"><a href="#cb47-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-561"><a href="#cb47-561" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-562"><a href="#cb47-562" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"How are you doing today?"</span></span>
+<span id="cb47-563"><a href="#cb47-563" aria-hidden="true" tabindex="-1"></a>ls <span class="op">=</span> s<span class="sc">.</span>split(<span class="st">" "</span>)</span>
+<span id="cb47-564"><a href="#cb47-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-565"><a href="#cb47-565" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ls[<span class="dv">1</span>])</span>
+<span id="cb47-566"><a href="#cb47-566" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-567"><a href="#cb47-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-568"><a href="#cb47-568" aria-hidden="true" tabindex="-1"></a><span class="co">#### Chaining Methods</span></span>
+<span id="cb47-569"><a href="#cb47-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-570"><a href="#cb47-570" aria-hidden="true" tabindex="-1"></a>Methods can be chained one after the other<span class="op">!</span></span>
+<span id="cb47-571"><a href="#cb47-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-572"><a href="#cb47-572" aria-hidden="true" tabindex="-1"></a>What would this do<span class="sc">?</span></span>
+<span id="cb47-573"><a href="#cb47-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-576"><a href="#cb47-576" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-577"><a href="#cb47-577" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"cHaNgE Me"</span></span>
+<span id="cb47-578"><a href="#cb47-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-579"><a href="#cb47-579" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.lower().upper())</span>
+<span id="cb47-580"><a href="#cb47-580" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-581"><a href="#cb47-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-584"><a href="#cb47-584" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-585"><a href="#cb47-585" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"This statement is false."</span></span>
+<span id="cb47-586"><a href="#cb47-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-587"><a href="#cb47-587" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.upper().replace(<span class="st">"false"</span>, <span class="st">"true"</span>))</span>
+<span id="cb47-588"><a href="#cb47-588" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-589"><a href="#cb47-589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-592"><a href="#cb47-592" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-593"><a href="#cb47-593" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"This statement is false."</span></span>
+<span id="cb47-594"><a href="#cb47-594" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-595"><a href="#cb47-595" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.replace(<span class="st">"false"</span>, <span class="st">"true"</span>).upper())</span>
+<span id="cb47-596"><a href="#cb47-596" aria-hidden="true" tabindex="-1"></a><span class="sc">```</span></span>
+<span id="cb47-597"><a href="#cb47-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-598"><a href="#cb47-598" aria-hidden="true" tabindex="-1"></a>Too many methods<span class="sc">?</span><span class="op">!</span></span>
+<span id="cb47-599"><a href="#cb47-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-600"><a href="#cb47-600" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[image](https:<span class="op">//</span>media.tenor.com<span class="op">/</span>QdAU5GjF5wsAAAAM<span class="op">/</span>brain<span class="op">-</span>explosion.gif)</span>
+<span id="cb47-601"><a href="#cb47-601" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-602"><a href="#cb47-602" aria-hidden="true" tabindex="-1"></a>Don<span class="st">'t worry, you won'</span>t need to memorize them <span class="bu">all</span> <span class="op">-</span> AI <span class="kw">and</span> Google have you covered<span class="op">!</span></span>
+<span id="cb47-603"><a href="#cb47-603" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-604"><a href="#cb47-604" aria-hidden="true" tabindex="-1"></a><span class="op">---</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024, Computer Programming I</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/python-fundamentals/strings.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/daniprec/Python-Course">
+      <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
