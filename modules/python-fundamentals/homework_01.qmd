@@ -1,0 +1,1668 @@
+---
+title: "Problem Set 1: Fundamentals"
+subtitle: "Homework for Module 1"
+---
+
+## Introduction
+
+Try the exercises below to practice the concepts from this module. I recommend deactivating Gemini first (and any other AI helper) and attempting the exercises on your own. This approach will help you gain a deeper understanding of how Python works. 
+
+**Mandatory exercises** are highlighted in red boxes. These are the ones you must complete to get your participation points. Feel free to use AI help on other exercises, but remember, you will be asked to explain the code in class!
+
+Each exercise includes one or more examples of how your solution should function. Keep in mind that a good Python program should work under any circumstances, or at the very least, provide an informative message when it fails. Always test your code in as many scenarios as you can imagine! For instance, if the exercise asks you to write a function that computes $\sqrt{x}$, does your code handle decimal numbers? What if $x$ is negative?
+
+---
+
+# Numeric Variables
+
+::: {.callout-note}
+## Currency Converter
+
+Write a Python program that converts an amount in Euros to US Dollars. The user inputs the amount in Euros, and the program calculates the equivalent amount in US Dollars. Assume a fixed exchange rate of 1 Euro to 1.17 US Dollars.
+
+*Sample input:* `euros = 100`  
+*Expected result:* `117.0`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+euros = 100
+dollars = euros * 1.17
+print(dollars)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Temperature Converter
+
+Write a Python code that takes a temperature in Fahrenheit and converts it to Celsius. The formula is: $(F - 32) \cdot 5/9 = C$
+
+*Sample input:* `fahrenheit = 270`  
+*Expected result:* `132.22`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+fahrenheit = 270
+celsius = (fahrenheit - 32) * 5 / 9
+print(round(celsius, 2))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Polynomial Evaluation
+
+Given the polynomial $$f(x) = a \cdot x^2+b \cdot x+c$$
+
+with $$\begin{cases} a=1 \\ b=1 \\ c=-6 \end{cases}$$
+
+Compute the values of $f(-2)$, $f(0)$, and $f(2.1)$.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+a, b, c = 1, 1, -6
+
+def f(x):
+    return a * x**2 + b * x + c
+
+print(f"f(-2) = {f(-2)}")
+print(f"f(0) = {f(0)}")
+print(f"f(2.1) = {f(2.1)}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Polynomial Evaluation II
+
+Given another polynomial $$g(x) = \frac{a}{x}$$
+
+with $a$ defined above.
+
+a) Compute the values of $g(-2)$ and $g(2.1)$.  
+b) What happens when you try to compute $g(0)$?
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+a = 1
+
+def g(x):
+    if x == 0:
+        return "Division by zero!"
+    return a / x
+
+print(f"g(-2) = {g(-2)}")
+print(f"g(2.1) = {g(2.1)}")
+print(f"g(0) = {g(0)}")  # Will print "Division by zero!"
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Polynomial Operation
+
+Let us define a third polynomial using the two previous:
+$$h(x) = \frac{f(x)}{g(x)}$$
+
+Compute the values of $h(-2)$, $h(0)$, and $h(2.1)$. Are you able to compute all three cases?
+
+:::
+
+::: {.callout-warning}
+## Simplified Polynomial Operation
+
+What if we simplify the polynomial of the previous exercise?
+$$h(x) = \frac{f(x)}{g(x)} = \frac{a \cdot x^2+b \cdot x+c}{a/x} = x^3 + \frac{b}{a} \cdot x^2 + \frac{c}{a} \cdot x$$
+
+Can you now compute all three cases? Do we get the same values?
+
+:::
+
+::: {.callout-note}
+## Basketball Scoring
+
+During a game of basketball, a team scored:
+
+- 21 two-point field goals
+- 12 three-point field goals, of which 4 occurred in the final minute and are worth double (6 points each)
+- 17 free throws (1 point each)
+
+**Tasks:**
+1. Compute the total number of points scored.
+2. Decompose the total into runs (groups) of 7 points: determine how many full runs fit and find how many points are left.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+two_pointers = 21 * 2
+three_pointers = (12 - 4) * 3 + 4 * 6
+free_throws = 17 * 1
+
+total = two_pointers + three_pointers + free_throws
+print(f"Total points: {total}")
+
+full_runs = total // 7
+remaining = total % 7
+print(f"Full runs of 7: {full_runs}, Remaining: {remaining}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Currency Converter (Advanced)
+
+Write a Python program that converts an amount in Euros to US Dollars with two decimal places precision. The user inputs the amount in Euros, and the program calculates the equivalent amount in US Dollars, outputting a message like `"(...) Euros is approximately (...) US Dollars"`. Assume a fixed exchange rate of 1 Euro to 1.17 US Dollars.
+
+*Sample input:* `euros = 100`  
+*Expected result:* `"100 Euros is approximately 117.00 US Dollars"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+euros = 100
+dollars = euros * 1.17
+print(f"{euros} Euros is approximately {dollars:.2f} US Dollars")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Car Fuel and Speed
+
+A car's baseline fuel consumption at $v_0=90 \text{ km/h}$ is $C_0=6.5$ L/100 km. On the highway, the model
+$$C(v)=C_0\left(\frac{v}{v_0}\right)^{2}$$
+estimates the consumption (in L/100 km) at speed $v$ due to aerodynamic drag.
+
+**Tasks:**
+1. Compute $C(120)$ for $v=120 \text{ km/h}$.
+2. For a $250$ km trip at $120 \text{ km/h}$, compute the total liters used.
+3. If fuel costs €1.79 per liter, compute the trip's fuel cost.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+v0 = 90
+C0 = 6.5
+v = 120
+distance = 250
+cost_per_liter = 1.79
+
+# Task 1
+C_120 = C0 * (v / v0)**2
+print(f"Consumption at 120 km/h: {C_120:.2f} L/100km")
+
+# Task 2
+liters_used = (distance / 100) * C_120
+print(f"Total liters used: {liters_used:.2f} L")
+
+# Task 3
+total_cost = liters_used * cost_per_liter
+print(f"Trip cost: €{total_cost:.2f}")
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Trigonometric Angle Formatter
+
+Create a Python program that takes an angle in degrees and formats it in degrees with minutes and seconds.
+
+*Sample input:* `degrees = 30.4`  
+*Expected result:* `"30 deg 24 min 0 sec"`
+
+:::
+
+---
+# String Variables
+
+::: {.callout-note}
+## Substring Extraction
+
+Write a Python code to get a substring with the odd index characters.
+
+*Sample input 1:* `s = "abcdefg"`  
+*Expected result 1:* `"bdf"`
+
+*Sample input 2:* `s = "0123456789"`  
+*Expected result 2:* `"13579"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "abcdefg"
+result = s[1::2]
+print(result)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Substring Extraction (Advanced)
+
+Write a Python code to get a substring with the even index characters, and make them uppercase.
+
+*Sample input:* `s = "abcdefg"`  
+*Expected result:* `"ACEG"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "abcdefg"
+result = s[::2].upper()
+print(result)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Substring Combination
+
+Write a Python code that gets a string `s` made of the first 3 and last 2 characters of a given string.
+
+*Sample input 1:* `s = "This is a string"`  
+*Expected result 1:* `"Thing"`
+
+*Sample input 2:* `s = "dragon"`  
+*Expected result 2:* `"draon"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "This is a string"
+result = s[:3] + s[-2:]
+print(result)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Substring Combination (Advanced)
+
+Write a Python code that gets a string `s` made of the first 3 and last 2 characters of a given string, ignoring leading and trailing white spaces.
+
+*Sample input 1:* `s = "   This is a string  "`  
+*Expected result 1:* `"Thing"`
+
+*Sample input 2:* `s = "    This has many spaces!   "`  
+*Expected result 2:* `"This!"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "   This is a string  "
+s = s.strip()
+result = s[:3] + s[-2:]
+print(result)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## String Swap
+
+Write a Python code to get a single string from two given strings (`u`, `v`), separated by a space and swap the first two characters of each string.
+
+*Sample input 1:* `u = "abc"`, `v = "xyz"`  
+*Expected result 1:* `"xyc abz"`
+
+*Sample input 2:* `u = "horse"`, `v = "fly"`  
+*Expected result 2:* `"horsy fle"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+u = "abc"
+v = "xyz"
+result = v[:2] + u[2:] + " " + u[:2] + v[2:]
+print(result)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Series Information
+
+Write a Python code that, given a string in the following format: `"SeriesName S02E05"`, where S02 represents the season and E05 represents the episode, returns the information in the following format:
+
+*Sample input:* `"Wendnesday S01E03"`  
+*Expected result:*
+```
+Series: Wendnesday
+    Season: 01
+    Episode: 03
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "Wendnesday S01E03"
+parts = s.split()
+series_name = parts[0]
+season = parts[1][1:3]
+episode = parts[1][4:6]
+
+print(f"Series: {series_name}")
+print(f"    Season: {season}")
+print(f"    Episode: {episode}")
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Character Replacement
+
+Write a Python code to get a string from a given string where all occurrences of its first char have been changed to `"$"`, except the first character itself.
+
+*Sample input 1:* `s = "excellent"`  
+*Expected result 1:* `"exc$ll$nt"`
+
+*Sample input 2:* `s = "crocodile"`  
+*Expected result 2:* `"cro$odile"`
+
+:::
+
+::: {.callout-warning}
+## Substring Detection
+
+Write a Python code that finds the first occurrence of the substring `"cat"` and outputs it. It must work both for lowercase and uppercase.
+
+*Sample input 1:* `s = "Catch that fly!"`  
+*Expected result 1:* `"Cat"`
+
+*Sample input 2:* `s = "I love cats. Cats are the best."`  
+*Expected result 2:* `"cat"`
+
+:::
+
+---
+# Flow Control
+
+::: {.callout-note}
+## Odd/Even Checker
+
+Create a code that checks if an integer is even or odd. The output should be a message like `"(number) is an odd/even number"`.
+
+*Sample input:* `num = 267`  
+*Expected result:* `"267 is an odd number"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 267
+if num % 2 == 0:
+    print(f"{num} is an even number")
+else:
+    print(f"{num} is an odd number")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Divisible Checker
+
+Create a code that checks if a number `a` is divisible by another `b`. The output should be a message like `"(a) is divisible by (b)"`.
+
+*Sample input:* `a = 10`, `b = 7`  
+*Expected result:* `"10 is not divisible by 7"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+a = 10
+b = 7
+if a % b == 0:
+    print(f"{a} is divisible by {b}")
+else:
+    print(f"{a} is not divisible by {b}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Leap Year Checker
+
+Write a Python program that checks whether a given year is a leap year or not. We input a year, and the program determines if it's a leap year based on the leap year rules (divisible by 4, but not divisible by 100 unless divisible by 400).
+
+*Sample input:* `year = 2023`  
+*Expected result:* `"2023 is not a leap year."`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+year = 2023
+if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+    print(f"{year} is a leap year.")
+else:
+    print(f"{year} is not a leap year.")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Vowel Checker
+
+Create a code that checks if a character is a vowel or a consonant. The output should be a message like `"(letter) is a vowel/consonant"`.
+
+*Sample input:* `s = "o"`  
+*Expected result:* `"o is a vowel"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "o"
+vowels = "aeiouAEIOU"
+if s in vowels:
+    print(f"{s} is a vowel")
+else:
+    print(f"{s} is a consonant")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Grade Calculator
+
+Develop a code that takes a numeric variable representing a student's score (between 0 and 100) and uses if/else statements to calculate the corresponding letter grade (A, B, C, D, or F) based on standard grading criteria:
+
+- F: Grade between 0 and 60
+- D: Grade between 61 and 70
+- C: Grade between 71 and 80
+- B: Grade between 81 and 90
+- A: Grade between 91 and 100
+
+The output should be a message like `"Student's grade: (grade)"`. If the input score is out of the range (i.e. below 0 or above 100), it should instead return a message `"Invalid score (out of range)"`.
+
+*Sample input:* `score = 89`  
+*Expected result:* `"Student's grade: B"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+score = 89
+if score < 0 or score > 100:
+    print("Invalid score (out of range)")
+elif score <= 60:
+    print("Student's grade: F")
+elif score <= 70:
+    print("Student's grade: D")
+elif score <= 80:
+    print("Student's grade: C")
+elif score <= 90:
+    print("Student's grade: B")
+else:
+    print("Student's grade: A")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Parcheesi Move
+
+Write a Python program to play Parcheesi. Your opponent has one pawn 4 squares away and another 2 squares away, and you still have pawns at home. It is your turn, and the program will simulate your actions. Your program input will be the number you rolled on the die.
+
+**Rules:**
+- If the roll is **5**, print: `"You must move a pawn out of home"` (**this has priority over any other move**).
+- If the roll is **2** or **4**, print: `"You capture an opponent's pawn and count 20"`.
+- Otherwise, print: `"Move the pawn x positions"`, where `x` is the number rolled on the die.
+
+*Sample input:* `die = 3`  
+*Expected result:* `"Move the pawn 3 positions"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+die = 3
+if die == 5:
+    print("You must move a pawn out of home")
+elif die == 2 or die == 4:
+    print("You capture an opponent's pawn and count 20")
+else:
+    print(f"Move the pawn {die} positions")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Password Validator
+
+Write a Python program that checks if a password is valid.
+
+**Rules:**
+- If the password has fewer than **10 characters**, print: `"Password too short"`.
+- If the password starts with `"admin"`, print: `"Password not allowed: starts with 'admin'"`.
+- If the password does not end with one of the special characters `!?#$`, print: `"Password does not end with a special character"`.
+- Otherwise, print: `"Password correct"`.
+
+*Sample input:* `password = "goodpassword?"`  
+*Expected result:* `"Password correct"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+password = "goodpassword?"
+if len(password) < 10:
+    print("Password too short")
+elif password.startswith("admin"):
+    print("Password not allowed: starts with 'admin'")
+elif password[-1] not in "!?#$":
+    print("Password does not end with a special character")
+else:
+    print("Password correct")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## String Palindrome Checker
+
+Create a code that checks if a string is a palindrome (reads the same forwards and backward).
+
+*Sample input:* `s = "tacocat"`  
+*Expected result:* `"The string is a palindrome"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+s = "tacocat"
+if s == s[::-1]:
+    print("The string is a palindrome")
+else:
+    print("The string is not a palindrome")
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Angle Quadrant Checker
+
+Write a code that takes an angle (in degrees) and determines in which quadrant of the Cartesian coordinate system it lies, even for angles outside the typical range.
+
+In the Cartesian coordinate system:
+
+- Quadrant I: Angle between 0 and 90 degrees
+- Quadrant II: Angle between 90 and 180 degrees
+- Quadrant III: Angle between 180 and 270 degrees
+- Quadrant IV: Angle between 270 and 360 degrees
+
+The code should provide an output message in the form `"The angle (angle) degrees is in quadrant (quadrant)"`.
+
+*Sample input:* `angle = 56`  
+*Expected result:* `"The angle 56 degrees is in quadrant I"`
+
+:::
+
+::: {.callout-warning}
+## Fraction Formatter
+
+Develop a Python program that takes two integers, the numerator and denominator of a fraction, and formats it as a proper fraction or mixed number. For example, if the input is `3` and `2`, the output should be formatted as `"1 + 1/2"`.
+
+*Sample input:* `numerator = 7`, `denominator = 4`  
+*Expected result:* `"1 + 3/4"`
+
+:::
+
+::: {.callout-warning}
+## Quadratic Equation Solver
+
+Write a Python code that takes three numeric variables (coefficients `a`, `b`, and `c`) representing a quadratic equation $a \cdot x^2 + b \cdot x + c = 0$. Use if/else statements to determine and display the roots (real or complex) of the equation. The code should provide one of the following output messages based on the result:
+
+- `"Roots are real and different: (root 1) and (root 2)"`
+- `"Root is real and equal: (root)"`
+- `"Roots are complex: (real 1) + (img 1)i and (real 2) + (img 2)i"`
+
+In all cases, ensure that the displayed numbers have a maximum of two decimal places.
+
+*Sample input:* `a = 1`, `b = 4`, `c = 2`  
+*Expected result:* `"Roots are real and different: -0.59 and -3.41"`
+
+:::
+
+::: {.callout-warning}
+## Pythagorean Triple Checker
+
+Write a program that checks whether a given set of three numbers forms a Pythagorean triple ($a^2+b^2=c^2$). Provide appropriate messages based on the check.
+
+*Sample input:* `a = 4`, `b = 3`, `c = 5`  
+*Expected result:* `"(a=4, b=3, c=5) forms a Pythagorean triple"`
+
+:::
+
+---
+
+# Looping
+
+::: {.callout-note}
+## Multiplication Table
+
+Write a Python program that gets an integer and then generates and displays the multiplication table for that number from 1 to 10. For example, if the user enters 5, the program should display:
+
+```
+Multiplication Table for 5:
+5 x 1 = 5
+5 x 2 = 10
+...
+5 x 10 = 50
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 5
+print(f"Multiplication Table for {num}:")
+for i in range(1, 11):
+    print(f"{num} x {i} = {num * i}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Factorial Calculator
+
+Write a Python program that gets a positive integer and then calculates its factorial. Ensure that the input is a positive integer, and provide feedback if it's not.
+
+*Sample input:* `num = 4`  
+*Expected result:* `24`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 4
+factorial = 1
+for i in range(1, num + 1):
+    factorial *= i
+print(factorial)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Multiples of a Number
+
+Write a Python program that finds and displays all the multiples of a given number within a specified range. The user inputs the number and the range, and the program lists the multiples. The output should be a string with all the terms separated by commas.
+
+*Sample input:* `num = 7`, `limit = 50`  
+*Expected result:* `"7, 14, 21, 28, 35, 42, 49"`
+
+**Warning:** We are talking about "range", but do not name the variable `range`! Why? Because `range` is a built-in function. If you assign `range = 50`, then you lose the handy `range` function.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 7
+limit = 50
+multiples = []
+for i in range(num, limit, num):
+    multiples.append(str(i))
+print(", ".join(multiples))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Sum of Digits
+
+Write a Python program that takes a positive integer as input and then calculates and displays the sum of its digits. Ensure that the input is a positive integer, and provide feedback if it's not.
+
+*Sample input 1:* `num = 517`  
+*Expected result 1:* `13`
+
+*Sample input 2:* `num = 1002`  
+*Expected result 2:* `3`
+
+**Tip:** Use modules and remainders! The remainder of $517 / 10$ is 7 (we have its last digit!), and the quotient is 51. Now we can compute the remainder of $51 / 10$, which will be 1 (we have the second digit!). And so on.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 517
+digit_sum = 0
+while num > 0:
+    digit_sum += num % 10
+    num //= 10
+print(digit_sum)
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Fibonacci Sequence
+
+Write a Python program that generates the Fibonacci sequence up to a specified number of terms. The input should be the number of terms we want to see in the sequence. The output should be a string with all the terms separated by commas.
+
+*Sample input:* `num = 5`  
+*Expected result:* `"0, 1, 1, 2, 3"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num = 5
+a, b = 0, 1
+sequence = [str(a)]
+for _ in range(num - 1):
+    sequence.append(str(b))
+    a, b = b, a + b
+print(", ".join(sequence))
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Palindrome Checker (Advanced)
+
+Enhance the palindrome checker program to ignore spaces, punctuation, and letter casing.
+
+*Sample input:* `s = "Was it a car or a cat I saw?"`  
+*Expected result:* `"The string is a palindrome"`
+
+:::
+
+::: {.callout-note}
+## Guessing a Number
+
+I'm sure you've played many times the game of guessing a number someone has thought of to make a decision.
+
+Let's write a program to simulate this game. The user will enter numbers until they guess correctly. If the attempt is greater than the chosen number, the program should display "My number is smaller", and if it is smaller: "My number is greater". If the user guesses correctly, the program ends and tells them they have won.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+number = 42  # The secret number
+while True:
+    guess = int(input("Guess the number: "))
+    if guess == number:
+        print("You have won!")
+        break
+    elif guess > number:
+        print("My number is smaller")
+    else:
+        print("My number is greater")
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Reversed Number
+
+Write a program that takes a number as input and outputs the reversed number.
+
+*Sample input:* `num = 1435`  
+*Expected result:* `5341`
+
+:::
+
+::: {.callout-warning}
+## Prime Number Checker
+
+Write a Python program that takes an integer and determines whether it's a prime number. The output should be a message indicating whether the entered number is prime or not.
+
+*Sample input:* `num = 7`  
+*Expected result:* `"7 is a prime number"`
+
+:::
+
+::: {.callout-warning}
+## Perfect Number Checker
+
+Develop a program that checks whether a given number is a perfect number (a positive integer that is equal to the sum of its proper divisors, excluding itself). The smallest perfect number is 6, which is the sum of 1, 2, and 3. Other perfect numbers are 28, 496, and 8,128.
+
+*Sample input:* `num = 100`  
+*Expected result:* `"100 is not a perfect number"`
+
+:::
+
+---
+
+# Functions
+
+## Input/Output Functions
+
+::: {.callout-note}
+## Sum
+
+Write a Python program that asks the user to input two numbers, using the `input()` function. The program then sums both values and prints a message with the result.
+
+*Sample input:* `3`, `6`  
+*Expected result:* `"The sum is 9"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+num1 = int(input("Enter first number: "))
+num2 = int(input("Enter second number: "))
+print(f"The sum is {num1 + num2}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Number of Characters
+
+Write a Python program that asks the user to input any sentence, using the `input()` function. The program then prints the number of characters in that string.
+
+*Sample input:* `"How long is this sentence?"`  
+*Expected result:* `"The sentence has 26 characters"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+sentence = input("Enter a sentence: ")
+print(f"The sentence has {len(sentence)} characters")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Rounding Floating-Point Numbers
+
+Write a Python program that prompts the user to input a floating-point number using the `input()` function. The program should then round the number to three decimal places and display a message.
+
+*Sample input:* `2.71828`  
+*Expected result:* `"I have rounded your number to 2.718"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+number = float(input("Enter a number: "))
+rounded = round(number, 3)
+print(f"I have rounded your number to {rounded}")
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Rounding Numbers (Advanced)
+
+Update the program from the previous exercise. Now:
+
+- If the input is an integer, display a message: `"Your number is an integer."`
+- If the input number is approximately equal to $\pi$ ($\sim 3.142$), the program should display a special message: `"Your number is pi!"`
+
+*Sample input 2:* `42`  
+*Expected result 2:* `"Your number is an integer"`
+
+*Sample input 3:* `3.14159265359`  
+*Expected result 3:* `"Your number is pi!"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+import math
+
+number = float(input("Enter a number: "))
+if number == int(number):
+    print("Your number is an integer")
+elif abs(number - math.pi) < 0.001:
+    print("Your number is pi!")
+else:
+    rounded = round(number, 3)
+    print(f"I have rounded your number to {rounded}")
+```
+
+:::
+
+:::
+
+## User-Defined Functions
+
+::: {.callout-note}
+## Multiplication
+
+Write a Python function `multiply(x, y)` that takes two numbers as arguments and returns their multiplication.
+
+*Sample input:* `multiply(3, 6)`  
+*Expected result:* `18`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def multiply(x, y):
+    return x * y
+
+print(multiply(3, 6))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Area of Rectangle
+
+Define a function `rectangle_area(length, width)` that calculates the area of a rectangle based on its length and width.
+
+*Sample input:* `rectangle_area(3, 6)`  
+*Expected result:* `18`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def rectangle_area(length, width):
+    return length * width
+
+print(rectangle_area(3, 6))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Area of Circle
+
+Define a function `circle_area(radius)` that calculates the area of a circle based on its radius.
+
+*Sample input:* `circle_area(1.1)`  
+*Expected result:* `3.80`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+import math
+
+def circle_area(radius):
+    return round(math.pi * radius**2, 2)
+
+print(circle_area(1.1))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Print Strings
+
+Define a function `say_hello(surname, name)` that accepts the user's last and first name and prints them in reverse order with a space between them.
+
+*Sample input:* `say_hello("Simpson", "Homer")`  
+*Expected result:* `"Hello Homer Simpson"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def say_hello(surname, name):
+    return f"Hello {name} {surname}"
+
+print(say_hello("Simpson", "Homer"))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Fahrenheit to Celsius
+
+Create a function `fahrenheit_to_celsius(fahrenheit)` that converts temperature from Fahrenheit to Celsius.
+
+*Sample input:* `fahrenheit_to_celsius(270)`  
+*Expected result:* `132.22`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def fahrenheit_to_celsius(fahrenheit):
+    celsius = (fahrenheit - 32) * 5 / 9
+    return round(celsius, 2)
+
+print(fahrenheit_to_celsius(270))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Even/Odd Checker
+
+Define a function that checks if a number is even or odd and returns a corresponding message.
+
+*Sample input:* `even_or_odd(5)`  
+*Expected result:* `"5 is an odd number"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def even_or_odd(num):
+    if num % 2 == 0:
+        return f"{num} is an even number"
+    else:
+        return f"{num} is an odd number"
+
+print(even_or_odd(5))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Factorial
+
+Write a function `factorial(x)` that calculates the factorial of a given number. If the input is zero or negative, the output should be 0.
+
+*Sample input:* `factorial(5)`  
+*Expected result:* `120`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def factorial(x):
+    if x <= 0:
+        return 0
+    result = 1
+    for i in range(1, x + 1):
+        result *= i
+    return result
+
+print(factorial(5))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Vowel Count
+
+Define a function `count_vowels(string)` that counts the number of vowels in a given string.
+
+*Sample input:* `count_vowels("I wish you an awesome day!")`  
+*Expected result:* `10`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def count_vowels(string):
+    vowels = "aeiouAEIOU"
+    count = 0
+    for char in string:
+        if char in vowels:
+            count += 1
+    return count
+
+print(count_vowels("I wish you an awesome day!"))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Prime Number Checker
+
+Write a Python function `is_prime(num)` that takes an integer `num` and uses a for loop to determine whether it's a prime number. The output should be a boolean True / False.
+
+*Sample input:* `is_prime(7)`  
+*Expected result:* `True`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+print(is_prime(7))
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Largest Prime Factor
+
+Develop a function `largest_prime_factor(num)` that calculates and displays the largest prime factor of a given number `num`. Tip: this function can use `is_prime(num)` to get prime numbers.
+
+*Sample input:* `largest_prime_factor(18)`  
+*Expected result:* `3`
+
+:::
+
+::: {.callout-note}
+## Common Divisors
+
+Write a Python function `common_divisors(num1, num2)` that takes two numbers and prints the common divisors of those numbers. A divisor is a number that divides another number without leaving a remainder.
+
+*Sample input:* `common_divisors(12, 4)`  
+*Expected result:* `"1, 2, 4"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def common_divisors(num1, num2):
+    divisors = []
+    for i in range(1, min(num1, num2) + 1):
+        if num1 % i == 0 and num2 % i == 0:
+            divisors.append(str(i))
+    return ", ".join(divisors)
+
+print(common_divisors(12, 4))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Greatest Common Divisor
+
+Modify the previous function to **return** only the GCD (Greatest Common Divisor). The greatest common divisor of two or more integers is the largest positive integer that divides each of the numbers exactly.
+
+*Sample input 1:* `common_divisors(18, 24)`  
+*Expected result 1:* `6`
+
+*Sample input 2:* `common_divisors(6, 12)`  
+*Expected result 2:* `6`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def common_divisors(num1, num2):
+    gcd = 1
+    for i in range(1, min(num1, num2) + 1):
+        if num1 % i == 0 and num2 % i == 0:
+            gcd = i
+    return gcd
+
+print(common_divisors(18, 24))
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Sum of Divisors
+
+Write a Python function `sum_of_divisors(num)` that calculates the sum of all positive divisors of a given positive integer `num`. A divisor is a number that divides another number without leaving a remainder.
+
+*Sample input 1:* `sum_of_divisors(12)`  
+*Expected result 1:* `28`
+
+*Sample input 2:* `sum_of_divisors(16)`  
+*Expected result 2:* `31`
+
+:::
+
+::: {.callout-warning}
+## Amicable Numbers
+
+Amicable numbers are two different numbers so related that the sum of the proper divisors of each is equal to the other number.
+
+Write a Python function `are_amicable(num1, num2)` that checks whether two given positive integers `num1` and `num2` are amicable numbers.
+
+*Sample input 1:* `are_amicable(220, 284)`  
+*Expected result 1:* `True`
+
+*Sample input 2:* `are_amicable(1184, 1210)`  
+*Expected result 2:* `True`
+
+:::
+
+::: {.callout-warning}
+## Digital Root
+
+The digital root of a number is found by summing all its digits repeatedly until a single-digit result is obtained. For instance, the digital root of 89 is 8 because: $8 + 9 = 17 \rightarrow 1 + 7 = 8$.
+
+Write a Python function `digital_root(num)` that calculates the digital root of a given positive integer `num` using recursion.
+
+Your function should follow these steps:
+1. Compute the sum of the digits of the given number.
+2. If the result is a single digit, output it.
+3. If the result has multiple digits, call the `digital_root()` function recursively using the new result.
+
+*Sample input 1:* `digital_root(89)`  
+*Expected result 1:* `8`
+
+*Sample input 2:* `digital_root(9875)`  
+*Expected result 2:* `2`
+
+:::
+
+::: {.callout-warning}
+## Number of Collatz Steps
+
+Consider the Collatz sequence, which is defined as follows:
+
+1. Start with a positive integer $n$.
+2. If $n$ is even, divide it by 2.
+3. If $n$ is odd, multiply it by 3 and add 1.
+4. Repeat these steps until $n$ becomes 1.
+
+Write a Python function `collatz_steps(num)` that calculates the number of steps it takes for the Collatz sequence to reach 1 starting from a positive integer `num`.
+
+For example, if you start with $n = 6$, the sequence is: $6 \rightarrow 3 \rightarrow 10 \rightarrow 5 \rightarrow 16 \rightarrow 8 \rightarrow 4 \rightarrow 2 \rightarrow 1$. It took 8 steps to reach 1, so `collatz_steps(6)` should return 8.
+
+*Sample input 1:* `collatz_steps(6)`  
+*Expected result 1:* `8`
+
+*Sample input 2:* `collatz_steps(27)`  
+*Expected result 2:* `111`
+
+:::
+
+## Functions with Keyword Arguments
+
+::: {.callout-note}
+## Area of Circle (Advanced)
+
+Define a function `circle_area(radius, is_diameter=False)` that calculates the area of a circle based on its radius. If the keyword argument `is_diameter` is input as True, then the function considers that `radius` is instead the diameter.
+
+*Sample input 1:* `circle_area(1.1)`  
+*Expected result 1:* `3.80`
+
+*Sample input 2:* `circle_area(2.2, is_diameter=True)`  
+*Expected result 2:* `3.80`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+import math
+
+def circle_area(radius, is_diameter=False):
+    if is_diameter:
+        radius = radius / 2
+    return round(math.pi * radius**2, 2)
+
+print(circle_area(1.1))
+print(circle_area(2.2, is_diameter=True))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Estimate Capital
+
+Write a Python function `capital_increase(capital, years=15, rate=2)` that accepts a user's initial `capital` and calculates the resulting capital after a certain amount of `years`, with a compound interest of `rate`% yearly. Both years and rate are keyword arguments.
+
+*Sample input 1:* `capital_increase(100000)`  
+*Expected result 1:* `134586.83`
+
+*Sample input 2:* `capital_increase(100000, years=10, rate=1)`  
+*Expected result 2:* `110462.21`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def capital_increase(capital, years=15, rate=2):
+    final_capital = capital * ((1 + rate/100)**years)
+    return round(final_capital, 2)
+
+print(capital_increase(100000))
+print(capital_increase(100000, years=10, rate=1))
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Time Difference between Days
+
+Define a function `time_difference(day1, hour1, min1, day2, hour2, min2)` that calculates the time difference in days, hours, and minutes between two given dates that belong to the same month.
+
+*Sample input 1:* `time_difference(5, 12, 35, 7, 17, 10)`  
+*Expected result 1:* `"2 days, 4 hours, 35 minutes"`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def time_difference(day1, hour1, min1, day2, hour2, min2):
+    total_min1 = day1 * 24 * 60 + hour1 * 60 + min1
+    total_min2 = day2 * 24 * 60 + hour2 * 60 + min2
+    diff_min = total_min2 - total_min1
+    
+    days = diff_min // (24 * 60)
+    hours = (diff_min % (24 * 60)) // 60
+    minutes = diff_min % 60
+    
+    return f"{days} days, {hours} hours, {minutes} minutes"
+
+print(time_difference(5, 12, 35, 7, 17, 10))
+```
+
+:::
+
+:::
+
+::: {.callout-warning}
+## Happy Numbers
+
+A happy number is a number that, when you repeatedly replace it with the sum of the square of its digits, eventually reaches the number 1. For instance, 19 is a happy number because: $1^2 + 9^2 = 82 \rightarrow 8^2 + 2^2 = 68 \rightarrow 6^2 + 8^2 = 100 \rightarrow 1^2 + 0^2 + 0^2 = 1$.
+
+Write a Python function `is_happy_number(num, max_iter=100)` that checks whether a given positive integer `num` is a happy number or not.
+
+Note that unhappy numbers will never end the loop, so you should set some stopping criteria! I recommend allowing a maximum of 100 iterations through the keyword argument `max_iter`, and output that the number is unhappy if you reach that limit.
+
+*Sample input 1:* `is_happy_number(19)`  
+*Expected result 1:* `True`
+
+*Sample input 2:* `is_happy_number(19, max_iter=3)`  
+*Expected result 2:* `False`
+
+:::
+
+---
+
+# Generator Functions
+
+::: {.callout-note}
+## Custom Range Generator
+
+Implement a generator function `custom_range(stop, start=0, step=1)` that generates numbers within a custom range specified by the user, just like `range` does. For obvious reasons, your function cannot use the original `range` function (but should work the same way!).
+
+*Sample input 1:* `[number for number in custom_range(6)]`  
+*Expected result 1:* `[0, 1, 2, 3, 4, 5]`
+
+*Sample input 2:* `[n for n in custom_range(-4, start=1, step=-2)]`  
+*Expected result 2:* `[1, -1, -3]`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def custom_range(stop, start=0, step=1):
+    current = start
+    while (step > 0 and current < stop) or (step < 0 and current > stop):
+        yield current
+        current += step
+
+print([number for number in custom_range(6)])
+print([n for n in custom_range(-4, start=1, step=-2)])
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Powers of Two
+
+Define a generator function `powers_of_two(num)` that generates the powers of 2 up to a certain limit.
+
+*Sample input:* `[number for number in powers_of_two(100)]`  
+*Expected result:* `[2, 4, 8, 16, 32, 64]`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def powers_of_two(num):
+    power = 1
+    result = 2
+    while result <= num:
+        yield result
+        power += 1
+        result = 2 ** power
+
+print([number for number in powers_of_two(100)])
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Fibonacci Generator
+
+Write a Python generator function `fibonacci(num)` that generates Fibonacci numbers up to a specified number.
+
+*Sample input:* `[number for number in fibonacci(5)]`  
+*Expected result:* `[0, 1, 1, 2, 3]`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def fibonacci(num):
+    a, b = 0, 1
+    count = 0
+    while count < num:
+        yield a
+        a, b = b, a + b
+        count += 1
+
+print([number for number in fibonacci(5)])
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Clock Generator
+
+Create a generator function `clock(limit)` that simulates a digital clock.
+
+**Rules:**
+- The generator should yield the current time in the format `"HH:MM:SS"`.
+- It must start at `"00:00:00"` and increment by one second each step.
+- After `"23:59:59"`, the cycle should continue again from `"00:00:00"`.
+- The generator must stop when the chosen `limit` of steps has been reached.
+
+*Sample usage:* `[time for time in clock(4)]`  
+*Expected result:* `["00:00:00", "00:00:01", "00:00:02", "00:00:03"]`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def clock(limit):
+    hour, minute, second = 0, 0, 0
+    for _ in range(limit):
+        yield f"{hour:02d}:{minute:02d}:{second:02d}"
+        second += 1
+        if second == 60:
+            second = 0
+            minute += 1
+            if minute == 60:
+                minute = 0
+                hour += 1
+                if hour == 24:
+                    hour = 0
+
+print([time for time in clock(4)])
+```
+
+:::
+
+:::
+
+::: {.callout-note}
+## Prime Number Generator
+
+Create a generator function `prime_numbers(num)` that yields prime numbers within a specified range.
+
+*Sample input:* `[number for number in prime_numbers(9)]`  
+*Expected result:* `[2, 3, 5, 7]`
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def prime_numbers(num):
+    def is_prime(n):
+        if n < 2:
+            return False
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
+    
+    for i in range(2, num):
+        if is_prime(i):
+            yield i
+
+print([number for number in prime_numbers(9)])
+```
+
+:::
+
+:::
