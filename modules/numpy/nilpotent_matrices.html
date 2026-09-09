@@ -493,8 +493,11 @@ window.Quarto = {
 
 <section id="nilpotent-matrices-with-numpy" class="level1">
 <h1>Nilpotent matrices with NumPy</h1>
-<div id="483d2e7c" class="cell">
+<div id="c8fbbcab" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ModuleNotFoundError: No module named 'numpy'</code></pre>
+</div>
 </div>
 <section id="definition" class="level2">
 <h2 class="anchored" data-anchor-id="definition">Definition</h2>
@@ -510,38 +513,47 @@ Exercise
 </div>
 <div class="callout-body-container callout-body">
 <p>Create a function that checks if an input matrix is nilpotent, returning True / False.</p>
-<div id="9c84c133" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_nilpotent(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return True if A^k is (approximately) zero for some k &lt;= n.</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses successive powers up to n (matrix size).</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol: <span class="co"># uses Frobenius norm</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="aa6b4f26" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_nilpotent(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return True if A^k is (approximately) zero for some k &lt;= n.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses successive powers up to n (matrix size).</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol: <span class="co"># uses Frobenius norm</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
-<div id="50184304" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block and show powers</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2 ="</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J2)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2^2 ="</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J2, <span class="dv">2</span>))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(J2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="47b23494" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(ones))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e4c94be0" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block and show powers</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2 ="</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J2)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2^2 ="</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J2, <span class="dv">2</span>))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(J2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
+</div>
+<div id="520ccb03" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(ones))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -556,36 +568,45 @@ Exercise
 </div>
 <div class="callout-body-container callout-body">
 <p>Create a function that returns the nilpotency index of a matrix. If the matrix is not nilpotent, return None.</p>
-<div id="fe868cde" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nilpotency_index(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the smallest k such that A^k == 0 (within tol), or None if not found up to n."""</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol:</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> k</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cc199221" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nilpotency_index(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the smallest k such that A^k == 0 (within tol), or None if not found up to n."""</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol:</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> k</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
-<div id="d1bb8cda" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(J2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="2bbe3f4b" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O ="</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ones)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O^2 ="</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(ones, <span class="dv">2</span>))</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(ones))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="68cfce5c" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(J2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
+</div>
+<div id="615a68af" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O ="</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ones)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O^2 ="</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(ones, <span class="dv">2</span>))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(ones))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -604,27 +625,33 @@ Exercise
 </div>
 <div class="callout-body-container callout-body">
 <p>Define a function that creates a Jordan block of size <span class="math inline">\(n\)</span> (chosen by the user).</p>
-<div id="4846b44a" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jordan_nilpotent(n: <span class="bu">int</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n<span class="op">-</span><span class="dv">1</span>):</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        A[i, i<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4ca1d845" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jordan_nilpotent(n: <span class="bu">int</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        A[i, i<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
-<div id="35aa42ec" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>J3 <span class="op">=</span> jordan_nilpotent(<span class="dv">3</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3 ="</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J3)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^2 ="</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">2</span>))</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^3 ="</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">3</span>))</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index J3:"</span>, nilpotency_index(J3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d737a453" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>J3 <span class="op">=</span> jordan_nilpotent(<span class="dv">3</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3 ="</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J3)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^2 ="</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">2</span>))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^3 ="</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">3</span>))</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index J3:"</span>, nilpotency_index(J3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'jordan_nilpotent' is not defined</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -643,24 +670,30 @@ Exercise
 </div>
 <div class="callout-body-container callout-body">
 <p>Define a function that creates a random strictly upper-triangular matrix (nilpotent) of size <span class="math inline">\(n\)</span> (chosen by the user).</p>
-<div id="ae2df8a5" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_strict_upper(n: <span class="bu">int</span>, seed: <span class="bu">int</span><span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a random strictly upper-triangular matrix (nilpotent)"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, n):</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            A[i, j] <span class="op">=</span> rng.normal()</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fd24f767" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_strict_upper(n: <span class="bu">int</span>, seed: <span class="bu">int</span><span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a random strictly upper-triangular matrix (nilpotent)"</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, n):</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>            A[i, j] <span class="op">=</span> rng.normal()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
-<div id="a4b2804e" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>R4 <span class="op">=</span> random_strict_upper(<span class="dv">4</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Random strictly upper triangular 4x4 (nilpotent):'</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(R4)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nilpotency index R4:'</span>, nilpotency_index(R4))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f98ad2cc" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>R4 <span class="op">=</span> random_strict_upper(<span class="dv">4</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Random strictly upper triangular 4x4 (nilpotent):'</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(R4)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nilpotency index R4:'</span>, nilpotency_index(R4))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'random_strict_upper' is not defined</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -671,10 +704,13 @@ Exercise
 <blockquote class="blockquote">
 <p>Note: numerical eigenvalue computations may return very small values close to zero instead of exact zero due to floating-point arithmetic.</p>
 </blockquote>
-<div id="387249ff" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, M <span class="kw">in</span> [(<span class="st">"J2"</span>, J2), (<span class="st">"J3"</span>, J3), (<span class="st">"R4"</span>, R4)]:</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    vals <span class="op">=</span> np.linalg.eigvals(M)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> eigenvalues: </span><span class="sc">{</span>vals<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="99efd488" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, M <span class="kw">in</span> [(<span class="st">"J2"</span>, J2), (<span class="st">"J3"</span>, J3), (<span class="st">"R4"</span>, R4)]:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    vals <span class="op">=</span> np.linalg.eigvals(M)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> eigenvalues: </span><span class="sc">{</span>vals<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'J2' is not defined</code></pre>
+</div>
 </div>
 </section>
 <section id="invertibility-of-i---a-and-explicit-inverse-formula" class="level2">
@@ -682,17 +718,20 @@ Exercise
 <p>If A is nilpotent with <span class="math inline">\(A^m = 0\)</span>, then <span class="math inline">\((I - A)\)</span> is invertible and its inverse is the finite sum <span class="math inline">\(I + A + A^2 + \dots + A^{m-1}\)</span>.</p>
 <p><span class="math display">\[(I - A)^{-1} = I + \sum_{n=1}^m A^n\]</span></p>
 <p>We’ll verify this numerically for an example.</p>
-<div id="3e7e0f29" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> J3.copy()  <span class="co"># J3 is nilpotent with index 3</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> nilpotency_index(A)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.eye(A.shape[<span class="dv">0</span>])  <span class="co"># creates a diagonal matrix</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>inv_series <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m))</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>inv_direct <span class="op">=</span> np.linalg.inv(I <span class="op">-</span> A)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by finite series:'</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_series)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by numpy.linalg.inv(I-A):'</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_direct)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Difference (fro norm):'</span>, np.linalg.norm(inv_series <span class="op">-</span> inv_direct))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1055f7bf" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> J3.copy()  <span class="co"># J3 is nilpotent with index 3</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> nilpotency_index(A)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.eye(A.shape[<span class="dv">0</span>])  <span class="co"># creates a diagonal matrix</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>inv_series <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>inv_direct <span class="op">=</span> np.linalg.inv(I <span class="op">-</span> A)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by finite series:'</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_series)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by numpy.linalg.inv(I-A):'</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_direct)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Difference (fro norm):'</span>, np.linalg.norm(inv_series <span class="op">-</span> inv_direct))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'J3' is not defined</code></pre>
+</div>
 </div>
 </section>
 <section id="final-exercise" class="level2">
@@ -703,18 +742,21 @@ Exercise
 <li>Verify that <span class="math inline">\((I - A)^{-1} = I + \sum_{n=1}^{5} A^n\)</span>.</li>
 </ol>
 <p>Try changing the random seed or creating particular Jordan block combinations to see different nilpotency indices.</p>
-<div id="d08ed5c3" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick run for the exercise</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>A5 <span class="op">=</span> random_strict_upper(<span class="dv">5</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A5 ="</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A5)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index A5:"</span>, nilpotency_index(A5))</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues A5:"</span>, np.linalg.eigvals(A5))</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>m5 <span class="op">=</span> nilpotency_index(A5)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>I5 <span class="op">=</span> np.eye(<span class="dv">5</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>inv_series_5 <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A5, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m5))</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>inv_direct_5 <span class="op">=</span> np.linalg.inv(I5 <span class="op">-</span> A5)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference (fro norm) A5 series vs direct:"</span>, np.linalg.norm(inv_series_5 <span class="op">-</span> inv_direct_5))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="27c3ae88" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick run for the exercise</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>A5 <span class="op">=</span> random_strict_upper(<span class="dv">5</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A5 ="</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A5)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index A5:"</span>, nilpotency_index(A5))</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues A5:"</span>, np.linalg.eigvals(A5))</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>m5 <span class="op">=</span> nilpotency_index(A5)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>I5 <span class="op">=</span> np.eye(<span class="dv">5</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>inv_series_5 <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A5, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m5))</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>inv_direct_5 <span class="op">=</span> np.linalg.inv(I5 <span class="op">-</span> A5)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference (fro norm) A5 series vs direct:"</span>, np.linalg.norm(inv_series_5 <span class="op">-</span> inv_direct_5))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'random_strict_upper' is not defined</code></pre>
+</div>
 </div>
 </section>
 <section id="notes-and-further-reading" class="level2">
@@ -1170,228 +1212,228 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb15" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Numpy Nilpotent Matrices"</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># Nilpotent matrices with NumPy</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Definition</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>A square matrix $A$ is nilpotent if there exists a positive integer $k$ such that $A^k$ is the zero matrix. The smallest such $k$ is called the index of nilpotency (or nilpotency index). All eigenvalues of a nilpotent matrix are 0.</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>Create a function that checks if an input matrix is nilpotent, returning True / False.</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_nilpotent(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return True if A^k is (approximately) zero for some k &lt;= n.</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses successive powers up to n (matrix size).</span></span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol: <span class="co"># uses Frobenius norm</span></span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block and show powers</span></span>
-<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
-<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2 ="</span>)</span>
-<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J2)</span>
-<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2^2 ="</span>)</span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J2, <span class="dv">2</span>))</span>
-<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(J2))</span>
-<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
-<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>))</span>
-<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(ones))</span>
-<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>Create a function that returns the nilpotency index of a matrix. If the matrix is not nilpotent, return None.</span>
-<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nilpotency_index(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the smallest k such that A^k == 0 (within tol), or None if not found up to n."""</span></span>
-<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
-<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
-<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
-<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
-<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
-<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
-<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol:</span>
-<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> k</span>
-<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block</span></span>
-<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
-<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(J2))</span>
-<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
-<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O ="</span>)</span>
-<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ones)</span>
-<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O^2 ="</span>)</span>
-<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(ones, <span class="dv">2</span>))</span>
-<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(ones))</span>
-<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Jordan blocks</span></span>
-<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a>A standard nilpotent Jordan block of size $n$ has ones on the superdiagonal and zeros elsewhere; its nilpotency index equals $n$.</span>
-<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a>Define a function that creates a Jordan block of size $n$ (chosen by the user).</span>
-<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jordan_nilpotent(n: <span class="bu">int</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n<span class="op">-</span><span class="dv">1</span>):</span>
-<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a>        A[i, i<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span>
-<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
-<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a>J3 <span class="op">=</span> jordan_nilpotent(<span class="dv">3</span>)</span>
-<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3 ="</span>)</span>
-<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J3)</span>
-<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^2 ="</span>)</span>
-<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">2</span>))</span>
-<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^3 ="</span>)</span>
-<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">3</span>))</span>
-<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index J3:"</span>, nilpotency_index(J3))</span>
-<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## General constructions</span></span>
-<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a>Another easy way to produce nilpotent matrices is to take any strictly upper-triangular matrix (zeros on and below diagonal). These are always nilpotent with index $\leq n$.</span>
-<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-160"><a href="#cb15-160" aria-hidden="true" tabindex="-1"></a>Define a function that creates a random strictly upper-triangular matrix (nilpotent) of size $n$ (chosen by the user).</span>
-<span id="cb15-161"><a href="#cb15-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-164"><a href="#cb15-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_strict_upper(n: <span class="bu">int</span>, seed: <span class="bu">int</span><span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb15-166"><a href="#cb15-166" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a random strictly upper-triangular matrix (nilpotent)"</span></span>
-<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
-<span id="cb15-168"><a href="#cb15-168" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb15-169"><a href="#cb15-169" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb15-170"><a href="#cb15-170" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, n):</span>
-<span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a>            A[i, j] <span class="op">=</span> rng.normal()</span>
-<span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span>
-<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
-<span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a>R4 <span class="op">=</span> random_strict_upper(<span class="dv">4</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Random strictly upper triangular 4x4 (nilpotent):'</span>)</span>
-<span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(R4)</span>
-<span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-184"><a href="#cb15-184" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nilpotency index R4:'</span>, nilpotency_index(R4))</span>
-<span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-186"><a href="#cb15-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-187"><a href="#cb15-187" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigenvalues and spectral properties</span></span>
-<span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a>All eigenvalues of a nilpotent matrix are zero. We'll compute eigenvalues for the examples above.</span>
-<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: numerical eigenvalue computations may return very small values close to zero instead of exact zero due to floating-point arithmetic.</span></span>
-<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, M <span class="kw">in</span> [(<span class="st">"J2"</span>, J2), (<span class="st">"J3"</span>, J3), (<span class="st">"R4"</span>, R4)]:</span>
-<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a>    vals <span class="op">=</span> np.linalg.eigvals(M)</span>
-<span id="cb15-199"><a href="#cb15-199" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> eigenvalues: </span><span class="sc">{</span>vals<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-200"><a href="#cb15-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-201"><a href="#cb15-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-202"><a href="#cb15-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Invertibility of I - A and explicit inverse formula</span></span>
-<span id="cb15-203"><a href="#cb15-203" aria-hidden="true" tabindex="-1"></a>If A is nilpotent with $A^m = 0$, then $(I - A)$ is invertible and its inverse is the finite sum $I + A + A^2 + \dots + A^{m-1}$.</span>
-<span id="cb15-204"><a href="#cb15-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-205"><a href="#cb15-205" aria-hidden="true" tabindex="-1"></a>$$(I - A)^{-1} = I + \sum_{n=1}^m A^n$$</span>
-<span id="cb15-206"><a href="#cb15-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-207"><a href="#cb15-207" aria-hidden="true" tabindex="-1"></a>We'll verify this numerically for an example.</span>
-<span id="cb15-208"><a href="#cb15-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-211"><a href="#cb15-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-212"><a href="#cb15-212" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> J3.copy()  <span class="co"># J3 is nilpotent with index 3</span></span>
-<span id="cb15-213"><a href="#cb15-213" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> nilpotency_index(A)</span>
-<span id="cb15-214"><a href="#cb15-214" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.eye(A.shape[<span class="dv">0</span>])  <span class="co"># creates a diagonal matrix</span></span>
-<span id="cb15-215"><a href="#cb15-215" aria-hidden="true" tabindex="-1"></a>inv_series <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m))</span>
-<span id="cb15-216"><a href="#cb15-216" aria-hidden="true" tabindex="-1"></a>inv_direct <span class="op">=</span> np.linalg.inv(I <span class="op">-</span> A)</span>
-<span id="cb15-217"><a href="#cb15-217" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by finite series:'</span>)</span>
-<span id="cb15-218"><a href="#cb15-218" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_series)</span>
-<span id="cb15-219"><a href="#cb15-219" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by numpy.linalg.inv(I-A):'</span>)</span>
-<span id="cb15-220"><a href="#cb15-220" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_direct)</span>
-<span id="cb15-221"><a href="#cb15-221" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Difference (fro norm):'</span>, np.linalg.norm(inv_series <span class="op">-</span> inv_direct))</span>
-<span id="cb15-222"><a href="#cb15-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-223"><a href="#cb15-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-224"><a href="#cb15-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Final exercise</span></span>
-<span id="cb15-225"><a href="#cb15-225" aria-hidden="true" tabindex="-1"></a>1) Construct a $5 \times 5$ strictly upper-triangular random matrix and compute its nilpotency index.</span>
-<span id="cb15-226"><a href="#cb15-226" aria-hidden="true" tabindex="-1"></a>2) Verify that all eigenvalues are (numerically) zero.</span>
-<span id="cb15-227"><a href="#cb15-227" aria-hidden="true" tabindex="-1"></a>3) Verify that $(I - A)^{-1} = I + \sum_{n=1}^{5} A^n$.</span>
-<span id="cb15-228"><a href="#cb15-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-229"><a href="#cb15-229" aria-hidden="true" tabindex="-1"></a>Try changing the random seed or creating particular Jordan block combinations to see different nilpotency indices.</span>
-<span id="cb15-230"><a href="#cb15-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-233"><a href="#cb15-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb15-234"><a href="#cb15-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick run for the exercise</span></span>
-<span id="cb15-235"><a href="#cb15-235" aria-hidden="true" tabindex="-1"></a>A5 <span class="op">=</span> random_strict_upper(<span class="dv">5</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb15-236"><a href="#cb15-236" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A5 ="</span>)</span>
-<span id="cb15-237"><a href="#cb15-237" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A5)</span>
-<span id="cb15-238"><a href="#cb15-238" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index A5:"</span>, nilpotency_index(A5))</span>
-<span id="cb15-239"><a href="#cb15-239" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues A5:"</span>, np.linalg.eigvals(A5))</span>
-<span id="cb15-240"><a href="#cb15-240" aria-hidden="true" tabindex="-1"></a>m5 <span class="op">=</span> nilpotency_index(A5)</span>
-<span id="cb15-241"><a href="#cb15-241" aria-hidden="true" tabindex="-1"></a>I5 <span class="op">=</span> np.eye(<span class="dv">5</span>)</span>
-<span id="cb15-242"><a href="#cb15-242" aria-hidden="true" tabindex="-1"></a>inv_series_5 <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A5, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m5))</span>
-<span id="cb15-243"><a href="#cb15-243" aria-hidden="true" tabindex="-1"></a>inv_direct_5 <span class="op">=</span> np.linalg.inv(I5 <span class="op">-</span> A5)</span>
-<span id="cb15-244"><a href="#cb15-244" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference (fro norm) A5 series vs direct:"</span>, np.linalg.norm(inv_series_5 <span class="op">-</span> inv_direct_5))</span>
-<span id="cb15-245"><a href="#cb15-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-246"><a href="#cb15-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-247"><a href="#cb15-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notes and further reading</span></span>
-<span id="cb15-248"><a href="#cb15-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Jordan normal form: nilpotent matrices are conjugate to a block-diagonal matrix with Jordan blocks that each have zero on the diagonal. The sizes of these Jordan blocks determine the nilpotency index (largest block size).</span>
-<span id="cb15-249"><a href="#cb15-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Many properties of nilpotent matrices are easier to show symbolically; for symbolic experiments you can use SymPy. This notebook focuses on numerical demonstrations with NumPy.</span>
-<span id="cb15-250"><a href="#cb15-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For large matrices, computing high powers may be numerically unstable; consider analytic properties (block structure) to reason about nilpotency index instead of brute-force powering.</span>
+<div class="sourceCode" id="cb29" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Numpy Nilpotent Matrices"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># Nilpotent matrices with NumPy</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Definition</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>A square matrix $A$ is nilpotent if there exists a positive integer $k$ such that $A^k$ is the zero matrix. The smallest such $k$ is called the index of nilpotency (or nilpotency index). All eigenvalues of a nilpotent matrix are 0.</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>Create a function that checks if an input matrix is nilpotent, returning True / False.</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_nilpotent(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return True if A^k is (approximately) zero for some k &lt;= n.</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses successive powers up to n (matrix size).</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol: <span class="co"># uses Frobenius norm</span></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block and show powers</span></span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2 ="</span>)</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J2)</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J2^2 ="</span>)</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J2, <span class="dv">2</span>))</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(J2))</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is nilpotent?"</span>, is_nilpotent(ones))</span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>Create a function that returns the nilpotency index of a matrix. If the matrix is not nilpotent, return None.</span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nilpotency_index(A: np.ndarray, tol: <span class="bu">float</span><span class="op">=</span><span class="fl">1e-12</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the smallest k such that A^k == 0 (within tol), or None if not found up to n."""</span></span>
+<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> A.shape[<span class="dv">0</span>]</span>
+<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> A.shape[<span class="dv">0</span>] <span class="op">!=</span> A.shape[<span class="dv">1</span>]:</span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"A must be square"</span>)</span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.eye(n)</span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B.dot(A)  <span class="co"># B = A^k</span></span>
+<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.linalg.norm(B, <span class="bu">ord</span><span class="op">=</span><span class="st">"fro"</span>) <span class="op">&lt;</span> tol:</span>
+<span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> k</span>
+<span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the standard 2x2 nilpotent Jordan block</span></span>
+<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a>J2 <span class="op">=</span> np.array([[<span class="fl">0.</span>, <span class="fl">1.</span>], [<span class="fl">0.</span>, <span class="fl">0.</span>]])</span>
+<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(J2))</span>
+<span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Test another matrix</span></span>
+<span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O ="</span>)</span>
+<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ones)</span>
+<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"O^2 ="</span>)</span>
+<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(ones, <span class="dv">2</span>))</span>
+<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index:"</span>, nilpotency_index(ones))</span>
+<span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Jordan blocks</span></span>
+<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a>A standard nilpotent Jordan block of size $n$ has ones on the superdiagonal and zeros elsewhere; its nilpotency index equals $n$.</span>
+<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a>Define a function that creates a Jordan block of size $n$ (chosen by the user).</span>
+<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jordan_nilpotent(n: <span class="bu">int</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a>        A[i, i<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span>
+<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-136"><a href="#cb29-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
+<span id="cb29-137"><a href="#cb29-137" aria-hidden="true" tabindex="-1"></a>J3 <span class="op">=</span> jordan_nilpotent(<span class="dv">3</span>)</span>
+<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3 ="</span>)</span>
+<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(J3)</span>
+<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^2 ="</span>)</span>
+<span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">2</span>))</span>
+<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"J3^3 ="</span>)</span>
+<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_power(J3, <span class="dv">3</span>))</span>
+<span id="cb29-147"><a href="#cb29-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index J3:"</span>, nilpotency_index(J3))</span>
+<span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## General constructions</span></span>
+<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-155"><a href="#cb29-155" aria-hidden="true" tabindex="-1"></a>Another easy way to produce nilpotent matrices is to take any strictly upper-triangular matrix (zeros on and below diagonal). These are always nilpotent with index $\leq n$.</span>
+<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a>Define a function that creates a random strictly upper-triangular matrix (nilpotent) of size $n$ (chosen by the user).</span>
+<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_strict_upper(n: <span class="bu">int</span>, seed: <span class="bu">int</span><span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a random strictly upper-triangular matrix (nilpotent)"</span></span>
+<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.zeros((n, n), dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, n):</span>
+<span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a>            A[i, j] <span class="op">=</span> rng.normal()</span>
+<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A</span>
+<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples</span></span>
+<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a>R4 <span class="op">=</span> random_strict_upper(<span class="dv">4</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Random strictly upper triangular 4x4 (nilpotent):'</span>)</span>
+<span id="cb29-182"><a href="#cb29-182" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(R4)</span>
+<span id="cb29-183"><a href="#cb29-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-184"><a href="#cb29-184" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nilpotency index R4:'</span>, nilpotency_index(R4))</span>
+<span id="cb29-185"><a href="#cb29-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-186"><a href="#cb29-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-188"><a href="#cb29-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-189"><a href="#cb29-189" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigenvalues and spectral properties</span></span>
+<span id="cb29-190"><a href="#cb29-190" aria-hidden="true" tabindex="-1"></a>All eigenvalues of a nilpotent matrix are zero. We'll compute eigenvalues for the examples above.</span>
+<span id="cb29-191"><a href="#cb29-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-192"><a href="#cb29-192" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: numerical eigenvalue computations may return very small values close to zero instead of exact zero due to floating-point arithmetic.</span></span>
+<span id="cb29-193"><a href="#cb29-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-196"><a href="#cb29-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, M <span class="kw">in</span> [(<span class="st">"J2"</span>, J2), (<span class="st">"J3"</span>, J3), (<span class="st">"R4"</span>, R4)]:</span>
+<span id="cb29-198"><a href="#cb29-198" aria-hidden="true" tabindex="-1"></a>    vals <span class="op">=</span> np.linalg.eigvals(M)</span>
+<span id="cb29-199"><a href="#cb29-199" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> eigenvalues: </span><span class="sc">{</span>vals<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Invertibility of I - A and explicit inverse formula</span></span>
+<span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a>If A is nilpotent with $A^m = 0$, then $(I - A)$ is invertible and its inverse is the finite sum $I + A + A^2 + \dots + A^{m-1}$.</span>
+<span id="cb29-204"><a href="#cb29-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-205"><a href="#cb29-205" aria-hidden="true" tabindex="-1"></a>$$(I - A)^{-1} = I + \sum_{n=1}^m A^n$$</span>
+<span id="cb29-206"><a href="#cb29-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-207"><a href="#cb29-207" aria-hidden="true" tabindex="-1"></a>We'll verify this numerically for an example.</span>
+<span id="cb29-208"><a href="#cb29-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-211"><a href="#cb29-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> J3.copy()  <span class="co"># J3 is nilpotent with index 3</span></span>
+<span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> nilpotency_index(A)</span>
+<span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.eye(A.shape[<span class="dv">0</span>])  <span class="co"># creates a diagonal matrix</span></span>
+<span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a>inv_series <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m))</span>
+<span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a>inv_direct <span class="op">=</span> np.linalg.inv(I <span class="op">-</span> A)</span>
+<span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by finite series:'</span>)</span>
+<span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_series)</span>
+<span id="cb29-219"><a href="#cb29-219" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Inverse by numpy.linalg.inv(I-A):'</span>)</span>
+<span id="cb29-220"><a href="#cb29-220" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(inv_direct)</span>
+<span id="cb29-221"><a href="#cb29-221" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Difference (fro norm):'</span>, np.linalg.norm(inv_series <span class="op">-</span> inv_direct))</span>
+<span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Final exercise</span></span>
+<span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a>1) Construct a $5 \times 5$ strictly upper-triangular random matrix and compute its nilpotency index.</span>
+<span id="cb29-226"><a href="#cb29-226" aria-hidden="true" tabindex="-1"></a>2) Verify that all eigenvalues are (numerically) zero.</span>
+<span id="cb29-227"><a href="#cb29-227" aria-hidden="true" tabindex="-1"></a>3) Verify that $(I - A)^{-1} = I + \sum_{n=1}^{5} A^n$.</span>
+<span id="cb29-228"><a href="#cb29-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-229"><a href="#cb29-229" aria-hidden="true" tabindex="-1"></a>Try changing the random seed or creating particular Jordan block combinations to see different nilpotency indices.</span>
+<span id="cb29-230"><a href="#cb29-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-233"><a href="#cb29-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb29-234"><a href="#cb29-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick run for the exercise</span></span>
+<span id="cb29-235"><a href="#cb29-235" aria-hidden="true" tabindex="-1"></a>A5 <span class="op">=</span> random_strict_upper(<span class="dv">5</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb29-236"><a href="#cb29-236" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A5 ="</span>)</span>
+<span id="cb29-237"><a href="#cb29-237" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A5)</span>
+<span id="cb29-238"><a href="#cb29-238" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nilpotency index A5:"</span>, nilpotency_index(A5))</span>
+<span id="cb29-239"><a href="#cb29-239" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues A5:"</span>, np.linalg.eigvals(A5))</span>
+<span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a>m5 <span class="op">=</span> nilpotency_index(A5)</span>
+<span id="cb29-241"><a href="#cb29-241" aria-hidden="true" tabindex="-1"></a>I5 <span class="op">=</span> np.eye(<span class="dv">5</span>)</span>
+<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a>inv_series_5 <span class="op">=</span> <span class="bu">sum</span>(np.linalg.matrix_power(A5, k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, m5))</span>
+<span id="cb29-243"><a href="#cb29-243" aria-hidden="true" tabindex="-1"></a>inv_direct_5 <span class="op">=</span> np.linalg.inv(I5 <span class="op">-</span> A5)</span>
+<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference (fro norm) A5 series vs direct:"</span>, np.linalg.norm(inv_series_5 <span class="op">-</span> inv_direct_5))</span>
+<span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notes and further reading</span></span>
+<span id="cb29-248"><a href="#cb29-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Jordan normal form: nilpotent matrices are conjugate to a block-diagonal matrix with Jordan blocks that each have zero on the diagonal. The sizes of these Jordan blocks determine the nilpotency index (largest block size).</span>
+<span id="cb29-249"><a href="#cb29-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Many properties of nilpotent matrices are easier to show symbolically; for symbolic experiments you can use SymPy. This notebook focuses on numerical demonstrations with NumPy.</span>
+<span id="cb29-250"><a href="#cb29-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For large matrices, computing high powers may be numerically unstable; consider analytic properties (block structure) to reason about nilpotency index instead of brute-force powering.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
