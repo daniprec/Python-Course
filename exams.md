@@ -59,6 +59,8 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 - [25_final_A.pdf](exams/25_final_A.pdf) — <a href="exams/25_final_A.pdf" download>Download</a>
 - [25_final_B.pdf](exams/25_final_B.pdf) — <a href="exams/25_final_B.pdf" download>Download</a>
 - [25_final_Madrid.pdf](exams/25_final_Madrid.pdf) — <a href="exams/25_final_Madrid.pdf" download>Download</a>
-- [25_final_Segovia.pdf](exams/25_final_Segovia.pdf) — <a href="exams/25_final_Segovia.pdf" download>Download</a>
 - [25_retake_Madrid.pdf](exams/25_retake_Madrid.pdf) — <a href="exams/25_retake_Madrid.pdf" download>Download</a>
+<!--
+- [25_final_Segovia.pdf](exams/25_final_Segovia.pdf) — <a href="exams/25_final_Segovia.pdf" download>Download</a>
 - [25_retake_Segovia.pdf](exams/25_retake_Segovia.pdf) — <a href="exams/25_retake_Segovia.pdf" download>Download</a>
+-->
