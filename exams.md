@@ -33,9 +33,6 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 
 ## Midterm exams
 
-### Mock exams
-
-### Past exams
 - **2024 Midterms**
 - [24_midterm_A.pdf](exams/24_midterm_A.pdf) — <a href="exams/24_midterm_A.pdf" download>Download</a>
 - [24_midterm_B.pdf](exams/24_midterm_B.pdf) — <a href="exams/24_midterm_B.pdf" download>Download</a>
@@ -50,9 +47,6 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 
 ## Final and retake exams
 
-### Mock exams
-
-### Past exams
 - **2024 Finals & Retake**
 - [24_final_A.pdf](exams/24_final_A.pdf) — <a href="exams/24_final_A.pdf" download>Download</a>
 - [24_final_B.pdf](exams/24_final_B.pdf) — <a href="exams/24_final_B.pdf" download>Download</a>
