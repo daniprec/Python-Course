@@ -33,12 +33,14 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 
 ## Midterm exams
 
-- **2024 Midterms**
+**2024 Midterms**
+
 - [24_midterm_A.pdf](exams/24_midterm_A.pdf) — <a href="exams/24_midterm_A.pdf" download>Download</a>
 - [24_midterm_B.pdf](exams/24_midterm_B.pdf) — <a href="exams/24_midterm_B.pdf" download>Download</a>
 - [24_midterm_C.pdf](exams/24_midterm_C.pdf) — <a href="exams/24_midterm_C.pdf" download>Download</a>
 
-- **2025 Midterms**
+**2025 Midterms**
+
 - [25_midterm_A.pdf](exams/25_midterm_A.pdf) — <a href="exams/25_midterm_A.pdf" download>Download</a>
 - [25_midterm_B.pdf](exams/25_midterm_B.pdf) — <a href="exams/25_midterm_B.pdf" download>Download</a>
 - [25_midterm_C.pdf](exams/25_midterm_C.pdf) — <a href="exams/25_midterm_C.pdf" download>Download</a>
@@ -47,7 +49,8 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 
 ## Final and retake exams
 
-- **2024 Finals & Retake**
+**2024 Finals & Retake**
+
 - [24_final_A.pdf](exams/24_final_A.pdf) — <a href="exams/24_final_A.pdf" download>Download</a>
 - [24_final_B.pdf](exams/24_final_B.pdf) — <a href="exams/24_final_B.pdf" download>Download</a>
 - [24_final_C.pdf](exams/24_final_C.pdf) — <a href="exams/24_final_C.pdf" download>Download</a>
@@ -55,7 +58,8 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 - [24_final_E.pdf](exams/24_final_E.pdf) — <a href="exams/24_final_E.pdf" download>Download</a>
 - [24_retake.pdf](exams/24_retake.pdf) — <a href="exams/24_retake.pdf" download>Download</a>
 
-- **2025 Finals & Retake**
+**2025 Finals & Retake**
+
 - [25_final_A.pdf](exams/25_final_A.pdf) — <a href="exams/25_final_A.pdf" download>Download</a>
 - [25_final_B.pdf](exams/25_final_B.pdf) — <a href="exams/25_final_B.pdf" download>Download</a>
 - [25_final_Madrid.pdf](exams/25_final_Madrid.pdf) — <a href="exams/25_final_Madrid.pdf" download>Download</a>
