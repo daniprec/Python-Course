@@ -45,7 +45,6 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 - [25_midterm_B.pdf](exams/25_midterm_B.pdf) — <a href="exams/25_midterm_B.pdf" download>Download</a>
 - [25_midterm_C.pdf](exams/25_midterm_C.pdf) — <a href="exams/25_midterm_C.pdf" download>Download</a>
 - [25_midterm_D.pdf](exams/25_midterm_D.pdf) — <a href="exams/25_midterm_D.pdf" download>Download</a>
-- [25_midterm_E.pdf](exams/25_midterm_E.pdf) — <a href="exams/25_midterm_E.pdf" download>Download</a>
 
 ## Final and retake exams
 
