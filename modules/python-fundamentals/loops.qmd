@@ -1,106 +1,310 @@
 ---
-title: "Loop"
+title: "Loops"
 format: html
-execute:
-  error: true
 ---
 
 # Fundamentals: Looping in Python
 
-For loops are a fundamental tool in programming. They allow us to iterate over the elements of a list.
-
-Before introducing the loops, let us see two other Python elements: lists and print. Both will be expanded upon in future lessons, but will be useful now to work with loops.
-
-## What is a List?
-
-In programming, we often work with collections of data. One common way to handle collections is by using **lists**. A list is an ordered collection of elements. These elements can be numbers, strings, or any other data type.
+Programs often need to repeat the same instructions. We could write the same code several times:
 
 ```{python}
-# For example, here is a list of numbers
-numbers = [1, 2, 3, 4, 5]
-
-print(numbers)
+print("Opening drawer 1")
+print("Opening drawer 2")
+print("Opening drawer 3")
 ```
 
-We will explain lists in detail later on this course. For now, it is enough for us to know that we can create lists using the brakets `[]`, and that lists can contain any kind of variable (numeric, string, boolean...).
+This works for three drawers, but it would be tedious for 100. Loops allow us to describe the repetition once and let Python perform it.
+
+## Your First `for` Loop
+
+A **for loop** takes values one at a time and executes the same block of code for each value.
 
 ```{python}
-mixed_list = [1, "b", True, 4]
-
-print(mixed_list)
+for drawer_number in range(1, 4):
+    print("Opening drawer", drawer_number)
 ```
 
----
+Python executes the loop three times:
 
-## For Loops
+| Iteration | Value of `drawer_number` | Output |
+|---|---:|---|
+| First | 1 | `Opening drawer 1` |
+| Second | 2 | `Opening drawer 2` |
+| Third | 3 | `Opening drawer 3` |
 
-**For loops** are a fundamental tool in programming. They allow us to iterate over the elements of a list.
-
-The structure of a For loop is:
+The general structure is:
 
 ```python
-for <element> in <list>:
-  <code>
+for <element> in <sequence>:
+    <code>
 ```
 
-The loop will executive its `<code>` for each one of the `<element>` in the `<list>`.
+The loop executes its `<code>` once for each `<element>` in the `<sequence>`. Notice the colon and the indentation. The indentation tells Python which instructions belong to the loop.
 
-For instance, let's say we have a list of numbers, and we want to print each number:
+::: {.callout-note}
+## Check Your Understanding
+
+Without running the code, write down exactly what it will print.
 
 ```{python}
-numbers = [1, 2, 3, 4, 5]
+#| eval: false
+for level in range(1, 4):
+    print("Starting level", level)
+    print("Ready!")
 
-for num in numbers:
-  print(num)
+print("Game finished")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+Starting level 1
+Ready!
+Starting level 2
+Ready!
+Starting level 3
+Ready!
+Game finished
 ```
 
-See that the code inside the loop does not even need to use the elements we are iterating over:
-
-```{python}
-numbers = [1, 2, 3, 4, 5]
-
-for num in numbers:
-  print("I do not care about the number")
-```
-
-_But what if we want to print the numbers from 1 to 100?_
+The two indented instructions run three times. The final instruction is outside the loop, so it runs only once.
+:::
 
 ---
 
 ## Using `range()` with For Loops
 
+Python provides a built-in function called `range()` that generates a sequence of integers. We can use it when a loop needs to count.
 
-Python provides a built-in function called `range(<start>, <stop>)` that generates a sequence of numbers from `<start>` to `<stop>` but not including the last number. You can use `range()` in for loops to iterate over a range of numbers.
-
-For example, let's print the numbers from 1 to 100 using `range()`:
-
-```{python}
-for num in range(1, 101):
-  print(num)
-```
-
-We can just write `range(<stop>)` too and it will start in 0:
+With `range(<start>, <stop>)`, Python starts at `<start>` and stops **before** `<stop>`:
 
 ```{python}
-for num in range(101):
-  print(num)
+for num in range(1, 6):
+    print(num)
 ```
 
-And even specify the stride (step between values) with `range(<start>, <strop>, <stride>)`:
+This prints `1`, `2`, `3`, `4`, and `5`. The stopping value `6` is not included.
+
+We can write `range(<stop>)` too. In this case, the sequence starts at `0`:
 
 ```{python}
-for num in range(1, 101, 3):
-  print(num)
+for num in range(5):
+    print(num)
 ```
+
+This prints `0`, `1`, `2`, `3`, and `4`.
+
+We can also specify the step between values with `range(<start>, <stop>, <step>)`:
+
+```{python}
+for num in range(1, 11, 3):
+    print(num)
+```
+
+This prints `1`, `4`, `7`, and `10`.
+
+A negative step lets us count backwards:
+
+```{python}
+for num in range(5, 0, -1):
+    print(num)
+
+print("Lift-off!")
+```
+
+::: {.callout-note}
+## Exercise: Rocket Launch
+
+Write a countdown from `10` to `1`. After the loop finishes, print `Lift-off!`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+for second in range(10, 0, -1):
+    print(second)
+
+print("Lift-off!")
+```
+:::
+
+::: {.callout-note}
+## Exercise: Character Levels
+
+A video-game character needs `level ** 2 * 100` experience points to complete each level. Print the experience required for levels 1 to 10.
+
+The first lines should be:
+
+```text
+Level 1 requires 100 XP
+Level 2 requires 400 XP
+Level 3 requires 900 XP
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+for level in range(1, 11):
+    experience = level ** 2 * 100
+    print(f"Level {level} requires {experience} XP")
+```
+:::
+
+---
+
+## Looping Through Sequences
+
+So far, `range()` has supplied numbers to our loops. A for loop can also work with a collection of values, such as a string.
+
+```{python}
+# Loop through the characters in a string
+for letter in "Python":
+    print(letter)
+```
+
+There exists a wide variety of sequences in Python. We will explore them in detail [in the second module](../structures/index.qmd). For now, we will briefly introduce lists, which are one of the most common ways to store a collection of values.
+
+### What Is a List?
+
+A list is an ordered collection of elements. The elements can be numbers, strings, Booleans, or other data types.
+
+```{python}
+# A list of numbers
+numbers = [1, 2, 3, 4, 5]
+print(numbers)
+```
+
+We will explain lists in detail [later in this course](../structures/list_tuples.qmd). For now, it is enough to know that we create lists using brackets `[]`.
+
+```{python}
+mixed_list = [1, "b", True, 4]
+print(mixed_list)
+```
+
+When a for loop uses a list, the loop variable receives each element in order:
+
+```{python}
+planets = ["Mercury", "Venus", "Earth", "Mars"]
+
+for planet in planets:
+    print("Visiting", planet)
+```
+
+The code inside the loop does not have to use the current element:
+
+```{python}
+numbers = [1, 2, 3, 4, 5]
+
+for num in numbers:
+    print("I do not care about the number")
+```
+
+The message is printed five times because the list contains five elements.
+
+::: {.callout-note}
+## Exercise: Roll Call
+
+Create a list with the names of four students. Use a for loop to print a welcome message for each student.
+
+For example: `Welcome, Ada!`
+:::
+
+::: {.callout-tip collapse="true"}
+## Example Solution
+
+```{python}
+students = ["Ada", "Grace", "Guido", "Linus"]
+
+for student in students:
+    print(f"Welcome, {student}!")
+```
+:::
+
+---
+
+## Updating Variables in For Loops
+
+Many times when we work with loops, we want to update one of our variables. Remember that variables can be reassigned.
+
+For instance, let us make a sentence from a list of words:
+
+```{python}
+list_words = ["Hello", "my", "name", "is", "Daniel"]
+
+# We initialize the output variable as an empty string
+sentence = ""
+
+# Add each word to the sentence
+for word in list_words:
+    sentence = sentence + word
+    print(sentence)
+```
+
+The value stored in `sentence` is preserved between iterations. Each iteration adds something to its previous value.
 
 ::: {.callout-note}
 ## Exercise
 
-Write a program to compute the factorial of any number.
+How would you add spaces to that sentence?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+list_words = ["Hello", "my", "name", "is", "Daniel"]
+sentence = ""
+
+for word in list_words:
+    sentence = sentence + word + " "
+
+print(sentence.strip())
+```
+:::
+
+The same pattern can accumulate numbers:
+
+```{python}
+total = 0
+
+for number in range(1, 6):
+    total = total + number
+    print(f"After adding {number}, the total is {total}")
+
+print("Final total:", total)
+```
+
+::: {.callout-note}
+## Exercise: Boss Battle
+
+A boss begins with `100` health points. The player attacks five times, and every attack causes `18` points of damage.
+
+After every attack, print the attack number and the boss's remaining health.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+boss_health = 100
+
+for attack in range(1, 6):
+    boss_health = boss_health - 18
+    print(f"Attack {attack}: the boss has {boss_health} HP")
+```
+:::
+
+::: {.callout-note}
+## Challenge: Factorial
+
+Write a program to compute the factorial of any positive integer.
 
 $$5! = 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1$$
-
-
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -111,79 +315,95 @@ num = 5
 result = 1
 
 for value in range(1, num + 1):
-  result = result * value
+    result = result * value
 
 print(result)
 ```
-
 :::
 
 ---
 
-## Updating Variables in For Loops
+## Flow Control inside For Loops
 
-Many times when we work with loops, we want to update one of our variables. Remember variables can be reassigned.
-
-For instance, lets make a sentence out of a list of words:
+We can combine `if` statements and for loops. The loop controls which value we are processing, and the condition decides what to do with that value.
 
 ```{python}
-list_words = ["Hello", "my", "name", "is", "Daniel"]
-
-# We initialize the output variable
-# In this case, it will be an empty string
-sentence = ""
-
-# This code will add words to the sentence
-for word in list_words:
-  # The word is added to the sentence
-  sentence = sentence + word
-  print(sentence)
+for number in [-2, -1, 0, 1, 2]:
+    if number < 0:
+        print(f"{number} is negative")
+    else:
+        print(f"{number} is zero or positive")
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Alien Detector
 
-How would you add spaces to that sentence?
-
-
+Scan rooms 1 to 20. Print `Scanning room <number>` for most rooms. If the room number is divisible by 7, print `Warning: alien detected in room <number>` instead.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-list_words = ["Hello", "my", "name", "is", "Daniel"]
-sentence = ""
-
-for word in list_words:
-  sentence = sentence + word + " "
-
-print(sentence.strip())
+for room in range(1, 21):
+    if room % 7 == 0:
+        print(f"Warning: alien detected in room {room}")
+    else:
+        print(f"Scanning room {room}")
 ```
+:::
 
+::: {.callout-note}
+## Exercise: Finding Factors
+
+Write code that finds all factors of any given positive integer.
+
+A factor is an integer that divides the given number without leaving a remainder.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+num = 52
+
+for factor in range(1, num + 1):
+    if num % factor == 0:
+        print(f"{factor} is a factor of {num}")
+```
 :::
 
 ---
 
 ## Nested For Loops
 
-We can include a loop inside another.
+We can include a loop inside another loop. This is called a **nested loop**.
 
-<img src="https://media.geeksforgeeks.org/wp-content/uploads/20220801153940/Nestedloop.png" style="height: 100px"/>
+Imagine searching several pieces of furniture. For each piece of furniture, you inspect every drawer:
+
+```{python}
+furniture = ["desk", "wardrobe", "bedside table"]
+
+for item in furniture:
+    print(f"Searching the {item}")
+
+    for drawer in range(1, 4):
+        print(f"Opening drawer {drawer}")
+```
+
+The inner loop finishes all three drawers before the outer loop moves to the next piece of furniture. With three pieces of furniture and three drawers in each, the instruction inside the inner loop runs $3 \times 3 = 9$ times.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Predict the Output
 
-What is the output you expect from this loop?
-
+What output do you expect from this loop? Answer before running the code.
 
 ```{python}
 #| eval: false
 for number in range(3):
-  for letter in ["a", "b", "c"]:
-    print(number, letter)
+    for letter in ["a", "b", "c"]:
+        print(number, letter)
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -202,88 +422,242 @@ The loop prints every combination of the numbers `0`, `1`, `2` with the letters 
 2 b
 2 c
 ```
-
 :::
 
----
+::: {.callout-note}
+## Exercise: Treasure Map
 
-## Flow Control inside For Loops
+A treasure map has four rows and five columns. Use nested loops to inspect every position and print its coordinates:
 
-We can also combine IF clauses and for loops:
-
-```{python}
-for number in [-2, -1, 0, 1, 2]:
-  if number < 0:
-    print(f"{number} is negative")
-  else:
-    print(f"{number} is zero or positive")
+```text
+Searching position 1 1
+Searching position 1 2
+...
+Searching position 4 5
 ```
 
-::: {.callout-note}
-## Exercise
-
-Write a code that finds all factors of any given number.
-
-A factor is a number that divides the given number without any remainder.
-
-
+The treasure is at row 3, column 4. When the program reaches that position, also print `Treasure found!`.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-num = 52
+for row in range(1, 5):
+    for column in range(1, 6):
+        print("Searching position", row, column)
 
-for factor in range(1, num + 1):
-  if num % factor == 0:
-    print(f"{factor} is a factor of {num}")
+        if row == 3 and column == 4:
+            print("Treasure found!")
+```
+:::
+
+::: {.callout-note}
+## Exercise: Cinema Seats
+
+A cinema has three rows with four seats in each row. Print a label for every seat, such as `Row 2, seat 3`.
+
+Before writing the program, answer:
+
+1. Which loop represents the rows?
+2. Which loop represents the seats?
+3. How many labels will the program print?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+for row in range(1, 4):
+    for seat in range(1, 5):
+        print(f"Row {row}, seat {seat}")
 ```
 
+The outer loop represents the rows, the inner loop represents the seats, and the program prints $3 \times 4 = 12$ labels.
+:::
+
+---
+
+## Stopping Loops Early
+
+The command `break` stops a loop immediately. We usually use it with an `if` statement.
+
+```python
+for <element> in <sequence>:
+    if <condition>:
+        break
+    <code>
+```
+
+Suppose we are searching drawers for some missing keys. Once we find them, there is no reason to continue searching:
+
+```{python}
+drawers = ["notebooks", "cables", "keys", "old photos"]
+
+for contents in drawers:
+    print("Checking", contents)
+
+    if contents == "keys":
+        print("Keys found!")
+        break
+```
+
+Notice that `old photos` is never checked.
+
+```{python}
+for number in range(10):
+    if number > 5:
+        print("Stop!")
+        break
+
+    print(number)
+```
+
+`break` stops only one loop. In a nested loop, breaking the inner loop does not stop the outer loop.
+
+```{python}
+for number in range(5):
+    for letter in ["a", "b", "c"]:
+        print(letter)
+
+        if letter == "b":
+            # This break stops only the loop over letters
+            break
+```
+
+::: {.callout-note}
+## Exercise: Three Password Attempts
+
+Give the user three attempts to enter the password `python`. If the password is correct, print `Access granted` and stop asking. Otherwise, print `Incorrect password`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+for attempt in range(1, 4):
+    password = input("Password: ")
+
+    if password == "python":
+        print("Access granted")
+        break
+    else:
+        print("Incorrect password")
+```
+:::
+
+::: {.callout-note}
+## Exercise: Reaching a Threshold
+
+Write a program that receives a list of numbers and adds them until the sum reaches or exceeds a threshold. Print the result and the number at which the loop stopped.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+list_numbers = [1, 3, 4, 5, 7, 9]
+threshold = 10
+result = 0
+
+for number in list_numbers:
+    result = result + number
+
+    if result >= threshold:
+        print(f"Stopped at {number}. Result is {result}")
+        break
+```
+:::
+
+::: {.callout-note}
+## Debugging Exercise
+
+Fix the following code.
+
+```{python}
+#| eval: false
+# Multiply odd numbers until the result is higher than n
+n = 1000
+result = 0
+
+for i in range(n):
+    if i % 2 == 1:
+        result = result * i
+
+    if result > n:
+        break
+
+print(result)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The multiplication never gets started because multiplying by `0` keeps the result at `0`. Initialize the result at `1`, and begin the range at `1`.
+
+```{python}
+n = 1000
+result = 1
+
+for i in range(1, n):
+    if i % 2 == 1:
+        result = result * i
+
+    if result > n:
+        break
+
+print(result)
+```
 :::
 
 ---
 
 ## Skipping One Iteration in a Loop
 
-The command `continue` will stop the current iteration of the loop and jump to the next one.
+The command `continue` stops the current iteration and jumps to the next one.
 
 ```python
-for <element> in <list>:
-  <code1>
-  if <condition>:
-    continue
-  <code2>
+for <element> in <sequence>:
+    <code1>
+
+    if <condition>:
+        continue
+
+    <code2>
 ```
 
-In the sample structure above, the loop will always execute `<code1>`. Then, if `<condition>` is met, will jump to the next `<element>` and skip `<code2>`.
+The loop always executes `<code1>`. If the condition is met, it jumps to the next element and skips `<code2>`.
 
 ```{python}
 for num in range(5):
-  # This always happens
-  print(num)
-  # If the number is 2, we skip the next part
-  if num == 2:
-    continue
-  # This happens for all numbers except 2
-  print(f"{num} x 2 = {num * 2}")
+    # This always happens
+    print(num)
+
+    # If the number is 2, skip the next instruction
+    if num == 2:
+        continue
+
+    # This happens for all numbers except 2
+    print(f"{num} x 2 = {num * 2}")
 ```
 
 ::: {.callout-note}
 ## Exercise
 
-Read the code below and, without running it, guess what messages will be printed.
-
+Read the code below and, without running it, predict which numbers will be printed.
 
 ```{python}
 #| eval: false
 for n in range(1, 10):
-  sqn = n ** (1/2)
-  if sqn % 1 == 0:
-    continue
-  print(n)
-```
+    sqn = n ** (1 / 2)
 
+    if sqn % 1 == 0:
+        continue
+
+    print(n)
+```
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -299,138 +673,47 @@ Perfect squares are skipped, so the loop prints:
 7
 8
 ```
-
 :::
 
 ---
 
-## Stopping Loops Early
+# While Loops
 
-The command `break` will stop the For loop. We usually use it in combination with an IF clause.
+A for loop works well when we have a sequence of values to process. Sometimes we do not know beforehand how many repetitions we will need. In that case, a condition can control the repetition.
 
-```python
-for <element> in <list>:
-  if <condition>:
-    break
-  <code>
-```
-
-In the structure below, the loop will stop once the `<condition>` is met. Else, it runs the `<code>` as usual.
-
-```{python}
-for number in range(10):
-  if number > 5:
-    print("Stop!")
-    break
-  print(number)
-```
-
-Notice that `break` only stops one loop. When working with nested For loops, breaking an inner loop will not stop the outer one.
-
-```{python}
-for number in range(5):
-  for letter in ["a", "b", "c"]:
-    print(letter)
-    if letter == "b":
-      # This break only stops the loop of "letter"
-      break
-```
-
-::: {.callout-note}
-## Exercise
-
-Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
-
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-list_numbers = [1, 3, 4, 5, 7, 9]
-threshold = 10
-result = 0
-
-for number in list_numbers:
-  result = number + result
-  if result >= threshold:
-    print(f"Stopped at {number}. Result is {result}")
-    break
-
-print(result)
-```
-
-:::
-
-::: {.callout-note}
-## Exercise
-
-Fix the following cell of code.
-
-
-```{python}
-#| eval: false
-# Multiply all odd numbers until the result is higher than "n"
-n = 1000
-result = 0
-
-for i in range(n):
-  if i % 2 == 1:
-    result = result * i
-  if result > n:
-    break
-
-print(result)
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-The loop never gets started correctly because multiplying by `0` keeps the result at `0`. Start from `1`, and only multiply odd numbers from `1` upward.
-
-```{python}
-n = 1000
-result = 1
-
-for i in range(1, n):
-  if i % 2 == 1:
-    result = result * i
-  if result > n:
-    break
-
-print(result)
-```
-
-:::
-
----
-
-## While Loops
-
-In addition to for loops, there's another type of loop called a **while loop**. A while loop repeatedly executes a block of code as long as a condition is True.
+A **while loop** repeatedly executes a block of code as long as a condition is `True`.
 
 ```python
 while <condition>:
-  <code>
+    <code>
 ```
 
 ```{python}
-# Let's use a while loop to count from 1 to 5
+# Count from 1 to 5
 num = 1
+
 while num <= 5:
     print(num)
     num = num + 1
 ```
 
+The variable involved in the condition must normally change inside the loop. Otherwise, the loop may never end.
+
+```python
+num = 1
+
+# This loop will never end
+while num > 0:
+    num = num + 1
+    print(num)
+```
+
+If you run an infinite loop, stop the execution by clicking the stop button next to the cell.
+
 ::: {.callout-note}
-## Exercise
+## Exercise: Threshold with a While Loop
 
-Write a program that gets list of numbers and calculates the sum of these numbers until the sum equates or exceeds a certain threshold (e.g., 100). It prints a message with the result and the number where it stopped.
-
-
+Rewrite the earlier threshold exercise using a while loop.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -442,121 +725,157 @@ threshold = 10
 result = 0
 index = 0
 
-while result < threshold:
-  result = list_numbers[index] + result
-  current_number = list_numbers[index]
-  index = index + 1
+while result < threshold and index < len(list_numbers):
+    current_number = list_numbers[index]
+    result = result + current_number
+    index = index + 1
 
-print(f"Stopped at {current_number}. Result is {result}")
+if result >= threshold:
+    print(f"Stopped at {current_number}. Result is {result}")
+else:
+    print("The list ended before the threshold was reached")
 ```
-
 :::
 
-Bear in mind that, if the condition never updates, the While loop will run forever! If you run into this case, you can stop the execution by clicking on the "stop" button at the left of the cell.
-
-```python
-num = 1
-
-# This loop will never end
-while num > 0:
-  num = num + 1
-  print(num)
-```
-
 ::: {.callout-note}
-## Exercise
+## Exercise: For or While?
 
-Read the following problems and answer: would you use a FOR loop or a WHILE loop?
+For each problem, decide whether a `for` loop or a `while` loop is more natural.
 
 1. Calculate the sum of the first 50 even numbers.
-
 2. List the first 20 terms of the Fibonacci sequence.
-
-3. Find the first number in the Fibonacci sequence that is higher than 999.
-
-3. Print all the multiples of 5 between 1 and 100.
-
-4. Find the first 10 prime numbers.
-
-5. Continuously divide a number by 2 until the result is less than 1.
-
-7. Compute the sum of the digits of a number until the sum becomes a single-digit number.
-
-8. Generate and print the first 15 square numbers (1, 4, 9, 16, ...).
-
+3. Find the first Fibonacci number higher than 999.
+4. Print all multiples of 5 between 1 and 100.
+5. Find the first 10 prime numbers.
+6. Continuously divide a number by 2 until the result is less than 1.
+7. Repeatedly sum the digits of a number until the result has one digit.
+8. Generate the first 15 square numbers: `1, 4, 9, 16, ...`.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-1. You know exactly how many even numbers you need (50), so a FOR loop is suitable.
-
-2. The number of terms is fixed (20), making a FOR loop appropriate.
-
-3. You don't know how many iterations it will take to reach a number greater than 999, so a WHILE loop is more suitable.
-
-4. The range of numbers (1 to 100) is fixed, so a FOR loop is ideal.
-
-5. You need exactly 10 primes, so a FOR loop is suitable for counting up to 10.
-
-6. The number of divisions needed is not predetermined, so a WHILE loop is best.
-
-7. You do not know how many times you will need to sum the digits, so a WHILE loop is appropriate.
-
-8. The number of square numbers is fixed (15), making a FOR loop ideal.
-
+1. `for`: the number of values is fixed at 50.
+2. `for`: the number of terms is fixed at 20.
+3. `while`: we do not know how many terms it will take to pass 999.
+4. `for`: the range of candidates is fixed.
+5. `while`: we know how many primes we want, but not how many integers we must test before finding them.
+6. `while`: the number of divisions is not known beforehand.
+7. `while`: the number of repetitions depends on the intermediate results.
+8. `for`: the number of square numbers is fixed at 15.
 :::
 
-Now try to code those exercises on your own! Feel free to use Gemini if you get stuck.
+Try to code some of these exercises. If you get stuck, first trace a small example by hand. You may also ask Gemini for a hint, but ask for one hint at a time before requesting a complete solution.
 
 ```{python}
-# Code the exercises
+# Code the exercises here
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Infinite Loops
 
-Why are the following WHILE loops never ending?
-
+Why do the following while loops never end?
 
 ```python
 i = 1
+
 while i != 0:
-  print(f"The value of i={i} is not zero.")
-  i += 1
+    print(f"The value of i={i} is not zero.")
+    i += 1
 ```
 
 ```python
 n = 2
+
 while n % 2 == 0:
-  print(f"n is still even: {n}")
-  n = n * 2
+    print(f"n is still even: {n}")
+    n = n * 2
 ```
 
 ```python
 i = 1
+
 while i > 0:
     i = i // 2
     print(f"i is now: {i}")
     i += 1
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The first loop keeps increasing `i`, so it never becomes `0`. The second loop keeps doubling an even number, so it always stays even. The third loop resets `i` to `0` and immediately adds `1`, so the condition `i > 0` stays true forever.
+The first loop keeps increasing `i`, so it never becomes `0`.
 
+The second loop keeps doubling an even number, so it always remains even.
+
+The third loop changes `i` to `0` and immediately adds `1`, so the condition `i > 0` remains true.
 :::
 
 ---
 
+# Final Practice
+
+::: {.callout-note}
+## Exercise: Build a Staircase
+
+Ask the user for a height and print a staircase of that height. For a height of 5:
+
+```text
+#
+##
+###
+####
+#####
+```
+
+Hint: Python can repeat a string. For example, `"#" * 3` produces `"###"`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+height = int(input("Height: "))
+
+for row in range(1, height + 1):
+    print("#" * row)
+```
+:::
+
+::: {.callout-note}
+## Challenge: FizzBuzz
+
+Print the numbers from 1 to 30, with these changes:
+
+* For multiples of 3, print `Fizz` instead of the number.
+* For multiples of 5, print `Buzz` instead of the number.
+* For multiples of both 3 and 5, print `FizzBuzz`.
+
+Think carefully about the order of your conditions.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+for number in range(1, 31):
+    if number % 15 == 0:
+        print("FizzBuzz")
+    elif number % 3 == 0:
+        print("Fizz")
+    elif number % 5 == 0:
+        print("Buzz")
+    else:
+        print(number)
+```
+:::
+
 # Homework and Review
 
-When you feel ready, you can test your knowledge by working through the [review exercises](review_loops.qmd).
+When you feel ready, test your knowledge by working through the [review exercises](review_loops.qmd).
 
-Work through the "Looping" homework exercises available here. To earn participation credit, you must complete the exercises highlighted in red.
+Work through the "Looping" homework exercises available here. To earn participation credit, complete the exercises highlighted in red.
 
 [Homework](homework_fundamentals.qmd#looping){.btn .btn-primary}
-
