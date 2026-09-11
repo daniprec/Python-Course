@@ -505,7 +505,7 @@ window.Quarto = {
 <h1>Exercise: Identify Hand-Drawn Numbers</h1>
 <p>In this exercise, we are going to use the MNIST dataset, which is a large database of handwritten digits commonly used for training various image processing systems. Our goal is to create a ‘’toy AI model’’ that can detect the digit drawn by the user.</p>
 <p>To complete this exercise, we need to install and import some additional libraries. Don’t worry if you don’t understand all these imports just yet. You will cover them in detail in future subjects.</p>
-<div id="73af2155" class="cell" data-execution_count="1">
+<div id="9963a987" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You DO NOT need to learn this cell</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary libraries (not included in Google Colab by default)</span></span>
@@ -553,9 +553,9 @@ Requirement already satisfied: asttokens&gt;=2.1.0 in /home/runner/.local/lib/py
 Requirement already satisfied: pure-eval in /home/runner/.local/lib/python3.12/site-packages (from stack_data&gt;=0.6.0-&gt;ipython&gt;=6.1.0-&gt;ipywidgets&lt;9,&gt;=7.6.0-&gt;ipycanvas) (0.2.4)
 Downloading ipycanvas-0.14.3-py2.py3-none-any.whl (142 kB)
 Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/6.9 MB ? eta -:--:--   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 71.6 MB/s  0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/6.9 MB ? eta -:--:--   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 37.1 MB/s  0:00:00
 Downloading numpy-2.5.3-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.7 MB ? eta -:--:--   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 252.8 MB/s  0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.7 MB ? eta -:--:--   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 121.3 MB/s  0:00:00
 Installing collected packages: pillow, numpy, ipycanvas
 
 
@@ -568,7 +568,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <hr>
 <section id="data-processing" class="level2">
 <h2 class="anchored" data-anchor-id="data-processing">Data Processing</h2>
-<div id="f29e4216" class="cell" data-execution_count="2">
+<div id="69c1dfd4" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the MNIST dataset</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> mnist.load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
@@ -577,7 +577,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 <p>The data is organized as a nested tuple: <code>(train_subset, test_subset)</code>, where each subset is further divided into <code>(train_x, train_y)</code> and <code>(test_x, test_y)</code>. In this context, <code>x</code> represents the data we have (the drawings), and <code>y</code> represents the value to predict (the digit that each drawing represents).</p>
 <p>How can we extract these four subsets? We aim to obtain: <code>(train_x, train_y, test_x, test_y)</code>.</p>
-<div id="dabd9b45" class="cell" data-execution_count="3">
+<div id="982d94fa" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your data is structured as (train_subset, test_subset)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>train_subset, test_subset <span class="op">=</span> dataset</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -590,14 +590,14 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <pre><code>NameError: name 'dataset' is not defined</code></pre>
 </div>
 </div>
-<div id="c7005cf7" class="cell" data-execution_count="4">
+<div id="fb09bba0" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the MNIST dataset (in one go)</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>(x_train, y_train), (x_test, y_test) <span class="op">=</span> mnist.load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>NameError: name 'mnist' is not defined</code></pre>
 </div>
 </div>
-<div id="b7310025" class="cell" data-execution_count="5">
+<div id="783d7756" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># See the shape - do we understand these dimensions?</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"x_train shape: </span><span class="sc">{</span>x_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"y_train shape: </span><span class="sc">{</span>y_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -605,7 +605,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <pre><code>NameError: name 'x_train' is not defined</code></pre>
 </div>
 </div>
-<div id="42dc2f3c" class="cell" data-execution_count="6">
+<div id="f684dceb" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets see the first data point</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x_train[<span class="dv">0</span>]</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> y_train[<span class="dv">0</span>]</span>
@@ -618,7 +618,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 <p>Before we start building our ‘’AI model’’, let’s create a function to visualize the images from our dataset. This will help us better understand the data we are working with.</p>
 <p>You do not need to understand the details of this function just yet. The function <code>show_image</code> will display an image and, if provided, the predicted digit.</p>
-<div id="e345a724" class="cell" data-execution_count="7">
+<div id="cdac71ea" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, create a function to plot the images</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># You DO NOT need to understand this cell</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -654,7 +654,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 </div>
 <p>Now, let’s test the <code>show_image</code> function with the first element of the training subset. This will help us verify that our function works correctly and allows us to visualize the images and their corresponding labels.</p>
-<div id="ea62c180" class="cell" data-execution_count="8">
+<div id="5e8fdd81" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try out the functions with the first element of the train subset</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x_train[<span class="dv">0</span>]</span>
@@ -671,7 +671,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <h2 class="anchored" data-anchor-id="build-our-ai-model">Build our AI Model</h2>
 <p>Time to start building our model!</p>
 <p>First, we will compute the mean image for each digit in the training dataset. This involves calculating the average pixel values for all images corresponding to each digit. The resulting mean images will help us understand the general appearance of each digit.</p>
-<div id="b9a3dc54" class="cell" data-execution_count="9">
+<div id="3a76a045" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the mean image for each digit</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dict_mean <span class="op">=</span> {}</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num <span class="kw">in</span> np.unique(y_train):</span>
@@ -681,7 +681,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 </div>
 <p>Next, let’s plot the mean image for one of the digits. This will help us visualize the average appearance of a specific digit based on the training data. In this example, we will plot the mean image for the digit <code>4</code>.</p>
-<div id="8dbaa509" class="cell" data-execution_count="10">
+<div id="78f425c6" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot one of these means</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> dict_mean[y]</span>
@@ -695,7 +695,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <p>The pairwise distance (d) between two matrices (A) and (B) is calculated using the following formula:</p>
 <p><span class="math display">\[d = \sqrt{ \sum_{i} \sum_{j} {(A_{ij} - B_{ij})^{2}}}\]</span></p>
 <p>This formula represents the Euclidean distance between the corresponding elements of the two matrices.</p>
-<div id="7f8e82e0" class="cell" data-execution_count="11">
+<div id="6208616e" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pairwise_distance(A: np.ndarray, B: np.ndarray) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Compute the pairwise Euclidean distance between two matrices.</span></span>
@@ -730,7 +730,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 </div>
 <p>Let’s now select a digit from the training set and compute the pairwise distance between this digit and the average of each digit.</p>
-<div id="92240c82" class="cell" data-execution_count="12">
+<div id="e6df1cd5" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x_train[idx]</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> y_train[idx]</span>
@@ -743,7 +743,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 </div>
 <p>We can build a function to compute the pairwise distance between the new image and the average look of each digit. Our function then identifies the digit with the closest average look and returns it as the predicted classification.</p>
-<div id="c0ef2a4c" class="cell" data-execution_count="13">
+<div id="c318c99f" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to classify a new image</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_image(x: np.ndarray) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find the closest mean image</span></span>
@@ -760,7 +760,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 <p>Congratulations! You’ve just built your first AI model that uses real data to classify new information. 🎉</p>
 <p>Now, let’s take a digit from the test subset and see if our model can predict it correctly.</p>
-<div id="902b637c" class="cell" data-execution_count="14">
+<div id="fd960847" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x_test[idx]</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -780,7 +780,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <p>To compute the accuracy of our model, we use the following formula:</p>
 <p><span class="math display">\[ \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}} \]</span></p>
 <p>_(*) But it is important to consider other metrics and the context of the problem for a comprehensive evaluation._</p>
-<div id="112adede" class="cell" data-execution_count="15">
+<div id="383e9fe3" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute our model's accuracy</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(y_test)):</span>
@@ -803,7 +803,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <h2 class="anchored" data-anchor-id="test-the-model-yourself">Test the Model Yourself!</h2>
 <p>Execute the following cell to generate a canvas where you can draw a digit. Once you are done, click on “Predict” to see what our model thinks your digit is!</p>
 <p>You do not need to understand the cell, but as always I provide comments for you to follow the code’s logic.</p>
-<div id="e22bcb3b" class="cell" data-execution_count="16">
+<div id="fe7bce18" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the color of your background</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>background <span class="op">=</span> <span class="st">"black"</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>color <span class="op">=</span> <span class="st">"white"</span> <span class="cf">if</span> background <span class="op">==</span> <span class="st">"black"</span> <span class="cf">else</span> <span class="st">"black"</span></span>
@@ -908,7 +908,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <h2 class="anchored" data-anchor-id="improving-the-model">Improving the Model</h2>
 <p>How can we improve the model? The most straightforward way to improve an AI model is with more data.</p>
 <p>And we have the data! So far our model learnt only from the train subset. We can add the test subset to their learning, and see if that improves its predictions.</p>
-<div id="d9aa15ad" class="cell" data-execution_count="17">
+<div id="bf53dc01" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate train and test data</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>x_both <span class="op">=</span> np.concatenate((x_train, x_test), axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>y_both <span class="op">=</span> np.concatenate((y_train, y_test), axis<span class="op">=</span><span class="dv">0</span>)</span>
@@ -919,7 +919,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
 </div>
-<div id="651c55dd" class="cell" data-execution_count="18">
+<div id="56215a57" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a new dictionary of means</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>dict_mean_new <span class="op">=</span> {}</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num <span class="kw">in</span> np.unique(y_both):</span>
@@ -928,7 +928,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
 </div>
-<div id="72e260bc" class="cell" data-execution_count="19">
+<div id="24d88347" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a new prediction function</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_image_new(x: np.ndarray) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find the closest mean image</span></span>
@@ -943,7 +943,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 <pre><code>NameError: name 'np' is not defined</code></pre>
 </div>
 </div>
-<div id="c46530c3" class="cell" data-execution_count="20">
+<div id="6b5b4b35" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute our model's accuracy</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(y_test)):</span>
@@ -961,7 +961,7 @@ Successfully installed ipycanvas-0.14.3 numpy-2.5.3 pillow-12.3.0</code></pre>
 </div>
 <p>The model doesn’t seem to improve. This is because we are using a very basic structure: just comparing a digit to their mean. In future courses, you will learn how to build way better models.</p>
 <p>Still, it was worth a try!</p>
-<div id="15b3a72a" class="cell" data-execution_count="21">
+<div id="2f360542" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the color of your background</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>background <span class="op">=</span> <span class="st">"black"</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>color <span class="op">=</span> <span class="st">"white"</span> <span class="cf">if</span> background <span class="op">==</span> <span class="st">"black"</span> <span class="cf">else</span> <span class="st">"black"</span></span>
