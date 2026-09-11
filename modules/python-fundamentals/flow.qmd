@@ -1,30 +1,48 @@
 ---
-title: "Flow"
+title: "Flow Control"
 format: html
-execute:
-  error: true
 ---
 
 # Fundamentals: Flow Control in Python
 
-Flow control refers to the way we can dictate the path or order in which our program's instructions are executed. It allows us to make decisions, repeat actions, and create more dynamic and responsive code.
+Normally, Python executes instructions from top to bottom. Flow control allows a program to choose which instructions to execute.
+
+For example, an app could warn you if you have spent too much time on your phone:
+
+```{python}
+time_on_phone = 20
+
+if time_on_phone > 15:
+    print("Warning: you have been on your phone for too long!")
+```
+
+```{python}
+time_on_phone = 10
+
+if time_on_phone > 15:
+    print("Warning: you have been on your phone for too long!")
+
+# Nothing is printed because the condition is False
+```
+
+To make decisions, Python needs questions whose answers are either `True` or `False`.
 
 ## Comparison Operators
 
-Before we delve into the various aspects of flow control, it's essential to grasp the concept of comparison operators. Comparison operators are fundamental tools in programming and allow us to compare values, variables, or expressions.
+Comparison operators allow us to compare values, variables, or expressions.
 
-Common comparison operators in Python are:
+| Operator | Meaning | Example |
+|---|---|---|
+| `==` | Equal to | `x == 3` |
+| `!=` | Not equal to | `x != 3` |
+| `<` | Less than | `x < 3` |
+| `>` | Greater than | `x > 3` |
+| `<=` | Less than or equal to | `x <= 3` |
+| `>=` | Greater than or equal to | `x >= 3` |
 
-- `==` (Double equals): Checks if two values are equal.
-- `<` (Less than): Checks if a value is less than another.
-- `>` (Greater than): Checks if a value is greater than another.
-- `<=` (Less than or equal to): Checks if a value is less than or equal to another.
-- `>=` (Greater than or equal to): Checks if a value is greater than or equal to another.
-- `!=` (Not equal to): Checks if two values are not equal.
+The double equals sign `==` compares two values. The single equals sign `=` assigns a value to a variable.
 
-Understanding comparison operators is crucial because they form the foundation of decision-making in programming. By comparing values, we can create conditional statements (like if/else statements), that are the basis of flow control.
-
-Let's start by comparing two numeric values. Open a new Python notebook and run the following code snippets to see how comparison operators work. Remember you can copy the code by clicking the "Copy" button at the top right of each code cell; and you can run the code in your notebook by clicking the "Run" button at the top left of each code cell.
+Open a new Python notebook and run the following snippets. Remember that you can copy code using the button at the top-right of each cell and run it using the button at the top-left.
 
 ```{python}
 x = 3
@@ -39,95 +57,146 @@ print(x == y)
 print(x != y)
 ```
 
-As you can see in the two examples above, comparisons return either `True` or `False`.
+Comparisons return either `True` or `False`. These two values are called **Booleans**.
 
 ```{python}
-# Is x higher than y?
+# Is x greater than y?
 print(x > y)
 ```
 
-Comparison operators do not care whether the number is integer or float.
+Comparison operators do not distinguish between equivalent integers and floats.
 
 ```{python}
 x = 3
 y = 3.0
 
-# Are x and y equal?
 print(x == y)
 ```
 
+We can store the result of a comparison in a variable:
+
+```{python}
+temperature = 38
+fever = temperature >= 38
+
+print(fever)
+```
+
+::: {.callout-note}
+## Check Your Understanding
+
+Predict whether each expression is `True` or `False`. Check your answers in Python afterward.
+
+```python
+7 > 4
+7 == 7.0
+5 != 5
+3 <= 3
+10 < 2
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+True
+True
+False
+True
+False
+```
+:::
+
 ### Strings and Comparison Operators
 
-Comparison operators care about the type of the values being compared. For instance, a string and a number will never be equal.
+Comparison operators care about the types of the values being compared. A string and a number are different values.
 
 ```{python}
 x = 3
 y = "3"
 
-# Are x and y equal?
 print(x == y)
 ```
 
-However, we can compare two strings.
+We can compare two strings too.
 
 ```{python}
 x = "hi"
 y = "hello"
 
-# Are x and y equal?
 print(x == y)
 ```
 
-The comparison is case-sensitive (lowercase vs. uppercase). Two strings will be considered equal only when they are an exact match.
+String comparison is case-sensitive. Two strings are equal only when their contents and capitalization match exactly.
 
 ```{python}
 x = "hi"
 y = "HI"
 
-# Are x and y equal?
 print(x == y)
 ```
 
-When comparing strings, the `>` operator returns `True` if the first string is lexicographically larger than the second string.
+Python can also order strings. It compares them lexicographically, one character at a time. Capitalization affects this ordering.
 
 ```{python}
 x = "hello"
 y = "hola"
 
-# Is x higher than y?
 print(x > y)
 ```
+
+::: {.callout-note}
+## Exercise: Security Check
+
+A secret code is stored as the string `"Python"`. Create a variable called `attempt` and compare it with the secret code.
+
+Try the values `"Python"`, `"python"`, and `"Python "`. Explain why only one of them matches.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+secret_code = "Python"
+attempt = "Python"
+
+print(attempt == secret_code)
+```
+
+The comparison is case-sensitive, and spaces are characters too. Therefore, `"python"` and `"Python "` do not equal `"Python"`.
+:::
 
 ---
 
 ## The `if` Statement
 
-The `if` statement is one of the most fundamental aspects of flow control. It enables us to execute specific code blocks if a certain condition is met. In other words, it lets us make decisions in our code. Here's a basic structure:
+The `if` statement executes a block of code only when a condition is `True`. It lets a program make a decision.
 
 ```python
 if <condition>:
-  <code to run if the condition is True>
+    <code to run if the condition is True>
 ```
 
-Pay special attention to the indentation of the code block inside the `if` condition.
+Pay special attention to the colon and indentation. The indentation determines which instructions belong to the `if` statement.
 
 ```python
-<we always run this>
+<this instruction always runs>
 
 if <condition>:
-  <code to run if the condition is True>
+    <this instruction runs only if the condition is True>
 
-<we always run this>
+<this instruction always runs>
 ```
 
-For instance, let us write a code that turns any number lower than 5 into 5.
+For instance, let us write code that changes any number below 5 into 5.
 
 ```{python}
 x = 2
 
-# If x is lower than 5, turn it to 5
+# If x is lower than 5, change it to 5
 if x < 5:
-  x = 5
+    x = 5
 
 print(x)
 ```
@@ -135,9 +204,7 @@ print(x)
 ::: {.callout-note}
 ## Exercise
 
-Create a numeric variable, `years`. Write a code that prints "I am X years old" where X is the number in `years`, only if `years` is positive.
-
-
+Create a numeric variable called `years`. Print `I am X years old`, where `X` is the value stored in `years`, but only if `years` is positive.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -147,109 +214,104 @@ Create a numeric variable, `years`. Write a code that prints "I am X years old" 
 years = 5
 
 if years > 0:
-  print(f"I am {years} years old")
+    print(f"I am {years} years old")
 ```
 
-Try the cell above changing the value of `years` to a negative number. The code should not print anything.
+Try changing `years` to a negative number. The program should print nothing.
 
-What happens if you turn `years` into a string? Try it and see what happens.
-
+What happens if `years` contains a string? The comparison raises an error because Python cannot order a string and an integer.
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Battery Warning
 
-Write a sentence containing the word "cat", store it in a variable `sentence`. Create a code that replaces the word "cat" with the word "dog", only if the word "love" also appears in `sentence`.
+A robot has a variable called `battery`. If the battery is at or below 20, print `Low battery: return to base`. Regardless of the battery level, print `Status check complete` afterward.
 
-
+Try your program with `battery = 15` and `battery = 80`.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-sentence = "I love cats"
+battery = 15
 
-if "love" in sentence and "cat" in sentence:
-  sentence = sentence.replace("cat", "dog")
+if battery <= 20:
+    print("Low battery: return to base")
 
-print(sentence)
+print("Status check complete")
 ```
-
 :::
 
 ::: {.callout-note}
-## Exercise
+## Debugging Exercise
 
-Fix the following codes.
+Fix the following code blocks.
 
 ```{python}
 #| eval: false
-# Prints the square root of a number only if its positive
+# Print the square root of a number only if it is positive
 x = 4
 
 if x >= 0:
-print(f"The square root of {x} is {x**0.5}")
+print(f"The square root of {x} is {x ** 0.5}")
 ```
 
 ```{python}
 #| eval: false
-# Replace a number by its power, if the original is even
+# Replace a number by its square if the original is even
 x = 4
 
 if x % 2 = 0
-  x = x**2
+    x = x ** 2
 
 print(x)
 ```
 
 ```{python}
 #| eval: false
-# Prints "Hello" if your name has more than 3 letters
+# Print "Hello" if a name has more than three letters
 name = "John"
 
 if name > 3:
-  print("Hello")
+    print("Hello")
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The first block fails because the `print` line is not indented under the `if` clause. The second block uses `=` instead of `==` and is also missing the colon after the condition. The third block compares a string with a number instead of checking the length of the string.
+The first block needs indentation. The second uses `=` instead of `==` and is missing a colon. The third compares a string with a number instead of checking the length of the string.
 
 ```{python}
-# Prints the square root of a number only if it is positive
 x = 4
 
 if x >= 0:
-  print(f"The square root of {x} is {x**0.5}")
+    print(f"The square root of {x} is {x ** 0.5}")
 ```
 
 ```{python}
-# Replace a number by its power, if the original is even
 x = 4
 
 if x % 2 == 0:
-  x = x**2
+    x = x ** 2
 
 print(x)
 ```
 
 ```{python}
-# Prints "Hello" if your name has more than 3 letters
 name = "John"
 
 if len(name) > 3:
-  print("Hello")
+    print("Hello")
 ```
-
 :::
+
+---
 
 ## The `else` Statement
 
-The `else` statement works in conjunction with if. It allows us to provide an alternative code block to execute if the if condition is not met. Here's how it looks:
+The `else` statement provides an alternative. Its block executes when the `if` condition is `False`.
 
 ```python
 if <condition>:
@@ -258,37 +320,34 @@ else:
     <code to run if the condition is False>
 ```
 
-Once again, be very mindful of the indentation:
+Only one of the two branches executes.
 
 ```python
-<we always run this>
+<this instruction always runs>
 
 if <condition>:
-    <code to run if the condition is True>
+    <one branch runs>
 else:
-    <code to run if the condition is False>
+    <the other branch runs>
 
-<we always run this>
+<this instruction always runs>
 ```
 
 ```{python}
-# This code checks if a student passed an exam
-# Assuming a mark 0-10
-
+# Check whether a student passed an exam
+# Assume that the mark is between 0 and 10
 grade = 7
 
 if grade >= 5:
-  print("You passed")
+    print("You passed")
 else:
-  print("You have not passed")
+    print("You have not passed")
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Even or Odd
 
-How would you write a function that checks if a number is even or odd?
-
-
+Write a program that reports whether a number is even or odd.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -298,26 +357,46 @@ How would you write a function that checks if a number is even or odd?
 x = 7
 
 if x % 2 == 0:
-  print("x is even")
+    print("x is even")
 else:
-  print("x is odd")
+    print("x is odd")
 ```
-
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Locked Door
 
-Read the following code cells. What will their output be?
+A player can open a door only when the Boolean variable `has_key` is `True`. Print `The door opens` if the player has the key. Otherwise, print `The door is locked`.
+
+Test both possible values of `has_key`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+has_key = False
+
+if has_key:
+    print("The door opens")
+else:
+    print("The door is locked")
+```
+:::
+
+::: {.callout-note}
+## Predict or Debug
+
+For each code cell, decide whether it prints a message or raises an error. If it prints something, write the exact output.
 
 ```{python}
 #| eval: false
 name = "Alberto"
 
 if "a" in name:
-  print("The name contains the letter a")
+    print("The name contains the letter a")
 else:
-  print("The name does not contain the letter a")
+    print("The name does not contain the letter a")
 ```
 
 ```{python}
@@ -325,131 +404,49 @@ else:
 x = 9
 
 if x % 3 == 0:
-  print("x is divisible by 3")
+    print("x is divisible by 3")
 else
-  print("x is not divisible by 3")
+    print("x is not divisible by 3")
 ```
 
 ```{python}
 #| eval: false
 x = 5
-y = 5 < 0
+y = x < 0
 
 if y:
-  print("x is negative")
+    print("x is negative")
 else:
-  print("x is positive")
+    print("x is zero or positive")
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The first block prints `The name does not contain the letter a` because the code looks for lowercase `a`, and `Alberto` only contains uppercase `A`. The second block raises a syntax error because the `else` line is missing a colon. The third block prints `x is positive` because `5 < 0` is `False`, so `y` is `False`.
+The first block prints `The name does not contain the letter a`. The search is case-sensitive, and `Alberto` contains uppercase `A`, not lowercase `a`.
 
-```{python}
-name = "Alberto"
+The second block raises a syntax error because `else` is missing a colon.
 
-if "a" in name:
-  print("The name contains the letter a")
-else:
-  print("The name does not contain the letter a")
-```
-
-```{python}
-x = 9
-
-if x % 3 == 0:
-  print("x is divisible by 3")
-else:
-  print("x is not divisible by 3")
-```
-
-```{python}
-x = 5
-y = 5 < 0
-
-if y:
-  print("x is negative")
-else:
-  print("x is positive")
-```
-
+The third block prints `x is zero or positive`. The comparison `5 < 0` produces `False`, so the `else` branch runs.
 :::
 
-We can include one `if` clause inside another.
-
-```{python}
-x = 7
-
-if x > 5:
-  if x < 10:
-    print("x is between 5 and 10")
-  else:
-    print("x is greater than 10")
-else:
-  print("x is lower than 5")
-```
-
-::: {.callout-note}
-## Exercise
-
-Fix the following code.
-
-
-```{python}
-#| eval: false
-name = "Bella"
-
-if name > 5:
-  if len(name) = 1:
-    print("Your name is just a letter?")
-  else:
-    print("The name is long")
-else:
-  print("The name is short")
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-The code compares a string with a number and also uses `=` instead of `==` inside the nested `if` clause.
-
-```{python}
-name = "Bella"
-
-if len(name) > 5:
-  if len(name) == 1:
-    print("Your name is just a letter?")
-  else:
-    print("The name is long")
-else:
-  print("The name is short")
-```
-
-:::
+---
 
 ## The `elif` Statement
 
-
-
-
-
-Sometimes, we need to check multiple conditions in a more complex decision-making process. That's where the `elif` (short for "else if") statement comes in. It allows us to evaluate additional conditions if the preceding ones are not met. Here's how it's used:
+Sometimes a program must choose between more than two possibilities. The `elif` keyword, short for “else if,” checks another condition when the preceding conditions were `False`.
 
 ```python
 if <condition1>:
-    <Code to execute if condition1 is True>
+    <code if condition1 is True>
 elif <condition2>:
-    <Code to execute if condition2 is True>
+    <code if condition2 is True>
 else:
-    <Code to execute if no conditions are True>
+    <code if no earlier condition is True>
 ```
 
-For instance, let's determine if a number is positive, negative, or zero:
+Python checks the conditions from top to bottom and executes the first branch whose condition is `True`. After selecting a branch, it skips the rest of the chain.
 
 ```{python}
 x = -5
@@ -462,7 +459,7 @@ else:
     print("x is zero")
 ```
 
-We can chain several `elif` clauses.
+We can chain several `elif` clauses:
 
 ```{python}
 x = -10
@@ -470,79 +467,351 @@ x = -10
 if x > 10:
     print("x is greater than 10")
 elif x > 0:
-   print("x is positive")
+    print("x is positive")
 elif x < -5:
-  print("x is lower than -5")
+    print("x is lower than -5")
 elif x < 0:
     print("x is negative")
 else:
     print("x is zero")
 ```
 
-Pay special attention when chaining IF clauses. Sometimes when they are not properly ordered, some clauses will never happen.
+The order matters. An early condition can capture a value before Python reaches a later, more specific condition.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: An Impossible Branch
 
-Which one of these clauses won't happen, no matter `x`?
-
+Which branch can never execute, regardless of the value of `x`?
 
 ```{python}
 #| eval: false
 if x > 10:
-  print("greater than 10")
+    print("greater than 10")
 elif x > 0:
-  print("positive")
+    print("positive")
 elif x < 0:
-  print("negative")
+    print("negative")
 elif x < -5:
-  print("lower than -5")
+    print("lower than -5")
 else:
-  print("zero")
+    print("zero")
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The clause `elif x < -5` will never happen, because every number below `-5` already satisfies the earlier condition `elif x < 0`.
+The branch `elif x < -5` can never execute. Every number below `-5` already satisfies the earlier condition `x < 0`.
+
+Put the more specific condition first:
 
 ```{python}
-if x > 10:
-  print("greater than 10")
-elif x > 0:
-  print("positive")
-elif x < -5:
-  print("lower than -5")
-elif x < 0:
-  print("negative")
-else:
-  print("zero")
-```
+x = -10
 
+if x > 10:
+    print("greater than 10")
+elif x > 0:
+    print("positive")
+elif x < -5:
+    print("lower than -5")
+elif x < 0:
+    print("negative")
+else:
+    print("zero")
+```
 :::
 
-Understanding these control structures allows us to create programs that can make decisions, adapt to different situations, and execute specific actions based on the conditions we define.
+::: {.callout-note}
+## Exercise: Theme-Park Ticket
+
+Calculate a ticket price from a visitor's age:
+
+* Under 4 years: free.
+* From 4 to 12 years: €8.
+* From 13 to 64 years: €15.
+* 65 years or older: €10.
+
+Store the result in `price`, then print it. Test at least one age from every category.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+age = 20
+
+if age < 4:
+    price = 0
+elif age <= 12:
+    price = 8
+elif age <= 64:
+    price = 15
+else:
+    price = 10
+
+print(f"Ticket price: €{price}")
+```
+
+After the first condition fails, Python already knows that `age >= 4`. We do not need to repeat that comparison in the second condition.
+:::
+
+::: {.callout-note}
+## Exercise: A Piecewise Function
+
+Write a program that calculates the following function:
+
+$$
+f(x) =
+\begin{cases}
+x^2, & x < 0, \\
+2x + 1, & 0 \leq x < 3, \\
+7, & x \geq 3.
+\end{cases}
+$$
+
+Store the result in `fx` and print it. Test `x = -2`, `x = 1`, and `x = 5`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = 1
+
+if x < 0:
+    fx = x ** 2
+elif x < 3:
+    fx = 2 * x + 1
+else:
+    fx = 7
+
+print(fx)
+```
+:::
 
 ---
 
+## Logical Operators
+
+Logical operators combine or modify Boolean conditions.
+
+### `and`
+
+The `and` operator returns `True` only when both conditions are `True`.
+
+```python
+if <condition1> and <condition2>:
+    <code to run if both conditions are True>
+```
+
+```{python}
+# A student passes only with a sufficient grade and attendance
+grade = 8
+attendance = 89
+
+if grade >= 5 and attendance >= 80:
+    print("You passed")
+else:
+    print("You have not passed")
+```
+
+### `or`
+
+The `or` operator returns `True` when at least one condition is `True`.
+
+```python
+if <condition1> or <condition2>:
+    <code to run if either condition is True>
+```
+
+```{python}
+grade = 8
+attendance = 89
+
+if grade < 5 or attendance < 80:
+    print("You have not passed")
+else:
+    print("You passed")
+```
+
+### `not`
+
+The `not` operator reverses a Boolean value. `not True` is `False`, and `not False` is `True`.
+
+```python
+if not <condition>:
+    <code to run if the condition is False>
+```
+
+```{python}
+# Add a period if the string does not already end with one
+s = "Hello world"
+
+if not s.endswith("."):
+    s = s + "."
+
+print(s)
+```
+
+::: {.callout-note}
+## Exercise: Cat or Dog?
+
+Write a sentence containing the word `cat` and store it in `sentence`. Replace `cat` with `dog`, but only if both `love` and `cat` appear in the sentence.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+sentence = "I love cats"
+
+if "love" in sentence and "cat" in sentence:
+    sentence = sentence.replace("cat", "dog")
+
+print(sentence)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Spacecraft Launch
+
+A spacecraft may launch only when all three conditions are met:
+
+* `fuel` is at least 80.
+* `weather` equals `"clear"`.
+* `crew_ready` is `True`.
+
+Print `Launch approved` when all conditions are met. Otherwise, print `Launch delayed`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+fuel = 95
+weather = "clear"
+crew_ready = True
+
+if fuel >= 80 and weather == "clear" and crew_ready:
+    print("Launch approved")
+else:
+    print("Launch delayed")
+```
+:::
+
+::: {.callout-note}
+## Exercise: Coordinate Quadrants
+
+Given coordinates `x` and `y`, report the point's quadrant:
+
+* Quadrant I: `x > 0` and `y > 0`
+* Quadrant II: `x < 0` and `y > 0`
+* Quadrant III: `x < 0` and `y < 0`
+* Quadrant IV: `x > 0` and `y < 0`
+
+If either coordinate equals zero, print `The point is on an axis`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = -2
+y = 5
+
+if x > 0 and y > 0:
+    print("Quadrant I")
+elif x < 0 and y > 0:
+    print("Quadrant II")
+elif x < 0 and y < 0:
+    print("Quadrant III")
+elif x > 0 and y < 0:
+    print("Quadrant IV")
+else:
+    print("The point is on an axis")
+```
+:::
+
+---
+
+## Nested Conditions
+
+We can place one `if` statement inside another. This is useful when the second decision matters only after the first condition is satisfied.
+
+```{python}
+age = 20
+has_ticket = True
+
+if age >= 18:
+    if has_ticket:
+        print("You may enter")
+    else:
+        print("You need a ticket")
+else:
+    print("You must be at least 18")
+```
+
+The inner condition is checked only when `age >= 18` is `True`.
+
+::: {.callout-note}
+## Exercise: Treasure Chest
+
+A player finds a treasure chest. The chest opens only if `has_key` is `True`. If it opens, the player receives the treasure only if `inventory_space > 0`.
+
+Print one of these messages:
+
+* `The chest is locked`
+* `Your inventory is full`
+* `Treasure collected!`
+
+Use one `if` statement inside another.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+has_key = True
+inventory_space = 2
+
+if has_key:
+    if inventory_space > 0:
+        print("Treasure collected!")
+    else:
+        print("Your inventory is full")
+else:
+    print("The chest is locked")
+```
+:::
+
+Nested conditions are valid, but they are not always necessary. When two requirements lead to the same result, a logical operator may be clearer:
+
+```{python}
+age = 20
+has_ticket = True
+
+if age >= 18 and has_ticket:
+    print("You may enter")
+else:
+    print("Entry denied")
+```
+
+---
+
+## Optional: Concise Conditional Syntax
+
+The regular indented form should be your default. Python also supports shorter forms that you may encounter in other people's code.
+
 ### One-Line `if` Statements
 
-It is customary to write if `<condition>` on one line and `<code>` indented on the following line, as we have seen above. But it is permissible to write an entire if statement on one line.
+An entire `if` statement can appear on one line:
 
 ```python
 if <condition>: <code>
 ```
 
-We can even separate several statements with semicolons.
-
-```python
-if <condition>: <code1>;<code2>;<code3>
-```
-
 ```{python}
-# This code turns negative numbers to 0
+# Change negative numbers to 0
 num = -3
 
 if num < 0: num = 0
@@ -550,102 +819,101 @@ if num < 0: num = 0
 print(num)
 ```
 
-In order to make the code easier to read, I do not recommend to write IF clauses in one line.
+Python also permits several instructions separated by semicolons, but this usually makes code harder to read. Prefer the indented form in this course.
 
-## Conditional Expressions (Python's Ternary Operator)
+### Conditional Expressions
 
-Python supports one additional decision-making entity called a conditional expression. It is also referred to as a conditional operator or ternary operator in various places in the Python documentation.
+A conditional expression selects one of two values:
 
-```pyton
-<expr1> if <condition> else <expr2>
+```python
+<expression1> if <condition> else <expression2>
 ```
 
-`<code1>` is run if the `<condition>` is `True`, otherwise `<expr2>` will take place.
-
 ```{python}
-# This code converst a number to string
-# If the number is below 100, it appears as float with 2 decimals.
-# If the number is equal or above 100, it appears as integer.
+# Format values below 100 with two decimals
+# Format values of 100 or more with no decimals
 num = 99
 out = f"{num:.2f}" if num < 100 else f"{num:.0f}"
 
 print(out)
 ```
 
-When using small IF clauses to assign a variable, a conditional expression will often times be more readable.
+Conditional expressions can be readable for short assignments. Use a normal `if` and `else` when the decision requires several instructions or is difficult to understand at a glance.
 
 ---
 
-## Logical Operators
+# Final Practice
 
-Logical operators are essential tools in Python for making complex decisions in our code. They allow us to combine multiple conditions and evaluate whether they are true or false as a group.
+::: {.callout-note}
+## Challenge: Delivery Decision System
 
-The `and` operator combines conditions, and all conditions must be `True` for the result to be `True`.
+A delivery drone uses three variables:
 
 ```python
-if <condition1> and <condition2>:
-    <Code to execute if both condition1 and condition2 are True>
+distance = 8
+battery = 65
+weather = "clear"
 ```
 
-```{python}
-# This code decides if a students passes or not
-# Based on their grade and attendance
-grade = 8
-attendance = 89
+Apply these rules in order:
 
-if (grade >= 5) and (attendance >= 80):
-  print("You passed")
+1. If the weather is `"storm"`, the drone cannot fly.
+2. Otherwise, if the battery is below 20, it must recharge.
+3. Otherwise, if the distance is greater than 10, it needs at least 60 battery units.
+4. For distances of 10 or less, it needs at least 30 battery units.
+
+Print exactly one of these messages:
+
+* `Flight cancelled: storm`
+* `Recharge required`
+* `Delivery approved`
+* `Insufficient battery for this distance`
+
+Test your program with several combinations. Try to make every possible message appear.
+:::
+
+::: {.callout-tip collapse="true"}
+## Example Solution
+
+```{python}
+distance = 8
+battery = 65
+weather = "clear"
+
+if weather == "storm":
+    print("Flight cancelled: storm")
+elif battery < 20:
+    print("Recharge required")
+elif distance > 10 and battery >= 60:
+    print("Delivery approved")
+elif distance <= 10 and battery >= 30:
+    print("Delivery approved")
 else:
-  print("You have not passed")
+    print("Insufficient battery for this distance")
 ```
+:::
 
-The `or` operator combines conditions, and at least one condition must be `True` for the result to be `True`.
+::: {.callout-note}
+## Reflection
 
-```python
-if <condition1> or <condition2>:
-    <Code to execute if either condition1 or condition2 is True>
-```
+For each concept, explain its purpose in one sentence:
 
-```{python}
-# This code decides if a students passes or not
-# Based on their grade and attendance
-grade = 8
-attendance = 89
+1. A comparison operator
+2. An `if` statement
+3. An `else` branch
+4. An `elif` branch
+5. The `and`, `or`, and `not` operators
 
-if (grade < 5) or (attendance < 80):
-  print("You have not passed")
-else:
-  print("You passed")
-```
-
-The `not` operator negates a condition.
-
-```python
-if not <condition>:
-    <Code to execute if the condition is False>
-```
-
-```{python}
-# This code adds a dot at the end of a string
-# if it does not have one
-
-s = "Hello world"
-
-if not s.endswith("."):
-  s = s + "."
-
-print(s)
-```
-
-We can combine logical operators to create complex conditions.
+Then answer: why can an `if` statement make a decision but not repeat an action?
+:::
 
 ---
 
 # Homework and Review
 
-When you feel ready, you can test your knowledge by working through the [review exercises](review_flow.qmd).
+When you feel ready, test your knowledge using the [review exercises](review_flow.qmd).
 
-Work through the "Flow Control" homework exercises available here. To earn participation credit, you must complete the exercises highlighted in red.
+Work through the "Flow Control" homework exercises available here. To earn participation credit, complete the exercises highlighted in red.
 
 [Homework](homework_fundamentals.qmd#flow-control){.btn .btn-primary}
 
@@ -653,10 +921,6 @@ Work through the "Flow Control" homework exercises available here. To earn parti
 
 # In the Next Session...
 
-We will learn about **loops**.
-
-They will help us automate repetitive tasks, iterate over data structures, and execute code efficiently based on certain conditions.
-
-<img src="https://cdn.eldeforma.com/wp-content/uploads/2020/07/alarmingimpassionedasiandamselfly-size-restricted.gif" width="300" height="auto" />
+We will learn about **loops**. They allow programs to repeat instructions and process several values without writing the same code again and again.
 
 See you!
