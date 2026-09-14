@@ -7,19 +7,53 @@ execute:
 
 # Functions: Introduction
 
-In mathematics, a function is a concept that maps inputs to outputs. For instance, consider the function $f(x, y) = x + y$, which takes two inputs, x and y, and produces an output, z.
+In mathematics, a function maps inputs to outputs.
+
+For example:
+
+$$f(x, y) = x + y$$
+
+This function takes two inputs, `x` and `y`, and produces one output.
 
 $$z = f(x, y) = x + y$$
 
-However, in programming, functions are a versatile and fundamental concept that goes beyond this mathematical definition. Functions in programming are self-contained blocks of code designed to perform specific tasks or groups of related tasks.
+In programming, functions are reusable commands that perform specific tasks.
+
+Some functions display information. Some functions transform values. Some functions ask the user for information. Some functions return information that we can store in a variable.
+
+We have already used one function many times:
+
+```{python}
+print("Hello world")
+```
+
+`print()` is a function. It receives an input and displays it on the screen.
 
 ---
 
 # Built-in Functions in Python
 
-Python, like many programming languages, provides both built-in and user-defined functions. Built-in functions are ready-made functions that come with Python. A good example that we have been using from the very start is `print()`.
+Python includes many ready-made functions. These are called built-in functions.
 
-The `type()` function either returns the type of the object or returns a new type object based on the arguments passed.
+Some useful built-in functions are:
+
+| Function  | What it does                         |
+| --------- | ------------------------------------ |
+| `print()` | Displays something on the screen     |
+| `type()`  | Returns the type of a value          |
+| `int()`   | Converts a value to an integer       |
+| `float()` | Converts a value to a decimal number |
+| `round()` | Rounds a number                      |
+| `abs()`   | Returns the absolute value           |
+| `str()`   | Converts a value to a string         |
+| `len()`   | Returns the length of something      |
+| `input()` | Asks the user for information        |
+
+---
+
+## The `type()` Function
+
+The `type()` function tells us the type of a value.
 
 ```{python}
 x = 10
@@ -35,20 +69,74 @@ print(type(False))
 print(type(print))
 ```
 
+Notice that `type(print)` also works. In Python, functions are objects too.
+
+::: {.callout-note}
+
+## Exercise
+
+Without running the code, what will Python print?
+
+```python
+x = "10"
+y = 10
+
+print(type(x))
+print(type(y))
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+<class 'str'>
+<class 'int'>
+```
+
+`x` is a string because it is written inside quotation marks.
+`y` is an integer.
+:::
+
 ---
 
-`int(<x>)` converts a value to a integer.
+## Type Conversion
+
+Sometimes a value has the wrong type.
+
+For example, `"12"` looks like a number, but Python sees it as text.
+
+```{python}
+x = "12"
+
+print(type(x))
+print(x * 2)
+```
+
+Because `x` is a string, `x * 2` repeats the text.
+
+To use it as a number, we must convert it.
+
+---
+
+## The `int()` Function
+
+`int(x)` converts a value to an integer.
 
 ```{python}
 pi = 3.1415
+
 print("pi is a", type(pi))
 
 pi_new = int(pi)
+
 print(f"We converted {pi} to {pi_new}")
 print("pi_new is a", type(pi_new))
 ```
 
-⚠ `int` will always round down!
+Be careful: `int()` does not round to the closest integer. It removes the decimal part.
 
 ```{python}
 x = 5.9999
@@ -58,16 +146,23 @@ print(f"Using f-string: {x:.0f}")
 print(f"Using int:      {int(x)}")
 ```
 
-`int` can be used to convert string to numbers.
+With negative numbers, `int()` truncates toward zero.
 
 ```{python}
-x = "12"  # This is a string
-y = int(x) # This is an integer
-
-print(y * 2) # We can operate with it now
+print(int(5.9))
+print(int(-5.9))
 ```
 
-⚠ `int` fails when the input contains anything other than a number.
+`int()` can convert strings that contain whole numbers.
+
+```{python}
+x = "12"
+y = int(x)
+
+print(y * 2)
+```
+
+But `int()` fails when the input contains anything other than a whole number.
 
 ```{python}
 s = "Hello"
@@ -75,7 +170,7 @@ s = "Hello"
 print(int(s))
 ```
 
-This includes periods `.` so be careful when converting from string to integer!
+This also fails:
 
 ```{python}
 s = "3.14"
@@ -83,27 +178,79 @@ s = "3.14"
 print(int(s))
 ```
 
+Even though `"3.14"` looks numeric, it is not written as an integer.
+
 ---
 
-`float(<x>)` converts a value to a float. Contrary to `int`, `float` allows periods inside strings.
+## The `float()` Function
+
+`float(x)` converts a value to a decimal number.
+
+Unlike `int()`, `float()` accepts strings with decimal points.
 
 ```{python}
 s = "3.14"
+
 print(s)
 print(type(s))
 
 new_s = float(s)
+
 print(new_s)
 print(type(new_s))
 ```
 
+But `float()` cannot understand operations written as strings.
+
 ```{python}
-# Can `float()` perform operations?
 s = "5 / 2"
+
 print(float(s))
 ```
 
-`round(<x>, <decimals>)` rounds a numeric value to a given amount of decimals.
+Python sees `"5 / 2"` as text, not as a calculation.
+
+::: {.callout-note}
+
+## Exercise
+
+Which of these lines will work?
+
+```python
+print(float("4.5"))
+print(float("4"))
+print(float("four"))
+print(float("4,5"))
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+These work:
+
+```python
+print(float("4.5"))
+print(float("4"))
+```
+
+These fail:
+
+```python
+print(float("four"))
+print(float("4,5"))
+```
+
+Python uses `.` as the decimal point, not `,`.
+:::
+
+---
+
+## The `round()` Function
+
+`round(x, decimals)` rounds a numeric value to a given number of decimal places.
 
 ```{python}
 x = round(3.1415, 2)
@@ -111,7 +258,7 @@ x = round(3.1415, 2)
 print(x)
 ```
 
-`<decimals>` can be 0 (we round to the closest integer) but the output will still be a floating number.
+The number of decimals can be `0`, but the output is still a floating-point number.
 
 ```{python}
 x = 5.9999
@@ -122,7 +269,39 @@ print(f"Using int:      {int(x)}")
 print(f"Using round:    {round(x, 0)}")
 ```
 
-`abs(<x>)` returns the absolute value of `<x>`.
+::: {.callout-note}
+
+## Exercise
+
+Predict the output.
+
+```python
+price = 19.987
+
+print(round(price, 2))
+print(round(price, 1))
+print(round(price, 0))
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+19.99
+20.0
+20.0
+```
+
+:::
+
+---
+
+## The `abs()` Function
+
+`abs(x)` returns the absolute value of `x`.
 
 ```{python}
 x = abs(-5)
@@ -130,46 +309,198 @@ x = abs(-5)
 print(x)
 ```
 
+This is useful when we care about distance from zero.
+
+```{python}
+temperature_change = -7
+
+print(abs(temperature_change))
+```
+
+::: {.callout-note}
+
+## Exercise
+
+A city was at `3` degrees in the morning and `-4` degrees at night.
+
+Write code that calculates the size of the temperature change.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+morning = 3
+night = -4
+
+change = night - morning
+
+print(abs(change))
+```
+
+:::
+
 ---
 
-`str(<x>)` converts a value to a string.
+## The `str()` Function
+
+`str(x)` converts a value to a string.
 
 ```{python}
 x = 10
+
 print(type(x))
 
-s = str(10)
+s = str(x)
+
 print(type(s))
 ```
 
-`len(<s>)` returns the length of a string.
+This is useful when we want to combine numbers with text.
 
 ```{python}
-# Remember, spaces do count
-print(len("a b"))
-# In the example above:
-# "a" is the element 0
-# " " is the element 1
-# "b" is the element 2
-# `len()` will return 3 (there are three elements)
+age = 25
+
+message = "I am " + str(age) + " years old"
+
+print(message)
 ```
+
+With f-strings, Python does this conversion for us.
+
+```{python}
+age = 25
+
+message = f"I am {age} years old"
+
+print(message)
+```
+
+---
+
+## The `len()` Function
+
+`len(x)` returns the length of a sequence.
+
+For now, we will use it with strings.
+
+```{python}
+print(len("a b"))
+```
+
+Spaces count.
+
+In the example above:
+
+* `"a"` is character 1
+* `" "` is character 2
+* `"b"` is character 3
+
+So `len("a b")` returns `3`.
 
 ```{python}
 print(len("There is fun in functions"))
 ```
 
+`len()` can also help us count the number of digits in a number.
+
 ```{python}
-# `len()` can be used to count the number of digits in a number
 x = 76875675474657
 
 print(len(str(x)))
 ```
 
+First, `str(x)` converts the number into text.
+Then, `len()` counts how many characters that text contains.
+
+::: {.callout-note}
+
+## Exercise
+
+Write code that counts how many digits there are in the number below.
+
+```python
+number = 90000012345
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+number = 90000012345
+
+digits = len(str(number))
+
+print(digits)
+```
+
+:::
+
 ---
 
-## The `input` Function
+## Combining Functions
 
-The `input(<message>)` function in Python is used to collect data from the user via the keyboard. It allows your program to pause and wait for the user to enter some text, which is then stored as a string.
+Functions can be used inside other functions.
+
+```{python}
+x = "3.14"
+
+print(type(float(x)))
+```
+
+Python evaluates the inner function first:
+
+1. `float(x)` converts `"3.14"` to `3.14`
+2. `type(...)` checks the type
+3. `print(...)` displays the result
+
+Another example:
+
+```{python}
+number = 123456
+
+print(len(str(number)))
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Without running the code, what is the output?
+
+```python
+x = "100"
+
+print(type(x))
+print(type(int(x)))
+print(int(x) + 50)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+<class 'str'>
+<class 'int'>
+150
+```
+
+:::
+
+---
+
+## The `input()` Function
+
+The `input(message)` function collects data from the user.
+
+It pauses the program and waits for the user to type something.
 
 ```python
 x = input("Give me a number: ")
@@ -177,49 +508,66 @@ x = input("Give me a number: ")
 print(f"Your number is {x}")
 ```
 
+`input()` always returns a string.
+
 ```python
-# `input` always returns a string
 x = input("Give me a number: ")
 
 print(type(x))
 ```
 
-What should we do to collect the user input as a numeric variable?
+So if we want a number, we must convert it.
 
 ```python
 number = input("Give me a number: ")
-# Convert the number to integer
+
 number = int(number)
 
 if number % 2 == 0:
-  print("Your number is even")
+    print("Your number is even")
 else:
-  print("Your number has odd parity")
+    print("Your number has odd parity")
+```
+
+We can also convert the input directly.
+
+```python
+number = int(input("Give me a number: "))
+
+if number % 2 == 0:
+    print("Your number is even")
+else:
+    print("Your number has odd parity")
 ```
 
 ::: {.callout-note}
+
 ## Exercise
 
-Without running the code, what will be the output?
-
+Without running the code, what will the program print if the user enters `5`?
 
 ```python
 x = int(input("Give me a number: "))
 
-# Multiply the number times 8
 print(x * 8)
 ```
 
 :::
 
 ::: {.callout-tip collapse="true"}
+
 ## Solution
 
-The exact output depends on the number the user types. If the user enters `5`, the program prints `40`. In general, the program prints the user input multiplied by 8.
+The program prints:
 
+```python
+40
+```
+
+In general, the program prints the user input multiplied by `8`.
 :::
 
-We can use several `input` statements in the same code. Just make sure that the variable stored has a different name.
+We can use several `input()` statements in the same code.
 
 ```python
 x = float(input("Give me a number:       "))
@@ -229,16 +577,64 @@ print(f"{x:.0f} x {y:.0f} = {x * y:.0f}")
 ```
 
 ::: {.callout-note}
-## Exercise: Three Password Attempts
 
-Give the user three attempts to enter the password `python`. If the password is correct, print `Access granted` and stop asking. Otherwise, print `Incorrect password`.
+## Exercise: Simple Calculator
+
+Ask the user for two numbers. Then print:
+
+* their sum
+* their difference
+* their product
+* their division
+
+Example:
+
+```python
+Give me a number: 10
+Give me another number: 2
+
+10 + 2 = 12
+10 - 2 = 8
+10 * 2 = 20
+10 / 2 = 5
+```
+
 :::
 
 ::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+x = float(input("Give me a number: "))
+y = float(input("Give me another number: "))
+
+print(f"{x} + {y} = {x + y}")
+print(f"{x} - {y} = {x - y}")
+print(f"{x} * {y} = {x * y}")
+print(f"{x} / {y} = {x / y}")
+```
+
+:::
+
+::: {.callout-note}
+
+## Exercise: Three Password Attempts
+
+Give the user three attempts to enter the password `python`.
+
+If the password is correct, print `Access granted` and stop asking.
+
+Otherwise, print `Incorrect password`.
+:::
+
+::: {.callout-tip collapse="true"}
+
 ## Solution
 
 ```{python}
 #| eval: false
+
 for attempt in range(1, 4):
     password = input("Password: ")
 
@@ -248,8 +644,167 @@ for attempt in range(1, 4):
     else:
         print("Incorrect password")
 ```
+
 :::
 
-These functions are part of the Python Standard Library, a collection of modules accessible to Python programs without the need for external code installation. The Python Standard Library simplifies programming by offering commonly used commands, reducing the need to reinvent the wheel.
+---
 
-To use functions from the standard library, you can import the specific module at the beginning of your script. In the upcoming sections, we'll explore some essential Python modules.
+## Some More Exercises
+
+::: {.callout-note}
+
+## Restaurant Bill
+
+Ask the user for:
+
+* the price of a meal
+* the tip percentage
+
+Then print the tip amount and the final price.
+
+Example:
+
+```python
+Meal price: 50
+Tip percentage: 10
+
+Tip: 5.0
+Total: 55.0
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+price = float(input("Meal price: "))
+percentage = float(input("Tip percentage: "))
+
+tip = price * percentage / 100
+total = price + tip
+
+print(f"Tip: {tip}")
+print(f"Total: {total}")
+```
+
+:::
+
+::: {.callout-note}
+
+## Username Length
+
+Ask the user for a username.
+
+If the username has fewer than `5` characters, print:
+
+```python
+Username too short
+```
+
+Otherwise, print:
+
+```python
+Username accepted
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+username = input("Username: ")
+
+if len(username) < 5:
+    print("Username too short")
+else:
+    print("Username accepted")
+```
+
+:::
+
+::: {.callout-note}
+
+## Age in Months
+
+Ask the user for their age in years.
+
+Print their age in months.
+
+Example:
+
+```python
+Age: 20
+You are approximately 240 months old
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+age = int(input("Age: "))
+
+months = age * 12
+
+print(f"You are approximately {months} months old")
+```
+
+:::
+
+::: {.callout-note}
+
+## Number Cleaner
+
+Ask the user for a decimal number.
+
+Then print:
+
+* the number as a float
+* the number rounded to two decimals
+* the number converted to an integer
+* the absolute value of the number
+
+Example:
+
+```python
+Give me a decimal number: -5.678
+
+Float: -5.678
+Rounded: -5.68
+Integer: -5
+Absolute: 5.678
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```python
+number = float(input("Give me a decimal number: "))
+
+print(f"Float: {number}")
+print(f"Rounded: {round(number, 2)}")
+print(f"Integer: {int(number)}")
+print(f"Absolute: {abs(number)}")
+```
+
+:::
+
+---
+
+## Summary
+
+- Python has many built-in functions.
+- A function receives input inside parentheses and performs a task.
+- Some functions display information, such as `print()`.Some functions return information, such as `type()`, `len()`, `round()`, and `abs()`.
+- Some functions convert values from one type to another, such as `int()`, `float()`, and `str()`.
+- The `input()` function always returns a string, so we often combine it with `int()` or `float()`.
+- Functions can also be combined. Python evaluates the inner function first.
