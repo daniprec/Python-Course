@@ -1,5 +1,5 @@
 ---
-title: "Functions"
+title: "User-Defined Functions"
 format: html
 execute:
   error: true
@@ -7,44 +7,119 @@ execute:
 
 # User-Defined Functions
 
-In Python, functions are created using the `def` keyword. They serve as reusable blocks of code that perform specific tasks. User-defined functions offer an effective way to encapsulate a sequence of statements into a single, reusable unit of code.
+In the previous lesson, we used built-in Python functions such as `print()`, `type()`, `int()`, `float()`, `str()`, `len()`, `round()`, and `abs()`.
 
-The `def` keyword marks the beginning of a function definition, followed by the function's name. Functions in Python can take zero or more arguments, which are values or data that the function operates on.
+Now we will create our own functions.
+
+A user-defined function is a reusable block of code that performs a specific task.
+
+We use functions to:
+
+- avoid repeating code
+- give names to useful actions
+- organize programs into smaller parts
+- reuse the same logic with different inputs
+
+---
+
+## Creating a Function
+
+In Python, functions are created using the `def` keyword.
 
 ```python
 def <function_name>(<argument>):
-  <code_of_the_function>
-```
+    <code_of_the_function>
+````
 
-User-defined functions play a vital role in structuring and organizing code, enhancing modularity, and simplifying code maintenance.
+The `def` keyword marks the beginning of a function definition.
 
-**Example.** Program a function that greets any user by name.
+The function name comes after `def`.
+
+The code inside the function must be indented.
+
+---
+
+# Defining and Calling a Function
+
+This code defines a function:
 
 ```{python}
-# Example of a simple function
 def greet(name):
-  # This functions says hello
-  print(f"Hello, {name}!")
-
-# This cell does not output anything, but after you run it,
-# Python will have the function `greet()` in memory!
+    print(f"Hello, {name}!")
 ```
+
+This cell does not print anything.
+
+Python has learned that the function `greet()` exists, but we have not used it yet.
+
+To use a function, we call it.
 
 ```{python}
-greet("Jorge")  # Output: Hello, Jorge!
+greet("Jorge")
 ```
+
+We can call the same function many times.
 
 ```{python}
 greet("Ana")
+greet("Luis")
+greet("Marta")
 ```
 
-**Example.** Program a function that takes any number and prints its multiplication table from 1 to 10.
+The value inside the parentheses is called an argument.
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `say_goodbye(name)`.
+
+It should print a goodbye message using the name.
+
+Example:
+
+```python
+say_goodbye("Ana")
+```
+
+Expected output:
+
+```python
+Goodbye, Ana!
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def say_goodbye(name):
+    print(f"Goodbye, {name}!")
+
+say_goodbye("Ana")
+```
+
+:::
+
+---
+
+## Functions Help Us Avoid Repetition
+
+Imagine we want to print multiplication tables.
+
+Without a function, we would repeat the same structure many times.
+
+With a function, we write the logic once.
 
 ```{python}
 def multiplication_table(x):
-  for n in range(1, 11):
-    print(f"{x} x {n} = {x * n}")
+    for n in range(1, 11):
+        print(f"{x} x {n} = {x * n}")
 ```
+
+Now we can reuse it with different numbers.
 
 ```{python}
 multiplication_table(3)
@@ -54,28 +129,65 @@ multiplication_table(3)
 multiplication_table(8)
 ```
 
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `countdown(number)`.
+
+It should print the numbers from `number` down to `1`.
+
+Example:
+
+```python
+countdown(5)
+```
+
+Expected output:
+
+```python
+5
+4
+3
+2
+1
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def countdown(number):
+    for n in range(number, 0, -1):
+        print(n)
+
+countdown(5)
+```
+
+:::
+
 ---
 
-## Positional Arguments in Python Functions
+## Functions With Several Arguments
 
-In Python, functions can accept arguments, which are values or data provided to the function to perform a specific task. Positional arguments are one type of argument, and they are passed to a function based on their position in the function call.
+A function can receive more than one argument.
 
 ```python
 def <function_name>(<argument_1>, <argument_2>):
-  <code_of_the_function>
-  return <output>
+    <code_of_the_function>
 ```
 
-Positional arguments must be passed to the function in the same order as they are defined in the function's parameter list. This means that the first argument provided corresponds to the first parameter in the function definition, the second argument corresponds to the second parameter, and so on.
-
-**Example.** Program a function that takes a student's name and their grade, then says if they passed or not.
+For example, this function takes a student's name and grade, then says if the student passed.
 
 ```{python}
 def check_pass(name, grade):
-  if grade >= 5:
-    print(f"{name} has passed!")
-  else:
-    print(f"{name} has failed")
+    if grade >= 5:
+        print(f"{name} has passed!")
+    else:
+        print(f"{name} has failed")
 ```
 
 ```{python}
@@ -86,146 +198,241 @@ check_pass("Luke", 8)
 check_pass("Yoda", 2)
 ```
 
+## Positional Arguments
+
+The arguments above are positional arguments.
+
+That means Python uses their position to decide what each value means.
+
 ```{python}
-# Careful with the order of the input arguments
+check_pass("Leia", 6)
+```
+
+Here:
+
+* `"Leia"` goes into `name`
+* `6` goes into `grade`
+
+The order matters.
+
+```{python}
 check_pass(6, "Leia")
 ```
 
-::: {.callout-note}
-## Exercise
-
-How would you improve the function `check_pass()` above, so that it does not raise an error when the input arguments are not the right type?
-
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-def check_pass(name, grade):
-  if type(name) != str:
-    print("Name must be a string")
-    return
-  if type(grade) != int:
-    print("Grade must be an integer")
-    return
-  if grade >= 5:
-    print(f"{name} has passed!")
-  else:
-    print(f"{name} has failed")
-```
-
-:::
+This fails because Python tries to compare `"Leia"` with `5`.
 
 ::: {.callout-note}
+
 ## Exercise
 
-Without running the code, guess the output of the cell below.
+Without running the code, guess the output.
 
+```python
+def describe_pet(name, animal):
+    print(f"{name} is a {animal}")
 
-```{python}
-def addition(x, y):
-  print(x + y)
-
-addition("hi", "oh")
+describe_pet("Nina", "cat")
+describe_pet("dog", "Rex")
 ```
 
 :::
 
 ::: {.callout-tip collapse="true"}
+
 ## Solution
 
-The output is `hioh`, because the `+` operator concatenates strings when both arguments are strings.
+```python
+Nina is a cat
+dog is a Rex
+```
 
+The second call works, but the order is wrong. Python does not know that `"dog"` is probably the animal and `"Rex"` is probably the name.
 :::
-
-**Example.** Program a function that takes the coordinates of two points in a 2D space and prints the distance between them.
-
-<p align="center">
-<img src="https://en.neurochispas.com/wp-content/uploads/2021/08/diagram-to-derive-the-formula-for-the-distance-between-two-points-2.png" width="300" height="auto" />
-</p>
-
-```{python}
-def distance_2d(x1, y1, x2, y2):
-  width = x2 - x1
-  height = y2 - y1
-  d = (width**2 + height**2)**(1/2)
-  print(f"The distance between ({x1}, {y1}) and ({x2}, {y2}) is {d:.2f}")
-
-distance_2d(1, 3, 5, 4)
-```
-
-```{python}
-distance_2d(1, 1, 2, 2)
-
-distance_2d(2, 2, 1, 1)
-
-distance_2d(1, 2, 1, 2)
-```
 
 ---
 
-## Return Output in Python Functions
+## Checking Input Types
 
+Sometimes a function receives arguments with the wrong type.
 
+We can check the type before continuing.
 
-Python functions can also provide results (outputs) via the `return` command. You can save function's outputs in variables for later use.
+```{python}
+def check_pass(name, grade):
+    if type(name) != str:
+        print("Name must be a string")
+        return
 
-```python
-def <function_name>(<argument>):
-  <code_of_the_function>
-  return <output>
+    if type(grade) != int and type(grade) != float:
+        print("Grade must be a number")
+        return
+
+    if grade >= 5:
+        print(f"{name} has passed!")
+    else:
+        print(f"{name} has failed")
 ```
 
-Lets see the difference between `print()` and `return`.
+```{python}
+check_pass("Luke", 8)
+check_pass("Yoda", 2)
+check_pass(6, "Leia")
+```
 
-A function that uses `print()`
+The `return` statements stop the function early.
+
+::: {.callout-note}
+
+## Exercise
+
+Improve the function below so that it checks whether `x` and `y` are numbers.
+
+```python
+def addition(x, y):
+    print(x + y)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def addition(x, y):
+    if type(x) != int and type(x) != float:
+        print("x must be a number")
+        return
+
+    if type(y) != int and type(y) != float:
+        print("y must be a number")
+        return
+
+    print(x + y)
+```
+
+:::
+
+---
+
+## `print()` and `return`
+
+A function can show information with `print()`.
+
+A function can also send information back with `return`.
+
+This difference is important.
+
+---
+
+### A Function That Uses `print()`
 
 ```{python}
 def add_print(a, b):
-  print(a + b)
+    print(a + b)
 ```
 
 ```{python}
-# When we run this cell, the function "add_print()"
-# calls the "print()" and Python shows the message to us
 result = add_print(3, 2)
 ```
 
+The function prints `5`.
+
+But what is stored in `result`?
+
 ```{python}
-# What happens when we print(result)?
-# We get "None", because the function "add_print()"
-# do not return any value!
 print(result)
 ```
 
-A function that uses `return`
+The answer is `None`.
+
+The function displayed a value, but it did not return a value.
+
+---
+
+### A Function That Uses `return`
 
 ```{python}
 def add_return(a, b):
-  return a + b
+    return a + b
 ```
 
 ```{python}
-# When we run this cell, the function "add_return"
-# computes the result and returns it as a value
 result = add_return(3, 2)
-# No print() function has been called yet,
-# so Python does not show anything to us
 ```
 
+This cell does not display anything because there is no `print()`.
+
+But the result has been stored.
+
 ```{python}
-# The result has been stored and printing it will show the value
 print(result)
 ```
 
-**Example.** Write a function that computes the difference between two numbers.
+A returned value can be reused.
+
+```{python}
+double_result = result * 2
+
+print(double_result)
+```
+
+::: {.callout-note}
+
+## Exercise
+
+What is the difference between these two functions?
+
+```python
+def square_print(x):
+    print(x ** 2)
+
+def square_return(x):
+    return x ** 2
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+`square_print(x)` displays the square on the screen.
+
+`square_return(x)` gives the square back to the program.
+
+This means we can store it.
+
+```python
+result = square_return(5)
+print(result + 10)
+```
+
+:::
+
+---
+
+### When Should We Use `print()`?
+
+Use `print()` when you want to show something to the user.
+
+```{python}
+def greet(name):
+    print(f"Hello, {name}!")
+```
+
+This function is about displaying a message.
+
+---
+
+### When Should We Use `return`?
+
+Use `return` when the function calculates something that you want to reuse.
 
 ```{python}
 def difference(a, b):
-  y = a - b
-  return y
+    y = a - b
+    return y
 ```
 
 ```{python}
@@ -234,11 +441,11 @@ z = difference(3, 2)
 print(z)
 ```
 
-**Example.** Write a function that takes any number and computes its square root.
+Another example:
 
 ```{python}
 def square_root(x):
-  return x**(1/2)
+    return x ** (1 / 2)
 ```
 
 ```{python}
@@ -247,175 +454,517 @@ n = square_root(9)
 print(n)
 ```
 
-```{python}
-# We can apply the function multiple times
-n = square_root(square_root(27))
-
-print(n)
-```
+We can use returned values inside other calculations.
 
 ```{python}
 x = 16
-# We store the output into variable `y`
+
 y = square_root(x)
 
 print(f"The square root of {x} is {y}")
 ```
 
-**Example.** Write a Python function to get a substring with the odd index characters.
+We can also apply the function multiple times.
+
+```{python}
+n = square_root(square_root(81))
+
+print(n)
+```
+
+---
+
+## Functions Can Return Text
+
+A function can return a string.
+
+```{python}
+def greet_with_return(name):
+    return f"Hello, {name}!"
+
+message = greet_with_return("Bob")
+
+print(message)
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `make_email(username, domain)`.
+
+It should return an email address.
+
+Example:
+
+```python
+make_email("ana", "university.edu")
+```
+
+Expected result:
+
+```python
+ana@university.edu
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def make_email(username, domain):
+    return f"{username}@{domain}"
+
+email = make_email("ana", "university.edu")
+
+print(email)
+```
+
+:::
+
+---
+
+## Functions Can Return Boolean Values
+
+A function can return `True` or `False`.
+
+```{python}
+def is_even(number):
+    return number % 2 == 0
+```
+
+```{python}
+print(is_even(10))
+print(is_even(7))
+```
+
+This is useful with `if` statements.
+
+```{python}
+number = 12
+
+if is_even(number):
+    print("Even")
+else:
+    print("Odd")
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `is_adult(age)`.
+
+It should return `True` if the age is at least `18`.
+
+Otherwise, it should return `False`.
+
+Test it with three ages.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def is_adult(age):
+    return age >= 18
+
+print(is_adult(15))
+print(is_adult(18))
+print(is_adult(30))
+```
+
+:::
+
+---
+
+## Example: Distance Between Two Points
+
+We can use functions to give names to mathematical formulas.
+
+This function takes the coordinates of two points in a 2D space and prints the distance between them.
+
+\(d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}\)
+
+```{python}
+def distance_2d(x1, y1, x2, y2):
+    width = x2 - x1
+    height = y2 - y1
+    d = (width ** 2 + height ** 2) ** (1 / 2)
+    return d
+```
+
+```{python}
+distance = distance_2d(1, 3, 5, 4)
+
+print(f"The distance is {distance:.2f}")
+```
+
+```{python}
+print(distance_2d(1, 1, 2, 2))
+print(distance_2d(2, 2, 1, 1))
+print(distance_2d(1, 2, 1, 2))
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `rectangle_area(width, height)`.
+
+It should return the area of a rectangle.
+
+Then use it to calculate the area of:
+
+* a rectangle with width `3` and height `4`
+* a rectangle with width `10` and height `2`
+* a rectangle with width `5.5` and height `3`
+  :::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def rectangle_area(width, height):
+    return width * height
+
+print(rectangle_area(3, 4))
+print(rectangle_area(10, 2))
+print(rectangle_area(5.5, 3))
+```
+
+:::
+
+---
+
+## Example: Odd Index Characters
+
+We can write a function that returns the characters in odd index positions.
 
 ```{python}
 def odd_index_chars(text):
-  return text[1::2]
+    return text[1::2]
 
 print(odd_index_chars("abcdefg"))
 ```
 
-**Example.** Write a Python function that calculates the sum of the squares of all integers from 1 to n.
+Remember that Python starts counting at `0`.
+
+For the string `"abcdefg"`:
+
+* `a` has index `0`
+* `b` has index `1`
+* `c` has index `2`
+* `d` has index `3`
+
+So the odd index characters are `b`, `d`, and `f`.
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `first_half(text)`.
+
+It should return the first half of a string.
+
+Example:
+
+```python
+first_half("python")
+```
+
+Expected result:
+
+```python
+pyt
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def first_half(text):
+    middle = len(text) // 2
+    return text[:middle]
+
+print(first_half("python"))
+```
+
+:::
+
+---
+
+## Example: Sum of Squares
+
+Write a function that calculates the sum of the squares of all integers from `1` to `n`.
+
+For example, if `n = 4`, the result is:
+
+\(1^2 + 2^2 + 3^2 + 4^2 = 30\)
 
 ```{python}
 def sum_of_squares(number):
-  result = 0
-  for x in range(1, number + 1):
-    result = result + x**2
-  return result
+    result = 0
 
+    for x in range(1, number + 1):
+        result = result + x ** 2
+
+    return result
+```
+
+```{python}
 y = sum_of_squares(2)
+
 print(y)
 
 y = sum_of_squares(4)
+
 print(y)
 ```
 
-**Example.** Lets use our knowledge of functions to solve the quadratic equation we saw during our first day of class!
+::: {.callout-note}
 
-$$f(x) = a \cdot x^2 + b \cdot x + c$$
+## Exercise
 
-```{python}
-def first_fun(a, b, c, x):
-  y = a * x**2 + b * x + c
-  return y
+Write a function called `sum_from_1_to_n(number)`.
 
-print(first_fun(1, 1, -6, 2))
-```
+It should return the sum of all integers from `1` to `number`.
 
----
-
-### What is the Difference Between `print` and `return`?
-
-
-When you write functions, you might encounter two ways of conveying information or results:
-
-- `print`: When you use `print` in a function, it displays a value to the console (or standard output). This means that the function can produce a visible result when called, but it does not provide a way to capture or use that result in other parts of your code. It is mainly used for producing output that you want to see while the program runs, but you can't directly work with the printed value in subsequent code.
-
-- `return`: On the other hand, when you use `return` in a function, it not only calculates a value but also sends that value back to the caller. This allows you to store, manipulate, or further process the result in your program. Functions that use `return` are often used to encapsulate logic and produce a result that can be used elsewhere in your code.
-
-**Example.**
-
-```{python}
-# Example of a function using print
-def greet_with_print(name):
-  print(f"Hello, {name}!")
-
-
-# Calling the functions
-greet_with_print("Alice")  # This function prints but does not return anything
-```
-
-```{python}
-# Example of a function using return
-def greet_with_return(name):
-  return f"Hello, {name}!"
-
-result = greet_with_return("Bob")  # This function returns a greeting
-# The cell does not output anything because there is no `print()`
-```
-
-```{python}
-print(result)  # Now we can use the returned result
-```
-
-**Example.**
-
-```{python}
-# Function using print to calculate and display a result
-def calculate_and_print_total(a, b):
-    total = a + b
-    print(f"The total is: {total}")
-
-# Calling the functions
-calculate_and_print_total(5, 7)  # This function calculates and prints the total
-```
-
-```{python}
-# Function using return to calculate and provide a result
-def calculate_and_return_total(a, b):
-    total = a + b
-    return total
-
-result = calculate_and_return_total(10, 15)  # This function calculates and returns the total
-```
-
-```{python}
-print(f"Result from the second function: {result}")  # Now we can use the returned result
-```
-
----
-
-## Keyword Arguments in Python Functions
-
-Keyword arguments are passed to a function using a keyword identifier followed by a value. Unlike positional arguments, which rely on their order, keyword arguments are associated with parameter names, making it clear which value corresponds to which parameter.
-
-Using keyword arguments provides flexibility in function calls, as you can specify values for specific parameters while leaving others with default values.
+Example:
 
 ```python
-def <function_name>(<positional_argument>, <keyword_argument>=<default_value>):
-  <code_of_the_function>
-  return <output>
+sum_from_1_to_n(5)
 ```
 
-Keyword arguments always come after positional arguments, never before them.
+Expected result:
+
+```python
+15
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
 
 ```{python}
-# This function computes the square root by default
-# but we can choose the order of the root with `n`
-def root(x, n=2):
-  return x**(1/n)
+def sum_from_1_to_n(number):
+    result = 0
+
+    for x in range(1, number + 1):
+        result = result + x
+
+    return result
+
+print(sum_from_1_to_n(5))
+```
+
+:::
+
+---
+
+## Example: Quadratic Function
+
+We can also use functions to represent mathematical functions.
+
+Consider:
+
+\(f(x) = a \cdot x^2 + b \cdot x + c\)
+
+```{python}
+def quadratic(a, b, c, x):
+    y = a * x ** 2 + b * x + c
+    return y
 ```
 
 ```{python}
-root(4, n=4)
+print(quadratic(1, 1, -6, 2))
 ```
 
-**Example.** How would you write a Python function that greets the user and allows them to customize the greeting message? Write it so that, if no greeting is given, defaults to "Hello".
+The function above calculates:
+
+\(1 \cdot 2^2 + 1 \cdot 2 - 6\)
+
+::: {.callout-note}
+
+## Exercise
+
+Use the function `quadratic(a, b, c, x)` to calculate:
+
+\(f(x) = 2x^2 - 3x + 1\)
+
+for:
+
+* `x = 0`
+* `x = 1`
+* `x = 2`
+* `x = 3`
+  :::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def quadratic(a, b, c, x):
+    y = a * x ** 2 + b * x + c
+    return y
+
+print(quadratic(2, -3, 1, 0))
+print(quadratic(2, -3, 1, 1))
+print(quadratic(2, -3, 1, 2))
+print(quadratic(2, -3, 1, 3))
+```
+
+:::
+
+---
+
+## Keyword Arguments
+
+Keyword arguments are passed using the parameter name.
+
+```python
+function(argument_name=value)
+```
+
+With positional arguments, order matters.
+
+With keyword arguments, the name tells Python where the value goes.
 
 ```{python}
 def greet(name, greeting="Hello"):
-  # "name" is a positional argument. It is always required
-  # "greeting" is a keyword argument.
-  # If the user does not provide it, the function will default to "Hello"
-  print(f"{greeting}, {name}!")
+    print(f"{greeting}, {name}!")
+```
 
+```{python}
 greet("Alice")
-
 greet("Bob", greeting="Hi")
-
 greet("Don Pepito", greeting="Hola")
 ```
 
-**Example.** Build a calculator function calculate that accepts three arguments: `num1`, `num2`, and the keyword argument `operation`. The function should perform the specified operation (addition, subtraction, multiplication, or division) on `num1` and `num2` and return the result. If no operation is given, defaults to addition.
+Here, `name` is required.
+
+`greeting` has a default value. If we do not provide it, Python uses `"Hello"`.
+
+---
+
+# Default Values
+
+A default value makes an argument optional.
+
+```{python}
+def root(x, n=2):
+    return x ** (1 / n)
+```
+
+By default, the function computes the square root.
+
+```{python}
+print(root(4))
+```
+
+But we can choose another root.
+
+```{python}
+print(root(16, n=4))
+```
+
+Keyword arguments must come after positional arguments.
+
+This works:
+
+```python
+root(16, n=4)
+```
+
+This does not work:
+
+```python
+root(n=4, 16)
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Write a function called `apply_discount(price, discount=10)`.
+
+It should return the price after applying the discount percentage.
+
+Example:
+
+```python
+apply_discount(100)
+```
+
+Expected result:
+
+```python
+90
+```
+
+Example:
+
+```python
+apply_discount(100, discount=25)
+```
+
+Expected result:
+
+```python
+75
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def apply_discount(price, discount=10):
+    return price - price * discount / 100
+
+print(apply_discount(100))
+print(apply_discount(100, discount=25))
+```
+
+:::
+
+---
+
+## Example: Calculator With Keyword Arguments
+
+Build a calculator function that accepts three arguments:
+
+* `num1`
+* `num2`
+* `operation`
+
+If no operation is given, it should use addition.
 
 ```{python}
 def calculator(num1, num2, operation="addition"):
-  if operation == "addition":
-    return num1 + num2
-  elif operation == "subtraction":
-    return num1 - num2
-  elif operation == "multiplication":
-    return num1 * num2
-  elif operation == "division":
-    return num1 / num2
+    if operation == "addition":
+        return num1 + num2
+    elif operation == "subtraction":
+        return num1 - num2
+    elif operation == "multiplication":
+        return num1 * num2
+    elif operation == "division":
+        return num1 / num2
+```
 
+```{python}
 result = calculator(4, 2)
 print(result)
 
@@ -432,84 +981,507 @@ result = calculator(4, 2, operation="division")
 print(result)
 ```
 
-**Example.** Lets use our knowledge of functions to solve the quadratic equation we saw during our first day of class!
+This function works, but it has two possible problems:
 
-$$f(x) = a \cdot x^2 + b \cdot x + c$$
+* it does not handle unknown operations
+* it does not handle division by zero
 
-But this time, $a=1$, $b=1$, $c=-6$ are keyword arguments.
+We can improve it.
 
 ```{python}
-def first_fun(x, a=1, b=1, c=-6):
-  y = a * x**2 + b * x + c
-  return y
+def calculator(num1, num2, operation="addition"):
+    if operation == "addition":
+        return num1 + num2
+    elif operation == "subtraction":
+        return num1 - num2
+    elif operation == "multiplication":
+        return num1 * num2
+    elif operation == "division":
+        if num2 == 0:
+            return "Cannot divide by zero"
+        return num1 / num2
+    else:
+        return "Unknown operation"
+```
 
-result = first_fun(2)
-print(result)
+```{python}
+print(calculator(4, 2))
+print(calculator(4, 2, operation="division"))
+print(calculator(4, 0, operation="division"))
+print(calculator(4, 2, operation="power"))
+```
 
-result = first_fun(2, a=2, b=0, c=0)
+::: {.callout-note}
+
+## Exercise
+
+Add one more operation to the calculator: `"power"`.
+
+It should return `num1 ** num2`.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def calculator(num1, num2, operation="addition"):
+    if operation == "addition":
+        return num1 + num2
+    elif operation == "subtraction":
+        return num1 - num2
+    elif operation == "multiplication":
+        return num1 * num2
+    elif operation == "division":
+        if num2 == 0:
+            return "Cannot divide by zero"
+        return num1 / num2
+    elif operation == "power":
+        return num1 ** num2
+    else:
+        return "Unknown operation"
+
+print(calculator(2, 3, operation="power"))
+```
+
+:::
+
+---
+
+## Example: Quadratic Function With Defaults
+
+Let us return to the quadratic function.
+
+\(f(x) = a \cdot x^2 + b \cdot x + c\)
+
+This time, `a = 1`, `b = 1`, and `c = -6` are default values.
+
+```{python}
+def quadratic(x, a=1, b=1, c=-6):
+    y = a * x ** 2 + b * x + c
+    return y
+```
+
+If we only provide `x`, Python uses the default values.
+
+```{python}
+result = quadratic(2)
+
 print(result)
 ```
 
-**Example. Decay of a Radioactive Element**
+We can also replace the defaults.
 
-In this exercise, you will create a Python function to model the radioactive decay of a specific element over time. Radioactive decay is a common phenomenon in nuclear physics and has applications in various fields, including radiometric dating and nuclear medicine.
+```{python}
+result = quadratic(2, a=2, b=0, c=0)
 
-Consider a radioactive element with a known half-life (the time it takes for half of the element to decay) represented as half_life (in years). The number of radioactive atoms at any given time can be described by the formula:
+print(result)
+```
 
-$$N(t) = N_0 \cdot (1/2)^{\left(t / T_{h}\right)}$$
+::: {.callout-note}
+
+## Exercise
+
+Use the function above to calculate:
+
+\(f(x) = x^2 + x - 6\)
+
+for `x = -3`, `x = 0`, and `x = 2`.
+
+Then use the same function to calculate:
+
+\(g(x) = 3x^2 - 2x + 1\)
+
+for `x = 2`.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def quadratic(x, a=1, b=1, c=-6):
+    y = a * x ** 2 + b * x + c
+    return y
+
+print(quadratic(-3))
+print(quadratic(0))
+print(quadratic(2))
+
+print(quadratic(2, a=3, b=-2, c=1))
+```
+
+:::
+
+---
+
+## Example: Radioactive Decay
+
+In this exercise, we will create a function to model radioactive decay.
+
+Radioactive decay describes how the amount of a radioactive element decreases over time.
+
+The formula is:
+
+\(N(t) = N_0 \cdot (1/2)^{t / T_h}\)
 
 Where:
 
-- $T_{h}$ is the half-life of the radioactive element.
-- $N(t)$ is the number of radioactive atoms at time $t$.
-- $N_0$ is the initial number of radioactive atoms at time $t = 0$.
+* $T_h$ is the half-life of the radioactive element
+* $N(t)$ is the number of radioactive atoms at time $t$
+* $N_0$ is the initial number of radioactive atoms
 
-Your task is to create a Python function `radioactive_decay(n0, half_life, t)` that calculates the number of radioactive atoms remaining at a specific time `t` using the provided parameters. The function should take the following keyword arguments:
+Create a function called `radioactive_decay(n0, half_life, t)`.
 
-- `n0`: Initial number of radioactive atoms.
-- `half_life`: Half-life of the radioactive element in years (default value: 5730 years).
-- `t`: Time (in years) at which you want to calculate the remaining atoms (default value: 500 years).
+It should return the number of atoms remaining at time `t`.
 
-Your function should return the remaining number of radioactive atoms at time `t`.
+We will use default values for `half_life` and `t`.
 
 ```{python}
 def radioactive_decay(n0, half_life=5730, t=500):
-  return n0 * (1/2)**(t / half_life)
+    return n0 * (1 / 2) ** (t / half_life)
 ```
 
-**Carbon-14 Dating.** Carbon-14 is a radioactive isotope used for radiometric dating. It has a half-life of approximately 5,730 years.
+Carbon-14 has a half-life of approximately `5730` years.
 
 ```{python}
 remaining_carbon_14 = radioactive_decay(1000, half_life=5730, t=2000)
+
 print(f"After 2000 years, there are approximately {remaining_carbon_14:.0f} Carbon-14 atoms remaining.")
 ```
 
-**Uranium-238 Decay.** Uranium-238 is another radioactive isotope with a much longer half-life, approximately 4.468 billion years.
+Uranium-238 has a much longer half-life, approximately `4.468` billion years.
 
 ```{python}
-remaining_uranium_238 = radioactive_decay(100, half_life=4.468 * 10**9, t=10**9)
+remaining_uranium_238 = radioactive_decay(100, half_life=4.468 * 10 ** 9, t=10 ** 9)
+
 print(f"After 1 billion years, there are approximately {remaining_uranium_238:.0f} Uranium-238 atoms remaining.")
+```
+
+::: {.callout-note}
+
+## Exercise
+
+Use `radioactive_decay()` to answer this question:
+
+A sample starts with `5000` atoms. The half-life is `100` years.
+
+How many atoms remain after:
+
+* `0` years
+* `50` years
+* `100` years
+* `200` years
+  :::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def radioactive_decay(n0, half_life=5730, t=500):
+    return n0 * (1 / 2) ** (t / half_life)
+
+print(radioactive_decay(5000, half_life=100, t=0))
+print(radioactive_decay(5000, half_life=100, t=50))
+print(radioactive_decay(5000, half_life=100, t=100))
+print(radioactive_decay(5000, half_life=100, t=200))
+```
+
+:::
+
+---
+
+## Common Mistakes
+
+### Forgetting the Parentheses
+
+This refers to the function:
+
+```python
+print
+```
+
+This calls the function:
+
+```python
+print()
+```
+
+The same happens with our own functions.
+
+```python
+greet
+greet("Ana")
+```
+
+### Forgetting the Colon
+
+Incorrect:
+
+```python
+def greet(name)
+    print(f"Hello, {name}")
+```
+
+Correct:
+
+```python
+def greet(name):
+    print(f"Hello, {name}")
+```
+
+### Wrong Indentation
+
+Incorrect:
+
+```python
+def greet(name):
+print(f"Hello, {name}")
+```
+
+Correct:
+
+```python
+def greet(name):
+    print(f"Hello, {name}")
+```
+
+### Using a Variable Outside the Function
+
+```python
+def double(x):
+    result = x * 2
+
+print(result)
+```
+
+This fails because `result` was created inside the function.
+
+A better version:
+
+```python
+def double(x):
+    result = x * 2
+    return result
+
+answer = double(5)
+
+print(answer)
+```
+
+### Printing Instead of Returning
+
+```python
+def double(x):
+    print(x * 2)
+
+answer = double(5)
+
+print(answer + 10)
+```
+
+This fails because `answer` is `None`.
+
+Correct version:
+
+```python
+def double(x):
+    return x * 2
+
+answer = double(5)
+
+print(answer + 10)
 ```
 
 ---
 
-## Summary of Argument Types in Python Functions
-
-In Python functions, arguments can be categorized into two main types: positional arguments and keyword arguments, each with its own characteristics.
+## Summary of Argument Types
 
 ### Positional Arguments
 
-- **Usage:** Positional arguments are essential for the function and must be provided in a specific order defined by the function's parameter list.
-- **Default Values:** Positional arguments do not have default values, meaning they must always be provided when calling the function.
-- **Order Matters:** The order of positional arguments in the function call must match the order of parameters in the function definition.
+Positional arguments are matched by order.
+
+```python
+def subtract(a, b):
+    return a - b
+
+subtract(10, 3)
+```
+
+Here, `a = 10` and `b = 3`.
+
+Order matters.
 
 ### Keyword Arguments
 
-- **Usage:** Keyword arguments are associated with specific parameter names in the function call, allowing flexibility in argument order.
-- **Default Values:** Functions can assign default values to keyword parameters, making them optional in the function call.
-- **Flexibility:** Using keyword arguments, you can specify values for specific parameters while leaving others with their default values.
+Keyword arguments are matched by name.
 
-Understanding these argument types and their behavior is crucial for working effectively with Python functions.
+```python
+subtract(a=10, b=3)
+```
+
+This is clearer when a function has many arguments.
+
+### Default Values
+
+Some arguments can have default values.
+
+```python
+def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+```
+
+If no greeting is given, Python uses `"Hello"`.
+
+---
+
+## Some More Exercises
+
+::: {.callout-note}
+
+### Celsius to Fahrenheit
+
+Write a function called `celsius_to_fahrenheit(celsius)`.
+
+Use this formula:
+
+\(F = C \times \frac{9}{5} + 32\)
+
+The function should return the temperature in Fahrenheit.
+
+Test it with:
+
+* `0`
+* `20`
+* `37`
+* `100`
+  :::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def celsius_to_fahrenheit(celsius):
+    return celsius * 9 / 5 + 32
+
+print(celsius_to_fahrenheit(0))
+print(celsius_to_fahrenheit(20))
+print(celsius_to_fahrenheit(37))
+print(celsius_to_fahrenheit(100))
+```
+
+:::
+
+::: {.callout-note}
+
+### Password Checker
+
+Write a function called `check_password(password)`.
+
+It should return `True` if the password is `"python"`.
+
+Otherwise, it should return `False`.
+
+Then ask the user for a password and use the function inside an `if` statement.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def check_password(password):
+    return password == "python"
+
+password = input("Password: ")
+
+if check_password(password):
+    print("Access granted")
+else:
+    print("Incorrect password")
+```
+
+:::
+
+::: {.callout-note}
+
+### Grade Classifier
+
+Write a function called `classify_grade(grade)`.
+
+It should return:
+
+* `"Fail"` if the grade is below `5`
+* `"Pass"` if the grade is from `5` to below `7`
+* `"Good"` if the grade is from `7` to below `9`
+* `"Excellent"` if the grade is `9` or higher
+
+Then test the function with several grades.
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def classify_grade(grade):
+    if grade < 5:
+        return "Fail"
+    elif grade < 7:
+        return "Pass"
+    elif grade < 9:
+        return "Good"
+    else:
+        return "Excellent"
+
+print(classify_grade(3))
+print(classify_grade(5))
+print(classify_grade(8))
+print(classify_grade(10))
+```
+
+:::
+
+::: {.callout-note}
+
+### Text Analyzer
+
+Write a function called `analyze_text(text)`.
+
+It should print:
+
+* the original text
+* the number of characters
+* the text in uppercase
+* the first character
+* the last character
+
+Example:
+
+```python
+analyze_text("python")
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+
+## Solution
+
+```{python}
+def analyze_text(text):
+    print(f"Original text: {text}")
+    print(f"Number of characters: {len(text)}")
+    print(f"Uppercase: {text.upper()}")
+    print(f"First character: {text[0]}")
+    print(f"Last character: {text[-1]}")
+
+analyze_text("python")
+```
+
+:::
 
 ---
 
@@ -520,4 +1492,3 @@ When you feel ready, you can test your knowledge by working through the [review 
 Work through the "Functions" homework exercises available here. To earn participation credit, you must complete the exercises highlighted in red.
 
 [Homework](homework_fundamentals.qmd#functions){.btn .btn-primary}
-
