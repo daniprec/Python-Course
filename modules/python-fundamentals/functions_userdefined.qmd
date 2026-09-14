@@ -5,260 +5,7 @@ execute:
   error: true
 ---
 
-# Functions: Introduction
-
-In mathematics, a function is a concept that maps inputs to outputs. For instance, consider the function $f(x, y) = x + y$, which takes two inputs, x and y, and produces an output, z.
-
-$$z = f(x, y) = x + y$$
-
-However, in programming, functions are a versatile and fundamental concept that goes beyond this mathematical definition. Functions in programming are self-contained blocks of code designed to perform specific tasks or groups of related tasks.
-
----
-
-# Built-in Functions in Python
-
-Python, like many programming languages, provides both built-in and user-defined functions. Built-in functions are ready-made functions that come with Python. A good example that we have been using from the very start is `print()`.
-
-The `type()` function either returns the type of the object or returns a new type object based on the arguments passed.
-
-```{python}
-x = 10
-print(f"x is a {type(x)}")
-
-y = 2.72
-print("y is a", type(y))
-
-s = "Hello world"
-print("s is a", type(s))
-
-print(type(False))
-print(type(print))
-```
-
----
-
-`int(<x>)` converts a value to a integer.
-
-```{python}
-pi = 3.1415
-print("pi is a", type(pi))
-
-pi_new = int(pi)
-print(f"We converted {pi} to {pi_new}")
-print("pi_new is a", type(pi_new))
-```
-
-⚠ `int` will always round down!
-
-```{python}
-x = 5.9999
-
-print(f"Input number:   {x}")
-print(f"Using f-string: {x:.0f}")
-print(f"Using int:      {int(x)}")
-```
-
-`int` can be used to convert string to numbers.
-
-```{python}
-x = "12"  # This is a string
-y = int(x) # This is an integer
-
-print(y * 2) # We can operate with it now
-```
-
-⚠ `int` fails when the input contains anything other than a number.
-
-```{python}
-s = "Hello"
-
-print(int(s))
-```
-
-This includes periods `.` so be careful when converting from string to integer!
-
-```{python}
-s = "3.14"
-
-print(int(s))
-```
-
----
-
-`float(<x>)` converts a value to a float. Contrary to `int`, `float` allows periods inside strings.
-
-```{python}
-s = "3.14"
-print(s)
-print(type(s))
-
-new_s = float(s)
-print(new_s)
-print(type(new_s))
-```
-
-```{python}
-# Can `float()` perform operations?
-s = "5 / 2"
-print(float(s))
-```
-
-`round(<x>, <decimals>)` rounds a numeric value to a given amount of decimals.
-
-```{python}
-x = round(3.1415, 2)
-
-print(x)
-```
-
-`<decimals>` can be 0 (we round to the closest integer) but the output will still be a floating number.
-
-```{python}
-x = 5.9999
-
-print(f"Input number:   {x}")
-print(f"Using f-string: {x:.0f}")
-print(f"Using int:      {int(x)}")
-print(f"Using round:    {round(x, 0)}")
-```
-
-`abs(<x>)` returns the absolute value of `<x>`.
-
-```{python}
-x = abs(-5)
-
-print(x)
-```
-
----
-
-`str(<x>)` converts a value to a string.
-
-```{python}
-x = 10
-print(type(x))
-
-s = str(10)
-print(type(s))
-```
-
-`len(<s>)` returns the length of a string.
-
-```{python}
-# Remember, spaces do count
-print(len("a b"))
-# In the example above:
-# "a" is the element 0
-# " " is the element 1
-# "b" is the element 2
-# `len()` will return 3 (there are three elements)
-```
-
-```{python}
-print(len("There is fun in functions"))
-```
-
-```{python}
-# `len()` can be used to count the number of digits in a number
-x = 76875675474657
-
-print(len(str(x)))
-```
-
----
-
-## The `input` Function
-
-The `input(<message>)` function in Python is used to collect data from the user via the keyboard. It allows your program to pause and wait for the user to enter some text, which is then stored as a string.
-
-```python
-x = input("Give me a number: ")
-
-print(f"Your number is {x}")
-```
-
-```python
-# `input` always returns a string
-x = input("Give me a number: ")
-
-print(type(x))
-```
-
-What should we do to collect the user input as a numeric variable?
-
-```python
-number = input("Give me a number: ")
-# Convert the number to integer
-number = int(number)
-
-if number % 2 == 0:
-  print("Your number is even")
-else:
-  print("Your number has odd parity")
-```
-
-::: {.callout-note}
-## Exercise
-
-Without running the code, what will be the output?
-
-
-```python
-x = int(input("Give me a number: "))
-
-# Multiply the number times 8
-print(x * 8)
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-The exact output depends on the number the user types. If the user enters `5`, the program prints `40`. In general, the program prints the user input multiplied by 8.
-
-:::
-
-We can use several `input` statements in the same code. Just make sure that the variable stored has a different name.
-
-```python
-x = float(input("Give me a number:       "))
-y = float(input("Give me another number: "))
-
-print(f"{x:.0f} x {y:.0f} = {x * y:.0f}")
-```
-
-::: {.callout-note}
-## Exercise: Three Password Attempts
-
-Give the user three attempts to enter the password `python`. If the password is correct, print `Access granted` and stop asking. Otherwise, print `Incorrect password`.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-#| eval: false
-for attempt in range(1, 4):
-    password = input("Password: ")
-
-    if password == "python":
-        print("Access granted")
-        break
-    else:
-        print("Incorrect password")
-```
-:::
-
-These functions are part of the Python Standard Library, a collection of modules accessible to Python programs without the need for external code installation. The Python Standard Library simplifies programming by offering commonly used commands, reducing the need to reinvent the wheel.
-
-To use functions from the standard library, you can import the specific module at the beginning of your script. In the upcoming sections, we'll explore some essential Python modules.
-
----
-
 # User-Defined Functions
-
-
 
 In Python, functions are created using the `def` keyword. They serve as reusable blocks of code that perform specific tasks. User-defined functions offer an effective way to encapsulate a sequence of statements into a single, reusable unit of code.
 
@@ -310,8 +57,6 @@ multiplication_table(8)
 ---
 
 ## Positional Arguments in Python Functions
-
-
 
 In Python, functions can accept arguments, which are values or data provided to the function to perform a specific task. Positional arguments are one type of argument, and they are passed to a function based on their position in the function call.
 
@@ -619,8 +364,6 @@ print(f"Result from the second function: {result}")  # Now we can use the return
 
 ## Keyword Arguments in Python Functions
 
-
-
 Keyword arguments are passed to a function using a keyword identifier followed by a value. Unlike positional arguments, which rely on their order, keyword arguments are associated with parameter names, making it clear which value corresponds to which parameter.
 
 Using keyword arguments provides flexibility in function calls, as you can specify values for specific parameters while leaving others with default values.
@@ -713,10 +456,11 @@ In this exercise, you will create a Python function to model the radioactive dec
 
 Consider a radioactive element with a known half-life (the time it takes for half of the element to decay) represented as half_life (in years). The number of radioactive atoms at any given time can be described by the formula:
 
-$$N(t) = N_0 * (1/2)^{(t / \text{half_life})}$$
+$$N(t) = N_0 \cdot (1/2)^{\left(t / T_{h}\right)}$$
 
 Where:
 
+- $T_{h}$ is the half-life of the radioactive element.
 - $N(t)$ is the number of radioactive atoms at time $t$.
 - $N_0$ is the initial number of radioactive atoms at time $t = 0$.
 
@@ -750,8 +494,6 @@ print(f"After 1 billion years, there are approximately {remaining_uranium_238:.0
 ---
 
 ## Summary of Argument Types in Python Functions
-
-
 
 In Python functions, arguments can be categorized into two main types: positional arguments and keyword arguments, each with its own characteristics.
 
