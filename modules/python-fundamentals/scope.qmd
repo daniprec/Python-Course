@@ -5,109 +5,161 @@ execute:
   error: true
 ---
 
-# Python Scopes
+# Python Scope
 
-[Read the slides first!](https://docs.google.com/presentation/d/104NkGpkBCbF8TzAIWwObnLGTcuICtgT7/edit?usp=drive_link&ouid=112793419067458804625&rtpof=true&sd=true)
+## What Is Scope?
 
-## Return inside an `if` Clause
+When you create a variable or define a function, it is not available everywhere in your program. **Scope** refers to the region of your code where a particular name (variable, function, etc.) can be accessed.
 
-When `return` is used inside an `if` clause, it means that if the condition specified in the `if` statement is met, the function will return a value, and the execution of the function will stop. For example:
+Python organises scope into four layers, from innermost to outermost:
+
+| Layer | What lives here | Example |
+|---|---|---|
+| **Local** | Variables defined inside the current function | `y = 5` inside a function |
+| **Enclosing** | Variables in a surrounding (outer) function | An outer function's variable accessed by a nested function |
+| **Global** | Variables defined at the top level of a script or module | `x = 10` outside any function |
+| **Built-in** | Names that Python provides automatically | `print()`, `len()`, `range()` |
+
+<img src="../../img/scope_diagram.png" width="300" height="auto" />
+
+### The LEGB Rule
+
+When you use a name in your code, Python looks it up in this order:
+
+1. **L**ocal: inside the current function.
+2. **E**nclosing: in any surrounding function (for nested functions).
+3. **G**lobal: at the module/script level.
+4. **B**uilt-in: among Python's built-in names.
+
+Python stops as soon as it finds a match. If no scope contains the name, you get a `NameError`.
+
+### Local Scope
+
+The local scope is the innermost scope, typically within a function. Variables defined inside a function are accessible only within that function.
+
+### Enclosing Scope
+
+When one function is defined inside another, the inner function can access variables from the outer function. Those outer-function variables live in the **enclosing** scope.
+
+### Global Scope
+
+The global scope is the outermost scope of your script. Variables defined at this level are accessible from anywhere in the code, including inside functions.
+
+### Built-in Scope
+
+This is the highest level of scope. It includes all the names that are always available when you run a Python program — the built-in functions, exceptions, and objects that are part of the language itself. You do not need to import anything to use them. We have already learned some built-in functions, such as `print()` and `len()`.
+
+---
+
+## `return` inside an `if` Clause
+
+When `return` is used inside an `if` clause, the function returns a value and stops executing as soon as the condition is met.
 
 ```{python}
 def check_even(number):
-  if number % 2 == 0:
-    return True
-  return False
+    if number % 2 == 0:
+        return True
+    return False
 
 print(check_even(5))
 print(check_even(8))
 ```
 
-In this case, if `number` is even, the function returns `True` and exits immediately. If `number` is not even, it proceeds to the next line (`return False`) and then exits.
+If `number` is even, the function returns `True` and exits immediately. If `number` is not even, it continues to the next line (`return False`) and then exits.
 
-## Return inside a `for` Loop
+## `return` inside a `for` Loop
 
-When `return` is used inside a `for` loop, it also affects the function's behavior. Once `return` is encountered within the loop, the function will exit, and the value provided after `return` will be returned as the result of the function. For example:
+When `return` is used inside a `for` loop, the function exits as soon as `return` is reached — the remaining iterations are skipped.
 
 ```{python}
 def find_element(sequence, target):
-  for item in sequence:
-    if item == target:
-      return True
-  return False
+    for item in sequence:
+        if item == target:
+            return True
+    return False
 
 seq = [1, 2, 3, 4, 5, 6]
 print(find_element(seq, 5))
 print(find_element(seq, 8))
 ```
 
-In this case, if the `target` element is found in the `sequence`, the function returns `True` and exits the loop and the function. If the loop completes without finding the target, it returns `False`.
+If the `target` is found in the `sequence`, the function returns `True` and exits the loop and the function. If the loop completes without finding the target, it returns `False`.
 
-It's important to note that using `return` inside loops and conditionals can be a way to efficiently handle certain cases when you want to exit a function early based on specific conditions. However, it's crucial to design your functions carefully to ensure they behave as expected and return the correct values.
+Using `return` inside loops and conditionals is a way to exit a function early when a specific condition is met. Design your functions carefully to make sure they return the correct value in every case.
 
 **Example.** Write a Python function `is_prime(n)` that checks if a given number `n` is prime.
 
 ```{python}
 def is_prime(number):
-  # Loop through all numbers lower than `number`
-  for x in range(2, number):
-    if number % x == 0:
-      # If the module is 0, then the number is not prime
-      # Using return inside a loop will finish the whole function execution
-      return False
-  # If the loop finishes, that means the number is prime
-  return True
+    # Loop through all numbers lower than `number`
+    for x in range(2, number):
+        if number % x == 0:
+            # If the remainder is 0, then the number is not prime
+            # Using return inside a loop finishes the whole function
+            return False
+    # If the loop finishes, the number is prime
+    return True
 
 print(is_prime(3))
 print(is_prime(11))
 print(is_prime(4))
 ```
 
-## Local Scope
+---
+
+## Local Scope in Practice
+
+Consider the following code. The variable `x` is **global** (defined outside any function), and `print` is a **built-in** function.
 
 ```{python}
-x = 10  # Global variable (we define it to be 10)
-print(x) # Build-in function (defined by Python)
+x = 10  # Global variable
+print(x) # Built-in function
 ```
+
+Inside a function, we can create **local** variables and also access global ones:
 
 ```{python}
 def example_function():
-  y = 5  # Local variable
-  z = 2 * x # Accessing the global variable
-  print(y) # Accessing the local variable
+    y = 5      # Local variable
+    z = 2 * x  # Accessing the global variable `x`
+    print(y)   # Accessing the local variable
 ```
 
 ```{python}
 example_function()
 ```
 
+However, a local variable does not exist outside its function:
+
 ```{python}
-# If we try to access `y` here, it will fail because we are outside the function
+# Trying to access `y` here fails because we are outside the function
 print(y)
 ```
 
-
-**Example.** Before running the code below, take a moment to think about what you expect to happen with the variable `x` when we call the `modify_variable` function. Will it change its value? Why or why not?
+**Example.** Before running the code below, think about what you expect to happen with the variable `x` when we call the `modify_variable` function. Will its value change? Why or why not?
 
 ```{python}
 x = 5
 
 
 def modify_variable(y):
-  x = 10
-  return y + x
-
+    x = 10
+    return y + x
 
 
 result = modify_variable(7)
 print(result)
 ```
 
-There are two variables named `x`. The global `x` is set to 5, while the `x` inside the `modify_variable` function is set to 10. When we call `modify_variable(7)`, it returns `7 + 10`, which is 17.
+There are two variables named `x`. The global `x` is set to `5`, while the `x` inside `modify_variable` is set to `10`. When we call `modify_variable(7)`, it returns `7 + 10`, which is `17`. The global `x` is unchanged.
 
-**Variable shadowing** happens when a function defines a variable (inside its local scope) with the same name as a variable in the global scope. In the example above, `x` is a shadow variable.
+### Variable Shadowing
 
-Variable shadowing is not necessary problematic but it is better practice to always use unique variable names, to avoid confussion!
+**Variable shadowing** happens when a function defines a variable with the same name as a variable in the global scope. In the example above, the local `x` *shadows* the global `x`.
+
+Variable shadowing is not necessarily problematic, but it is better practice to use unique variable names to avoid confusion.
+
+---
 
 ## Function and Variable Names
 
@@ -116,176 +168,16 @@ Be careful with variable and function names! Using a function name as a variable
 ```{python}
 # Define `square_root` as a function
 def square_root(x):
-  return x**(1/2)
+    return x ** (1 / 2)
 ```
 
 ```{python}
 square_root = square_root(16)
-# Now `square_root` refers to the variable above
+# Now `square_root` refers to the number 4.0
 # We have lost our `square_root` function!
 ```
 
 ```{python}
-# What happens when we call the function now?
+# What happens when we try to call the function now?
 print(square_root(9))
 ```
-
----
-
-# Extra Exercises
-
-## Function Without Return
-
-::: {.callout-note}
-## Exercise
-
-What do you expect the value of `variable` to be after the function call?
-
-
-```{python}
-def modify_variable(x: int):
-    x += 5
-
-variable = 10
-modify_variable(variable)
-print(variable)
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-The output is `10`. Integers are immutable, so the function only changes its local copy of the value.
-
-:::
-
-## Variable Shadowing
-
-::: {.callout-note}
-## Exercise
-
-Before running the code below, take a moment to think about what you expect to happen with the variable `x` when we call the `factorial` function. Will it change its value? Why or why not?
-
-
-```{python}
-def factorial(num: int) -> int:
-  """
-  This is a function to calculate the factorial of a number.
-  It takes an integer 'num' as input and returns its factorial.
-  """
-  x = num
-  result = 1
-  while x > 1:
-    result = result * x
-    x = x - 1
-  return result
-
-x = 10
-print(factorial(x))
-print(x)
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-The function prints the factorial of `10`, and then it prints `10` again. The outer variable `x` does not change because the function works with its own local variables.
-
-:::
-
-## Decimal to Binary Conversion
-
-::: {.callout-note}
-## Exercise
-
-Write a Python function `decimal_to_binary(decimal)` that takes a decimal number as input and returns its binary representation as a string.
-
-For example, if the input is `10`, the function should return `'1010'`.
-
-You can use the following steps to perform the conversion:
-
-1. Initialize an empty string to store the binary representation.
-2. Use a while loop to repeatedly perform the following:
-   - Calculate the remainder of the decimal number when divided by `2`. This will be the least significant bit of the binary representation.
-   - Add the remainder to the beginning of the binary string.
-   - Update the decimal number by performing integer division by `2`.
-   - Continue this process until the decimal number becomes `0`.
-
-Test your function with various decimal inputs to ensure it correctly converts them to binary.
-
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-def decimal_to_binary(decimal: int) -> str:
-  binary_str = ""
-
-  while decimal > 0:
-    remainder = decimal % 2
-    binary_str = str(remainder) + binary_str
-    decimal //= 2
-
-  return binary_str
-```
-
-```{python}
-for number in range(10):
-  binary = decimal_to_binary(number)
-  print(f"The binary representation of {number} is {binary}")
-```
-
-:::
-
-## Binary to Decimal Conversion
-
-::: {.callout-note}
-## Exercise
-
-Write a Python function `binary_to_decimal(binary)` that converts a binary number represented as a string to its decimal equivalent.
-
-You can use the following steps to perform the conversion:
-
-1. Create a Python function called `binary_to_decimal` with the specified input parameter and return type.
-2. Inside the function, initialize a variable `decimal` to 0. This variable will store the decimal equivalent.
-3. Iterate through each character in the `binary_str` from left to right.
-4. For each character:
-   - Multiply the current `decimal` by 2.
-   - Add the integer value of the current binary digit (0 or 1) to the `decimal`.
-5. After processing all characters in `binary_str`, return the `decimal` as the result.
-
-Ensure that your function works correctly for different binary strings of varying lengths. You can use `decimal_to_binary` to check the results are right.
-
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-def binary_to_decimal(binary: str) -> int:
-  decimal = 0
-
-  for digit in binary:
-    decimal = decimal * 2 + int(digit)
-
-  return decimal
-```
-
-```{python}
-for number in range(5):
-  binary = decimal_to_binary(number)
-  print(f"The binary representation of {number} is {binary}")
-  x = binary_to_decimal(binary)
-  print(f"The binary number {binary} is {x}")
-  if x == number:
-    print("The function works!")
-  else:
-    print("We did something wrong...")
-```
-
-:::

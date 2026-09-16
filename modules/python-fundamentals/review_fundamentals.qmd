@@ -15,3 +15,194 @@ Use these smaller review pages to work one topic at a time. Try each question on
 - [Loops](review_loops.qmd)
 - [Functions](review_functions.qmd)
 - [Scope](review_scope.qmd)
+
+---
+
+
+# Project Euler
+
+Now that we have learned about variables, flow control, loops, and functions, you have the perfect toolkit to dive into some of the most intriguing mathematical problems. Head over to [Project Euler](https://projecteuler.net/archives) and challenge yourself with their extensive collection of exercises. You might even come across problems that connect to the `is_prime` function we wrote earlier.
+
+Happy coding!
+
+---
+
+# Extra Exercises
+
+## Function Without Return
+
+::: {.callout-note}
+## Exercise
+
+What do you expect the value of `variable` to be after the function call?
+
+```{python}
+def modify_variable(x: int):
+    x += 5
+
+variable = 10
+modify_variable(variable)
+print(variable)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The output is `10`. Integers are immutable, so the function only changes its local copy of the value.
+
+:::
+
+## Variable Shadowing
+
+::: {.callout-note}
+## Exercise
+
+Before running the code below, think about what you expect to happen with the variable `x` when we call the `factorial` function. Will its value change? Why or why not?
+
+```{python}
+def factorial(num: int) -> int:
+    """
+    This is a function to calculate the factorial of a number.
+    It takes an integer 'num' as input and returns its factorial.
+    """
+    x = num
+    result = 1
+    while x > 1:
+        result = result * x
+        x = x - 1
+    return result
+
+x = 10
+print(factorial(x))
+print(x)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The function prints the factorial of `10`, and then it prints `10` again. The outer variable `x` does not change because the function works with its own local variables.
+
+:::
+
+## Decimal to Binary Conversion
+
+::: {.callout-note}
+## Exercise
+
+Write a Python function `decimal_to_binary(decimal)` that takes a decimal number as input and returns its binary representation as a string.
+
+For example, if the input is `10`, the function should return `'1010'`.
+
+You can use the following steps to perform the conversion:
+
+1. Initialise an empty string to store the binary representation.
+2. Use a `while` loop to repeatedly perform the following:
+   - Calculate the remainder of the decimal number when divided by `2`. This will be the least significant bit of the binary representation.
+   - Add the remainder to the beginning of the binary string.
+   - Update the decimal number by performing integer division by `2`.
+   - Continue this process until the decimal number becomes `0`.
+
+Test your function with various decimal inputs to ensure it correctly converts them to binary.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def decimal_to_binary(decimal: int) -> str:
+    """
+    Convert a non-negative integer to its binary representation.
+
+    Parameters
+    ----------
+    decimal : int
+        The number to convert.
+
+    Returns
+    -------
+    str
+        The binary representation as a string.
+    """
+    binary_str = ""
+
+    while decimal > 0:
+        remainder = decimal % 2
+        binary_str = str(remainder) + binary_str
+        decimal //= 2
+
+    return binary_str
+```
+
+```{python}
+for number in range(10):
+    binary = decimal_to_binary(number)
+    print(f"The binary representation of {number} is {binary}")
+```
+
+:::
+
+## Binary to Decimal Conversion
+
+::: {.callout-note}
+## Exercise
+
+Write a Python function `binary_to_decimal(binary)` that converts a binary number represented as a string to its decimal equivalent.
+
+You can use the following steps to perform the conversion:
+
+1. Create a Python function called `binary_to_decimal` with the specified input parameter and return type.
+2. Inside the function, initialise a variable `decimal` to `0`. This variable will store the decimal equivalent.
+3. Iterate through each character in the binary string from left to right.
+4. For each character:
+   - Multiply the current `decimal` by `2`.
+   - Add the integer value of the current binary digit (`0` or `1`) to `decimal`.
+5. After processing all characters, return `decimal` as the result.
+
+Ensure that your function works correctly for different binary strings of varying lengths. You can use `decimal_to_binary` to check the results are right.
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def binary_to_decimal(binary: str) -> int:
+    """
+    Convert a binary string to its decimal equivalent.
+
+    Parameters
+    ----------
+    binary : str
+        A string of '0's and '1's representing a binary number.
+
+    Returns
+    -------
+    int
+        The decimal equivalent.
+    """
+    decimal = 0
+
+    for digit in binary:
+        decimal = decimal * 2 + int(digit)
+
+    return decimal
+```
+
+```{python}
+for number in range(5):
+    binary = decimal_to_binary(number)
+    print(f"The binary representation of {number} is {binary}")
+    x = binary_to_decimal(binary)
+    print(f"The binary number {binary} is {x}")
+    if x == number:
+        print("The function works!")
+    else:
+        print("We did something wrong...")
+```
+
+:::
