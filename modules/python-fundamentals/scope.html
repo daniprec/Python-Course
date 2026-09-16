@@ -444,19 +444,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#python-scopes" id="toc-python-scopes" class="nav-link active" data-scroll-target="#python-scopes">Python Scopes</a>
+  <li><a href="#python-scope" id="toc-python-scope" class="nav-link active" data-scroll-target="#python-scope">Python Scope</a>
   <ul class="collapse">
-  <li><a href="#return-inside-an-if-clause" id="toc-return-inside-an-if-clause" class="nav-link" data-scroll-target="#return-inside-an-if-clause">Return inside an <code>if</code> Clause</a></li>
-  <li><a href="#return-inside-a-for-loop" id="toc-return-inside-a-for-loop" class="nav-link" data-scroll-target="#return-inside-a-for-loop">Return inside a <code>for</code> Loop</a></li>
+  <li><a href="#what-is-scope" id="toc-what-is-scope" class="nav-link" data-scroll-target="#what-is-scope">What Is Scope?</a>
+  <ul class="collapse">
+  <li><a href="#the-legb-rule" id="toc-the-legb-rule" class="nav-link" data-scroll-target="#the-legb-rule">The LEGB Rule</a></li>
   <li><a href="#local-scope" id="toc-local-scope" class="nav-link" data-scroll-target="#local-scope">Local Scope</a></li>
-  <li><a href="#function-and-variable-names" id="toc-function-and-variable-names" class="nav-link" data-scroll-target="#function-and-variable-names">Function and Variable Names</a></li>
+  <li><a href="#enclosing-scope" id="toc-enclosing-scope" class="nav-link" data-scroll-target="#enclosing-scope">Enclosing Scope</a></li>
+  <li><a href="#global-scope" id="toc-global-scope" class="nav-link" data-scroll-target="#global-scope">Global Scope</a></li>
+  <li><a href="#built-in-scope" id="toc-built-in-scope" class="nav-link" data-scroll-target="#built-in-scope">Built-in Scope</a></li>
   </ul></li>
-  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra Exercises</a>
+  <li><a href="#return-inside-an-if-clause" id="toc-return-inside-an-if-clause" class="nav-link" data-scroll-target="#return-inside-an-if-clause"><code>return</code> inside an <code>if</code> Clause</a></li>
+  <li><a href="#return-inside-a-for-loop" id="toc-return-inside-a-for-loop" class="nav-link" data-scroll-target="#return-inside-a-for-loop"><code>return</code> inside a <code>for</code> Loop</a></li>
+  <li><a href="#local-scope-in-practice" id="toc-local-scope-in-practice" class="nav-link" data-scroll-target="#local-scope-in-practice">Local Scope in Practice</a>
   <ul class="collapse">
-  <li><a href="#function-without-return" id="toc-function-without-return" class="nav-link" data-scroll-target="#function-without-return">Function Without Return</a></li>
   <li><a href="#variable-shadowing" id="toc-variable-shadowing" class="nav-link" data-scroll-target="#variable-shadowing">Variable Shadowing</a></li>
-  <li><a href="#decimal-to-binary-conversion" id="toc-decimal-to-binary-conversion" class="nav-link" data-scroll-target="#decimal-to-binary-conversion">Decimal to Binary Conversion</a></li>
-  <li><a href="#binary-to-decimal-conversion" id="toc-binary-to-decimal-conversion" class="nav-link" data-scroll-target="#binary-to-decimal-conversion">Binary to Decimal Conversion</a></li>
+  </ul></li>
+  <li><a href="#function-and-variable-names" id="toc-function-and-variable-names" class="nav-link" data-scroll-target="#function-and-variable-names">Function and Variable Names</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/python-fundamentals/scope.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -483,17 +487,86 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="python-scopes" class="level1">
-<h1>Python Scopes</h1>
-<p><a href="https://docs.google.com/presentation/d/104NkGpkBCbF8TzAIWwObnLGTcuICtgT7/edit?usp=drive_link&amp;ouid=112793419067458804625&amp;rtpof=true&amp;sd=true">Read the slides first!</a></p>
+<section id="python-scope" class="level1">
+<h1>Python Scope</h1>
+<section id="what-is-scope" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-scope">What Is Scope?</h2>
+<p>When you create a variable or define a function, it is not available everywhere in your program. <strong>Scope</strong> refers to the region of your code where a particular name (variable, function, etc.) can be accessed.</p>
+<p>Python organises scope into four layers, from innermost to outermost:</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>What lives here</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Local</strong></td>
+<td>Variables defined inside the current function</td>
+<td><code>y = 5</code> inside a function</td>
+</tr>
+<tr class="even">
+<td><strong>Enclosing</strong></td>
+<td>Variables in a surrounding (outer) function</td>
+<td>An outer function’s variable accessed by a nested function</td>
+</tr>
+<tr class="odd">
+<td><strong>Global</strong></td>
+<td>Variables defined at the top level of a script or module</td>
+<td><code>x = 10</code> outside any function</td>
+</tr>
+<tr class="even">
+<td><strong>Built-in</strong></td>
+<td>Names that Python provides automatically</td>
+<td><code>print()</code>, <code>len()</code>, <code>range()</code></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../img/scope_diagram.png" width="300" height="auto"></p>
+<section id="the-legb-rule" class="level3">
+<h3 class="anchored" data-anchor-id="the-legb-rule">The LEGB Rule</h3>
+<p>When you use a name in your code, Python looks it up in this order:</p>
+<ol type="1">
+<li><strong>L</strong>ocal: inside the current function.</li>
+<li><strong>E</strong>nclosing: in any surrounding function (for nested functions).</li>
+<li><strong>G</strong>lobal: at the module/script level.</li>
+<li><strong>B</strong>uilt-in: among Python’s built-in names.</li>
+</ol>
+<p>Python stops as soon as it finds a match. If no scope contains the name, you get a <code>NameError</code>.</p>
+</section>
+<section id="local-scope" class="level3">
+<h3 class="anchored" data-anchor-id="local-scope">Local Scope</h3>
+<p>The local scope is the innermost scope, typically within a function. Variables defined inside a function are accessible only within that function.</p>
+</section>
+<section id="enclosing-scope" class="level3">
+<h3 class="anchored" data-anchor-id="enclosing-scope">Enclosing Scope</h3>
+<p>When one function is defined inside another, the inner function can access variables from the outer function. Those outer-function variables live in the <strong>enclosing</strong> scope.</p>
+</section>
+<section id="global-scope" class="level3">
+<h3 class="anchored" data-anchor-id="global-scope">Global Scope</h3>
+<p>The global scope is the outermost scope of your script. Variables defined at this level are accessible from anywhere in the code, including inside functions.</p>
+</section>
+<section id="built-in-scope" class="level3">
+<h3 class="anchored" data-anchor-id="built-in-scope">Built-in Scope</h3>
+<p>This is the highest level of scope. It includes all the names that are always available when you run a Python program — the built-in functions, exceptions, and objects that are part of the language itself. You do not need to import anything to use them. We have already learned some built-in functions, such as <code>print()</code> and <code>len()</code>.</p>
+<hr>
+</section>
+</section>
 <section id="return-inside-an-if-clause" class="level2">
-<h2 class="anchored" data-anchor-id="return-inside-an-if-clause">Return inside an <code>if</code> Clause</h2>
-<p>When <code>return</code> is used inside an <code>if</code> clause, it means that if the condition specified in the <code>if</code> statement is met, the function will return a value, and the execution of the function will stop. For example:</p>
-<div id="31171831" class="cell" data-execution_count="1">
+<h2 class="anchored" data-anchor-id="return-inside-an-if-clause"><code>return</code> inside an <code>if</code> Clause</h2>
+<p>When <code>return</code> is used inside an <code>if</code> clause, the function returns a value and stops executing as soon as the condition is met.</p>
+<div id="2a44a47f" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_even(number):</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> number <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> number <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">5</span>))</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -502,17 +575,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 True</code></pre>
 </div>
 </div>
-<p>In this case, if <code>number</code> is even, the function returns <code>True</code> and exits immediately. If <code>number</code> is not even, it proceeds to the next line (<code>return False</code>) and then exits.</p>
+<p>If <code>number</code> is even, the function returns <code>True</code> and exits immediately. If <code>number</code> is not even, it continues to the next line (<code>return False</code>) and then exits.</p>
 </section>
 <section id="return-inside-a-for-loop" class="level2">
-<h2 class="anchored" data-anchor-id="return-inside-a-for-loop">Return inside a <code>for</code> Loop</h2>
-<p>When <code>return</code> is used inside a <code>for</code> loop, it also affects the function’s behavior. Once <code>return</code> is encountered within the loop, the function will exit, and the value provided after <code>return</code> will be returned as the result of the function. For example:</p>
-<div id="58fbf825" class="cell" data-execution_count="2">
+<h2 class="anchored" data-anchor-id="return-inside-a-for-loop"><code>return</code> inside a <code>for</code> Loop</h2>
+<p>When <code>return</code> is used inside a <code>for</code> loop, the function exits as soon as <code>return</code> is reached — the remaining iterations are skipped.</p>
+<div id="362d1ba6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_element(sequence, target):</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> item <span class="kw">in</span> sequence:</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item <span class="op">==</span> target:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> sequence:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> item <span class="op">==</span> target:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>seq <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(find_element(seq, <span class="dv">5</span>))</span>
@@ -522,19 +595,19 @@ True</code></pre>
 False</code></pre>
 </div>
 </div>
-<p>In this case, if the <code>target</code> element is found in the <code>sequence</code>, the function returns <code>True</code> and exits the loop and the function. If the loop completes without finding the target, it returns <code>False</code>.</p>
-<p>It’s important to note that using <code>return</code> inside loops and conditionals can be a way to efficiently handle certain cases when you want to exit a function early based on specific conditions. However, it’s crucial to design your functions carefully to ensure they behave as expected and return the correct values.</p>
+<p>If the <code>target</code> is found in the <code>sequence</code>, the function returns <code>True</code> and exits the loop and the function. If the loop completes without finding the target, it returns <code>False</code>.</p>
+<p>Using <code>return</code> inside loops and conditionals is a way to exit a function early when a specific condition is met. Design your functions carefully to make sure they return the correct value in every case.</p>
 <p><strong>Example.</strong> Write a Python function <code>is_prime(n)</code> that checks if a given number <code>n</code> is prime.</p>
-<div id="ddb77f5c" class="cell" data-execution_count="3">
+<div id="0249d973" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(number):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through all numbers lower than `number`</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, number):</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> number <span class="op">%</span> x <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If the module is 0, then the number is not prime</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Using return inside a loop will finish the whole function execution</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the loop finishes, that means the number is prime</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop through all numbers lower than `number`</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, number):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> number <span class="op">%</span> x <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="co"># If the remainder is 0, then the number is not prime</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Using return inside a loop finishes the whole function</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the loop finishes, the number is prime</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">3</span>))</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">11</span>))</span>
@@ -545,327 +618,81 @@ True
 False</code></pre>
 </div>
 </div>
+<hr>
 </section>
-<section id="local-scope" class="level2">
-<h2 class="anchored" data-anchor-id="local-scope">Local Scope</h2>
-<div id="db0b2ff1" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Global variable (we define it to be 10)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x) <span class="co"># Build-in function (defined by Python)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="local-scope-in-practice" class="level2">
+<h2 class="anchored" data-anchor-id="local-scope-in-practice">Local Scope in Practice</h2>
+<p>Consider the following code. The variable <code>x</code> is <strong>global</strong> (defined outside any function), and <code>print</code> is a <strong>built-in</strong> function.</p>
+<div id="515dd313" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Global variable</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x) <span class="co"># Built-in function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>10</code></pre>
 </div>
 </div>
-<div id="1a51b9e7" class="cell" data-execution_count="5">
+<p>Inside a function, we can create <strong>local</strong> variables and also access global ones:</p>
+<div id="d56218c8" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> example_function():</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Local variable</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  z <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x <span class="co"># Accessing the global variable</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(y) <span class="co"># Accessing the local variable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="dv">5</span>      <span class="co"># Local variable</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x  <span class="co"># Accessing the global variable `x`</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(y)   <span class="co"># Accessing the local variable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="d24be356" class="cell" data-execution_count="6">
+<div id="9f8a2fd7" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>example_function()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5</code></pre>
 </div>
 </div>
-<div id="ed95d4e6" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we try to access `y` here, it will fail because we are outside the function</span></span>
+<p>However, a local variable does not exist outside its function:</p>
+<div id="0a98c79e" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trying to access `y` here fails because we are outside the function</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>NameError: name 'y' is not defined</code></pre>
 </div>
 </div>
-<p><strong>Example.</strong> Before running the code below, take a moment to think about what you expect to happen with the variable <code>x</code> when we call the <code>modify_variable</code> function. Will it change its value? Why or why not?</p>
-<div id="023ad163" class="cell" data-execution_count="8">
+<p><strong>Example.</strong> Before running the code below, think about what you expect to happen with the variable <code>x</code> when we call the <code>modify_variable</code> function. Will its value change? Why or why not?</p>
+<div id="23c74bd5" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modify_variable(y):</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> y <span class="op">+</span> x</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y <span class="op">+</span> x</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> modify_variable(<span class="dv">7</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> modify_variable(<span class="dv">7</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>17</code></pre>
 </div>
 </div>
-<p>There are two variables named <code>x</code>. The global <code>x</code> is set to 5, while the <code>x</code> inside the <code>modify_variable</code> function is set to 10. When we call <code>modify_variable(7)</code>, it returns <code>7 + 10</code>, which is 17.</p>
-<p><strong>Variable shadowing</strong> happens when a function defines a variable (inside its local scope) with the same name as a variable in the global scope. In the example above, <code>x</code> is a shadow variable.</p>
-<p>Variable shadowing is not necessary problematic but it is better practice to always use unique variable names, to avoid confussion!</p>
+<p>There are two variables named <code>x</code>. The global <code>x</code> is set to <code>5</code>, while the <code>x</code> inside <code>modify_variable</code> is set to <code>10</code>. When we call <code>modify_variable(7)</code>, it returns <code>7 + 10</code>, which is <code>17</code>. The global <code>x</code> is unchanged.</p>
+<section id="variable-shadowing" class="level3">
+<h3 class="anchored" data-anchor-id="variable-shadowing">Variable Shadowing</h3>
+<p><strong>Variable shadowing</strong> happens when a function defines a variable with the same name as a variable in the global scope. In the example above, the local <code>x</code> <em>shadows</em> the global <code>x</code>.</p>
+<p>Variable shadowing is not necessarily problematic, but it is better practice to use unique variable names to avoid confusion.</p>
+<hr>
+</section>
 </section>
 <section id="function-and-variable-names" class="level2">
 <h2 class="anchored" data-anchor-id="function-and-variable-names">Function and Variable Names</h2>
 <p>Be careful with variable and function names! Using a function name as a variable will overwrite it.</p>
-<div id="ab5d1a42" class="cell" data-execution_count="9">
+<div id="825c84a3" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define `square_root` as a function</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> square_root(x):</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">**</span> (<span class="dv">1</span> <span class="op">/</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="bcd0402c" class="cell" data-execution_count="10">
+<div id="04e4ab4b" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>square_root <span class="op">=</span> square_root(<span class="dv">16</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `square_root` refers to the variable above</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `square_root` refers to the number 4.0</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We have lost our `square_root` function!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7a6bc393" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What happens when we call the function now?</span></span>
+<div id="cfa63d45" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What happens when we try to call the function now?</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(square_root(<span class="dv">9</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>TypeError: 'float' object is not callable</code></pre>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="extra-exercises" class="level1">
-<h1>Extra Exercises</h1>
-<section id="function-without-return" class="level2">
-<h2 class="anchored" data-anchor-id="function-without-return">Function Without Return</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What do you expect the value of <code>variable</code> to be after the function call?</p>
-<div id="dbfae0c0" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modify_variable(x: <span class="bu">int</span>):</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">5</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>variable <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>modify_variable(variable)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(variable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>10</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The output is <code>10</code>. Integers are immutable, so the function only changes its local copy of the value.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="variable-shadowing" class="level2">
-<h2 class="anchored" data-anchor-id="variable-shadowing">Variable Shadowing</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Before running the code below, take a moment to think about what you expect to happen with the variable <code>x</code> when we call the <code>factorial</code> function. Will it change its value? Why or why not?</p>
-<div id="8293870b" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorial(num: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">  This is a function to calculate the factorial of a number.</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">  It takes an integer 'num' as input and returns its factorial.</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> num</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> x <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> result <span class="op">*</span> x</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial(x))</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>3628800
-10</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The function prints the factorial of <code>10</code>, and then it prints <code>10</code> again. The outer variable <code>x</code> does not change because the function works with its own local variables.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="decimal-to-binary-conversion" class="level2">
-<h2 class="anchored" data-anchor-id="decimal-to-binary-conversion">Decimal to Binary Conversion</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Write a Python function <code>decimal_to_binary(decimal)</code> that takes a decimal number as input and returns its binary representation as a string.</p>
-<p>For example, if the input is <code>10</code>, the function should return <code>'1010'</code>.</p>
-<p>You can use the following steps to perform the conversion:</p>
-<ol type="1">
-<li>Initialize an empty string to store the binary representation.</li>
-<li>Use a while loop to repeatedly perform the following:
-<ul>
-<li>Calculate the remainder of the decimal number when divided by <code>2</code>. This will be the least significant bit of the binary representation.</li>
-<li>Add the remainder to the beginning of the binary string.</li>
-<li>Update the decimal number by performing integer division by <code>2</code>.</li>
-<li>Continue this process until the decimal number becomes <code>0</code>.</li>
-</ul></li>
-</ol>
-<p>Test your function with various decimal inputs to ensure it correctly converts them to binary.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div id="6a9de52b" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decimal_to_binary(decimal: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  binary_str <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> decimal <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    remainder <span class="op">=</span> decimal <span class="op">%</span> <span class="dv">2</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    binary_str <span class="op">=</span> <span class="bu">str</span>(remainder) <span class="op">+</span> binary_str</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    decimal <span class="op">//=</span> <span class="dv">2</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> binary_str</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="3d63a09f" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> number <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  binary <span class="op">=</span> decimal_to_binary(number)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary representation of </span><span class="sc">{</span>number<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The binary representation of 0 is 
-The binary representation of 1 is 1
-The binary representation of 2 is 10
-The binary representation of 3 is 11
-The binary representation of 4 is 100
-The binary representation of 5 is 101
-The binary representation of 6 is 110
-The binary representation of 7 is 111
-The binary representation of 8 is 1000
-The binary representation of 9 is 1001</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="binary-to-decimal-conversion" class="level2">
-<h2 class="anchored" data-anchor-id="binary-to-decimal-conversion">Binary to Decimal Conversion</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Write a Python function <code>binary_to_decimal(binary)</code> that converts a binary number represented as a string to its decimal equivalent.</p>
-<p>You can use the following steps to perform the conversion:</p>
-<ol type="1">
-<li>Create a Python function called <code>binary_to_decimal</code> with the specified input parameter and return type.</li>
-<li>Inside the function, initialize a variable <code>decimal</code> to 0. This variable will store the decimal equivalent.</li>
-<li>Iterate through each character in the <code>binary_str</code> from left to right.</li>
-<li>For each character:
-<ul>
-<li>Multiply the current <code>decimal</code> by 2.</li>
-<li>Add the integer value of the current binary digit (0 or 1) to the <code>decimal</code>.</li>
-</ul></li>
-<li>After processing all characters in <code>binary_str</code>, return the <code>decimal</code> as the result.</li>
-</ol>
-<p>Ensure that your function works correctly for different binary strings of varying lengths. You can use <code>decimal_to_binary</code> to check the results are right.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div id="46264945" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binary_to_decimal(binary: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  decimal <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> digit <span class="kw">in</span> binary:</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    decimal <span class="op">=</span> decimal <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="bu">int</span>(digit)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> decimal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="2a4098af" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> number <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  binary <span class="op">=</span> decimal_to_binary(number)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary representation of </span><span class="sc">{</span>number<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> binary_to_decimal(binary)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary number </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> x <span class="op">==</span> number:</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"The function works!"</span>)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"We did something wrong..."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The binary representation of 0 is 
-The binary number  is 0
-The function works!
-The binary representation of 1 is 1
-The binary number 1 is 1
-The function works!
-The binary representation of 2 is 10
-The binary number 10 is 2
-The function works!
-The binary representation of 3 is 11
-The binary number 11 is 3
-The function works!
-The binary representation of 4 is 100
-The binary number 100 is 4
-The function works!</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 
@@ -1326,297 +1153,189 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb30" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The Python Scope"</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Python Scopes</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Read the slides first!</span><span class="co">](https://docs.google.com/presentation/d/104NkGpkBCbF8TzAIWwObnLGTcuICtgT7/edit?usp=drive_link&amp;ouid=112793419067458804625&amp;rtpof=true&amp;sd=true)</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Return inside an `if` Clause</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>When <span class="in">`return`</span> is used inside an <span class="in">`if`</span> clause, it means that if the condition specified in the <span class="in">`if`</span> statement is met, the function will return a value, and the execution of the function will stop. For example:</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_even(number):</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> number <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">5</span>))</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">8</span>))</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>In this case, if <span class="in">`number`</span> is even, the function returns <span class="in">`True`</span> and exits immediately. If <span class="in">`number`</span> is not even, it proceeds to the next line (<span class="in">`return False`</span>) and then exits.</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Return inside a `for` Loop</span></span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>When <span class="in">`return`</span> is used inside a <span class="in">`for`</span> loop, it also affects the function's behavior. Once <span class="in">`return`</span> is encountered within the loop, the function will exit, and the value provided after <span class="in">`return`</span> will be returned as the result of the function. For example:</span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_element(sequence, target):</span>
-<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> item <span class="kw">in</span> sequence:</span>
-<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item <span class="op">==</span> target:</span>
-<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>seq <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
-<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(find_element(seq, <span class="dv">5</span>))</span>
-<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(find_element(seq, <span class="dv">8</span>))</span>
-<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>In this case, if the <span class="in">`target`</span> element is found in the <span class="in">`sequence`</span>, the function returns <span class="in">`True`</span> and exits the loop and the function. If the loop completes without finding the target, it returns <span class="in">`False`</span>.</span>
-<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>It's important to note that using <span class="in">`return`</span> inside loops and conditionals can be a way to efficiently handle certain cases when you want to exit a function early based on specific conditions. However, it's crucial to design your functions carefully to ensure they behave as expected and return the correct values.</span>
-<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>**Example.** Write a Python function <span class="in">`is_prime(n)`</span> that checks if a given number <span class="in">`n`</span> is prime.</span>
-<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(number):</span>
-<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through all numbers lower than `number`</span></span>
-<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, number):</span>
-<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> number <span class="op">%</span> x <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If the module is 0, then the number is not prime</span></span>
-<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Using return inside a loop will finish the whole function execution</span></span>
-<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the loop finishes, that means the number is prime</span></span>
-<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">3</span>))</span>
-<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">11</span>))</span>
-<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">4</span>))</span>
-<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## Local Scope</span></span>
-<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Global variable (we define it to be 10)</span></span>
-<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x) <span class="co"># Build-in function (defined by Python)</span></span>
-<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> example_function():</span>
-<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Local variable</span></span>
-<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>  z <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x <span class="co"># Accessing the global variable</span></span>
-<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(y) <span class="co"># Accessing the local variable</span></span>
-<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a>example_function()</span>
-<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a><span class="co"># If we try to access `y` here, it will fail because we are outside the function</span></span>
-<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span>
-<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a>**Example.** Before running the code below, take a moment to think about what you expect to happen with the variable <span class="in">`x`</span> when we call the <span class="in">`modify_variable`</span> function. Will it change its value? Why or why not?</span>
-<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-112"><a href="#cb30-112" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modify_variable(y):</span>
-<span id="cb30-113"><a href="#cb30-113" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> y <span class="op">+</span> x</span>
-<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> modify_variable(<span class="dv">7</span>)</span>
-<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
-<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a>There are two variables named <span class="in">`x`</span>. The global <span class="in">`x`</span> is set to 5, while the <span class="in">`x`</span> inside the <span class="in">`modify_variable`</span> function is set to 10. When we call <span class="in">`modify_variable(7)`</span>, it returns <span class="in">`7 + 10`</span>, which is 17.</span>
-<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a>**Variable shadowing** happens when a function defines a variable (inside its local scope) with the same name as a variable in the global scope. In the example above, <span class="in">`x`</span> is a shadow variable.</span>
-<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a>Variable shadowing is not necessary problematic but it is better practice to always use unique variable names, to avoid confussion!</span>
-<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Function and Variable Names</span></span>
-<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a>Be careful with variable and function names! Using a function name as a variable will overwrite it.</span>
-<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-135"><a href="#cb30-135" aria-hidden="true" tabindex="-1"></a><span class="co"># Define `square_root` as a function</span></span>
-<span id="cb30-136"><a href="#cb30-136" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> square_root(x):</span>
-<span id="cb30-137"><a href="#cb30-137" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
-<span id="cb30-138"><a href="#cb30-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-139"><a href="#cb30-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-142"><a href="#cb30-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-143"><a href="#cb30-143" aria-hidden="true" tabindex="-1"></a>square_root <span class="op">=</span> square_root(<span class="dv">16</span>)</span>
-<span id="cb30-144"><a href="#cb30-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `square_root` refers to the variable above</span></span>
-<span id="cb30-145"><a href="#cb30-145" aria-hidden="true" tabindex="-1"></a><span class="co"># We have lost our `square_root` function!</span></span>
-<span id="cb30-146"><a href="#cb30-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-147"><a href="#cb30-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-150"><a href="#cb30-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-151"><a href="#cb30-151" aria-hidden="true" tabindex="-1"></a><span class="co"># What happens when we call the function now?</span></span>
-<span id="cb30-152"><a href="#cb30-152" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(square_root(<span class="dv">9</span>))</span>
-<span id="cb30-153"><a href="#cb30-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-154"><a href="#cb30-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-155"><a href="#cb30-155" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb30-156"><a href="#cb30-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-157"><a href="#cb30-157" aria-hidden="true" tabindex="-1"></a><span class="fu"># Extra Exercises</span></span>
-<span id="cb30-158"><a href="#cb30-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-159"><a href="#cb30-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Function Without Return</span></span>
-<span id="cb30-160"><a href="#cb30-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-161"><a href="#cb30-161" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb30-162"><a href="#cb30-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb30-163"><a href="#cb30-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-164"><a href="#cb30-164" aria-hidden="true" tabindex="-1"></a>What do you expect the value of <span class="in">`variable`</span> to be after the function call?</span>
-<span id="cb30-165"><a href="#cb30-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-166"><a href="#cb30-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-169"><a href="#cb30-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-170"><a href="#cb30-170" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modify_variable(x: <span class="bu">int</span>):</span>
-<span id="cb30-171"><a href="#cb30-171" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">5</span></span>
-<span id="cb30-172"><a href="#cb30-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-173"><a href="#cb30-173" aria-hidden="true" tabindex="-1"></a>variable <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb30-174"><a href="#cb30-174" aria-hidden="true" tabindex="-1"></a>modify_variable(variable)</span>
-<span id="cb30-175"><a href="#cb30-175" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(variable)</span>
-<span id="cb30-176"><a href="#cb30-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-177"><a href="#cb30-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-178"><a href="#cb30-178" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-179"><a href="#cb30-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-180"><a href="#cb30-180" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb30-181"><a href="#cb30-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb30-182"><a href="#cb30-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-183"><a href="#cb30-183" aria-hidden="true" tabindex="-1"></a>The output is <span class="in">`10`</span>. Integers are immutable, so the function only changes its local copy of the value.</span>
-<span id="cb30-184"><a href="#cb30-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-185"><a href="#cb30-185" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-186"><a href="#cb30-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-187"><a href="#cb30-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## Variable Shadowing</span></span>
-<span id="cb30-188"><a href="#cb30-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-189"><a href="#cb30-189" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb30-190"><a href="#cb30-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb30-191"><a href="#cb30-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-192"><a href="#cb30-192" aria-hidden="true" tabindex="-1"></a>Before running the code below, take a moment to think about what you expect to happen with the variable <span class="in">`x`</span> when we call the <span class="in">`factorial`</span> function. Will it change its value? Why or why not?</span>
-<span id="cb30-193"><a href="#cb30-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-194"><a href="#cb30-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-197"><a href="#cb30-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-198"><a href="#cb30-198" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorial(num: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb30-199"><a href="#cb30-199" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb30-200"><a href="#cb30-200" aria-hidden="true" tabindex="-1"></a><span class="co">  This is a function to calculate the factorial of a number.</span></span>
-<span id="cb30-201"><a href="#cb30-201" aria-hidden="true" tabindex="-1"></a><span class="co">  It takes an integer 'num' as input and returns its factorial.</span></span>
-<span id="cb30-202"><a href="#cb30-202" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb30-203"><a href="#cb30-203" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> num</span>
-<span id="cb30-204"><a href="#cb30-204" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb30-205"><a href="#cb30-205" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> x <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb30-206"><a href="#cb30-206" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> result <span class="op">*</span> x</span>
-<span id="cb30-207"><a href="#cb30-207" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb30-208"><a href="#cb30-208" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
-<span id="cb30-209"><a href="#cb30-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-210"><a href="#cb30-210" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb30-211"><a href="#cb30-211" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial(x))</span>
-<span id="cb30-212"><a href="#cb30-212" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
-<span id="cb30-213"><a href="#cb30-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-214"><a href="#cb30-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-215"><a href="#cb30-215" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-216"><a href="#cb30-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-217"><a href="#cb30-217" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb30-218"><a href="#cb30-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb30-219"><a href="#cb30-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-220"><a href="#cb30-220" aria-hidden="true" tabindex="-1"></a>The function prints the factorial of <span class="in">`10`</span>, and then it prints <span class="in">`10`</span> again. The outer variable <span class="in">`x`</span> does not change because the function works with its own local variables.</span>
-<span id="cb30-221"><a href="#cb30-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-222"><a href="#cb30-222" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-223"><a href="#cb30-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-224"><a href="#cb30-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Decimal to Binary Conversion</span></span>
-<span id="cb30-225"><a href="#cb30-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-226"><a href="#cb30-226" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb30-227"><a href="#cb30-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb30-228"><a href="#cb30-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-229"><a href="#cb30-229" aria-hidden="true" tabindex="-1"></a>Write a Python function <span class="in">`decimal_to_binary(decimal)`</span> that takes a decimal number as input and returns its binary representation as a string.</span>
-<span id="cb30-230"><a href="#cb30-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-231"><a href="#cb30-231" aria-hidden="true" tabindex="-1"></a>For example, if the input is <span class="in">`10`</span>, the function should return <span class="in">`'1010'`</span>.</span>
-<span id="cb30-232"><a href="#cb30-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-233"><a href="#cb30-233" aria-hidden="true" tabindex="-1"></a>You can use the following steps to perform the conversion:</span>
-<span id="cb30-234"><a href="#cb30-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-235"><a href="#cb30-235" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Initialize an empty string to store the binary representation.</span>
-<span id="cb30-236"><a href="#cb30-236" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Use a while loop to repeatedly perform the following:</span>
-<span id="cb30-237"><a href="#cb30-237" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Calculate the remainder of the decimal number when divided by <span class="in">`2`</span>. This will be the least significant bit of the binary representation.</span>
-<span id="cb30-238"><a href="#cb30-238" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Add the remainder to the beginning of the binary string.</span>
-<span id="cb30-239"><a href="#cb30-239" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Update the decimal number by performing integer division by <span class="in">`2`</span>.</span>
-<span id="cb30-240"><a href="#cb30-240" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Continue this process until the decimal number becomes <span class="in">`0`</span>.</span>
-<span id="cb30-241"><a href="#cb30-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-242"><a href="#cb30-242" aria-hidden="true" tabindex="-1"></a>Test your function with various decimal inputs to ensure it correctly converts them to binary.</span>
-<span id="cb30-243"><a href="#cb30-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-244"><a href="#cb30-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-245"><a href="#cb30-245" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-246"><a href="#cb30-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-247"><a href="#cb30-247" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb30-248"><a href="#cb30-248" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb30-249"><a href="#cb30-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-252"><a href="#cb30-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-253"><a href="#cb30-253" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decimal_to_binary(decimal: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb30-254"><a href="#cb30-254" aria-hidden="true" tabindex="-1"></a>  binary_str <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb30-255"><a href="#cb30-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-256"><a href="#cb30-256" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> decimal <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb30-257"><a href="#cb30-257" aria-hidden="true" tabindex="-1"></a>    remainder <span class="op">=</span> decimal <span class="op">%</span> <span class="dv">2</span></span>
-<span id="cb30-258"><a href="#cb30-258" aria-hidden="true" tabindex="-1"></a>    binary_str <span class="op">=</span> <span class="bu">str</span>(remainder) <span class="op">+</span> binary_str</span>
-<span id="cb30-259"><a href="#cb30-259" aria-hidden="true" tabindex="-1"></a>    decimal <span class="op">//=</span> <span class="dv">2</span></span>
-<span id="cb30-260"><a href="#cb30-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-261"><a href="#cb30-261" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> binary_str</span>
-<span id="cb30-262"><a href="#cb30-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-263"><a href="#cb30-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-266"><a href="#cb30-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-267"><a href="#cb30-267" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> number <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb30-268"><a href="#cb30-268" aria-hidden="true" tabindex="-1"></a>  binary <span class="op">=</span> decimal_to_binary(number)</span>
-<span id="cb30-269"><a href="#cb30-269" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary representation of </span><span class="sc">{</span>number<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb30-270"><a href="#cb30-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-271"><a href="#cb30-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-272"><a href="#cb30-272" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-273"><a href="#cb30-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-274"><a href="#cb30-274" aria-hidden="true" tabindex="-1"></a><span class="fu">## Binary to Decimal Conversion</span></span>
-<span id="cb30-275"><a href="#cb30-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-276"><a href="#cb30-276" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb30-277"><a href="#cb30-277" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
-<span id="cb30-278"><a href="#cb30-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-279"><a href="#cb30-279" aria-hidden="true" tabindex="-1"></a>Write a Python function <span class="in">`binary_to_decimal(binary)`</span> that converts a binary number represented as a string to its decimal equivalent.</span>
-<span id="cb30-280"><a href="#cb30-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-281"><a href="#cb30-281" aria-hidden="true" tabindex="-1"></a>You can use the following steps to perform the conversion:</span>
-<span id="cb30-282"><a href="#cb30-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-283"><a href="#cb30-283" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create a Python function called <span class="in">`binary_to_decimal`</span> with the specified input parameter and return type.</span>
-<span id="cb30-284"><a href="#cb30-284" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Inside the function, initialize a variable <span class="in">`decimal`</span> to 0. This variable will store the decimal equivalent.</span>
-<span id="cb30-285"><a href="#cb30-285" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Iterate through each character in the <span class="in">`binary_str`</span> from left to right.</span>
-<span id="cb30-286"><a href="#cb30-286" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>For each character:</span>
-<span id="cb30-287"><a href="#cb30-287" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Multiply the current <span class="in">`decimal`</span> by 2.</span>
-<span id="cb30-288"><a href="#cb30-288" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Add the integer value of the current binary digit (0 or 1) to the <span class="in">`decimal`</span>.</span>
-<span id="cb30-289"><a href="#cb30-289" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>After processing all characters in <span class="in">`binary_str`</span>, return the <span class="in">`decimal`</span> as the result.</span>
-<span id="cb30-290"><a href="#cb30-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-291"><a href="#cb30-291" aria-hidden="true" tabindex="-1"></a>Ensure that your function works correctly for different binary strings of varying lengths. You can use <span class="in">`decimal_to_binary`</span> to check the results are right.</span>
-<span id="cb30-292"><a href="#cb30-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-293"><a href="#cb30-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-294"><a href="#cb30-294" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-295"><a href="#cb30-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-296"><a href="#cb30-296" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb30-297"><a href="#cb30-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb30-298"><a href="#cb30-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-301"><a href="#cb30-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-302"><a href="#cb30-302" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binary_to_decimal(binary: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb30-303"><a href="#cb30-303" aria-hidden="true" tabindex="-1"></a>  decimal <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb30-304"><a href="#cb30-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-305"><a href="#cb30-305" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> digit <span class="kw">in</span> binary:</span>
-<span id="cb30-306"><a href="#cb30-306" aria-hidden="true" tabindex="-1"></a>    decimal <span class="op">=</span> decimal <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="bu">int</span>(digit)</span>
-<span id="cb30-307"><a href="#cb30-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-308"><a href="#cb30-308" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> decimal</span>
-<span id="cb30-309"><a href="#cb30-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-310"><a href="#cb30-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-313"><a href="#cb30-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-314"><a href="#cb30-314" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> number <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
-<span id="cb30-315"><a href="#cb30-315" aria-hidden="true" tabindex="-1"></a>  binary <span class="op">=</span> decimal_to_binary(number)</span>
-<span id="cb30-316"><a href="#cb30-316" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary representation of </span><span class="sc">{</span>number<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb30-317"><a href="#cb30-317" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> binary_to_decimal(binary)</span>
-<span id="cb30-318"><a href="#cb30-318" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"The binary number </span><span class="sc">{</span>binary<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb30-319"><a href="#cb30-319" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> x <span class="op">==</span> number:</span>
-<span id="cb30-320"><a href="#cb30-320" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"The function works!"</span>)</span>
-<span id="cb30-321"><a href="#cb30-321" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
-<span id="cb30-322"><a href="#cb30-322" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"We did something wrong..."</span>)</span>
-<span id="cb30-323"><a href="#cb30-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-324"><a href="#cb30-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-325"><a href="#cb30-325" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="sourceCode" id="cb20" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The Python Scope"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Python Scope</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Is Scope?</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>When you create a variable or define a function, it is not available everywhere in your program. **Scope** refers to the region of your code where a particular name (variable, function, etc.) can be accessed.</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>Python organises scope into four layers, from innermost to outermost:</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>| Layer | What lives here | Example |</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>|---|---|---|</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>| **Local** | Variables defined inside the current function | <span class="in">`y = 5`</span> inside a function |</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>| **Enclosing** | Variables in a surrounding (outer) function | An outer function's variable accessed by a nested function |</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>| **Global** | Variables defined at the top level of a script or module | <span class="in">`x = 10`</span> outside any function |</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>| **Built-in** | Names that Python provides automatically | <span class="in">`print()`</span>, <span class="in">`len()`</span>, <span class="in">`range()`</span> |</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/scope_diagram.png" width="300" height="auto" /&gt;</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="fu">### The LEGB Rule</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>When you use a name in your code, Python looks it up in this order:</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**L**ocal: inside the current function.</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**E**nclosing: in any surrounding function (for nested functions).</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**G**lobal: at the module/script level.</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**B**uilt-in: among Python's built-in names.</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>Python stops as soon as it finds a match. If no scope contains the name, you get a <span class="in">`NameError`</span>.</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### Local Scope</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>The local scope is the innermost scope, typically within a function. Variables defined inside a function are accessible only within that function.</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### Enclosing Scope</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>When one function is defined inside another, the inner function can access variables from the outer function. Those outer-function variables live in the **enclosing** scope.</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### Global Scope</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>The global scope is the outermost scope of your script. Variables defined at this level are accessible from anywhere in the code, including inside functions.</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### Built-in Scope</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>This is the highest level of scope. It includes all the names that are always available when you run a Python program — the built-in functions, exceptions, and objects that are part of the language itself. You do not need to import anything to use them. We have already learned some built-in functions, such as <span class="in">`print()`</span> and <span class="in">`len()`</span>.</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## `return` inside an `if` Clause</span></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>When <span class="in">`return`</span> is used inside an <span class="in">`if`</span> clause, the function returns a value and stops executing as soon as the condition is met.</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_even(number):</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> number <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">5</span>))</span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_even(<span class="dv">8</span>))</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>If <span class="in">`number`</span> is even, the function returns <span class="in">`True`</span> and exits immediately. If <span class="in">`number`</span> is not even, it continues to the next line (<span class="in">`return False`</span>) and then exits.</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## `return` inside a `for` Loop</span></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>When <span class="in">`return`</span> is used inside a <span class="in">`for`</span> loop, the function exits as soon as <span class="in">`return`</span> is reached — the remaining iterations are skipped.</span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_element(sequence, target):</span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> sequence:</span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> item <span class="op">==</span> target:</span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a>seq <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(find_element(seq, <span class="dv">5</span>))</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(find_element(seq, <span class="dv">8</span>))</span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a>If the <span class="in">`target`</span> is found in the <span class="in">`sequence`</span>, the function returns <span class="in">`True`</span> and exits the loop and the function. If the loop completes without finding the target, it returns <span class="in">`False`</span>.</span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>Using <span class="in">`return`</span> inside loops and conditionals is a way to exit a function early when a specific condition is met. Design your functions carefully to make sure they return the correct value in every case.</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>**Example.** Write a Python function <span class="in">`is_prime(n)`</span> that checks if a given number <span class="in">`n`</span> is prime.</span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(number):</span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop through all numbers lower than `number`</span></span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, number):</span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> number <span class="op">%</span> x <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a>            <span class="co"># If the remainder is 0, then the number is not prime</span></span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Using return inside a loop finishes the whole function</span></span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the loop finishes, the number is prime</span></span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">3</span>))</span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">11</span>))</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_prime(<span class="dv">4</span>))</span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a><span class="fu">## Local Scope in Practice</span></span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>Consider the following code. The variable <span class="in">`x`</span> is **global** (defined outside any function), and `print` is a **built-in** function.</span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Global variable</span></span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x) <span class="co"># Built-in function</span></span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>Inside a function, we can create **local** variables and also access global ones:</span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> example_function():</span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="dv">5</span>      <span class="co"># Local variable</span></span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x  <span class="co"># Accessing the global variable `x`</span></span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(y)   <span class="co"># Accessing the local variable</span></span>
+<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a>example_function()</span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>However, a local variable does not exist outside its function:</span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Trying to access `y` here fails because we are outside the function</span></span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span>
+<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a>**Example.** Before running the code below, think about what you expect to happen with the variable <span class="in">`x`</span> when we call the <span class="in">`modify_variable`</span> function. Will its value change? Why or why not?</span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modify_variable(y):</span>
+<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y <span class="op">+</span> x</span>
+<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> modify_variable(<span class="dv">7</span>)</span>
+<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
+<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a>There are two variables named <span class="in">`x`</span>. The global <span class="in">`x`</span> is set to <span class="in">`5`</span>, while the <span class="in">`x`</span> inside <span class="in">`modify_variable`</span> is set to <span class="in">`10`</span>. When we call <span class="in">`modify_variable(7)`</span>, it returns <span class="in">`7 + 10`</span>, which is <span class="in">`17`</span>. The global <span class="in">`x`</span> is unchanged.</span>
+<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### Variable Shadowing</span></span>
+<span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a>**Variable shadowing** happens when a function defines a variable with the same name as a variable in the global scope. In the example above, the local <span class="in">`x`</span> *shadows* the global <span class="in">`x`</span>.</span>
+<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a>Variable shadowing is not necessarily problematic, but it is better practice to use unique variable names to avoid confusion.</span>
+<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Function and Variable Names</span></span>
+<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-182"><a href="#cb20-182" aria-hidden="true" tabindex="-1"></a>Be careful with variable and function names! Using a function name as a variable will overwrite it.</span>
+<span id="cb20-183"><a href="#cb20-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-186"><a href="#cb20-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-187"><a href="#cb20-187" aria-hidden="true" tabindex="-1"></a><span class="co"># Define `square_root` as a function</span></span>
+<span id="cb20-188"><a href="#cb20-188" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> square_root(x):</span>
+<span id="cb20-189"><a href="#cb20-189" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">**</span> (<span class="dv">1</span> <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb20-190"><a href="#cb20-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-191"><a href="#cb20-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-194"><a href="#cb20-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-195"><a href="#cb20-195" aria-hidden="true" tabindex="-1"></a>square_root <span class="op">=</span> square_root(<span class="dv">16</span>)</span>
+<span id="cb20-196"><a href="#cb20-196" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `square_root` refers to the number 4.0</span></span>
+<span id="cb20-197"><a href="#cb20-197" aria-hidden="true" tabindex="-1"></a><span class="co"># We have lost our `square_root` function!</span></span>
+<span id="cb20-198"><a href="#cb20-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-199"><a href="#cb20-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-202"><a href="#cb20-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-203"><a href="#cb20-203" aria-hidden="true" tabindex="-1"></a><span class="co"># What happens when we try to call the function now?</span></span>
+<span id="cb20-204"><a href="#cb20-204" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(square_root(<span class="dv">9</span>))</span>
+<span id="cb20-205"><a href="#cb20-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
