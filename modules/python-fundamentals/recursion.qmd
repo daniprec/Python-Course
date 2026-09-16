@@ -1,102 +1,196 @@
 ---
-title: "Recursion"
+title: "Recursion and Generator Functions"
 format: html
 ---
 
-# Recursive Functions
+# Calling Functions inside Functions
 
-You can use one function inside another!
+You can use one function inside another. This lets you solve complex problems by combining smaller, already-solved pieces.
 
-**Example.** Implement a function `closest_lower_prime(m)` that takes a number `m` and returns the closest prime number that is lower than `m`. You can use the `is_prime()` function you previously defined to help you.
+**Example.** Implement a function `closest_lower_prime(m)` that takes a number `m` and returns the closest prime number that is lower than `m`. Use the `is_prime()` function from the previous session.
+
+```{python}
+#| echo: false
+def is_prime(number):
+    for x in range(2, number):
+        if number % x == 0:
+            return False
+    return True
+```
 
 ```{python}
 def closest_lower_prime(number: int) -> int:
-  # As we want to get the closest lower prime, we will use the range in
-  # reverse order: start from the highest number
-  for x in range(number, 2, -1):
-    if is_prime(x):
-      # Using return inside a loop will finish the whole function execution
-      return x
+    """
+    Return the closest prime number that is strictly lower than `number`.
+
+    Parameters
+    ----------
+    number : int
+        The upper bound (exclusive).
+
+    Returns
+    -------
+    int
+        The largest prime below `number`.
+    """
+    # Start from number - 1 and work downward
+    for x in range(number - 1, 1, -1):
+        if is_prime(x):
+            return x
 
 print(closest_lower_prime(12))
 print(closest_lower_prime(100))
 ```
 
-**Example.** Implement a function that takes a list of numbers and prints the closest prime number that is lower than each of them, using a message like "x is the closest lower prime number to n".
+**Example.** Implement a function that takes a list of numbers and prints the closest prime below each one.
 
 ```{python}
 def closest_lower_prime_list(ls_numbers: list[int]):
-  for n in ls_numbers:
-    x = closest_lower_prime(n)
-    print(f"{x} is the closest lower prime number to {n}")
+    """
+    Print the closest lower prime for every number in a list.
+
+    Parameters
+    ----------
+    ls_numbers : list[int]
+        The numbers to check.
+    """
+    for n in ls_numbers:
+        x = closest_lower_prime(n)
+        print(f"{x} is the closest lower prime number to {n}")
 
 closest_lower_prime_list([5, 136, 782])
 ```
 
-In fact, a function can even **call itself**. A **recursive function** is a function that solves a problem by breaking it down into smaller instances of the same problem, calling itself with these smaller inputs.
+In both examples, one function calls another. The key idea is that once a function works correctly, you can treat it as a building block and use it anywhere — including inside other functions.
 
-Each recursive function needs a base case (a condition under which it stops calling itself) to avoid an infinite loop. When the base case is reached, the function begins to return its results, eventually building back up to the original call.
+---
 
-For example, the factorial function is often defined recursively:
+# Recursive Functions
+
+A function can even **call itself**. A **recursive function** solves a problem by breaking it into smaller instances of the same problem, calling itself with those smaller inputs.
+
+Every recursive function needs two parts:
+
+1. **Base case**: a condition under which the function stops calling itself and returns a result directly.
+2. **Recursive case**: the function calls itself with a smaller or simpler input, moving toward the base case.
+
+Without a base case, the function would call itself forever.
+
+## Factorial
+
+The factorial of a non-negative integer $$n$$ is defined as:
+
+$$
+n! = n \times (n-1) \times \cdots \times 2 \times 1, \qquad 0! = 1
+$$
+
+This definition is naturally recursive: $$n! = n \times (n-1)!$$, with the base case $$0! = 1$$.
 
 ```{python}
 def factorial(n: int) -> int:
-  """Computes the factorial of any integer by using recursion"""
-  if n == 0:
-    return 1  # base case
-  else:
-    return n * factorial(n - 1)  # recursive call
+    """
+    Compute the factorial of `n` using recursion.
 
+    Parameters
+    ----------
+    n : int
+        A non-negative integer.
 
-# Try the function
+    Returns
+    -------
+    int
+        The factorial of `n`.
+    """
+    if n == 0:
+        return 1                    # base case
+    else:
+        return n * factorial(n - 1) # recursive call
+
+print(factorial(5))
 print(factorial(10))
 ```
 
-This approach is elegant and powerful, especially for problems that have a naturally recursive structure, like computing Fibonacci numbers, traversing trees, or solving puzzles like the Tower of Hanoi.
+Let's trace the calls for `factorial(4)`:
+
+| Call | `n` | Action | Returns |
+|---|---:|---|---:|
+| `factorial(4)` | 4 | `4 * factorial(3)` | `4 * 6 = 24` |
+| `factorial(3)` | 3 | `3 * factorial(2)` | `3 * 2 = 6` |
+| `factorial(2)` | 2 | `2 * factorial(1)` | `2 * 1 = 2` |
+| `factorial(1)` | 1 | `1 * factorial(0)` | `1 * 1 = 1` |
+| `factorial(0)` | 0 | Base case | `1` |
+
+Python works its way down until it reaches the base case, then builds the result back up.
+
+## Fibonacci
 
 ::: {.callout-note}
 ## Exercise
 
-Write a recursive function `fibonacci(n)` that returns the `n`-th number in the Fibonacci sequence, defined as:
+Write a recursive function `fibonacci(n)` that returns the $$n$$-th number in the Fibonacci sequence, defined as:
 
-- $F(0) = 0$  
-- $F(1) = 1$  
-- $F(n) = F(n-1) + F(n-2) for n \geq 2$
+- $$F(0) = 0$$
+- $$F(1) = 1$$
+- $$F(n) = F(n-1) + F(n-2) \quad \text{for } n \geq 2$$
 
-
+Test it for a few values: `fibonacci(0)` should return `0`, `fibonacci(1)` should return `1`, and `fibonacci(6)` should return `8`.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
+The base cases are $$F(0) = 0$$ and $$F(1) = 1$$. For any other $$n$$, the function calls itself twice — once for $$n-1$$ and once for $$n-2$$.
+
 ```{python}
 def fibonacci(n: int) -> int:
-  if n == 0:
-    return 0
-  elif n == 1:
-    return 1
-  else:
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    """
+    Return the n-th Fibonacci number using recursion.
 
+    Parameters
+    ----------
+    n : int
+        A non-negative integer.
 
+    Returns
+    -------
+    int
+        The n-th Fibonacci number.
+    """
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(0))
+print(fibonacci(1))
 print(fibonacci(6))
 ```
-
 :::
+
+## Tower of Hanoi
 
 ::: {.callout-note}
 ## Exercise
 
-Write a recursive function `hanoi(n, source, target, auxiliary)` that prints the steps to solve the Tower of Hanoi puzzle for `n` disks. Rules:
+The Tower of Hanoi is a classic puzzle:
 
-- There are three towers: A, B and C.
-- There are $n$ disks of different sizes.
-- All disks start at tower A, forming a pyramid (bigger at bottom, smaller at top).
-- You need to move all disk to tower C.
+- There are three towers: **A**, **B**, and **C**.
+- $$n$$ disks of different sizes start on tower **A**, forming a pyramid (largest at the bottom, smallest at the top).
+- The goal is to move all disks to tower **C**.
 - Only one disk can be moved at a time.
 - A larger disk cannot be placed on top of a smaller one.
 
+Write a recursive function `hanoi(n, source, target, auxiliary)` that prints each move needed to solve the puzzle.
 
+**Hint.** To move $$n$$ disks from A to C:
+
+1. Move the top $$n-1$$ disks from A to B (using C as a helper).
+2. Move the remaining large disk from A to C.
+3. Move the $$n-1$$ disks from B to C (using A as a helper).
+
+The base case is when there is only one disk — just move it directly.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -104,69 +198,69 @@ Write a recursive function `hanoi(n, source, target, auxiliary)` that prints the
 
 ```{python}
 def hanoi(n: int, source: str, target: str, auxiliary: str):
-  if n == 1:
-    print(f"Move disk 1 from {source} to {target}")
-  else:
-    hanoi(n - 1, source, auxiliary, target)
-    print(f"Move disk {n} from {source} to {target}")
-    hanoi(n - 1, auxiliary, target, source)
+    """
+    Print the steps to solve the Tower of Hanoi for `n` disks.
 
+    Parameters
+    ----------
+    n : int
+        Number of disks.
+    source : str
+        Name of the starting tower.
+    target : str
+        Name of the destination tower.
+    auxiliary : str
+        Name of the helper tower.
+    """
+    if n == 1:
+        print(f"Move disk 1 from {source} to {target}")
+    else:
+        hanoi(n - 1, source, auxiliary, target)
+        print(f"Move disk {n} from {source} to {target}")
+        hanoi(n - 1, auxiliary, target, source)
 
 hanoi(3, "A", "C", "B")
 ```
 
+For 3 disks the puzzle takes 7 moves. In general, the minimum number of moves is $$2^n - 1$$.
 :::
 
 ---
 
 # Generator Functions
 
-In Python, a generator function is a special type of function that allows you to generate a sequence of values on-the-fly. Unlike regular functions that compute all values at once and store them in memory, generator functions generate values one at a time, which can be more memory-efficient. This session will introduce us to generator functions and the `yield` statement.
+A **generator function** is a special kind of function that produces a sequence of values one at a time, instead of computing them all at once and storing them in memory. This makes generators memory-efficient when working with large or potentially infinite sequences.
 
-Generator functions are defined like regular functions but use the `yield` statement instead of `return`. When a generator function is called, it returns a generator object, which can be iterated over to retrieve the values generated by the function.
+Generator functions look like regular functions but use the `yield` keyword instead of `return`.
 
-Let's start by defining a simple generator function that generates a sequence of even numbers:
+## Defining a Generator Function
 
 ```{python}
-def generate_even_numbers(limit: int) -> int:
-  """
-  This is a generator function that yields even numbers
-  less than a specified limit
+def generate_even_numbers(limit: int):
+    """
+    Yield even numbers from 0 up to (but not including) `limit`.
 
-  Parameters
-  ----------
-  limit : int
-
-  Returns
-  -------
-  int
-    Even number less than `limit`
-  """
-  n = 0
-  while n < limit:
-    print(f"  [Function enters loop and yields {n}]")
-    yield n
-    n += 2
-    print("  [Function moves to next loop]")
+    Parameters
+    ----------
+    limit : int
+        The upper bound (exclusive).
+    """
+    n = 0
+    while n < limit:
+        yield n
+        n += 2
 ```
 
-What is the output of this expression? Lets see:
+When you call a generator function, it does **not** run the body immediately. Instead, it returns a **generator object**:
 
 ```{python}
 x = generate_even_numbers(10)
 
 print(x)
-```
-
-```{python}
-x = generate_even_numbers(10)
-
 print(type(x))
 ```
 
-The output of a **generator function** (a function that uses yield) is a **generator**.
-
-⚠ You cannot operate with generators!
+The generator object is not a number or a list — it is an iterator that produces values on demand. You cannot use it in arithmetic:
 
 ```{python}
 x = generate_even_numbers(10)
@@ -177,69 +271,65 @@ print(x + y)
 
 ## Using a Generator
 
-To use a generator, you can iterate over it using a `for` loop or by explicitly calling `next()` to retrieve the next value.
+There are two ways to retrieve values from a generator.
 
-Here's how you can use our `generate_even_numbers` function:
+### With a `for` loop
+
+A `for` loop automatically calls `next()` on the generator until it is exhausted:
 
 ```{python}
 even_generator = generate_even_numbers(10)
-print(f"Type of `even_generator`: {type(even_generator)}")
 
-# This code will print even numbers from 0 to 8
-print("Start looping on `even_generator`")
 for num in even_generator:
-  print(f"  `even_generator` returns {num}")
-  print("  Next step!\n")
-print("End of loop")
+    print(num)
 ```
 
-Alternatively, this is how we use the `next` statement:
+### With `next()`
+
+You can also pull values one at a time using `next()`:
 
 ```{python}
 even_generator = generate_even_numbers(10)
 
-num = next(even_generator)
-print(f"`even_generator` returns {num}\n")
-
-num = next(even_generator)
-print(f"`even_generator` returns {num}\n")
-
-num = next(even_generator)
-print(f"`even_generator` returns {num}")
+print(next(even_generator))
+print(next(even_generator))
+print(next(even_generator))
 ```
 
-## Difference between `return` and `yield` Python
+Each call to `next()` runs the generator until it hits the next `yield`, returns that value, and **pauses**. The next call resumes from where it left off.
 
-The `yield` keyword in Python is similar to a `return` statement used for returning values in Python which returns a generator object to the one who calls the function which contains `yield`, instead of simply returning a value. The main difference between them is, the `return` statement terminates the execution of the function. Whereas, the `yield` statement only pauses the execution of the function. Another difference is `return` statements are never executed. Whereas, `yield` statements are executed when the function resumes its execution.
+## `yield` vs `return`
 
-Advantages of `yield`:
+The key difference between `yield` and `return`:
 
-- Using `yield` keyword is highly memory efficient, since the execution happens only when the caller iterates over the object.
-- As the variables states are saved, we can pause and resume from the same point, thus saving time.
+| | `return` | `yield` |
+|---|---|---|
+| **Effect** | Terminates the function and sends back a value | Pauses the function and sends back a value |
+| **State** | Local variables are discarded | Local variables are preserved until the next call |
+| **Output** | The value itself | A generator object |
+| **Calls** | One result per call | Multiple results across successive calls |
 
-Disadvantages of `yield`:
-
-- Sometimes it becomes hard to understand the flow of code due to multiple times of value return from the function generator.
-- Calling of generator functions must be handled properly, else might cause errors in program.
-
-[Reference](https://www.geeksforgeeks.org/python-yield-keyword/)
-
-What will happen with this function?
+To see the contrast clearly, consider what happens if we replace `yield` with `return`:
 
 ```{python}
-def generate_even_numbers(limit: int) -> int:
-  n = 0
-  while n < limit:
-    print(f"  [Function enters loop and returns {n}]")
-    return n
-    n += 2
-    print("  [Function moves to next loop]")
-```
+def generate_even_numbers_return(limit: int) -> int:
+    n = 0
+    while n < limit:
+        return n    # terminates immediately
+        n += 2      # this line is never reached
 
-```{python}
-x = generate_even_numbers(10)
-print(f"Type of output is {type(x)}")
+x = generate_even_numbers_return(10)
+print(f"Type of output: {type(x)}")
 print(f"x is {x}")
 ```
 
----
+With `return`, the function exits on the first iteration and only ever produces `0`. With `yield`, it pauses and resumes, producing `0, 2, 4, 6, 8` across successive calls.
+
+### Advantages of generators
+
+- **Memory efficient** — values are produced one at a time, not stored all at once.
+- **Lazy evaluation** — computation only happens when the next value is requested.
+
+### When to use them
+
+Generators are especially useful when working with very large sequences or streams of data where you do not need all values in memory at once. For small sequences, a regular function returning a list is often simpler.
