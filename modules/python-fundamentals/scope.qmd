@@ -1,8 +1,6 @@
 ---
 title: "The Python Scope"
 format: html
-execute:
-  error: true
 ---
 
 # Python Scope
@@ -48,68 +46,6 @@ The global scope is the outermost scope of your script. Variables defined at thi
 ### Built-in Scope
 
 This is the highest level of scope. It includes all the names that are always available when you run a Python program: the built-in functions, exceptions, and objects that are part of the language itself. You do not need to import anything to use them. We have already learned some built-in functions, such as `print()` and `len()`.
-
----
-
-## `return` inside an `if` Clause
-
-When `return` is used inside an `if` clause, the function returns a value and stops executing as soon as the condition is met.
-
-```{python}
-def check_even(number):
-    if number % 2 == 0:
-        return True
-    return False
-
-print(check_even(5))
-print(check_even(8))
-```
-
-If `number` is even, the function returns `True` and exits immediately. If `number` is not even, it continues to the next line (`return False`) and then exits.
-
-## `return` inside a `for` Loop
-
-When `return` is used inside a `for` loop, the function exits as soon as `return` is reached — the remaining iterations are skipped.
-
-```{python}
-def find_element(sequence, target):
-    for item in sequence:
-        if item == target:
-            return True
-    return False
-
-seq = [1, 2, 3, 4, 5, 6]
-print(find_element(seq, 5))
-print(find_element(seq, 8))
-```
-
-If the `target` is found in the `sequence`, the function returns `True` and exits the loop and the function. If the loop completes without finding the target, it returns `False`.
-
-Using `return` inside loops and conditionals is a way to exit a function early when a specific condition is met. Design your functions carefully to make sure they return the correct value in every case.
-
-**Example.** Write a Python function `is_prime(n)` that checks if a given number `n` is prime.
-
-```{python}
-def is_prime(number):
-    # Loop through all numbers lower than `number`
-    for x in range(2, number):
-        if number % x == 0:
-            # If the remainder is 0, then the number is not prime
-            # Using return inside a loop finishes the whole function
-            return False
-    # If the loop finishes, the number is prime
-    return True
-
-print(is_prime(3))
-```
-
-```{python}
-print(is_prime(11))
-```
-
-```{python}
-print(is_prime(4))
-```
 
 ---
 
@@ -186,4 +122,70 @@ square_root = square_root(16)
 ```{python}
 # What happens when we try to call the function now?
 print(square_root(9))
+```
+
+---
+
+
+## `return` inside an `if` Clause
+
+When `return` is used inside an `if` clause, the function returns a value and stops executing as soon as the condition is met.
+
+```{python}
+def check_even(number):
+    if number % 2 == 0:
+        return True
+    return False
+
+print(check_even(5))
+```
+
+```{python}
+print(check_even(8))
+```
+
+If `number` is even, the function returns `True` and exits immediately. If `number` is not even, it continues to the next line (`return False`) and then exits.
+
+## `return` inside a `for` Loop
+
+When `return` is used inside a `for` loop, the function exits as soon as `return` is reached — the remaining iterations are skipped.
+
+```{python}
+def find_element(sequence, target):
+    for item in sequence:
+        if item == target:
+            return True
+    return False
+
+seq = [1, 2, 3, 4, 5, 6]
+print(find_element(seq, 5))
+print(find_element(seq, 8))
+```
+
+If the `target` is found in the `sequence`, the function returns `True` and exits the loop and the function. If the loop completes without finding the target, it returns `False`.
+
+Using `return` inside loops and conditionals is a way to exit a function early when a specific condition is met. Design your functions carefully to make sure they return the correct value in every case.
+
+**Example.** Write a Python function `is_prime(n)` that checks if a given number `n` is prime.
+
+```{python}
+def is_prime(number):
+    # Loop through all numbers lower than `number`
+    for x in range(2, number):
+        if number % x == 0:
+            # If the remainder is 0, then the number is not prime
+            # Using return inside a loop finishes the whole function
+            return False
+    # If the loop finishes, the number is prime
+    return True
+
+print(is_prime(3))
+```
+
+```{python}
+print(is_prime(11))
+```
+
+```{python}
+print(is_prime(4))
 ```
