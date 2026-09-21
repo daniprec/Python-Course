@@ -452,13 +452,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#data-structures-dictionaries" id="toc-data-structures-dictionaries" class="nav-link active" data-scroll-target="#data-structures-dictionaries">Data Structures: Dictionaries</a>
   <ul class="collapse">
-  <li><a href="#unordered" id="toc-unordered" class="nav-link" data-scroll-target="#unordered">Unordered</a></li>
-  <li><a href="#mutable" id="toc-mutable" class="nav-link" data-scroll-target="#mutable">Mutable</a></li>
-  <li><a href="#no-duplication" id="toc-no-duplication" class="nav-link" data-scroll-target="#no-duplication">No Duplication</a></li>
-  <li><a href="#convert-between-structures" id="toc-convert-between-structures" class="nav-link" data-scroll-target="#convert-between-structures">Convert between Structures</a></li>
+  <li><a href="#creating-dictionaries" id="toc-creating-dictionaries" class="nav-link" data-scroll-target="#creating-dictionaries">Creating Dictionaries</a></li>
+  <li><a href="#keys-and-values" id="toc-keys-and-values" class="nav-link" data-scroll-target="#keys-and-values">Keys and Values</a></li>
+  <li><a href="#accessing-values" id="toc-accessing-values" class="nav-link" data-scroll-target="#accessing-values">Accessing Values</a>
+  <ul class="collapse">
+  <li><a href="#insertion-order-and-position" id="toc-insertion-order-and-position" class="nav-link" data-scroll-target="#insertion-order-and-position">Insertion Order and Position</a></li>
+  <li><a href="#accessing-values-safely" id="toc-accessing-values-safely" class="nav-link" data-scroll-target="#accessing-values-safely">Accessing Values Safely</a></li>
+  </ul></li>
+  <li><a href="#mutable" id="toc-mutable" class="nav-link" data-scroll-target="#mutable">Mutable</a>
+  <ul class="collapse">
+  <li><a href="#updating-a-value" id="toc-updating-a-value" class="nav-link" data-scroll-target="#updating-a-value">Updating a Value</a></li>
+  <li><a href="#adding-a-pair" id="toc-adding-a-pair" class="nav-link" data-scroll-target="#adding-a-pair">Adding a Pair</a></li>
+  <li><a href="#removing-a-pair" id="toc-removing-a-pair" class="nav-link" data-scroll-target="#removing-a-pair">Removing a Pair</a></li>
+  </ul></li>
+  <li><a href="#unique-keys" id="toc-unique-keys" class="nav-link" data-scroll-target="#unique-keys">Unique Keys</a></li>
+  <li><a href="#membership" id="toc-membership" class="nav-link" data-scroll-target="#membership">Membership</a></li>
+  <li><a href="#dictionary-methods" id="toc-dictionary-methods" class="nav-link" data-scroll-target="#dictionary-methods">Dictionary Methods</a></li>
+  <li><a href="#looping-through-a-dictionary" id="toc-looping-through-a-dictionary" class="nav-link" data-scroll-target="#looping-through-a-dictionary">Looping Through a Dictionary</a></li>
+  <li><a href="#nested-dictionaries" id="toc-nested-dictionaries" class="nav-link" data-scroll-target="#nested-dictionaries">Nested Dictionaries</a></li>
+  <li><a href="#converting-to-a-dictionary" id="toc-converting-to-a-dictionary" class="nav-link" data-scroll-target="#converting-to-a-dictionary">Converting to a Dictionary</a></li>
+  <li><a href="#challenge-count-words" id="toc-challenge-count-words" class="nav-link" data-scroll-target="#challenge-count-words">Challenge: Count Words</a></li>
+  <li><a href="#lists-tuples-sets-and-dictionaries-compared" id="toc-lists-tuples-sets-and-dictionaries-compared" class="nav-link" data-scroll-target="#lists-tuples-sets-and-dictionaries-compared">Lists, Tuples, Sets, and Dictionaries Compared</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul></li>
-  <li><a href="#ready-for-a-challenge" id="toc-ready-for-a-challenge" class="nav-link" data-scroll-target="#ready-for-a-challenge">Ready for a Challenge?</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/structures/dictionaries.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -484,313 +500,763 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><a href="https://drive.google.com/file/d/1pdfubE7_7a44_Mz7O3yK2PqXfD0S0rXH/view?usp=sharing">Review previous sessions here!</a></p>
-<hr>
 <section id="data-structures-dictionaries" class="level1">
 <h1>Data Structures: Dictionaries</h1>
-<p>Dictionaries are the last the built-in data type that we will learn in Python. They are used to store collections of data in key-value pairs.</p>
-<p align="center">
-<img src="https://www.sapiens.org/app/uploads/2016/12/01-AP_271041288910-1024x698.jpg" width="400" height="auto">
-</p>
-<p>In a dictionary, a <strong>key</strong> is a unique identifier pointing to its associated <strong>value</strong>. While keys must be unique and immutable, values can be of any data type and may be duplicated.</p>
-<p>A dictionary is created using curly brackets <code>{}</code>. Here’s an example:</p>
-<div id="2437f8c5" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>dictionary <span class="op">=</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
+<p>A <strong>dictionary</strong> stores data in <strong>key-value pairs</strong>. Each key identifies a value.</p>
+<p>Dictionaries are useful for structured records, such as a person’s profile, a product catalogue, or the settings of an application.</p>
+<section id="creating-dictionaries" class="level2">
+<h2 class="anchored" data-anchor-id="creating-dictionaries">Creating Dictionaries</h2>
+<p>Create a dictionary with curly brackets <code>{}</code>. Separate each key from its value with a colon.</p>
+<div id="0a3effa9" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dictionary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}</code></pre>
-</div>
-</div>
-<p>We access data inside a dictionary using its <strong>keys</strong>. Every key returns its associated <strong>value</strong>.</p>
-<div id="ba57fb77" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dictionary <span class="op">=</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dictionary[<span class="st">"key1"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>value1</code></pre>
-</div>
-</div>
-<p>Keys must be strings or numbers. Values can be <strong>anything</strong>.</p>
-<div id="a1e55e1c" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>very_complex_dictionary <span class="op">=</span> {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"number"</span>: <span class="fl">3.14</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"string"</span>: <span class="st">"Hello"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"boolean"</span>: <span class="va">True</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"list"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tuple"</span>: (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"set"</span>: {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>},</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dictionary"</span>: {</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"function"</span>: <span class="kw">lambda</span> x: x <span class="op">+</span> <span class="dv">1</span>,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="dv">10</span>: <span class="st">"ten"</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(very_complex_dictionary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'number': 3.14, 'string': 'Hello', 'boolean': True, 'list': [1, 2, 3, 4], 'tuple': (1, 2, 3, 4), 'set': {1, 2, 3, 4}, 'dictionary': {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}, 'function': &lt;function &lt;lambda&gt; at 0x7f54f8dbc0e0&gt;, 10: 'ten'}</code></pre>
-</div>
-</div>
-<p>We can use other Python variables to define keys or values.</p>
-<div id="f56aa5ce" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>name_value <span class="op">=</span> <span class="st">"John"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>key_years <span class="op">=</span> <span class="st">"age"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: name_value,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    key_years: <span class="dv">25</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'name': 'John', 'age': 25, 'city': 'New York'}</code></pre>
 </div>
 </div>
-<hr>
-<section id="unordered" class="level2">
-<h2 class="anchored" data-anchor-id="unordered">Unordered</h2>
-<p>Dictionaries are <strong>unordered</strong>. You cannot use numeric indices to acces an item.</p>
-<div id="8047f715" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="dv">0</span>])  <span class="co"># This will cause an error!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>KeyError: 0</code></pre>
+<div id="2069aa60" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(person))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'dict'&gt;</code></pre>
 </div>
 </div>
-<p>Instead, you refer to its key:</p>
-<div id="b759e1a7" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"name"</span>])  <span class="co"># Outputs: John</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Use empty curly brackets to create an empty dictionary.</p>
+<div id="bc1af201" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>empty_dictionary <span class="op">=</span> {}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(empty_dictionary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{}</code></pre>
+</div>
+</div>
+<div id="b607f621" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(empty_dictionary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'dict'&gt;</code></pre>
+</div>
+</div>
+<p>Remember that an empty set uses <code>set()</code> instead.</p>
+<div id="1aa985f2" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>empty_set <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(empty_set))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'set'&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="keys-and-values" class="level2">
+<h2 class="anchored" data-anchor-id="keys-and-values">Keys and Values</h2>
+<p>Keys must be unique and immutable. Strings, numbers, and tuples can be keys. Values can have any data type and may be duplicated.</p>
+<div id="4622c848" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>course <span class="op">=</span> {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Introduction to Python"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"students"</span>: <span class="dv">32</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"online"</span>: <span class="va">True</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"topics"</span>: [<span class="st">"variables"</span>, <span class="st">"loops"</span>, <span class="st">"functions"</span>],</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"room"</span>: (<span class="dv">4</span>, <span class="dv">12</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(course)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'title': 'Introduction to Python', 'students': 32, 'online': True, 'topics': ['variables', 'loops', 'functions'], 'room': (4, 12)}</code></pre>
+</div>
+</div>
+<p>You can also use variables when defining keys or values.</p>
+<div id="eed9680c" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>student_name <span class="op">=</span> <span class="st">"Maya"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>grade_key <span class="op">=</span> <span class="st">"grade"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>student <span class="op">=</span> {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: student_name,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    grade_key: <span class="fl">8.7</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"programme"</span>: <span class="st">"Data Science"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'Maya', 'grade': 8.7, 'programme': 'Data Science'}</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lists and sets cannot be dictionary keys because they are mutable. Tuples can be keys if all their items are immutable.</p>
+</div>
+</div>
+<div id="9bb21aa2" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>classrooms <span class="op">=</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Monday"</span>, <span class="st">"09:00"</span>): <span class="st">"Room A"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Tuesday"</span>, <span class="st">"11:00"</span>): <span class="st">"Room C"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classrooms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{('Monday', '09:00'): 'Room A', ('Tuesday', '11:00'): 'Room C'}</code></pre>
+</div>
+</div>
+</section>
+<section id="accessing-values" class="level2">
+<h2 class="anchored" data-anchor-id="accessing-values">Accessing Values</h2>
+<p>Access a value by writing its key inside square brackets.</p>
+<div id="afe63094" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"name"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>John</code></pre>
 </div>
 </div>
-<p>However, dictionary keys can be numeric.</p>
-<div id="67485d2e" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">3</span>])  <span class="co"># Outputs: three</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="74ed4c4f" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"age"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>25</code></pre>
+</div>
+</div>
+<section id="insertion-order-and-position" class="level3">
+<h3 class="anchored" data-anchor-id="insertion-order-and-position">Insertion Order and Position</h3>
+<p>Modern Python dictionaries preserve insertion order. However, they are accessed by key, not by position.</p>
+<div id="45b802a0" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>KeyError: 0</code></pre>
+</div>
+</div>
+<p>The code fails because <code>0</code> is not a key in <code>person</code>.</p>
+<p>Numeric keys are valid, but Python still treats them as keys rather than positions.</p>
+<div id="c40023a3" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>three</code></pre>
 </div>
 </div>
-<div id="5c4756de" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">2</span>])  <span class="co"># Error: 2 is not a key in that dictionary!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e750ef5c" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>KeyError: 2</code></pre>
+<pre><code>KeyError: 0</code></pre>
 </div>
 </div>
+</section>
+<section id="accessing-values-safely" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-values-safely">Accessing Values Safely</h3>
+<p>Square brackets raise a <code>KeyError</code> when the requested key does not exist.</p>
+<div id="1947c521" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"email"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>KeyError: 'email'</code></pre>
+</div>
+</div>
+<p>The <code>get()</code> method returns <code>None</code> instead of raising an error.</p>
+<div id="a9a13342" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person.get(<span class="st">"email"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>None</code></pre>
+</div>
+</div>
+<p>You can provide a default value as the second argument.</p>
+<div id="a468b120" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person.get(<span class="st">"email"</span>, <span class="st">"Email not available"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Email not available</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Read a record
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the dictionary below to print the book’s title and publication year in separate cells.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>book <span class="op">=</span> {</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Kindred"</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"author"</span>: <span class="st">"Octavia Butler"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>: <span class="dv">1979</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(book[<span class="st">"title"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(book[<span class="st">"year"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="mutable" class="level2">
 <h2 class="anchored" data-anchor-id="mutable">Mutable</h2>
-<p>Dictionaries are <strong>mutable</strong>. This means that you can change the value of a specific item by referring to its key:</p>
-<div id="fa827ad6" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary before:"</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"age"</span>] <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dictionaries are mutable. You can add, update, and remove key-value pairs.</p>
+<section id="updating-a-value" class="level3">
+<h3 class="anchored" data-anchor-id="updating-a-value">Updating a Value</h3>
+<p>Assign a new value to an existing key.</p>
+<div id="1c8610b2" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Dictionary before:
-{'name': 'John', 'age': 25, 'city': 'New York'}
-Dictionary after:
-{'name': 'John', 'age': 100, 'city': 'New York'}</code></pre>
+<pre><code>{'name': 'John', 'age': 25, 'city': 'New York'}</code></pre>
 </div>
 </div>
-<p>However, once an item is defined we cannot change its key name, only its associated value.</p>
-<p>We can remove keys with <code>del</code>.</p>
-<div id="574b9402" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary before:"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> person[<span class="st">"city"</span>]</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="eab60fd4" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"age"</span>] <span class="op">=</span> <span class="dv">26</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Dictionary before:
-{'name': 'John', 'age': 25, 'city': 'New York'}
-Dictionary after:
-{'name': 'John', 'age': 25}</code></pre>
+<pre><code>{'name': 'John', 'age': 26, 'city': 'New York'}</code></pre>
 </div>
 </div>
-<p>We can initialize empty dictionaries using the curly brackets:</p>
-<div id="0f33f295" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_dict <span class="op">=</span> {}</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Empty dictionary:"</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_dict)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Type: </span><span class="sc">{</span><span class="bu">type</span>(my_dict)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new key to it</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>my_dict[<span class="st">"pi"</span>] <span class="op">=</span> <span class="fl">3.1415</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Empty dictionary:
-{}
-Type: &lt;class 'dict'&gt;
-Dictionary after:
-{'pi': 3.1415}</code></pre>
-</div>
-</div>
-<p>Wait! Aren’t curly brackets used for <strong>sets</strong> too? How can we initialize an empty set?</p>
-<div id="9e2bb628" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty set</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>my_set <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Empty set:"</span>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_set)</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Type: </span><span class="sc">{</span><span class="bu">type</span>(my_set)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Empty set:
-set()
-Type: &lt;class 'set'&gt;</code></pre>
-</div>
-</div>
-<hr>
 </section>
-<section id="no-duplication" class="level2">
-<h2 class="anchored" data-anchor-id="no-duplication">No Duplication</h2>
-<p>Dictionaries <strong>do not allow</strong> duplicate keys! If we use the same key twice, only the last key will remain.</p>
-<div id="70ef8283" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Smith"</span>,</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="adding-a-pair" class="level3">
+<h3 class="anchored" data-anchor-id="adding-a-pair">Adding a Pair</h3>
+<p>Assigning a value to a new key adds a new key-value pair.</p>
+<div id="8373cb37" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"email"</span>] <span class="op">=</span> <span class="st">"john@example.com"</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'name': 'Smith', 'age': 25, 'city': 'New York'}</code></pre>
+<pre><code>{'name': 'John', 'age': 26, 'city': 'New York', 'email': 'john@example.com'}</code></pre>
 </div>
 </div>
-<p>However we can have duplicate values:</p>
-<div id="994c640a" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"John"</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="removing-a-pair" class="level3">
+<h3 class="anchored" data-anchor-id="removing-a-pair">Removing a Pair</h3>
+<p>Use <code>del</code> to remove a key and its value.</p>
+<div id="05733685" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> person[<span class="st">"city"</span>]</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'name': 'John', 'age': 25, 'city': 'John'}</code></pre>
+<pre><code>{'name': 'John', 'age': 26, 'email': 'john@example.com'}</code></pre>
 </div>
 </div>
-<hr>
+<p>The <code>pop()</code> method removes a key and returns its value.</p>
+<div id="f9d65138" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>removed_email <span class="op">=</span> person.pop(<span class="st">"email"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(removed_email)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>john@example.com</code></pre>
+</div>
+</div>
+<div id="fbaa0f94" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'John', 'age': 26}</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Update an event
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make these changes to the dictionary:</p>
+<ol type="1">
+<li>Change the venue to <code>"Main Hall"</code>.</li>
+<li>Add the pair <code>"sold_out": False</code>.</li>
+<li>Remove the <code>"dress_code"</code> pair.</li>
+</ol>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>event <span class="op">=</span> {</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Data Night"</span>,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"venue"</span>: <span class="st">"Room 2"</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dress_code"</span>: <span class="st">"Casual"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>event[<span class="st">"venue"</span>] <span class="op">=</span> <span class="st">"Main Hall"</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>event[<span class="st">"sold_out"</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> event[<span class="st">"dress_code"</span>]</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="convert-between-structures" class="level2">
-<h2 class="anchored" data-anchor-id="convert-between-structures">Convert between Structures</h2>
-<p>You can use the <code>dict</code> function to convert list of tuples into dictionaries.</p>
-<div id="7542f673" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">dict</span>([(<span class="st">"person"</span>, <span class="st">"Pipo"</span>), (<span class="st">"Age"</span>, <span class="dv">10</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>{'person': 'Pipo', 'Age': 10}</code></pre>
-</div>
-</div>
-<hr>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<section id="unique-keys" class="level2">
+<h2 class="anchored" data-anchor-id="unique-keys">Unique Keys</h2>
+<p>A dictionary cannot contain duplicate keys. If the same key appears more than once, the last value replaces the earlier value.</p>
+<div id="5954885d" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Smith"</span>,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'Smith', 'age': 25}</code></pre>
+</div>
+</div>
+<p>Different keys may contain the same value.</p>
+<div id="59d4aeaf" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>locations <span class="op">=</span> {</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"home_city"</span>: <span class="st">"Madrid"</span>,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"work_city"</span>: <span class="st">"Madrid"</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(locations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'home_city': 'Madrid', 'work_city': 'Madrid'}</code></pre>
+</div>
+</div>
+</section>
+<section id="membership" class="level2">
+<h2 class="anchored" data-anchor-id="membership">Membership</h2>
+<p>The <code>in</code> operator checks dictionary keys, not values.</p>
+<div id="e91749ae" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"name"</span> <span class="kw">in</span> person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div id="9c14c3d1" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"John"</span> <span class="kw">in</span> person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>False</code></pre>
+</div>
+</div>
+<p>Use <code>.values()</code> if you need to search among the values.</p>
+<div id="61940bba" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"John"</span> <span class="kw">in</span> person.values())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Predict the output
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Without running the code, determine the result of each expression.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>settings <span class="op">=</span> {</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theme"</span>: <span class="st">"dark"</span>,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"language"</span>: <span class="st">"English"</span>,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"notifications"</span>: <span class="va">True</span>,</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"theme"</span> <span class="kw">in</span> settings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dark"</span> <span class="kw">in</span> settings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dark"</span> <span class="kw">in</span> settings.values())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The three results are <code>True</code>, <code>False</code>, and <code>True</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="dictionary-methods" class="level2">
+<h2 class="anchored" data-anchor-id="dictionary-methods">Dictionary Methods</h2>
+<p>Three useful methods provide views of a dictionary:</p>
+<ul>
+<li><code>keys()</code> returns the keys.</li>
+<li><code>values()</code> returns the values.</li>
+<li><code>items()</code> returns key-value pairs as tuples.</li>
+</ul>
+<div id="86e9a8fa" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> {</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Headphones"</span>,</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"price"</span>: <span class="fl">79.99</span>,</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stock"</span>: <span class="dv">14</span>,</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dict_keys(['name', 'price', 'stock'])</code></pre>
+</div>
+</div>
+<div id="e5566c7e" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.values())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dict_values(['Headphones', 79.99, 14])</code></pre>
+</div>
+</div>
+<div id="e3969a8c" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.items())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dict_items([('name', 'Headphones'), ('price', 79.99), ('stock', 14)])</code></pre>
+</div>
+</div>
+<p>The <code>update()</code> method adds new pairs and replaces values for existing keys.</p>
+<div id="e11e618c" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>product.update({<span class="st">"price"</span>: <span class="fl">69.99</span>, <span class="st">"colour"</span>: <span class="st">"black"</span>})</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'Headphones', 'price': 69.99, 'stock': 14, 'colour': 'black'}</code></pre>
+</div>
+</div>
+</section>
+<section id="looping-through-a-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="looping-through-a-dictionary">Looping Through a Dictionary</h2>
+<p>A <code>for</code> loop over a dictionary visits its keys.</p>
+<div id="cc6b22f7" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> product:</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>name
+price
+stock
+colour</code></pre>
+</div>
+</div>
+<p>Use <code>.items()</code> when you need both the key and the value.</p>
+<div id="6f1165c6" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> product.items():</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>name: Headphones
+price: 69.99
+stock: 14
+colour: black</code></pre>
+</div>
+</div>
+<p>Each loop contains one <code>print()</code> statement, even though it produces several output lines.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Display a profile
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use a loop and <code>.items()</code> to print each key and value in this format:</p>
+<pre class="text"><code>username: maya_21
+level: 8
+premium: True</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> {</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"username"</span>: <span class="st">"maya_21"</span>,</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"level"</span>: <span class="dv">8</span>,</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"premium"</span>: <span class="va">True</span>,</span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> profile.items():</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="nested-dictionaries" class="level2">
+<h2 class="anchored" data-anchor-id="nested-dictionaries">Nested Dictionaries</h2>
+<p>A dictionary can contain other dictionaries. This is useful when several records share the same structure.</p>
+<div id="bf591887" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> {</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"S001"</span>: {</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span>: <span class="st">"Maya"</span>,</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"programme"</span>: <span class="st">"Data Science"</span>,</span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"grade"</span>: <span class="fl">8.7</span>,</span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"S002"</span>: {</span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span>: <span class="st">"Leo"</span>,</span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"programme"</span>: <span class="st">"Economics"</span>,</span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"grade"</span>: <span class="fl">7.9</span>,</span>
+<span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-14"><a href="#cb79-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'S001': {'name': 'Maya', 'programme': 'Data Science', 'grade': 8.7}, 'S002': {'name': 'Leo', 'programme': 'Economics', 'grade': 7.9}}</code></pre>
+</div>
+</div>
+<p>Use one key for the outer dictionary and another for the nested dictionary.</p>
+<div id="b926c4de" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S001"</span>][<span class="st">"name"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Maya</code></pre>
+</div>
+</div>
+<div id="51b5dd08" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S002"</span>][<span class="st">"grade"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7.9</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Update a nested record
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the <code>students</code> dictionary above:</p>
+<ol type="1">
+<li>Change Maya’s grade to <code>9.1</code>.</li>
+<li>Add a new field, <code>"graduated": False</code>, to Leo’s record.</li>
+<li>Print each updated student record in a separate cell.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>students[<span class="st">"S001"</span>][<span class="st">"grade"</span>] <span class="op">=</span> <span class="fl">9.1</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>students[<span class="st">"S002"</span>][<span class="st">"graduated"</span>] <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S001"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S002"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="converting-to-a-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="converting-to-a-dictionary">Converting to a Dictionary</h2>
+<p>The <code>dict()</code> function can convert a sequence of key-value pairs into a dictionary.</p>
+<div id="ba8f8e74" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>pairs <span class="op">=</span> [</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"name"</span>, <span class="st">"Pipo"</span>),</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"age"</span>, <span class="dv">10</span>),</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"city"</span>, <span class="st">"Seville"</span>),</span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>converted_dictionary <span class="op">=</span> <span class="bu">dict</span>(pairs)</span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(converted_dictionary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'Pipo', 'age': 10, 'city': 'Seville'}</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Convert a menu
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Convert the following list of tuples into a dictionary. Then print the price of the salad.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>menu_pairs <span class="op">=</span> [</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"soup"</span>, <span class="fl">6.50</span>),</span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"salad"</span>, <span class="fl">8.00</span>),</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"pasta"</span>, <span class="fl">12.50</span>),</span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>menu <span class="op">=</span> <span class="bu">dict</span>(menu_pairs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(menu[<span class="st">"salad"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="challenge-count-words" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-count-words">Challenge: Count Words</h2>
+<p>Create a dictionary that counts how many times each word appears in the list.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">"python"</span>, <span class="st">"data"</span>, <span class="st">"python"</span>, <span class="st">"model"</span>, <span class="st">"data"</span>, <span class="st">"python"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The expected dictionary is:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">"python"</span>: <span class="dv">3</span>, <span class="st">"data"</span>: <span class="dv">2</span>, <span class="st">"model"</span>: <span class="dv">1</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Possible solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>word_counts <span class="op">=</span> {}</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> words:</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>    word_counts[word] <span class="op">=</span> word_counts.get(word, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="lists-tuples-sets-and-dictionaries-compared" class="level2">
+<h2 class="anchored" data-anchor-id="lists-tuples-sets-and-dictionaries-compared">Lists, Tuples, Sets, and Dictionaries Compared</h2>
 <table class="table">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 31%">
-<col style="width: 10%">
-<col style="width: 26%">
-<col style="width: 10%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Data Structure</th>
-<th>Ordered</th>
+<th>Data structure</th>
+<th>Syntax</th>
+<th>Preserves order</th>
 <th>Mutable</th>
-<th>Duplication</th>
-<th>Indexable</th>
+<th>Duplicate items</th>
+<th>Access</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>List</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<td><code>[]</code></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Position</td>
 </tr>
 <tr class="even">
 <td>Tuple</td>
-<td>✅</td>
-<td>❌</td>
-<td>✅</td>
-<td>✅</td>
+<td><code>()</code></td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Position</td>
 </tr>
 <tr class="odd">
 <td>Set</td>
-<td>❌</td>
-<td>✅</td>
-<td>❌</td>
-<td>❌</td>
+<td><code>{item, ...}</code> or <code>set()</code></td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Membership</td>
 </tr>
 <tr class="even">
 <td>Dictionary</td>
-<td>❌</td>
-<td>✅</td>
-<td>❌</td>
-<td>✅</td>
+<td><code>{key: value}</code></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Keys: No; values: Yes</td>
+<td>Key</td>
 </tr>
 </tbody>
 </table>
-<hr>
+<p>Use a <strong>list</strong> when position matters and the collection may change. Use a <strong>tuple</strong> when position matters and the collection should remain fixed. Use a <strong>set</strong> for unique items and membership tests. Use a <strong>dictionary</strong> when each value needs a meaningful identifier.</p>
 </section>
-</section>
-<section id="ready-for-a-challenge" class="level1">
-<h1>Ready for a Challenge?</h1>
-<p>Try to beat one of these exercises!</p>
-<p><strong><a href="https://drive.google.com/file/d/1u8MhIvC3eDci2It2E61k2b2S3abCmhhy/view?usp=sharing">Challenge 1</a>:</strong> Create a recommendation system that suggests products to new clients based on their purchases and the purchase history of existing clients.</p>
-<p><strong><a href="https://drive.google.com/file/d/1O4hQ4YdmetLY7SD3OPsOYrTjbwuxu1wK/view?usp=sharing">Challenge 2</a>:</strong> Given a list of cities and the distances between each pair of cities, find the shortest possible route that visits each city exactly once and returns to the original city.</p>
-<p><strong><a href="https://drive.google.com/file/d/1JtNDuxPH8ATburxJoymt5UI0Vrk-FZ9U/view?usp=sharing">Challenge 3</a>:</strong> Juan Parrondo stated this paradox within game theory where two games, both of which are losing when played individually, can lead to a winning strategy when played alternately.</p>
-<p><strong><a href="https://drive.google.com/file/d/1j7mTtWt-9kkafa5PjanIdoW5SEshWIsK/view?usp=sharing">Challenge 4</a>:</strong> Sudoku is a classic logic-based number-placement puzzle. The objective is to fill a 9x9 grid with digits in such a way that each column, each row, and each of the nine 3x3 sub-grids that compose the grid contains all of the digits from 1 to 9.</p>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<ul>
+<li>Dictionaries store key-value pairs.</li>
+<li>Keys must be unique and immutable.</li>
+<li>Values can use any data type and may be duplicated.</li>
+<li>Dictionaries preserve insertion order but use keys for access.</li>
+<li>Dictionaries are mutable.</li>
+<li><code>get()</code> provides safe access to a missing key.</li>
+<li><code>keys()</code>, <code>values()</code>, and <code>items()</code> provide different views of the data.</li>
+<li>Nested dictionaries store structured collections of records.</li>
+</ul>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1244,259 +1710,595 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb31" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Dictionaries"</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Review previous sessions here!</span><span class="co">](https://drive.google.com/file/d/1pdfubE7_7a44_Mz7O3yK2PqXfD0S0rXH/view?usp=sharing)</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Structures: Dictionaries</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>Dictionaries are the last the built-in data type that we will learn in Python. They are used to store collections of data in key-value pairs.</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://www.sapiens.org/app/uploads/2016/12/01-AP_271041288910-1024x698.jpg" width="400" height="auto" /&gt;</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>In a dictionary, a **key** is a unique identifier pointing to its associated **value**. While keys must be unique and immutable, values can be of any data type and may be duplicated.</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>A dictionary is created using curly brackets <span class="in">`{}`</span>. Here's an example:</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>dictionary <span class="op">=</span> {</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dictionary)</span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>We access data inside a dictionary using its **keys**. Every key returns its associated **value**.</span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>dictionary <span class="op">=</span> {</span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
-<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dictionary[<span class="st">"key1"</span>])</span>
-<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>Keys must be strings or numbers. Values can be **anything**.</span>
-<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>very_complex_dictionary <span class="op">=</span> {</span>
-<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"number"</span>: <span class="fl">3.14</span>,</span>
-<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"string"</span>: <span class="st">"Hello"</span>,</span>
-<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"boolean"</span>: <span class="va">True</span>,</span>
-<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">"list"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
-<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tuple"</span>: (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
-<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">"set"</span>: {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>},</span>
-<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dictionary"</span>: {</span>
-<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key1"</span>: <span class="st">"value1"</span>,</span>
-<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key2"</span>: <span class="st">"value2"</span>,</span>
-<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>        <span class="st">"key3"</span>: <span class="st">"value3"</span></span>
-<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"function"</span>: <span class="kw">lambda</span> x: x <span class="op">+</span> <span class="dv">1</span>,</span>
-<span id="cb31-70"><a href="#cb31-70" aria-hidden="true" tabindex="-1"></a>    <span class="dv">10</span>: <span class="st">"ten"</span></span>
-<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(very_complex_dictionary)</span>
-<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a>We can use other Python variables to define keys or values.</span>
-<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a>name_value <span class="op">=</span> <span class="st">"John"</span></span>
-<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a>key_years <span class="op">=</span> <span class="st">"age"</span></span>
-<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: name_value,</span>
-<span id="cb31-86"><a href="#cb31-86" aria-hidden="true" tabindex="-1"></a>    key_years: <span class="dv">25</span>,</span>
-<span id="cb31-87"><a href="#cb31-87" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb31-88"><a href="#cb31-88" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-89"><a href="#cb31-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Unordered</span></span>
-<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a>Dictionaries are **unordered**. You cannot use numeric indices to acces an item.</span>
-<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-102"><a href="#cb31-102" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="dv">0</span>])  <span class="co"># This will cause an error!</span></span>
-<span id="cb31-103"><a href="#cb31-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a>Instead, you refer to its key:</span>
-<span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"name"</span>])  <span class="co"># Outputs: John</span></span>
-<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a>However, dictionary keys can be numeric.</span>
-<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
-<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
-<span id="cb31-120"><a href="#cb31-120" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
-<span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span></span>
-<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">3</span>])  <span class="co"># Outputs: three</span></span>
-<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
-<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
-<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span></span>
-<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">2</span>])  <span class="co"># Error: 2 is not a key in that dictionary!</span></span>
-<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mutable</span></span>
-<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>Dictionaries are **mutable**. This means that you can change the value of a specific item by referring to its key:</span>
-<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary before:"</span>)</span>
-<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"age"</span>] <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a>However, once an item is defined we cannot change its key name, only its associated value.</span>
-<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a>We can remove keys with <span class="in">`del`</span>.</span>
-<span id="cb31-164"><a href="#cb31-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary before:"</span>)</span>
-<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-176"><a href="#cb31-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-177"><a href="#cb31-177" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> person[<span class="st">"city"</span>]</span>
-<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a>We can initialize empty dictionaries using the curly brackets:</span>
-<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-187"><a href="#cb31-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-188"><a href="#cb31-188" aria-hidden="true" tabindex="-1"></a>my_dict <span class="op">=</span> {}</span>
-<span id="cb31-189"><a href="#cb31-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Empty dictionary:"</span>)</span>
-<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_dict)</span>
-<span id="cb31-192"><a href="#cb31-192" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Type: </span><span class="sc">{</span><span class="bu">type</span>(my_dict)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new key to it</span></span>
-<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a>my_dict[<span class="st">"pi"</span>] <span class="op">=</span> <span class="fl">3.1415</span></span>
-<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dictionary after:"</span>)</span>
-<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_dict)</span>
-<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a>Wait! Aren't curly brackets used for **sets** too? How can we initialize an empty set?</span>
-<span id="cb31-202"><a href="#cb31-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty set</span></span>
-<span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a>my_set <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Empty set:"</span>)</span>
-<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_set)</span>
-<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Type: </span><span class="sc">{</span><span class="bu">type</span>(my_set)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-216"><a href="#cb31-216" aria-hidden="true" tabindex="-1"></a><span class="fu">## No Duplication</span></span>
-<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a>Dictionaries **do not allow** duplicate keys! If we use the same key twice, only the last key will remain.</span>
-<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-222"><a href="#cb31-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Smith"</span>,</span>
-<span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span></span>
-<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-232"><a href="#cb31-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-233"><a href="#cb31-233" aria-hidden="true" tabindex="-1"></a>However we can have duplicate values:</span>
-<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
-<span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
-<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
-<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"John"</span></span>
-<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
-<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-246"><a href="#cb31-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-247"><a href="#cb31-247" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Convert between Structures</span></span>
-<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a>You can use the <span class="in">`dict`</span> function to convert list of tuples into dictionaries.</span>
-<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a><span class="bu">dict</span>([(<span class="st">"person"</span>, <span class="st">"Pipo"</span>), (<span class="st">"Age"</span>, <span class="dv">10</span>)])</span>
-<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-258"><a href="#cb31-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-259"><a href="#cb31-259" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-260"><a href="#cb31-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
-<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a>| Data Structure | Ordered | Mutable | Duplication | Indexable |</span>
-<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>|----------------|--------------------------|---------|----------------------|---------|</span>
-<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a>| List           | ✅                       | ✅     | ✅                  | ✅                  |</span>
-<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>| Tuple          | ✅                       | ❌     | ✅                  | ✅                  |</span>
-<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a>| Set            | ❌                       | ✅     | ❌                  | ❌                  |</span>
-<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a>| Dictionary     | ❌                       | ✅     | ❌                  | ✅                  |</span>
-<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a><span class="fu"># Ready for a Challenge?</span></span>
-<span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a>Try to beat one of these exercises!</span>
-<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-277"><a href="#cb31-277" aria-hidden="true" tabindex="-1"></a>**[Challenge 1](https://drive.google.com/file/d/1u8MhIvC3eDci2It2E61k2b2S3abCmhhy/view?usp=sharing):** Create a recommendation system that suggests products to new clients based on their purchases and the purchase history of existing clients.</span>
-<span id="cb31-278"><a href="#cb31-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a>**[Challenge 2](https://drive.google.com/file/d/1O4hQ4YdmetLY7SD3OPsOYrTjbwuxu1wK/view?usp=sharing):** Given a list of cities and the distances between each pair of cities, find the shortest possible route that visits each city exactly once and returns to the original city.</span>
-<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>**[Challenge 3](https://drive.google.com/file/d/1JtNDuxPH8ATburxJoymt5UI0Vrk-FZ9U/view?usp=sharing):** Juan Parrondo stated this paradox within game theory where two games, both of which are losing when played individually, can lead to a winning strategy when played alternately.</span>
-<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a>**[Challenge 4](https://drive.google.com/file/d/1j7mTtWt-9kkafa5PjanIdoW5SEshWIsK/view?usp=sharing):** Sudoku is a classic logic-based number-placement puzzle. The objective is to fill a 9x9 grid with digits in such a way that each column, each row, and each of the nine 3x3 sub-grids that compose the grid contains all of the digits from 1 to 9.</span>
+<div class="sourceCode" id="cb97" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Dictionaries"</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Structures: Dictionaries</span></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>A **dictionary** stores data in **key-value pairs**. Each key identifies a value.</span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a>Dictionaries are useful for structured records, such as a person's profile, a product catalogue, or the settings of an application.</span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating Dictionaries</span></span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a>Create a dictionary with curly brackets <span class="in">`{}`</span>. Separate each key from its value with a colon.</span>
+<span id="cb97-17"><a href="#cb97-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-20"><a href="#cb97-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-21"><a href="#cb97-21" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb97-22"><a href="#cb97-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb97-23"><a href="#cb97-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb97-24"><a href="#cb97-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb97-25"><a href="#cb97-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-26"><a href="#cb97-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-27"><a href="#cb97-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-28"><a href="#cb97-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-29"><a href="#cb97-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-32"><a href="#cb97-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-33"><a href="#cb97-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(person))</span>
+<span id="cb97-34"><a href="#cb97-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-35"><a href="#cb97-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-36"><a href="#cb97-36" aria-hidden="true" tabindex="-1"></a>Use empty curly brackets to create an empty dictionary.</span>
+<span id="cb97-37"><a href="#cb97-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-40"><a href="#cb97-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-41"><a href="#cb97-41" aria-hidden="true" tabindex="-1"></a>empty_dictionary <span class="op">=</span> {}</span>
+<span id="cb97-42"><a href="#cb97-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-43"><a href="#cb97-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(empty_dictionary)</span>
+<span id="cb97-44"><a href="#cb97-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-45"><a href="#cb97-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-48"><a href="#cb97-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-49"><a href="#cb97-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(empty_dictionary))</span>
+<span id="cb97-50"><a href="#cb97-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-51"><a href="#cb97-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-52"><a href="#cb97-52" aria-hidden="true" tabindex="-1"></a>Remember that an empty set uses <span class="in">`set()`</span> instead.</span>
+<span id="cb97-53"><a href="#cb97-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-56"><a href="#cb97-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-57"><a href="#cb97-57" aria-hidden="true" tabindex="-1"></a>empty_set <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb97-58"><a href="#cb97-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-59"><a href="#cb97-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(empty_set))</span>
+<span id="cb97-60"><a href="#cb97-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-61"><a href="#cb97-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-62"><a href="#cb97-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## Keys and Values</span></span>
+<span id="cb97-63"><a href="#cb97-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-64"><a href="#cb97-64" aria-hidden="true" tabindex="-1"></a>Keys must be unique and immutable. Strings, numbers, and tuples can be keys. Values can have any data type and may be duplicated.</span>
+<span id="cb97-65"><a href="#cb97-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-68"><a href="#cb97-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-69"><a href="#cb97-69" aria-hidden="true" tabindex="-1"></a>course <span class="op">=</span> {</span>
+<span id="cb97-70"><a href="#cb97-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Introduction to Python"</span>,</span>
+<span id="cb97-71"><a href="#cb97-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">"students"</span>: <span class="dv">32</span>,</span>
+<span id="cb97-72"><a href="#cb97-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"online"</span>: <span class="va">True</span>,</span>
+<span id="cb97-73"><a href="#cb97-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"topics"</span>: [<span class="st">"variables"</span>, <span class="st">"loops"</span>, <span class="st">"functions"</span>],</span>
+<span id="cb97-74"><a href="#cb97-74" aria-hidden="true" tabindex="-1"></a>    <span class="st">"room"</span>: (<span class="dv">4</span>, <span class="dv">12</span>),</span>
+<span id="cb97-75"><a href="#cb97-75" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-76"><a href="#cb97-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-77"><a href="#cb97-77" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(course)</span>
+<span id="cb97-78"><a href="#cb97-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-79"><a href="#cb97-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-80"><a href="#cb97-80" aria-hidden="true" tabindex="-1"></a>You can also use variables when defining keys or values.</span>
+<span id="cb97-81"><a href="#cb97-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-84"><a href="#cb97-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-85"><a href="#cb97-85" aria-hidden="true" tabindex="-1"></a>student_name <span class="op">=</span> <span class="st">"Maya"</span></span>
+<span id="cb97-86"><a href="#cb97-86" aria-hidden="true" tabindex="-1"></a>grade_key <span class="op">=</span> <span class="st">"grade"</span></span>
+<span id="cb97-87"><a href="#cb97-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-88"><a href="#cb97-88" aria-hidden="true" tabindex="-1"></a>student <span class="op">=</span> {</span>
+<span id="cb97-89"><a href="#cb97-89" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: student_name,</span>
+<span id="cb97-90"><a href="#cb97-90" aria-hidden="true" tabindex="-1"></a>    grade_key: <span class="fl">8.7</span>,</span>
+<span id="cb97-91"><a href="#cb97-91" aria-hidden="true" tabindex="-1"></a>    <span class="st">"programme"</span>: <span class="st">"Data Science"</span>,</span>
+<span id="cb97-92"><a href="#cb97-92" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-93"><a href="#cb97-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-94"><a href="#cb97-94" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student)</span>
+<span id="cb97-95"><a href="#cb97-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-96"><a href="#cb97-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-97"><a href="#cb97-97" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb97-98"><a href="#cb97-98" aria-hidden="true" tabindex="-1"></a>Lists and sets cannot be dictionary keys because they are mutable. Tuples can be keys if all their items are immutable.</span>
+<span id="cb97-99"><a href="#cb97-99" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-100"><a href="#cb97-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-103"><a href="#cb97-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-104"><a href="#cb97-104" aria-hidden="true" tabindex="-1"></a>classrooms <span class="op">=</span> {</span>
+<span id="cb97-105"><a href="#cb97-105" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Monday"</span>, <span class="st">"09:00"</span>): <span class="st">"Room A"</span>,</span>
+<span id="cb97-106"><a href="#cb97-106" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Tuesday"</span>, <span class="st">"11:00"</span>): <span class="st">"Room C"</span>,</span>
+<span id="cb97-107"><a href="#cb97-107" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-108"><a href="#cb97-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-109"><a href="#cb97-109" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classrooms)</span>
+<span id="cb97-110"><a href="#cb97-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-111"><a href="#cb97-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-112"><a href="#cb97-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Accessing Values</span></span>
+<span id="cb97-113"><a href="#cb97-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-114"><a href="#cb97-114" aria-hidden="true" tabindex="-1"></a>Access a value by writing its key inside square brackets.</span>
+<span id="cb97-115"><a href="#cb97-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-118"><a href="#cb97-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-119"><a href="#cb97-119" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb97-120"><a href="#cb97-120" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb97-121"><a href="#cb97-121" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb97-122"><a href="#cb97-122" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb97-123"><a href="#cb97-123" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-124"><a href="#cb97-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-125"><a href="#cb97-125" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"name"</span>])</span>
+<span id="cb97-126"><a href="#cb97-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-127"><a href="#cb97-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-130"><a href="#cb97-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-131"><a href="#cb97-131" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"age"</span>])</span>
+<span id="cb97-132"><a href="#cb97-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-133"><a href="#cb97-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-134"><a href="#cb97-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Insertion Order and Position</span></span>
+<span id="cb97-135"><a href="#cb97-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-136"><a href="#cb97-136" aria-hidden="true" tabindex="-1"></a>Modern Python dictionaries preserve insertion order. However, they are accessed by key, not by position.</span>
+<span id="cb97-137"><a href="#cb97-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-140"><a href="#cb97-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-141"><a href="#cb97-141" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
+<span id="cb97-142"><a href="#cb97-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-143"><a href="#cb97-143" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="dv">0</span>])</span>
+<span id="cb97-144"><a href="#cb97-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-145"><a href="#cb97-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-146"><a href="#cb97-146" aria-hidden="true" tabindex="-1"></a>The code fails because <span class="in">`0`</span> is not a key in <span class="in">`person`</span>.</span>
+<span id="cb97-147"><a href="#cb97-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-148"><a href="#cb97-148" aria-hidden="true" tabindex="-1"></a>Numeric keys are valid, but Python still treats them as keys rather than positions.</span>
+<span id="cb97-149"><a href="#cb97-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-152"><a href="#cb97-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-153"><a href="#cb97-153" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {</span>
+<span id="cb97-154"><a href="#cb97-154" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"three"</span>,</span>
+<span id="cb97-155"><a href="#cb97-155" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"four"</span>,</span>
+<span id="cb97-156"><a href="#cb97-156" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"five"</span>,</span>
+<span id="cb97-157"><a href="#cb97-157" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-158"><a href="#cb97-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-159"><a href="#cb97-159" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">3</span>])</span>
+<span id="cb97-160"><a href="#cb97-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-161"><a href="#cb97-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-164"><a href="#cb97-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-165"><a href="#cb97-165" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
+<span id="cb97-166"><a href="#cb97-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-167"><a href="#cb97-167" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[<span class="dv">0</span>])</span>
+<span id="cb97-168"><a href="#cb97-168" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-169"><a href="#cb97-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-170"><a href="#cb97-170" aria-hidden="true" tabindex="-1"></a><span class="fu">### Accessing Values Safely</span></span>
+<span id="cb97-171"><a href="#cb97-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-172"><a href="#cb97-172" aria-hidden="true" tabindex="-1"></a>Square brackets raise a <span class="in">`KeyError`</span> when the requested key does not exist.</span>
+<span id="cb97-173"><a href="#cb97-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-176"><a href="#cb97-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-177"><a href="#cb97-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
+<span id="cb97-178"><a href="#cb97-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-179"><a href="#cb97-179" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person[<span class="st">"email"</span>])</span>
+<span id="cb97-180"><a href="#cb97-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-181"><a href="#cb97-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-182"><a href="#cb97-182" aria-hidden="true" tabindex="-1"></a>The <span class="in">`get()`</span> method returns <span class="in">`None`</span> instead of raising an error.</span>
+<span id="cb97-183"><a href="#cb97-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-186"><a href="#cb97-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-187"><a href="#cb97-187" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person.get(<span class="st">"email"</span>))</span>
+<span id="cb97-188"><a href="#cb97-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-189"><a href="#cb97-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-190"><a href="#cb97-190" aria-hidden="true" tabindex="-1"></a>You can provide a default value as the second argument.</span>
+<span id="cb97-191"><a href="#cb97-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-194"><a href="#cb97-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-195"><a href="#cb97-195" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person.get(<span class="st">"email"</span>, <span class="st">"Email not available"</span>))</span>
+<span id="cb97-196"><a href="#cb97-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-197"><a href="#cb97-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-198"><a href="#cb97-198" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-199"><a href="#cb97-199" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Read a record</span></span>
+<span id="cb97-200"><a href="#cb97-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-201"><a href="#cb97-201" aria-hidden="true" tabindex="-1"></a>Use the dictionary below to print the book's title and publication year in separate cells.</span>
+<span id="cb97-202"><a href="#cb97-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-203"><a href="#cb97-203" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-204"><a href="#cb97-204" aria-hidden="true" tabindex="-1"></a>book <span class="op">=</span> {</span>
+<span id="cb97-205"><a href="#cb97-205" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Kindred"</span>,</span>
+<span id="cb97-206"><a href="#cb97-206" aria-hidden="true" tabindex="-1"></a>    <span class="st">"author"</span>: <span class="st">"Octavia Butler"</span>,</span>
+<span id="cb97-207"><a href="#cb97-207" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>: <span class="dv">1979</span>,</span>
+<span id="cb97-208"><a href="#cb97-208" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-209"><a href="#cb97-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-210"><a href="#cb97-210" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-211"><a href="#cb97-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-212"><a href="#cb97-212" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-213"><a href="#cb97-213" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-214"><a href="#cb97-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-215"><a href="#cb97-215" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-216"><a href="#cb97-216" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(book[<span class="st">"title"</span>])</span>
+<span id="cb97-217"><a href="#cb97-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-218"><a href="#cb97-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-219"><a href="#cb97-219" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-220"><a href="#cb97-220" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(book[<span class="st">"year"</span>])</span>
+<span id="cb97-221"><a href="#cb97-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-222"><a href="#cb97-222" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-223"><a href="#cb97-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-224"><a href="#cb97-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mutable</span></span>
+<span id="cb97-225"><a href="#cb97-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-226"><a href="#cb97-226" aria-hidden="true" tabindex="-1"></a>Dictionaries are mutable. You can add, update, and remove key-value pairs.</span>
+<span id="cb97-227"><a href="#cb97-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-228"><a href="#cb97-228" aria-hidden="true" tabindex="-1"></a><span class="fu">### Updating a Value</span></span>
+<span id="cb97-229"><a href="#cb97-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-230"><a href="#cb97-230" aria-hidden="true" tabindex="-1"></a>Assign a new value to an existing key.</span>
+<span id="cb97-231"><a href="#cb97-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-234"><a href="#cb97-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-235"><a href="#cb97-235" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb97-236"><a href="#cb97-236" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb97-237"><a href="#cb97-237" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb97-238"><a href="#cb97-238" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb97-239"><a href="#cb97-239" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-240"><a href="#cb97-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-241"><a href="#cb97-241" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-242"><a href="#cb97-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-243"><a href="#cb97-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-246"><a href="#cb97-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-247"><a href="#cb97-247" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"age"</span>] <span class="op">=</span> <span class="dv">26</span></span>
+<span id="cb97-248"><a href="#cb97-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-249"><a href="#cb97-249" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-250"><a href="#cb97-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-251"><a href="#cb97-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-252"><a href="#cb97-252" aria-hidden="true" tabindex="-1"></a><span class="fu">### Adding a Pair</span></span>
+<span id="cb97-253"><a href="#cb97-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-254"><a href="#cb97-254" aria-hidden="true" tabindex="-1"></a>Assigning a value to a new key adds a new key-value pair.</span>
+<span id="cb97-255"><a href="#cb97-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-258"><a href="#cb97-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-259"><a href="#cb97-259" aria-hidden="true" tabindex="-1"></a>person[<span class="st">"email"</span>] <span class="op">=</span> <span class="st">"john@example.com"</span></span>
+<span id="cb97-260"><a href="#cb97-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-261"><a href="#cb97-261" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-262"><a href="#cb97-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-263"><a href="#cb97-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-264"><a href="#cb97-264" aria-hidden="true" tabindex="-1"></a><span class="fu">### Removing a Pair</span></span>
+<span id="cb97-265"><a href="#cb97-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-266"><a href="#cb97-266" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`del`</span> to remove a key and its value.</span>
+<span id="cb97-267"><a href="#cb97-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-270"><a href="#cb97-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-271"><a href="#cb97-271" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> person[<span class="st">"city"</span>]</span>
+<span id="cb97-272"><a href="#cb97-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-273"><a href="#cb97-273" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-274"><a href="#cb97-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-275"><a href="#cb97-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-276"><a href="#cb97-276" aria-hidden="true" tabindex="-1"></a>The <span class="in">`pop()`</span> method removes a key and returns its value.</span>
+<span id="cb97-277"><a href="#cb97-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-280"><a href="#cb97-280" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-281"><a href="#cb97-281" aria-hidden="true" tabindex="-1"></a>removed_email <span class="op">=</span> person.pop(<span class="st">"email"</span>)</span>
+<span id="cb97-282"><a href="#cb97-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-283"><a href="#cb97-283" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(removed_email)</span>
+<span id="cb97-284"><a href="#cb97-284" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-285"><a href="#cb97-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-288"><a href="#cb97-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-289"><a href="#cb97-289" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-290"><a href="#cb97-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-291"><a href="#cb97-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-292"><a href="#cb97-292" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-293"><a href="#cb97-293" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Update an event</span></span>
+<span id="cb97-294"><a href="#cb97-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-295"><a href="#cb97-295" aria-hidden="true" tabindex="-1"></a>Make these changes to the dictionary:</span>
+<span id="cb97-296"><a href="#cb97-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-297"><a href="#cb97-297" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Change the venue to <span class="in">`"Main Hall"`</span>.</span>
+<span id="cb97-298"><a href="#cb97-298" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Add the pair <span class="in">`"sold_out": False`</span>.</span>
+<span id="cb97-299"><a href="#cb97-299" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Remove the <span class="in">`"dress_code"`</span> pair.</span>
+<span id="cb97-300"><a href="#cb97-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-301"><a href="#cb97-301" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-302"><a href="#cb97-302" aria-hidden="true" tabindex="-1"></a>event <span class="op">=</span> {</span>
+<span id="cb97-303"><a href="#cb97-303" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Data Night"</span>,</span>
+<span id="cb97-304"><a href="#cb97-304" aria-hidden="true" tabindex="-1"></a>    <span class="st">"venue"</span>: <span class="st">"Room 2"</span>,</span>
+<span id="cb97-305"><a href="#cb97-305" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dress_code"</span>: <span class="st">"Casual"</span>,</span>
+<span id="cb97-306"><a href="#cb97-306" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-307"><a href="#cb97-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-308"><a href="#cb97-308" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-309"><a href="#cb97-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-310"><a href="#cb97-310" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-311"><a href="#cb97-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-312"><a href="#cb97-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-313"><a href="#cb97-313" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-314"><a href="#cb97-314" aria-hidden="true" tabindex="-1"></a>event[<span class="st">"venue"</span>] <span class="op">=</span> <span class="st">"Main Hall"</span></span>
+<span id="cb97-315"><a href="#cb97-315" aria-hidden="true" tabindex="-1"></a>event[<span class="st">"sold_out"</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb97-316"><a href="#cb97-316" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> event[<span class="st">"dress_code"</span>]</span>
+<span id="cb97-317"><a href="#cb97-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-318"><a href="#cb97-318" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event)</span>
+<span id="cb97-319"><a href="#cb97-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-320"><a href="#cb97-320" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-321"><a href="#cb97-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-322"><a href="#cb97-322" aria-hidden="true" tabindex="-1"></a><span class="fu">## Unique Keys</span></span>
+<span id="cb97-323"><a href="#cb97-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-324"><a href="#cb97-324" aria-hidden="true" tabindex="-1"></a>A dictionary cannot contain duplicate keys. If the same key appears more than once, the last value replaces the earlier value.</span>
+<span id="cb97-325"><a href="#cb97-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-328"><a href="#cb97-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-329"><a href="#cb97-329" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb97-330"><a href="#cb97-330" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb97-331"><a href="#cb97-331" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Smith"</span>,</span>
+<span id="cb97-332"><a href="#cb97-332" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb97-333"><a href="#cb97-333" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-334"><a href="#cb97-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-335"><a href="#cb97-335" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(person)</span>
+<span id="cb97-336"><a href="#cb97-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-337"><a href="#cb97-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-338"><a href="#cb97-338" aria-hidden="true" tabindex="-1"></a>Different keys may contain the same value.</span>
+<span id="cb97-339"><a href="#cb97-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-342"><a href="#cb97-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-343"><a href="#cb97-343" aria-hidden="true" tabindex="-1"></a>locations <span class="op">=</span> {</span>
+<span id="cb97-344"><a href="#cb97-344" aria-hidden="true" tabindex="-1"></a>    <span class="st">"home_city"</span>: <span class="st">"Madrid"</span>,</span>
+<span id="cb97-345"><a href="#cb97-345" aria-hidden="true" tabindex="-1"></a>    <span class="st">"work_city"</span>: <span class="st">"Madrid"</span>,</span>
+<span id="cb97-346"><a href="#cb97-346" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-347"><a href="#cb97-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-348"><a href="#cb97-348" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(locations)</span>
+<span id="cb97-349"><a href="#cb97-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-350"><a href="#cb97-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-351"><a href="#cb97-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## Membership</span></span>
+<span id="cb97-352"><a href="#cb97-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-353"><a href="#cb97-353" aria-hidden="true" tabindex="-1"></a>The <span class="in">`in`</span> operator checks dictionary keys, not values.</span>
+<span id="cb97-354"><a href="#cb97-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-357"><a href="#cb97-357" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-358"><a href="#cb97-358" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {</span>
+<span id="cb97-359"><a href="#cb97-359" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"John"</span>,</span>
+<span id="cb97-360"><a href="#cb97-360" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">25</span>,</span>
+<span id="cb97-361"><a href="#cb97-361" aria-hidden="true" tabindex="-1"></a>    <span class="st">"city"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb97-362"><a href="#cb97-362" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-363"><a href="#cb97-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-364"><a href="#cb97-364" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"name"</span> <span class="kw">in</span> person)</span>
+<span id="cb97-365"><a href="#cb97-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-366"><a href="#cb97-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-369"><a href="#cb97-369" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-370"><a href="#cb97-370" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"John"</span> <span class="kw">in</span> person)</span>
+<span id="cb97-371"><a href="#cb97-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-372"><a href="#cb97-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-373"><a href="#cb97-373" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`.values()`</span> if you need to search among the values.</span>
+<span id="cb97-374"><a href="#cb97-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-377"><a href="#cb97-377" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-378"><a href="#cb97-378" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"John"</span> <span class="kw">in</span> person.values())</span>
+<span id="cb97-379"><a href="#cb97-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-380"><a href="#cb97-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-381"><a href="#cb97-381" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-382"><a href="#cb97-382" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Predict the output</span></span>
+<span id="cb97-383"><a href="#cb97-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-384"><a href="#cb97-384" aria-hidden="true" tabindex="-1"></a>Without running the code, determine the result of each expression.</span>
+<span id="cb97-385"><a href="#cb97-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-386"><a href="#cb97-386" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-387"><a href="#cb97-387" aria-hidden="true" tabindex="-1"></a>settings <span class="op">=</span> {</span>
+<span id="cb97-388"><a href="#cb97-388" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theme"</span>: <span class="st">"dark"</span>,</span>
+<span id="cb97-389"><a href="#cb97-389" aria-hidden="true" tabindex="-1"></a>    <span class="st">"language"</span>: <span class="st">"English"</span>,</span>
+<span id="cb97-390"><a href="#cb97-390" aria-hidden="true" tabindex="-1"></a>    <span class="st">"notifications"</span>: <span class="va">True</span>,</span>
+<span id="cb97-391"><a href="#cb97-391" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-392"><a href="#cb97-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-393"><a href="#cb97-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-394"><a href="#cb97-394" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-395"><a href="#cb97-395" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"theme"</span> <span class="kw">in</span> settings)</span>
+<span id="cb97-396"><a href="#cb97-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-397"><a href="#cb97-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-398"><a href="#cb97-398" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-399"><a href="#cb97-399" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dark"</span> <span class="kw">in</span> settings)</span>
+<span id="cb97-400"><a href="#cb97-400" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-401"><a href="#cb97-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-402"><a href="#cb97-402" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-403"><a href="#cb97-403" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dark"</span> <span class="kw">in</span> settings.values())</span>
+<span id="cb97-404"><a href="#cb97-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-405"><a href="#cb97-405" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-406"><a href="#cb97-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-407"><a href="#cb97-407" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-408"><a href="#cb97-408" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-409"><a href="#cb97-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-410"><a href="#cb97-410" aria-hidden="true" tabindex="-1"></a>The three results are <span class="in">`True`</span>, <span class="in">`False`</span>, and <span class="in">`True`</span>.</span>
+<span id="cb97-411"><a href="#cb97-411" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-412"><a href="#cb97-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-413"><a href="#cb97-413" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dictionary Methods</span></span>
+<span id="cb97-414"><a href="#cb97-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-415"><a href="#cb97-415" aria-hidden="true" tabindex="-1"></a>Three useful methods provide views of a dictionary:</span>
+<span id="cb97-416"><a href="#cb97-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-417"><a href="#cb97-417" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`keys()`</span> returns the keys.</span>
+<span id="cb97-418"><a href="#cb97-418" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`values()`</span> returns the values.</span>
+<span id="cb97-419"><a href="#cb97-419" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`items()`</span> returns key-value pairs as tuples.</span>
+<span id="cb97-420"><a href="#cb97-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-423"><a href="#cb97-423" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-424"><a href="#cb97-424" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> {</span>
+<span id="cb97-425"><a href="#cb97-425" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Headphones"</span>,</span>
+<span id="cb97-426"><a href="#cb97-426" aria-hidden="true" tabindex="-1"></a>    <span class="st">"price"</span>: <span class="fl">79.99</span>,</span>
+<span id="cb97-427"><a href="#cb97-427" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stock"</span>: <span class="dv">14</span>,</span>
+<span id="cb97-428"><a href="#cb97-428" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-429"><a href="#cb97-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-430"><a href="#cb97-430" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.keys())</span>
+<span id="cb97-431"><a href="#cb97-431" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-432"><a href="#cb97-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-435"><a href="#cb97-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-436"><a href="#cb97-436" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.values())</span>
+<span id="cb97-437"><a href="#cb97-437" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-438"><a href="#cb97-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-441"><a href="#cb97-441" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-442"><a href="#cb97-442" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product.items())</span>
+<span id="cb97-443"><a href="#cb97-443" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-444"><a href="#cb97-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-445"><a href="#cb97-445" aria-hidden="true" tabindex="-1"></a>The <span class="in">`update()`</span> method adds new pairs and replaces values for existing keys.</span>
+<span id="cb97-446"><a href="#cb97-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-449"><a href="#cb97-449" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-450"><a href="#cb97-450" aria-hidden="true" tabindex="-1"></a>product.update({<span class="st">"price"</span>: <span class="fl">69.99</span>, <span class="st">"colour"</span>: <span class="st">"black"</span>})</span>
+<span id="cb97-451"><a href="#cb97-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-452"><a href="#cb97-452" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product)</span>
+<span id="cb97-453"><a href="#cb97-453" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-454"><a href="#cb97-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-455"><a href="#cb97-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## Looping Through a Dictionary</span></span>
+<span id="cb97-456"><a href="#cb97-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-457"><a href="#cb97-457" aria-hidden="true" tabindex="-1"></a>A <span class="in">`for`</span> loop over a dictionary visits its keys.</span>
+<span id="cb97-458"><a href="#cb97-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-461"><a href="#cb97-461" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-462"><a href="#cb97-462" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> product:</span>
+<span id="cb97-463"><a href="#cb97-463" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key)</span>
+<span id="cb97-464"><a href="#cb97-464" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-465"><a href="#cb97-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-466"><a href="#cb97-466" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`.items()`</span> when you need both the key and the value.</span>
+<span id="cb97-467"><a href="#cb97-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-470"><a href="#cb97-470" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-471"><a href="#cb97-471" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> product.items():</span>
+<span id="cb97-472"><a href="#cb97-472" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb97-473"><a href="#cb97-473" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-474"><a href="#cb97-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-475"><a href="#cb97-475" aria-hidden="true" tabindex="-1"></a>Each loop contains one <span class="in">`print()`</span> statement, even though it produces several output lines.</span>
+<span id="cb97-476"><a href="#cb97-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-477"><a href="#cb97-477" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-478"><a href="#cb97-478" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Display a profile</span></span>
+<span id="cb97-479"><a href="#cb97-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-480"><a href="#cb97-480" aria-hidden="true" tabindex="-1"></a>Use a loop and <span class="in">`.items()`</span> to print each key and value in this format:</span>
+<span id="cb97-481"><a href="#cb97-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-482"><a href="#cb97-482" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb97-483"><a href="#cb97-483" aria-hidden="true" tabindex="-1"></a><span class="in">username: maya_21</span></span>
+<span id="cb97-484"><a href="#cb97-484" aria-hidden="true" tabindex="-1"></a><span class="in">level: 8</span></span>
+<span id="cb97-485"><a href="#cb97-485" aria-hidden="true" tabindex="-1"></a><span class="in">premium: True</span></span>
+<span id="cb97-486"><a href="#cb97-486" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-487"><a href="#cb97-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-488"><a href="#cb97-488" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-489"><a href="#cb97-489" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> {</span>
+<span id="cb97-490"><a href="#cb97-490" aria-hidden="true" tabindex="-1"></a>    <span class="st">"username"</span>: <span class="st">"maya_21"</span>,</span>
+<span id="cb97-491"><a href="#cb97-491" aria-hidden="true" tabindex="-1"></a>    <span class="st">"level"</span>: <span class="dv">8</span>,</span>
+<span id="cb97-492"><a href="#cb97-492" aria-hidden="true" tabindex="-1"></a>    <span class="st">"premium"</span>: <span class="va">True</span>,</span>
+<span id="cb97-493"><a href="#cb97-493" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-494"><a href="#cb97-494" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-495"><a href="#cb97-495" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-496"><a href="#cb97-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-497"><a href="#cb97-497" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-498"><a href="#cb97-498" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-499"><a href="#cb97-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-500"><a href="#cb97-500" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-501"><a href="#cb97-501" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> profile.items():</span>
+<span id="cb97-502"><a href="#cb97-502" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb97-503"><a href="#cb97-503" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-504"><a href="#cb97-504" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-505"><a href="#cb97-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-506"><a href="#cb97-506" aria-hidden="true" tabindex="-1"></a><span class="fu">## Nested Dictionaries</span></span>
+<span id="cb97-507"><a href="#cb97-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-508"><a href="#cb97-508" aria-hidden="true" tabindex="-1"></a>A dictionary can contain other dictionaries. This is useful when several records share the same structure.</span>
+<span id="cb97-509"><a href="#cb97-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-512"><a href="#cb97-512" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-513"><a href="#cb97-513" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> {</span>
+<span id="cb97-514"><a href="#cb97-514" aria-hidden="true" tabindex="-1"></a>    <span class="st">"S001"</span>: {</span>
+<span id="cb97-515"><a href="#cb97-515" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span>: <span class="st">"Maya"</span>,</span>
+<span id="cb97-516"><a href="#cb97-516" aria-hidden="true" tabindex="-1"></a>        <span class="st">"programme"</span>: <span class="st">"Data Science"</span>,</span>
+<span id="cb97-517"><a href="#cb97-517" aria-hidden="true" tabindex="-1"></a>        <span class="st">"grade"</span>: <span class="fl">8.7</span>,</span>
+<span id="cb97-518"><a href="#cb97-518" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb97-519"><a href="#cb97-519" aria-hidden="true" tabindex="-1"></a>    <span class="st">"S002"</span>: {</span>
+<span id="cb97-520"><a href="#cb97-520" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span>: <span class="st">"Leo"</span>,</span>
+<span id="cb97-521"><a href="#cb97-521" aria-hidden="true" tabindex="-1"></a>        <span class="st">"programme"</span>: <span class="st">"Economics"</span>,</span>
+<span id="cb97-522"><a href="#cb97-522" aria-hidden="true" tabindex="-1"></a>        <span class="st">"grade"</span>: <span class="fl">7.9</span>,</span>
+<span id="cb97-523"><a href="#cb97-523" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb97-524"><a href="#cb97-524" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-525"><a href="#cb97-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-526"><a href="#cb97-526" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students)</span>
+<span id="cb97-527"><a href="#cb97-527" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-528"><a href="#cb97-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-529"><a href="#cb97-529" aria-hidden="true" tabindex="-1"></a>Use one key for the outer dictionary and another for the nested dictionary.</span>
+<span id="cb97-530"><a href="#cb97-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-533"><a href="#cb97-533" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-534"><a href="#cb97-534" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S001"</span>][<span class="st">"name"</span>])</span>
+<span id="cb97-535"><a href="#cb97-535" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-536"><a href="#cb97-536" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-539"><a href="#cb97-539" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-540"><a href="#cb97-540" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S002"</span>][<span class="st">"grade"</span>])</span>
+<span id="cb97-541"><a href="#cb97-541" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-542"><a href="#cb97-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-543"><a href="#cb97-543" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-544"><a href="#cb97-544" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Update a nested record</span></span>
+<span id="cb97-545"><a href="#cb97-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-546"><a href="#cb97-546" aria-hidden="true" tabindex="-1"></a>Using the <span class="in">`students`</span> dictionary above:</span>
+<span id="cb97-547"><a href="#cb97-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-548"><a href="#cb97-548" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Change Maya's grade to <span class="in">`9.1`</span>.</span>
+<span id="cb97-549"><a href="#cb97-549" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Add a new field, <span class="in">`"graduated": False`</span>, to Leo's record.</span>
+<span id="cb97-550"><a href="#cb97-550" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Print each updated student record in a separate cell.</span>
+<span id="cb97-551"><a href="#cb97-551" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-552"><a href="#cb97-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-553"><a href="#cb97-553" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-554"><a href="#cb97-554" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-555"><a href="#cb97-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-556"><a href="#cb97-556" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-557"><a href="#cb97-557" aria-hidden="true" tabindex="-1"></a>students[<span class="st">"S001"</span>][<span class="st">"grade"</span>] <span class="op">=</span> <span class="fl">9.1</span></span>
+<span id="cb97-558"><a href="#cb97-558" aria-hidden="true" tabindex="-1"></a>students[<span class="st">"S002"</span>][<span class="st">"graduated"</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb97-559"><a href="#cb97-559" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-560"><a href="#cb97-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-561"><a href="#cb97-561" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-562"><a href="#cb97-562" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S001"</span>])</span>
+<span id="cb97-563"><a href="#cb97-563" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-564"><a href="#cb97-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-565"><a href="#cb97-565" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-566"><a href="#cb97-566" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="st">"S002"</span>])</span>
+<span id="cb97-567"><a href="#cb97-567" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-568"><a href="#cb97-568" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-569"><a href="#cb97-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-570"><a href="#cb97-570" aria-hidden="true" tabindex="-1"></a><span class="fu">## Converting to a Dictionary</span></span>
+<span id="cb97-571"><a href="#cb97-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-572"><a href="#cb97-572" aria-hidden="true" tabindex="-1"></a>The <span class="in">`dict()`</span> function can convert a sequence of key-value pairs into a dictionary.</span>
+<span id="cb97-573"><a href="#cb97-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-576"><a href="#cb97-576" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb97-577"><a href="#cb97-577" aria-hidden="true" tabindex="-1"></a>pairs <span class="op">=</span> [</span>
+<span id="cb97-578"><a href="#cb97-578" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"name"</span>, <span class="st">"Pipo"</span>),</span>
+<span id="cb97-579"><a href="#cb97-579" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"age"</span>, <span class="dv">10</span>),</span>
+<span id="cb97-580"><a href="#cb97-580" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"city"</span>, <span class="st">"Seville"</span>),</span>
+<span id="cb97-581"><a href="#cb97-581" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb97-582"><a href="#cb97-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-583"><a href="#cb97-583" aria-hidden="true" tabindex="-1"></a>converted_dictionary <span class="op">=</span> <span class="bu">dict</span>(pairs)</span>
+<span id="cb97-584"><a href="#cb97-584" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-585"><a href="#cb97-585" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(converted_dictionary)</span>
+<span id="cb97-586"><a href="#cb97-586" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-587"><a href="#cb97-587" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-588"><a href="#cb97-588" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb97-589"><a href="#cb97-589" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Convert a menu</span></span>
+<span id="cb97-590"><a href="#cb97-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-591"><a href="#cb97-591" aria-hidden="true" tabindex="-1"></a>Convert the following list of tuples into a dictionary. Then print the price of the salad.</span>
+<span id="cb97-592"><a href="#cb97-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-593"><a href="#cb97-593" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-594"><a href="#cb97-594" aria-hidden="true" tabindex="-1"></a>menu_pairs <span class="op">=</span> [</span>
+<span id="cb97-595"><a href="#cb97-595" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"soup"</span>, <span class="fl">6.50</span>),</span>
+<span id="cb97-596"><a href="#cb97-596" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"salad"</span>, <span class="fl">8.00</span>),</span>
+<span id="cb97-597"><a href="#cb97-597" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"pasta"</span>, <span class="fl">12.50</span>),</span>
+<span id="cb97-598"><a href="#cb97-598" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb97-599"><a href="#cb97-599" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-600"><a href="#cb97-600" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-601"><a href="#cb97-601" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-602"><a href="#cb97-602" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-603"><a href="#cb97-603" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb97-604"><a href="#cb97-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-605"><a href="#cb97-605" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-606"><a href="#cb97-606" aria-hidden="true" tabindex="-1"></a>menu <span class="op">=</span> <span class="bu">dict</span>(menu_pairs)</span>
+<span id="cb97-607"><a href="#cb97-607" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-608"><a href="#cb97-608" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-609"><a href="#cb97-609" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-610"><a href="#cb97-610" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(menu[<span class="st">"salad"</span>])</span>
+<span id="cb97-611"><a href="#cb97-611" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-612"><a href="#cb97-612" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-613"><a href="#cb97-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-614"><a href="#cb97-614" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge: Count Words</span></span>
+<span id="cb97-615"><a href="#cb97-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-616"><a href="#cb97-616" aria-hidden="true" tabindex="-1"></a>Create a dictionary that counts how many times each word appears in the list.</span>
+<span id="cb97-617"><a href="#cb97-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-618"><a href="#cb97-618" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-619"><a href="#cb97-619" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">"python"</span>, <span class="st">"data"</span>, <span class="st">"python"</span>, <span class="st">"model"</span>, <span class="st">"data"</span>, <span class="st">"python"</span>]</span>
+<span id="cb97-620"><a href="#cb97-620" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-621"><a href="#cb97-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-622"><a href="#cb97-622" aria-hidden="true" tabindex="-1"></a>The expected dictionary is:</span>
+<span id="cb97-623"><a href="#cb97-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-624"><a href="#cb97-624" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-625"><a href="#cb97-625" aria-hidden="true" tabindex="-1"></a>{<span class="st">"python"</span>: <span class="dv">3</span>, <span class="st">"data"</span>: <span class="dv">2</span>, <span class="st">"model"</span>: <span class="dv">1</span>}</span>
+<span id="cb97-626"><a href="#cb97-626" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-627"><a href="#cb97-627" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-628"><a href="#cb97-628" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb97-629"><a href="#cb97-629" aria-hidden="true" tabindex="-1"></a><span class="fu">## Possible solution</span></span>
+<span id="cb97-630"><a href="#cb97-630" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-631"><a href="#cb97-631" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-632"><a href="#cb97-632" aria-hidden="true" tabindex="-1"></a>word_counts <span class="op">=</span> {}</span>
+<span id="cb97-633"><a href="#cb97-633" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-634"><a href="#cb97-634" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> words:</span>
+<span id="cb97-635"><a href="#cb97-635" aria-hidden="true" tabindex="-1"></a>    word_counts[word] <span class="op">=</span> word_counts.get(word, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb97-636"><a href="#cb97-636" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-637"><a href="#cb97-637" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-638"><a href="#cb97-638" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb97-639"><a href="#cb97-639" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_counts)</span>
+<span id="cb97-640"><a href="#cb97-640" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb97-641"><a href="#cb97-641" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb97-642"><a href="#cb97-642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-643"><a href="#cb97-643" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lists, Tuples, Sets, and Dictionaries Compared</span></span>
+<span id="cb97-644"><a href="#cb97-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-645"><a href="#cb97-645" aria-hidden="true" tabindex="-1"></a>| Data structure | Syntax | Preserves order | Mutable | Duplicate items | Access |</span>
+<span id="cb97-646"><a href="#cb97-646" aria-hidden="true" tabindex="-1"></a>|---|---|---|---|---|---|</span>
+<span id="cb97-647"><a href="#cb97-647" aria-hidden="true" tabindex="-1"></a>| List | <span class="in">`[]`</span> | Yes | Yes | Yes | Position |</span>
+<span id="cb97-648"><a href="#cb97-648" aria-hidden="true" tabindex="-1"></a>| Tuple | <span class="in">`()`</span> | Yes | No | Yes | Position |</span>
+<span id="cb97-649"><a href="#cb97-649" aria-hidden="true" tabindex="-1"></a>| Set | <span class="in">`{item, ...}`</span> or <span class="in">`set()`</span> | No | Yes | No | Membership |</span>
+<span id="cb97-650"><a href="#cb97-650" aria-hidden="true" tabindex="-1"></a>| Dictionary | <span class="in">`{key: value}`</span> | Yes | Yes | Keys: No; values: Yes | Key |</span>
+<span id="cb97-651"><a href="#cb97-651" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-652"><a href="#cb97-652" aria-hidden="true" tabindex="-1"></a>Use a **list** when position matters and the collection may change. Use a **tuple** when position matters and the collection should remain fixed. Use a **set** for unique items and membership tests. Use a **dictionary** when each value needs a meaningful identifier.</span>
+<span id="cb97-653"><a href="#cb97-653" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-654"><a href="#cb97-654" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb97-655"><a href="#cb97-655" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-656"><a href="#cb97-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dictionaries store key-value pairs.</span>
+<span id="cb97-657"><a href="#cb97-657" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keys must be unique and immutable.</span>
+<span id="cb97-658"><a href="#cb97-658" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Values can use any data type and may be duplicated.</span>
+<span id="cb97-659"><a href="#cb97-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dictionaries preserve insertion order but use keys for access.</span>
+<span id="cb97-660"><a href="#cb97-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dictionaries are mutable.</span>
+<span id="cb97-661"><a href="#cb97-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`get()`</span> provides safe access to a missing key.</span>
+<span id="cb97-662"><a href="#cb97-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`keys()`</span>, <span class="in">`values()`</span>, and <span class="in">`items()`</span> provide different views of the data.</span>
+<span id="cb97-663"><a href="#cb97-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Nested dictionaries store structured collections of records.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
