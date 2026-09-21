@@ -5,249 +5,585 @@ execute:
   error: true
 ---
 
-[Review previous sessions here!](https://drive.google.com/file/d/1pdfubE7_7a44_Mz7O3yK2PqXfD0S0rXH/view?usp=sharing)
-
----
-
 # Data Structures: Dictionaries
 
+A **dictionary** stores data in **key-value pairs**. Each key identifies a value.
 
-Dictionaries are the last the built-in data type that we will learn in Python. They are used to store collections of data in key-value pairs.
+Dictionaries are useful for structured records, such as a person's profile, a product catalogue, or the settings of an application.
 
+## Creating Dictionaries
 
-<p align="center">
-<img src="https://www.sapiens.org/app/uploads/2016/12/01-AP_271041288910-1024x698.jpg" width="400" height="auto" />
-</p>
-
-In a dictionary, a **key** is a unique identifier pointing to its associated **value**. While keys must be unique and immutable, values can be of any data type and may be duplicated.
-
-A dictionary is created using curly brackets `{}`. Here's an example:
+Create a dictionary with curly brackets `{}`. Separate each key from its value with a colon.
 
 ```{python}
-dictionary = {
-    "key1": "value1",
-    "key2": "value2",
-    "key3": "value3"
-}
-
-print(dictionary)
-```
-
-We access data inside a dictionary using its **keys**. Every key returns its associated **value**.
-
-```{python}
-dictionary = {
-    "key1": "value1",
-    "key2": "value2",
-    "key3": "value3"
-}
-
-print(dictionary["key1"])
-```
-
-Keys must be strings or numbers. Values can be **anything**.
-
-```{python}
-very_complex_dictionary = {
-    "number": 3.14,
-    "string": "Hello",
-    "boolean": True,
-    "list": [1, 2, 3, 4],
-    "tuple": (1, 2, 3, 4),
-    "set": {1, 2, 3, 4},
-    "dictionary": {
-        "key1": "value1",
-        "key2": "value2",
-        "key3": "value3"
-    },
-    "function": lambda x: x + 1,
-    10: "ten"
-}
-
-print(very_complex_dictionary)
-```
-
-We can use other Python variables to define keys or values.
-
-```{python}
-name_value = "John"
-key_years = "age"
-
 person = {
-    "name": name_value,
-    key_years: 25,
-    "city": "New York"
+    "name": "John",
+    "age": 25,
+    "city": "New York",
 }
 
 print(person)
 ```
 
----
-
-## Unordered
-
-Dictionaries are **unordered**. You cannot use numeric indices to acces an item.
-
 ```{python}
-print(person[0])  # This will cause an error!
+print(type(person))
 ```
 
-Instead, you refer to its key:
+Use empty curly brackets to create an empty dictionary.
 
 ```{python}
-print(person["name"])  # Outputs: John
+empty_dictionary = {}
+
+print(empty_dictionary)
 ```
 
-However, dictionary keys can be numeric.
+```{python}
+print(type(empty_dictionary))
+```
+
+Remember that an empty set uses `set()` instead.
+
+```{python}
+empty_set = set()
+
+print(type(empty_set))
+```
+
+## Keys and Values
+
+Keys must be unique and immutable. Strings, numbers, and tuples can be keys. Values can have any data type and may be duplicated.
+
+```{python}
+course = {
+    "title": "Introduction to Python",
+    "students": 32,
+    "online": True,
+    "topics": ["variables", "loops", "functions"],
+    "room": (4, 12),
+}
+
+print(course)
+```
+
+You can also use variables when defining keys or values.
+
+```{python}
+student_name = "Maya"
+grade_key = "grade"
+
+student = {
+    "name": student_name,
+    grade_key: 8.7,
+    "programme": "Data Science",
+}
+
+print(student)
+```
+
+::: {.callout-warning}
+Lists and sets cannot be dictionary keys because they are mutable. Tuples can be keys if all their items are immutable.
+:::
+
+```{python}
+classrooms = {
+    ("Monday", "09:00"): "Room A",
+    ("Tuesday", "11:00"): "Room C",
+}
+
+print(classrooms)
+```
+
+## Accessing Values
+
+Access a value by writing its key inside square brackets.
+
+```{python}
+person = {
+    "name": "John",
+    "age": 25,
+    "city": "New York",
+}
+
+print(person["name"])
+```
+
+```{python}
+print(person["age"])
+```
+
+### Insertion Order and Position
+
+Modern Python dictionaries preserve insertion order. However, they are accessed by key, not by position.
+
+```{python}
+#| error: true
+
+print(person[0])
+```
+
+The code fails because `0` is not a key in `person`.
+
+Numeric keys are valid, but Python still treats them as keys rather than positions.
 
 ```{python}
 numbers = {
     3: "three",
     4: "four",
-    5: "five"
+    5: "five",
 }
 
-print(numbers[3])  # Outputs: three
+print(numbers[3])
 ```
 
 ```{python}
-numbers = {
-    3: "three",
-    4: "four",
-    5: "five"
-}
+#| error: true
 
-print(numbers[2])  # Error: 2 is not a key in that dictionary!
+print(numbers[0])
 ```
+
+### Accessing Values Safely
+
+Square brackets raise a `KeyError` when the requested key does not exist.
+
+```{python}
+#| error: true
+
+print(person["email"])
+```
+
+The `get()` method returns `None` instead of raising an error.
+
+```{python}
+print(person.get("email"))
+```
+
+You can provide a default value as the second argument.
+
+```{python}
+print(person.get("email", "Email not available"))
+```
+
+::: {.callout-note}
+## Exercise: Read a record
+
+Use the dictionary below to print the book's title and publication year in separate cells.
+
+```python
+book = {
+    "title": "Kindred",
+    "author": "Octavia Butler",
+    "year": 1979,
+}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+print(book["title"])
+```
+
+```python
+print(book["year"])
+```
+:::
 
 ## Mutable
 
-Dictionaries are **mutable**. This means that you can change the value of a specific item by referring to its key:
+Dictionaries are mutable. You can add, update, and remove key-value pairs.
+
+### Updating a Value
+
+Assign a new value to an existing key.
 
 ```{python}
 person = {
     "name": "John",
     "age": 25,
-    "city": "New York"
+    "city": "New York",
 }
 
-print("Dictionary before:")
-print(person)
-
-person["age"] = 100
-
-print("Dictionary after:")
 print(person)
 ```
 
-However, once an item is defined we cannot change its key name, only its associated value.
+```{python}
+person["age"] = 26
 
-We can remove keys with `del`.
+print(person)
+```
+
+### Adding a Pair
+
+Assigning a value to a new key adds a new key-value pair.
 
 ```{python}
-person = {
-    "name": "John",
-    "age": 25,
-    "city": "New York"
-}
+person["email"] = "john@example.com"
 
-print("Dictionary before:")
 print(person)
+```
 
+### Removing a Pair
+
+Use `del` to remove a key and its value.
+
+```{python}
 del person["city"]
 
-print("Dictionary after:")
 print(person)
 ```
 
-We can initialize empty dictionaries using the curly brackets:
+The `pop()` method removes a key and returns its value.
 
 ```{python}
-my_dict = {}
+removed_email = person.pop("email")
 
-print("Empty dictionary:")
-print(my_dict)
-print(f"Type: {type(my_dict)}")
-
-# Add a new key to it
-my_dict["pi"] = 3.1415
-
-print("Dictionary after:")
-print(my_dict)
+print(removed_email)
 ```
-
-Wait! Aren't curly brackets used for **sets** too? How can we initialize an empty set?
 
 ```{python}
-# Initialize an empty set
-my_set = set()
-
-print("Empty set:")
-print(my_set)
-print(f"Type: {type(my_set)}")
+print(person)
 ```
 
----
+::: {.callout-note}
+## Exercise: Update an event
 
-## No Duplication
+Make these changes to the dictionary:
 
-Dictionaries **do not allow** duplicate keys! If we use the same key twice, only the last key will remain.
+1. Change the venue to `"Main Hall"`.
+2. Add the pair `"sold_out": False`.
+3. Remove the `"dress_code"` pair.
+
+```python
+event = {
+    "name": "Data Night",
+    "venue": "Room 2",
+    "dress_code": "Casual",
+}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+event["venue"] = "Main Hall"
+event["sold_out"] = False
+del event["dress_code"]
+
+print(event)
+```
+:::
+
+## Unique Keys
+
+A dictionary cannot contain duplicate keys. If the same key appears more than once, the last value replaces the earlier value.
 
 ```{python}
 person = {
     "name": "John",
     "name": "Smith",
     "age": 25,
-    "city": "New York"
 }
 
 print(person)
 ```
 
-However we can have duplicate values:
+Different keys may contain the same value.
+
+```{python}
+locations = {
+    "home_city": "Madrid",
+    "work_city": "Madrid",
+}
+
+print(locations)
+```
+
+## Membership
+
+The `in` operator checks dictionary keys, not values.
 
 ```{python}
 person = {
     "name": "John",
     "age": 25,
-    "city": "John"
+    "city": "New York",
 }
 
-print(person)
+print("name" in person)
 ```
-
----
-
-## Convert between Structures
-
-You can use the `dict` function to convert list of tuples into dictionaries.
 
 ```{python}
-dict([("person", "Pipo"), ("Age", 10)])
+print("John" in person)
 ```
 
----
+Use `.values()` if you need to search among the values.
+
+```{python}
+print("John" in person.values())
+```
+
+::: {.callout-note}
+## Exercise: Predict the output
+
+Without running the code, determine the result of each expression.
+
+```python
+settings = {
+    "theme": "dark",
+    "language": "English",
+    "notifications": True,
+}
+```
+
+```python
+print("theme" in settings)
+```
+
+```python
+print("dark" in settings)
+```
+
+```python
+print("dark" in settings.values())
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The three results are `True`, `False`, and `True`.
+:::
+
+## Dictionary Methods
+
+Three useful methods provide views of a dictionary:
+
+- `keys()` returns the keys.
+- `values()` returns the values.
+- `items()` returns key-value pairs as tuples.
+
+```{python}
+product = {
+    "name": "Headphones",
+    "price": 79.99,
+    "stock": 14,
+}
+
+print(product.keys())
+```
+
+```{python}
+print(product.values())
+```
+
+```{python}
+print(product.items())
+```
+
+The `update()` method adds new pairs and replaces values for existing keys.
+
+```{python}
+product.update({"price": 69.99, "colour": "black"})
+
+print(product)
+```
+
+## Looping Through a Dictionary
+
+A `for` loop over a dictionary visits its keys.
+
+```{python}
+for key in product:
+    print(key)
+```
+
+Use `.items()` when you need both the key and the value.
+
+```{python}
+for key, value in product.items():
+    print(f"{key}: {value}")
+```
+
+Each loop contains one `print()` statement, even though it produces several output lines.
+
+::: {.callout-note}
+## Exercise: Display a profile
+
+Use a loop and `.items()` to print each key and value in this format:
+
+```text
+username: maya_21
+level: 8
+premium: True
+```
+
+```python
+profile = {
+    "username": "maya_21",
+    "level": 8,
+    "premium": True,
+}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+for key, value in profile.items():
+    print(f"{key}: {value}")
+```
+:::
+
+## Nested Dictionaries
+
+A dictionary can contain other dictionaries. This is useful when several records share the same structure.
+
+```{python}
+students = {
+    "S001": {
+        "name": "Maya",
+        "programme": "Data Science",
+        "grade": 8.7,
+    },
+    "S002": {
+        "name": "Leo",
+        "programme": "Economics",
+        "grade": 7.9,
+    },
+}
+
+print(students)
+```
+
+Use one key for the outer dictionary and another for the nested dictionary.
+
+```{python}
+print(students["S001"]["name"])
+```
+
+```{python}
+print(students["S002"]["grade"])
+```
+
+::: {.callout-note}
+## Exercise: Update a nested record
+
+Using the `students` dictionary above:
+
+1. Change Maya's grade to `9.1`.
+2. Add a new field, `"graduated": False`, to Leo's record.
+3. Print each updated student record in a separate cell.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+students["S001"]["grade"] = 9.1
+students["S002"]["graduated"] = False
+```
+
+```python
+print(students["S001"])
+```
+
+```python
+print(students["S002"])
+```
+:::
+
+## Converting to a Dictionary
+
+The `dict()` function can convert a sequence of key-value pairs into a dictionary.
+
+```{python}
+pairs = [
+    ("name", "Pipo"),
+    ("age", 10),
+    ("city", "Seville"),
+]
+
+converted_dictionary = dict(pairs)
+
+print(converted_dictionary)
+```
+
+::: {.callout-note}
+## Exercise: Convert a menu
+
+Convert the following list of tuples into a dictionary. Then print the price of the salad.
+
+```python
+menu_pairs = [
+    ("soup", 6.50),
+    ("salad", 8.00),
+    ("pasta", 12.50),
+]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+menu = dict(menu_pairs)
+```
+
+```python
+print(menu["salad"])
+```
+:::
+
+## Challenge: Count Words
+
+Create a dictionary that counts how many times each word appears in the list.
+
+```python
+words = ["python", "data", "python", "model", "data", "python"]
+```
+
+The expected dictionary is:
+
+```python
+{"python": 3, "data": 2, "model": 1}
+```
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```python
+word_counts = {}
+
+for word in words:
+    word_counts[word] = word_counts.get(word, 0) + 1
+```
+
+```python
+print(word_counts)
+```
+:::
+
+## Lists, Tuples, Sets, and Dictionaries Compared
+
+| Data structure | Syntax | Preserves order | Mutable | Duplicate items | Access |
+|---|---|---|---|---|---|
+| List | `[]` | Yes | Yes | Yes | Position |
+| Tuple | `()` | Yes | No | Yes | Position |
+| Set | `{item, ...}` or `set()` | No | Yes | No | Membership |
+| Dictionary | `{key: value}` | Yes | Yes | Keys: No; values: Yes | Key |
+
+Use a **list** when position matters and the collection may change. Use a **tuple** when position matters and the collection should remain fixed. Use a **set** for unique items and membership tests. Use a **dictionary** when each value needs a meaningful identifier.
 
 ## Summary
 
-| Data Structure | Ordered | Mutable | Duplication | Indexable |
-|----------------|--------------------------|---------|----------------------|---------|
-| List           | ✅                       | ✅     | ✅                  | ✅                  |
-| Tuple          | ✅                       | ❌     | ✅                  | ✅                  |
-| Set            | ❌                       | ✅     | ❌                  | ❌                  |
-| Dictionary     | ❌                       | ✅     | ❌                  | ✅                  |
-
-
----
-
-# Ready for a Challenge?
-
-Try to beat one of these exercises!
-
-**[Challenge 1](https://drive.google.com/file/d/1u8MhIvC3eDci2It2E61k2b2S3abCmhhy/view?usp=sharing):** Create a recommendation system that suggests products to new clients based on their purchases and the purchase history of existing clients.
-
-**[Challenge 2](https://drive.google.com/file/d/1O4hQ4YdmetLY7SD3OPsOYrTjbwuxu1wK/view?usp=sharing):** Given a list of cities and the distances between each pair of cities, find the shortest possible route that visits each city exactly once and returns to the original city.
-
-**[Challenge 3](https://drive.google.com/file/d/1JtNDuxPH8ATburxJoymt5UI0Vrk-FZ9U/view?usp=sharing):** Juan Parrondo stated this paradox within game theory where two games, both of which are losing when played individually, can lead to a winning strategy when played alternately.
-
-**[Challenge 4](https://drive.google.com/file/d/1j7mTtWt-9kkafa5PjanIdoW5SEshWIsK/view?usp=sharing):** Sudoku is a classic logic-based number-placement puzzle. The objective is to fill a 9x9 grid with digits in such a way that each column, each row, and each of the nine 3x3 sub-grids that compose the grid contains all of the digits from 1 to 9.
+- Dictionaries store key-value pairs.
+- Keys must be unique and immutable.
+- Values can use any data type and may be duplicated.
+- Dictionaries preserve insertion order but use keys for access.
+- Dictionaries are mutable.
+- `get()` provides safe access to a missing key.
+- `keys()`, `values()`, and `items()` provide different views of the data.
+- Nested dictionaries store structured collections of records.
