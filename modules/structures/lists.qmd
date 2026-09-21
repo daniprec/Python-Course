@@ -1,0 +1,441 @@
+---
+title: "Lists"
+format: html
+execute:
+  error: true
+---
+
+# Data Structures: Lists
+
+A **list** stores a collection of items in a single variable. Lists are useful when the number of items may change, such as a playlist, a shopping basket, or a class roster.
+
+## Creating Lists
+
+Create a list by placing comma-separated items inside square brackets `[]`.
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+print(fruits)
+```
+
+```{python}
+print(type(fruits))
+```
+
+A list can contain any type of data. It can also mix types, although lists are often easier to work with when their items represent the same kind of information.
+
+```{python}
+profile = ["Maya", 21, True]
+
+print(profile)
+```
+
+A list can contain other lists. This is called a **nested list**.
+
+```{python}
+weekly_schedule = [
+    ["Python", "Design"],
+    ["Economics", "Writing"],
+    ["Statistics", "Python"],
+]
+
+print(weekly_schedule)
+```
+
+## Properties of Lists
+
+### Ordered
+
+Items remain in a specific order. Python uses **zero-based indexing**, so the first item is at index `0`.
+
+```{python}
+fruits = ["apple", "banana", "cherry", "pineapple", "watermelon"]
+
+print(fruits[0])
+```
+
+Indexing lists works exactly like strings, which are also ordered sequences.
+```{python}
+print(fruits[1])
+```
+
+Negative indexes count from the end. The index `-1` refers to the last item.
+
+```{python}
+print(fruits[-1])
+```
+
+### Slicing
+
+Slicing selects part of a list. The starting index is included and the ending index is excluded.
+
+```{python}
+print(fruits[1:4])
+```
+
+```{python}
+print(fruits[:2])
+```
+
+```{python}
+print(fruits[3:])
+```
+
+Use more than one index to access an item inside a nested list.
+
+```{python}
+weekly_schedule = [
+    ["Python", "Design"],
+    ["Economics", "Writing"],
+    ["Statistics", "Python"],
+]
+
+print(weekly_schedule[1])
+```
+
+```{python}
+print(weekly_schedule[1][0])
+```
+
+::: {.callout-note}
+## Exercise: Predict the output
+
+Without running the code, write the three lines that it prints.
+
+```python
+shows = ["Severance", "The Bear", "Andor", "Arcane"]
+
+print(shows[0])
+print(shows[-2])
+print(shows[1:3])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+Severance
+Andor
+['The Bear', 'Andor']
+```
+:::
+
+### Mutable
+
+Lists are **mutable**, which means their contents can change after creation.
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+fruits[0] = "orange"
+
+print(fruits)
+```
+
+### Duplicate Items
+
+Lists can contain the same value more than once.
+
+```{python}
+votes = ["blue", "green", "blue", "red", "blue"]
+
+print(votes)
+```
+
+## Operations with Lists
+
+Lists are sequences, like strings. The `+` operator joins two lists.
+
+```{python}
+morning_tasks = ["check email", "attend class"]
+afternoon_tasks = ["study", "go to the gym"]
+
+all_tasks = morning_tasks + afternoon_tasks
+print(all_tasks)
+```
+
+Both operands must be lists. A single item must be placed inside a list before it can be concatenated.
+
+```{python}
+#| error: true
+
+tasks = ["check email", "attend class"]
+tasks = tasks + "study"
+```
+
+```{python}
+tasks = ["check email", "attend class"]
+tasks = tasks + ["study"]
+
+print(tasks)
+```
+
+Multiplying a list repeats its items.
+
+```{python}
+notification_pattern = ["work", "break"] * 3
+
+print(notification_pattern)
+```
+
+The `len()` function returns the number of items in a list.
+
+```{python}
+fruits = ["apple", "banana", "cherry", "pineapple", "watermelon"]
+
+print(len(fruits))
+```
+
+For a nested list, `len()` counts only the items in the outer list.
+
+```{python}
+weekly_schedule = [
+    ["Python", "Design"],
+    ["Economics", "Writing"],
+    ["Statistics", "Python"],
+]
+
+print(len(weekly_schedule))
+print(len(weekly_schedule[0]))
+```
+
+::: {.callout-note}
+## Exercise: Conference schedule
+
+The list below stores two conference days. Write code that prints:
+
+1. The number of days in the schedule.
+2. The number of sessions on day 2.
+3. The title of the first session on day 2.
+
+```python
+schedule = [
+    ["Opening", "Data Ethics", "Networking"],
+    ["Python Lab", "Career Panel", "Closing"],
+]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+print(len(schedule))
+print(len(schedule[1]))
+print(schedule[1][0])
+```
+:::
+
+## Built-in List Methods
+
+Most list methods modify the original list **in place**. They do not usually need to be assigned back to the variable.
+
+### Adding Items
+
+`append()` adds one item to the end of a list.
+
+```{python}
+playlist = ["Intro", "Night Drive"]
+playlist.append("Last Train")
+
+print(playlist)
+```
+
+`extend()` adds every item from another iterable.
+
+```{python}
+playlist = ["Intro", "Night Drive"]
+new_tracks = ["Last Train", "Home"]
+playlist.extend(new_tracks)
+
+print(playlist)
+```
+
+`insert()` adds an item at a specified index.
+
+```{python}
+playlist.insert(1, "Interlude")
+
+print(playlist)
+```
+
+::: {.callout-warning}
+`append(["A", "B"])` adds one nested list. `extend(["A", "B"])` adds two separate items.
+:::
+
+::: {.callout-note}
+## Exercise: Build a watchlist
+
+Start with the list below and use list methods to make these changes:
+
+1. Add `"Arrival"` to the end.
+2. Insert `"Spirited Away"` at the beginning.
+3. Add both `"Moonlight"` and `"Dune"` in one operation.
+
+```python
+watchlist = ["Past Lives", "The Matrix"]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+watchlist = ["Past Lives", "The Matrix"]
+
+watchlist.append("Arrival")
+watchlist.insert(0, "Spirited Away")
+watchlist.extend(["Moonlight", "Dune"])
+
+print(watchlist)
+```
+:::
+
+### Removing Items
+
+`remove()` removes the first occurrence of a value.
+
+```{python}
+guests = ["Ava", "Leo", "Nora", "Leo"]
+guests.remove("Leo")
+
+print(guests)
+```
+
+`pop()` removes and returns an item. With no index, it removes the last item.
+
+```{python}
+guests = ["Ava", "Leo", "Nora", "Sam"]
+cancelled_guest = guests.pop(1)
+
+print(cancelled_guest)
+print(guests)
+```
+
+`clear()` removes all items.
+
+```{python}
+guests.clear()
+
+print(guests)
+```
+
+### Finding and Counting Items
+
+`index()` returns the index of the first matching item. `count()` returns how many times a value appears.
+
+```{python}
+responses = ["yes", "no", "yes", "maybe", "yes"]
+
+print(responses.index("maybe"))
+print(responses.count("yes"))
+```
+
+### Sorting and Reversing
+
+`sort()` sorts the original list. `reverse()` reverses its current order.
+
+```{python}
+cities = ["Tokyo", "Lima", "Berlin", "Accra"]
+cities.sort()
+
+print(cities)
+
+cities.reverse()
+print(cities)
+```
+
+The `key` argument lets us choose what Python uses for sorting.
+
+```{python}
+def last_character(word):
+    return word[-1]
+
+
+animals = ["Dog", "Cat", "Bird", "Horse"]
+animals.sort(key=last_character)
+
+print(animals)
+```
+
+::: {.callout-note}
+## Exercise: Sort by length
+
+Sort the podcast titles from shortest to longest. Use `len` as the sorting key.
+
+```python
+podcasts = ["Radiolab", "Today Explained", "Serial", "99% Invisible"]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+podcasts = ["Radiolab", "Today Explained", "Serial", "99% Invisible"]
+podcasts.sort(key=len)
+
+print(podcasts)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Fix the program
+
+The programmer wants to add two destinations separately, but the result is not correct. Fix one line.
+
+```python
+destinations = ["Lisbon", "Seoul"]
+destinations.append(["Cairo", "Oslo"])
+
+print(destinations)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Use `extend()` so that both destinations become individual items.
+
+```python
+destinations = ["Lisbon", "Seoul"]
+destinations.extend(["Cairo", "Oslo"])
+
+print(destinations)
+```
+:::
+
+## Challenge: Reading tracker
+
+Complete a small reading tracker that:
+
+1. Starts with three book titles.
+2. Adds a fourth title.
+3. Removes one completed book and stores its title in `finished_book`.
+4. Sorts the remaining titles alphabetically.
+5. Prints the finished book, the updated list, and the number of books still waiting.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```python
+reading_list = ["Beloved", "Dune", "The Hobbit"]
+
+reading_list.append("Pachinko")
+finished_book = reading_list.pop(1)
+reading_list.sort()
+
+print(f"Finished: {finished_book}")
+print(f"Still to read: {reading_list}")
+print(f"Books remaining: {len(reading_list)}")
+```
+:::
+
+## Summary
+
+- Lists use square brackets: `[]`.
+- Lists are ordered and mutable.
+- Lists allow duplicate items.
+- Indexes and slices retrieve items.
+- Methods such as `append()`, `remove()`, and `sort()` modify a list in place.
