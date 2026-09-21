@@ -250,6 +250,32 @@ Create a Python program that takes an angle in degrees and formats it in degrees
 
 :::
 
+::: {.callout-note}
+## Printing Numbers
+
+Without running the code, determine the output of each cell.
+
+```{python}
+#| eval: false
+x = 4
+
+print(x)
+```
+
+```{python}
+#| eval: false
+y = 2 * 2
+
+print(y)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Printing Numbers
+
+Both cells print `4`.
+:::
+
 ---
 # String Variables
 
@@ -428,6 +454,147 @@ Write a Python code that finds the first occurrence of the substring `"cat"` and
 *Sample input 2:* `s = "I love cats. Cats are the best."`  
 *Expected result 2:* `"cat"`
 
+:::
+
+::: {.callout-note}
+## Adjacent String Literals
+
+Without running the code, what will it print?
+
+```{python}
+#| eval: false
+message = "Pi is" "3.14"
+
+print(message)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Adjacent String Literals
+
+```text
+Pi is3.14
+```
+
+Python joins adjacent string literals. No space is added automatically.
+:::
+
+::: {.callout-note}
+## Printing Quotation Marks
+
+Write one `print()` statement that produces this message:
+
+```text
+The cow says "Moooo"
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Printing Quotation Marks
+
+```{python}
+#| eval: false
+print('The cow says "Moooo"')
+```
+
+You could also escape the inner double quotation marks.
+:::
+
+::: {.callout-note}
+## Valid Print Statements
+
+Which statements fail? There may be more than one.
+
+```python
+# A
+print("The number 3.14 is close to pi")
+```
+
+```python
+# B
+print(f"The number {3.1415.2f} is close to pi")
+```
+
+```python
+# C
+number = 3.1415
+print(f"The number {number:.2f} is close to pi")
+```
+
+```python
+# D
+number = 3.1415
+print("The number", number, "is close to pi")
+```
+
+```python
+# E
+number = 3.1415
+print("The number" + number + "is close to pi")
+```
+
+```python
+# F
+number = "3.14"
+print("The number", number, "is close to pi")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Valid Print Statements
+
+Statements B and E fail.
+
+- B uses invalid f-string formatting. A valid expression is `{3.1415:.2f}`.
+- E tries to concatenate strings and a float with `+`.
+- A, C, D, and F run successfully.
+:::
+
+::: {.callout-note}
+## Values Stored in f-Strings
+
+Predict the output of each cell.
+
+```{python}
+#| eval: false
+pet = "dog"
+message = f"I have a {pet}"
+
+print(message)
+```
+
+```{python}
+#| eval: false
+pet = "dog"
+message = f"I have a {pet}"
+pet = "cat"
+
+print(message)
+```
+
+```{python}
+#| eval: false
+x = 1
+y = 3 * x
+x = 2
+y = 2 * x
+
+print(y)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Values Stored in f-Strings
+
+The outputs are:
+
+```text
+I have a dog
+I have a dog
+4
+```
+
+The f-string is evaluated when `message` is created. Changing `pet` later does not update the existing string.
 :::
 
 ***
@@ -707,6 +874,119 @@ Write a program that checks whether a given set of three numbers forms a Pythago
 
 :::
 
+::: {.callout-note}
+## Unreachable Branches
+
+Which branches can never run, assuming `apples`, `bananas`, and `friends` are positive?
+
+```{python}
+#| eval: false
+apples = 10
+bananas = 5
+friends = 15
+
+if apples + bananas >= friends:
+    print("We have enough fruit for our friends!")
+elif apples >= friends:
+    print("We have enough apples for our friends!")
+elif bananas >= friends:
+    print("We have enough bananas for our friends!")
+else:
+    print("We do not have enough fruit for our friends!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Unreachable Branches
+
+The two `elif` branches can never run. If either the apples or bananas are enough on their own, their combined total is also enough, so the first condition already succeeds.
+:::
+
+::: {.callout-note}
+## Updating a Variable in a Conditional
+
+What is the final value of `x`?
+
+```{python}
+#| eval: false
+x = 5
+condition = x**2 < 10
+
+if condition:
+    x = x + 1
+else:
+    x = x + 3
+
+x = x / 2
+
+print(x)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Updating a Variable
+
+The final value is `4.0`. The condition is false, so `x` becomes `8` before being divided by `2`.
+:::
+
+::: {.callout-note}
+## Comparing Different Types
+
+What happens when this code runs?
+
+```{python}
+#| eval: false
+years = "5"
+
+if years > 0:
+    print(f"I am {years} years old")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Comparing Different Types
+
+Python raises a `TypeError` because it cannot compare a string with an integer using `>`.
+
+```{python}
+#| eval: false
+years = "5"
+
+if int(years) > 0:
+    print(f"I am {years} years old")
+```
+:::
+
+::: {.callout-note}
+## Assignment or Comparison?
+
+Explain why this code fails and correct it.
+
+```{python}
+#| eval: false
+a = 10
+b = 2
+
+if a % b = 0:
+    print(f"{a} is divisible by {b}")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Assignment or Comparison
+
+The condition needs the comparison operator `==`. A single equals sign performs assignment and is invalid in this position.
+
+```{python}
+#| eval: false
+a = 10
+b = 2
+
+if a % b == 0:
+    print(f"{a} is divisible by {b}")
+```
+:::
+
 ---
 
 # Looping
@@ -905,6 +1185,370 @@ Develop a program that checks whether a given number is a perfect number (a posi
 *Sample input:* `num = 100`  
 *Expected result:* `"100 is not a perfect number"`
 
+:::
+
+::: {.callout-note}
+## Iterating Over a List
+
+Without running the code, write its output.
+
+```{python}
+#| eval: false
+for value in [1, 2, 3]:
+    print(value)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Iterating Over a List
+
+```text
+1
+2
+3
+```
+:::
+
+::: {.callout-note}
+## Understanding `range()`
+
+Without running the code, write its output.
+
+```{python}
+#| eval: false
+for value in range(1, 3):
+    print(value)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Understanding `range()`
+
+```text
+1
+2
+```
+
+The stopping value `3` is excluded.
+:::
+
+::: {.callout-note}
+## Range with a Step
+
+Without running the code, write its output.
+
+```{python}
+#| eval: false
+for c in range(1, 4, 2):
+    print(c)
+
+print("Next!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Range with a Step
+
+```text
+1
+3
+Next!
+```
+:::
+
+::: {.callout-note}
+## Reusing a Previous Loop Variable
+
+Assume the previous exercise has already run, so `c` has the value `3`. Without running the code, write its output.
+
+```{python}
+#| eval: false
+for d in ["apple", "banana", "chocolate"]:
+    print(c)
+    print("Next!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Reusing a Previous Loop Variable
+
+```text
+3
+Next!
+3
+Next!
+3
+Next!
+```
+
+The loop changes `d`, but the code prints the existing value of `c` from the previous exercise.
+:::
+
+::: {.callout-note}
+## Conditional Output Inside a Loop
+
+Without running the code, write its output.
+
+```{python}
+#| eval: false
+n = 0
+
+for d in ["apple", "banana", "chocolate"]:
+    n = n + 1
+
+    if n != 1:
+        print(d)
+
+    print("Next!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Conditional Output Inside a Loop
+
+```text
+Next!
+banana
+Next!
+chocolate
+Next!
+```
+
+The food is not printed during the first iteration, but `"Next!"` is printed during every iteration.
+:::
+
+::: {.callout-note}
+## Sum with `for` and `while`
+
+Use a `for` loop to calculate the sum of the positive integers below `10`. Then solve the same problem with a `while` loop.
+
+Expected result: `45`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Sum with `for` and `while`
+
+Using `for`:
+
+```{python}
+#| eval: false
+result = 0
+
+for number in range(1, 10):
+    result += number
+
+print(result)
+```
+
+Using `while`:
+
+```{python}
+#| eval: false
+result = 0
+number = 1
+
+while number < 10:
+    result += number
+    number += 1
+
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Two Multiplication Tables
+
+Use loops to generate the multiplication tables of `2` and `4`, from multiplier `1` through `10`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Two Multiplication Tables
+
+```{python}
+#| eval: false
+lines = []
+
+for number in (2, 4):
+    lines.append(f"Multiplication table of {number}")
+
+    for multiplier in range(1, 11):
+        product = number * multiplier
+        lines.append(f"{number} x {multiplier} = {product}")
+
+print("\n".join(lines))
+```
+:::
+
+::: {.callout-note}
+## Factorial with `for` and `while`
+
+Use a `for` loop to calculate `5!`. Then solve the same problem with a `while` loop.
+
+Expected result: `120`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Factorial with `for` and `while`
+
+Using `for`:
+
+```{python}
+#| eval: false
+result = 1
+
+for number in range(2, 6):
+    result *= number
+
+print(result)
+```
+
+Using `while`:
+
+```{python}
+#| eval: false
+result = 1
+number = 2
+
+while number <= 5:
+    result *= number
+    number += 1
+
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Build a Sentence with Loops
+
+Use a `for` loop to combine the words below into one sentence. Then solve the same problem with a `while` loop.
+
+```python
+words = ["Hello", "my", "name", "is", "Daniel"]
+```
+
+Expected result: `"Hello my name is Daniel"`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Build a Sentence with Loops
+
+Using `for`:
+
+```{python}
+#| eval: false
+words = ["Hello", "my", "name", "is", "Daniel"]
+sentence = ""
+
+for word in words:
+    sentence = sentence + " " + word
+
+print(sentence.strip())
+```
+
+Using `while`:
+
+```{python}
+#| eval: false
+words = ["Hello", "my", "name", "is", "Daniel"]
+sentence = ""
+index = 0
+
+while index < len(words):
+    sentence = sentence + " " + words[index]
+    index += 1
+
+print(sentence.strip())
+```
+:::
+
+::: {.callout-note}
+## Repair the Multiples Program
+
+Explain why the code fails, then correct it.
+
+```{python}
+#| eval: false
+number = 7
+limit = 50
+message = ""
+
+for value in range(1, limit + 1):
+    if value % number == 0:
+        message = message + value + ", "
+
+print(message)
+```
+
+Expected result: `"7, 14, 21, 28, 35, 42, 49"`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Repair the Multiples Program
+
+The code tries to concatenate an integer to a string. Convert each multiple with `str()`.
+
+```{python}
+#| eval: false
+number = 7
+limit = 50
+message = ""
+
+for value in range(1, limit + 1):
+    if value % number == 0:
+        message = message + str(value) + ", "
+
+message = message[:-2]
+
+print(message)
+```
+:::
+
+::: {.callout-note}
+## Repair the Fibonacci Program
+
+The program below should generate five Fibonacci terms. Find and correct every error.
+
+```{python}
+#| eval: false
+number_of_terms = 5
+first = 0
+second = 1
+terms_computed = 2
+message = "0, 1"
+
+while terms_computed < number_of_terms:
+    next_value = first + second
+    message = message + ", " + next_value
+    terms_computed = +1
+
+print(message)
+```
+
+Expected result: `"0, 1, 1, 2, 3"`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Repair the Fibonacci Program
+
+The original code concatenates a number to a string, resets the counter to `1`, and never updates the two previous Fibonacci values.
+
+```{python}
+#| eval: false
+number_of_terms = 5
+first = 0
+second = 1
+terms_computed = 2
+message = "0, 1"
+
+while terms_computed < number_of_terms:
+    next_value = first + second
+    message = message + ", " + str(next_value)
+    first = second
+    second = next_value
+    terms_computed += 1
+
+print(message)
+```
 :::
 
 ---
@@ -1458,6 +2102,439 @@ Note that unhappy numbers will never end the loop, so you should set some stoppi
 *Sample input 2:* `is_happy_number(19, max_iter=3)`  
 *Expected result 2:* `False`
 
+:::
+
+### Function Behavior
+
+::: {.callout-note}
+## Defining Without Calling
+
+Without running the code, what output does this cell produce?
+
+```{python}
+#| eval: false
+def yell(text="hello"):
+    print(text.upper() + "!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Defining Without Calling
+
+The cell produces no output. It defines `yell()` but never calls it.
+
+```{python}
+#| eval: false
+yell()
+```
+
+The added call prints `HELLO!`.
+:::
+
+::: {.callout-note}
+## Default Arguments and `range()`
+
+Without running the code, write its output.
+
+```{python}
+#| eval: false
+def powers_of_number(number, limit=4):
+    for exponent in range(1, limit):
+        print(f"{number}^{exponent} = {number**exponent}")
+
+
+powers_of_number(2)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Default Arguments and `range()`
+
+```text
+2^1 = 2
+2^2 = 4
+2^3 = 8
+```
+
+The stopping value `4` is excluded from the range.
+:::
+
+::: {.callout-note}
+## Initialise Before a Password Loop
+
+Explain why the program fails and correct it.
+
+```{python}
+#| eval: false
+password = "coconut"
+
+while user_input != password:
+    user_input = input("Enter a password: ")
+
+print("Access granted!")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Initialise Before a Password Loop
+
+The condition uses `user_input` before that variable exists.
+
+```{python}
+#| eval: false
+password = "coconut"
+user_input = input("Enter a password: ")
+
+while user_input != password:
+    user_input = input("Enter a password: ")
+
+print("Access granted!")
+```
+:::
+
+::: {.callout-note}
+## Repair the Natural-Number Sum
+
+Find and correct every error.
+
+```{python}
+#| eval: false
+number = input("Enter a positive integer: ")
+
+while number > 0:
+    result += number
+    number -= 1
+
+print(result)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Repair the Natural-Number Sum
+
+`input()` returns a string, and `result` has not been initialised.
+
+```{python}
+#| eval: false
+number = int(input("Enter a positive integer: "))
+result = 0
+
+while number > 0:
+    result += number
+    number -= 1
+
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Repair the Naming Errors
+
+Each block contains a naming error. Explain and correct all three.
+
+```python
+def rectangle_area(length, width):
+    return len * width
+
+
+print(rectangle_area(10, 20))
+```
+
+```python
+def rectangle_area(length, width):
+    return length * width
+
+
+rectangle_area = rectangle_area(20, 40)
+area_2 = rectangle_area(10, 20)
+
+print(area_2)
+```
+
+```python
+print = "Hello world"
+
+print(8)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Repair the Naming Errors
+
+The first block uses the built-in function `len` instead of the parameter `length`.
+
+```{python}
+#| eval: false
+def rectangle_area(length, width):
+    return length * width
+
+
+print(rectangle_area(10, 20))
+```
+
+The second block replaces the function name with a number. Store the result under another name.
+
+```{python}
+#| eval: false
+def rectangle_area(length, width):
+    return length * width
+
+
+area_1 = rectangle_area(20, 40)
+area_2 = rectangle_area(10, 20)
+
+print(area_2)
+```
+
+The third block replaces the name of the built-in `print()` function. Use a descriptive variable name instead.
+
+```{python}
+#| eval: false
+message = "Hello world"
+
+print(message)
+```
+:::
+
+::: {.callout-note}
+## Unreachable Code After `return`
+
+Explain why the diameter correction never runs, then repair the function.
+
+```{python}
+#| eval: false
+def circle_area(radius, is_diameter=False):
+    return 3.1415 * radius**2
+
+    if is_diameter:
+        radius = radius / 2
+        return 3.1415 * radius**2
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Unreachable Code After `return`
+
+The first `return` ends the function before Python reaches the conditional.
+
+```{python}
+#| eval: false
+def circle_area(radius, is_diameter=False):
+    if is_diameter:
+        radius = radius / 2
+
+    return 3.1415 * radius**2
+```
+
+```{python}
+#| eval: false
+print(circle_area(10, is_diameter=True))
+```
+:::
+
+### Scope
+
+::: {.callout-note}
+## Nested Function Parameters
+
+Do these two versions return different values? Predict each output.
+
+```{python}
+#| eval: false
+def add(a, b):
+    result = a + b
+
+    def multiply(a, b):
+        return a * b
+
+    return multiply(a, b), result
+
+
+product, total = add(2, 3)
+
+print(f"{product}\n{total}")
+```
+
+```{python}
+#| eval: false
+def add(a, b):
+    result = a + b
+
+    def multiply(c, d):
+        return c * d
+
+    return multiply(a, b), result
+
+
+product, total = add(2, 3)
+
+print(f"{product}\n{total}")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Nested Function Parameters
+
+Both versions print:
+
+```text
+6
+5
+```
+
+Parameter names are local to their function. Renaming the nested parameters from `a, b` to `c, d` does not change the calculation.
+:::
+
+::: {.callout-note}
+## Shadowing `print()`
+
+What happens when this code runs? How can you restore the built-in `print()` function?
+
+```{python}
+#| eval: false
+print = 7
+
+print(print)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Shadowing `print()`
+
+Python raises a `TypeError` because the name `print` now refers to the integer `7`.
+
+```{python}
+#| eval: false
+del print
+
+print("The built-in function is available again")
+```
+
+Restarting the Python session also removes the accidental assignment.
+:::
+
+::: {.callout-note}
+## Immutable Arguments
+
+What is the value of `variable` after the function call?
+
+```{python}
+#| eval: false
+def modify_variable(value):
+    value += 5
+
+
+variable = 10
+modify_variable(variable)
+
+print(variable)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Immutable Arguments
+
+The output is `10`. Integers are immutable, and the parameter `value` is local to the function.
+:::
+
+::: {.callout-note}
+## Local Variable Shadowing
+
+Predict the two outputs.
+
+```{python}
+#| eval: false
+def factorial(number):
+    x = number
+    result = 1
+
+    while x > 1:
+        result *= x
+        x -= 1
+
+    return result
+
+
+x = 10
+factorial_result = factorial(x)
+```
+
+```{python}
+#| eval: false
+print(factorial_result)
+```
+
+```{python}
+#| eval: false
+print(x)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Local Variable Shadowing
+
+The outputs are `3628800` and `10`. The `x` created inside `factorial()` is local and does not replace the outer `x`.
+:::
+
+### Number-System Conversions
+
+::: {.callout-note}
+## Decimal to Binary
+
+Write a function named `decimal_to_binary(decimal)` that converts a non-negative integer to a binary string without using `bin()`.
+
+*Sample input:* `decimal_to_binary(10)`  
+*Expected result:* `"1010"`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Decimal to Binary
+
+```{python}
+#| eval: false
+def decimal_to_binary(decimal):
+    if not isinstance(decimal, int) or decimal < 0:
+        raise ValueError("decimal must be a non-negative integer")
+
+    if decimal == 0:
+        return "0"
+
+    binary = ""
+
+    while decimal > 0:
+        remainder = decimal % 2
+        binary = str(remainder) + binary
+        decimal //= 2
+
+    return binary
+```
+:::
+
+::: {.callout-note}
+## Binary to Decimal
+
+Write a function named `binary_to_decimal(binary)` that converts a binary string to an integer without using `int(binary, 2)`.
+
+*Sample input:* `binary_to_decimal("1010")`  
+*Expected result:* `10`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution: Binary to Decimal
+
+```{python}
+#| eval: false
+def binary_to_decimal(binary):
+    if not binary or any(digit not in "01" for digit in binary):
+        raise ValueError("binary must contain only 0 and 1")
+
+    decimal = 0
+
+    for digit in binary:
+        decimal = decimal * 2 + int(digit)
+
+    return decimal
+```
 :::
 
 ---
