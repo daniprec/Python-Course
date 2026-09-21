@@ -5,341 +5,556 @@ execute:
   error: true
 ---
 
-[Review previous sessions here!](https://colab.research.google.com/drive/1nKy4p56awC7g7Iki4KF7m2JID47DuFy_?usp=sharing)
+# Functions and Mutability
 
----
+Some Python objects can change after creation. Others cannot.
 
-# Data Structures: Functions and Mutability
+This distinction becomes especially important when objects are passed to functions.
 
-In our last class, we went over fundamental data structures in Python: lists, tuples, sets, and dictionaries. Today, we'll explore a crucial concept: how functions can affect mutable objects.
+| Data type | Mutable? |
+|---|---|
+| List | Yes |
+| Dictionary | Yes |
+| Set | Yes |
+| Integer | No |
+| Float | No |
+| Boolean | No |
+| String | No |
+| Tuple | No |
 
-Remember, some objects in Python are *mutable* (like lists and dictionaries) while others are *immutable* (like integers, strings, and tuples). This distinction becomes particularly important when these objects interact with functions.
+A function can modify a mutable object received as an argument. The caller will see that change.
 
----
+## Review: Changing a List
 
-## Review of Methods
-
-First, it is important for us to remember how a method can change a list.
+The `append()` method changes a list in place.
 
 ```{python}
 my_list = [1, 2, 3]
-print("List before:", my_list)
 
+print(my_list)
+```
+
+```{python}
 my_list.append(4)
-print("List after:", my_list)
+
+print(my_list)
 ```
 
-The majority of list methods do not return new list! They instead update the **original** list in place.
+Many methods that mutate a list return `None`.
 
 ```{python}
 my_list = [1, 2, 3]
-print("List before:", my_list)
+result = my_list.append(4)
 
-new_list = my_list.append(4)
-print("New list?", new_list)
-# None because "append()" does not return a value!
-
-print("List after:", my_list)
-# Instead, "append()" is changing the ORIGINAL "my_list"
+print(result)
 ```
 
-There is a different between applying a method and an operation
+```{python}
+print(my_list)
+```
 
-**Methods** change mutable objects in place.
-
-**Operations** create new objects.
+The assignment below is therefore a common mistake:
 
 ```{python}
 my_list = [1, 2, 3]
-print("List before:", my_list)
+my_list = my_list.append(4)
 
-new_list = my_list.append(4)
-print("New list:", new_list)  # Method returns None
-print("List after:", my_list)  # Method modifies the original list
+print(my_list)
+```
+
+`append()` changes the original list and returns `None`. The assignment then replaces the variable with `None`.
+
+::: {.callout-warning}
+Not every method mutates its object. For example, `string.upper()` returns a new string because strings are immutable. Check what a method returns before assigning its result.
+:::
+
+## Mutation and New Objects
+
+Compare a mutating list method with list concatenation.
+
+### Mutation with `append()`
+
+```{python}
+original = [1, 2, 3]
+new_list = original.append(4)
+
+print(original)
 ```
 
 ```{python}
-my_list = [1, 2, 3]
-print("List before:", my_list)
-
-new_list = my_list + [4]
-print("New list:", new_list)  # Operation returns a new list
-print("List after:", my_list)  # Operation does not modify the original list
+print(new_list)
 ```
 
----
+`original` changes, while `new_list` receives `None`.
 
-## How Functions Can Change Mutable Objects
-
-So what happens when we use a method inside a function?
+### A New Object with `+`
 
 ```{python}
-def add_element(my_list: list) -> list:
-  my_list.append("New Element")
-  return my_list
+original = [1, 2, 3]
+new_list = original + [4]
 
-sample_list = [1, 2, 3]
-print("Original list before function:", sample_list)
-
-modified_list = add_element(sample_list)
-print("Modified list:", modified_list)
-print("Original list after function:", sample_list)
+print(original)
 ```
 
-You might expect that `sample_list` remains `[1, 2, 3]`, but if you check its value after calling the function, you'll find that it has changed. This is because lists are mutable, and the function modifies the list in-place.
+```{python}
+print(new_list)
+```
 
-**Exercise.** What will be the outputs of this cell?
+The `+` operation creates a new list. The original list remains unchanged.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Predict the output
 
-What will be the outputs of this cell?
+Without running the code, determine the value printed by each cell.
 
-
-```{python}
-def add_element(my_list: list) -> list:
-  my_list.append("New Element")
-
-sample_list = [1, 2, 3]
-print("Original list before function:", sample_list)
-
-modified_list = add_element(sample_list)
-print("Modified list:", modified_list)
-print("Original list after function:", sample_list)
+```python
+playlist = ["Intro", "Night Drive"]
+result = playlist.append("Home")
 ```
 
+```python
+print(playlist)
+```
+
+```python
+print(result)
+```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-`modified_list` is `None` because the function has no `return` statement. `sample_list` is still modified in place, so the last print shows the extra element.
+The first cell prints:
 
+```text
+['Intro', 'Night Drive', 'Home']
+```
+
+The second cell prints:
+
+```text
+None
+```
 :::
 
-The same logic applies to **sets** and **dictionaries**. And with any other **mutable** object.
+## Functions Can Mutate Their Arguments
+
+When a function receives a mutable object, its parameter refers to the same object used by the caller.
 
 ```{python}
-def expand_set(my_set: set, element) -> set:
-  my_set.add(element)
-
-sample_set = {1, 2, 3}
-print("Original set before function:", sample_set)
-
-modified_set = expand_set(sample_set, 4)
-print("Modified set:", modified_set)
-print("Original set after function:", sample_set)
+def add_item(items: list, item) -> None:
+    items.append(item)
 ```
 
 ```{python}
-def update_dict(my_dict: dict, key, value) -> dict:
-  my_dict[key] = value
+shopping_list = ["bread", "coffee"]
 
-sample_dict = {"a": 1, "b": 2, "c": 3}
-print("Original dict before function:", sample_dict)
-
-modified_dict = update_dict(sample_dict, "d", 4)
-print("Modified dict:", modified_dict)
-print("Original dict after function:", sample_dict)
+print(shopping_list)
 ```
 
----
+```{python}
+returned_value = add_item(shopping_list, "apples")
+
+print(returned_value)
+```
+
+```{python}
+print(shopping_list)
+```
+
+The function returns `None`, but `shopping_list` still changes.
+
+### Sets
+
+```{python}
+def add_attendee(attendees: set, name: str) -> None:
+    attendees.add(name)
+```
+
+```{python}
+event_attendees = {"Maya", "Leo"}
+add_attendee(event_attendees, "Nora")
+
+print(event_attendees)
+```
+
+### Dictionaries
+
+```{python}
+def update_status(record: dict, status: str) -> None:
+    record["status"] = status
+```
+
+```{python}
+project = {"name": "Website", "status": "planned"}
+update_status(project, "active")
+
+print(project)
+```
+
+::: {.callout-note}
+## Exercise: What changes?
+
+Predict the values of `guest` and `returned_value` after the function call.
+
+```python
+def add_preference(profile: dict, preference: str) -> None:
+    profile["preference"] = preference
+
+
+guest = {"name": "Ava"}
+returned_value = add_preference(guest, "window seat")
+```
+
+```python
+print(guest)
+```
+
+```python
+print(returned_value)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`guest` contains both `"name"` and `"preference"`. `returned_value` is `None` because the function has no `return` statement.
+:::
+
+## Rebinding Is Not Mutation
+
+Assigning a new object to a parameter only changes the local parameter. It does not replace the caller's object.
+
+```{python}
+def replace_list(items: list) -> None:
+    items = ["replacement"]
+```
+
+```{python}
+original = ["first", "second"]
+replace_list(original)
+
+print(original)
+```
+
+The function rebinds its local variable `items`. It does not mutate `original`.
+
+Compare that with slice assignment, which changes the existing list:
+
+```{python}
+def replace_contents(items: list) -> None:
+    items[:] = ["replacement"]
+```
+
+```{python}
+original = ["first", "second"]
+replace_contents(original)
+
+print(original)
+```
 
 ## Protecting Mutable Objects
 
-If you don't want a function to modify a mutable object, you need to copy that object inside the function.
-
-For lists, you can use the `copy` method:
+If a function should leave its input unchanged, create a copy before modifying it.
 
 ```{python}
-def add_element(my_list: list) -> list:
-  # We perform a copy to avoid modifying the original input
-  copied_list = my_list.copy()
-  copied_list.append("New Element")
-  return copied_list
-
-sample_list = [1, 2, 3]
-print("Original list before function:", sample_list)
-modified_list = add_element(sample_list)
-print("Modified list:", modified_list)
-print("Original list after function:", sample_list)
+def add_item_safely(items: list, item) -> list:
+    copied_items = items.copy()
+    copied_items.append(item)
+    return copied_items
 ```
 
-**Exercise.** What will be the outputs of this cell?
+```{python}
+shopping_list = ["bread", "coffee"]
+updated_list = add_item_safely(shopping_list, "apples")
+
+print(shopping_list)
+```
+
+```{python}
+print(updated_list)
+```
+
+You can copy dictionaries and sets in the same way.
+
+```{python}
+def change_city(profile: dict, city: str) -> dict:
+    copied_profile = profile.copy()
+    copied_profile["city"] = city
+    return copied_profile
+```
+
+```{python}
+profile = {"name": "Maya", "city": "Madrid"}
+updated_profile = change_city(profile, "Lisbon")
+
+print(profile)
+```
+
+```{python}
+print(updated_profile)
+```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Protect the original set
 
-What will be the outputs of this cell?
+Complete `add_tag_safely()` so it returns an updated set without changing the original set.
 
-
-```{python}
-def add_element(my_list: list) -> list:
-  copied_list = my_list.copy()
-  copied_list.append("New Element")
-
-sample_list = [1, 2, 3]
-print("Original list before function:", sample_list)
-modified_list = add_element(sample_list)
-print("Modified list:", modified_list)
-print("Original list after function:", sample_list)
+```python
+def add_tag_safely(tags: set, new_tag: str) -> set:
+    # Complete the function
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-`modified_list` is still `None`, but now the original list stays unchanged because the function appends to a copied list instead of the input list.
-
+```python
+def add_tag_safely(tags: set, new_tag: str) -> set:
+    copied_tags = tags.copy()
+    copied_tags.add(new_tag)
+    return copied_tags
+```
 :::
 
----
+## Shallow Copies
 
-## Mutable Objects as Default Parameters: Problem
-
-When a function defines a mutable object as a default parameter, the object is created once and shared across all subsequent calls to the function that don't specify a different object for that parameter. This can lead to unexpected behaviors, as changes to the mutable object persist across function calls.
-
-Consider the following function which appends a value to a list:
+The `.copy()` method creates a **shallow copy**. The outer object is new, but nested mutable objects are still shared.
 
 ```{python}
-def add_to_list(value, default_list: list=[]) -> list:
-  default_list.append(value)
-  return default_list
-```
+original = [["Monday"], ["Tuesday"]]
+copied = original.copy()
+copied[0].append("Python")
 
-Now, let's see how this behaves:
+print(copied)
+```
 
 ```{python}
-# First call
-print(add_to_list(1))  # Expected [1], Actual [1]
-
-# Second call
-print(add_to_list(2))  # Expected [2], Actual [1, 2]
-
-# Third call
-print(add_to_list(3, default_list=[]))  # Expected [3], Actual [3]
-
-# Fourth call
-print(add_to_list(4))  # Expected [4], Actual [1, 2, 4]
+print(original)
 ```
 
-As seen in the example above, the `default_list` keeps accumulating values across function calls. The default list created during the function's definition gets modified with every function call that doesn't specify a separate list.
+Both outputs include `"Python"` because the inner lists are shared.
 
-**Exercise.** How many different keys will `dict_animals` have?
+Use `deepcopy()` when nested mutable objects must also be copied.
+
+```{python}
+from copy import deepcopy
+
+original = [["Monday"], ["Tuesday"]]
+copied = deepcopy(original)
+copied[0].append("Python")
+
+print(copied)
+```
+
+```{python}
+print(original)
+```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Shallow or independent?
 
-How many different keys will `dict_animals` have?
+Will `original` contain `"dessert"` after this code runs? Explain your answer.
 
+```python
+original = {
+    "starter": ["soup"],
+    "main": ["pasta"],
+}
 
-```{python}
-def update_dict(key, value, dict_base: dict={}) -> dict:
-  dict_base[key] = value
-  return dict_base
-
-dict_clothes = update_dict("shirt", "blue")
-dict_clothes = update_dict("pants", "green", dict_clothes)
-
-print("Dictionary with clothes")
-print(dict_clothes)
-
-dict_animals = update_dict("dog", "woof")
-dict_animals = update_dict("cat", "meow", dict_animals)
-
-print("Dictionary with animals")
-print(dict_animals)
+copied = original.copy()
+copied["main"].append("dessert")
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-`dict_animals` ends up with four keys, because the default dictionary created for `dict_base` is shared across calls. The animal entries are added to the same dictionary that already contains the clothing entries.
-
+Yes. The dictionaries are different objects, but both refer to the same nested list stored under `"main"`. Appending to that list affects both dictionaries.
 :::
 
-**Exercise.** How long will be the set `st_evens`?
+## Mutable Default Parameters: The Problem
+
+Default parameter values are created once, when Python defines the function. A mutable default is therefore shared by later calls.
+
+```{python}
+def add_to_list(value, stored_values: list = []) -> list:
+    stored_values.append(value)
+    return stored_values
+```
+
+```{python}
+first_result = add_to_list(1)
+
+print(first_result)
+```
+
+```{python}
+second_result = add_to_list(2)
+
+print(second_result)
+```
+
+```{python}
+separate_result = add_to_list(3, stored_values=[])
+
+print(separate_result)
+```
+
+```{python}
+fourth_result = add_to_list(4)
+
+print(fourth_result)
+```
+
+The first, second, and fourth calls use the same default list. The third call receives a separate empty list.
+
+The same problem affects dictionary and set defaults.
+
+```{python}
+def remember_tag(tag: str, tags: set = set()) -> set:
+    tags.add(tag)
+    return tags
+```
+
+```{python}
+print(remember_tag("python"))
+```
+
+```{python}
+print(remember_tag("data"))
+```
+
+::: {.callout-warning}
+Avoid mutable default values such as `[]`, `{}`, and `set()`.
+:::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Shared dictionary
 
-How long will be the set `st_evens`?
+How many keys does `animal_sounds` contain at the end? Explain why.
+
+```python
+def add_entry(key, value, records: dict = {}) -> dict:
+    records[key] = value
+    return records
 
 
-```{python}
-def add_even_numbers(n: int, myset: set = {}) -> set:
-  if len(myset) == 0:
-    maxnum = 0
-  else:
-    maxnum = max(myset)
-  for i in range(maxnum, maxnum + n):
-    myset.add(i * 2)
-  return myset
+clothes = add_entry("shirt", "blue")
+clothes = add_entry("pants", "green", clothes)
 
-st_numbers = {1, 2}
-st_evens = add_even_numbers(2, st_numbers)
-print("Set with 2 even numbers:", st_evens)
-
-st_evens = add_even_numbers(5)
-print("Set with 5 even numbers:", st_evens)
-
-st_evens = add_even_numbers(10)
-print("Set with 10 even numbers:", st_evens)
+animal_sounds = add_entry("dog", "woof")
+animal_sounds = add_entry("cat", "meow", animal_sounds)
 ```
 
+```python
+print(animal_sounds)
+```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The final `st_evens` has `15` elements, because the same default set is reused and grows between the second and third calls.
+`animal_sounds` contains four keys: `"shirt"`, `"pants"`, `"dog"`, and `"cat"`.
 
+The first and third calls use the same default dictionary. The second and fourth calls receive that same dictionary explicitly.
 :::
 
----
+## Mutable Default Parameters: The Solution
 
-## Mutable Objects as Default Parameters: Solution
-
-One of the common patterns to prevent this behavior is to use `None` as the default value and then instantiate the mutable object within the function:
+Use `None` as the default. Create a new mutable object inside the function when needed.
 
 ```{python}
-def add_to_list(value, default_list: list=None) -> list:
-  # If no input list is given, initialize a new one
-  if default_list is None:
-    # This code will run when the user provides no list
-    # Ensures that a new list is created every time
-    default_list = []
-  # We then add the value to the list
-  default_list.append(value)
-  return default_list
+def add_to_list(value, stored_values: list = None) -> list:
+    if stored_values is None:
+        stored_values = []
+
+    stored_values.append(value)
+    return stored_values
 ```
 
-With this revised function, each call to `add_to_list` without a specific list will use a new, empty list:
+Each call without a list now creates a separate list.
 
 ```{python}
-print(add_to_list(1))  # [1]
-print(add_to_list(2))  # [2]
-print(add_to_list(3))  # [3]
-print(add_to_list(4))  # [4]
+print(add_to_list(1))
 ```
 
-**Exercise.** Fix the function `update_dict()`.
+```{python}
+print(add_to_list(2))
+```
 
+```{python}
+print(add_to_list(3))
+```
+
+You can still provide an existing list when you want the function to update it.
+
+```{python}
+saved_values = [10]
+result = add_to_list(20, saved_values)
+
+print(result)
+```
+
+```{python}
+print(saved_values)
+```
+
+::: {.callout-note}
+## Exercise: Fix the function
+
+Rewrite `add_entry()` so calls without a dictionary do not share data.
+
+```python
+def add_entry(key, value, records: dict = {}) -> dict:
+    records[key] = value
+    return records
+```
+:::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-```{python}
-def update_dict(key, value, dict_base: dict=None) -> dict:
-  if dict_base is None:
-    dict_base = {}
-  dict_base[key] = value
-  return dict_base
-```
+```python
+def add_entry(key, value, records: dict = None) -> dict:
+    if records is None:
+        records = {}
 
+    records[key] = value
+    return records
+```
 :::
 
----
+## Challenge: Notification Preferences
+
+Write a function named `enable_notification()` with these requirements:
+
+1. It receives a notification name.
+2. It accepts an optional set of existing preferences.
+3. If no set is supplied, it creates a new one.
+4. It returns a set containing the new notification.
+5. Separate calls without a set must not share data.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```python
+def enable_notification(name: str, preferences: set = None) -> set:
+    if preferences is None:
+        preferences = set()
+
+    preferences.add(name)
+    return preferences
+```
+:::
+
+## Summary
+
+- Lists, dictionaries, and sets are mutable.
+- Integers, floats, booleans, strings, and tuples are immutable.
+- A function can mutate a mutable object received from its caller.
+- Rebinding a parameter does not replace the caller's object.
+- Copy an object when a function should leave its input unchanged.
+- `.copy()` is shallow, so nested mutable objects remain shared.
+- Mutable default parameters persist across calls.
+- Use `None` as the default and create the mutable object inside the function.
