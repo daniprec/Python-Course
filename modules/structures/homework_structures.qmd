@@ -5,9 +5,11 @@ subtitle: "Homework for Module 2"
 
 ## Introduction
 
-Use these exercises to practise. None of the exercises are mandatory.
+Use these exercises to practise the concepts from this module. I recommend deactivating Gemini first, along with any other AI helper, and attempting the exercises on your own.
 
-Try each exercise before opening its solution. Every solution is collapsed so you can reveal it when needed.
+**Mandatory exercises** are highlighted in red boxes. These are the exercises you must complete to receive your participation points. You may use AI help, but remember that you may be asked to explain your code in class.
+
+The remaining exercises are optional. Try each one before opening its collapsed solution.
 
 When an exercise asks you to predict an output or error, explain your reasoning before checking the answer. For programming exercises, test your solution with additional inputs.
 
@@ -251,6 +253,338 @@ print(first_name)
 ```
 :::
 
+::: {.callout-note}
+## Filter Even Numbers
+
+Write a function named `filter_even(numbers)` that returns a new list containing only the even numbers.
+
+*Sample input:* `filter_even([1, 2, 3, 4, 5, 6])`  
+*Expected result:* `[2, 4, 6]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def filter_even(numbers):
+    even_numbers = []
+    for number in numbers:
+        if number % 2 == 0:
+            even_numbers.append(number)
+    return even_numbers
+
+print(filter_even([1, 2, 3, 4, 5, 6]))
+```
+:::
+
+::: {.callout-note}
+## List Reversal
+
+Write a function named `my_reverse(values)` that returns the elements of a list in reverse order without using the `reverse()` method.
+
+*Sample input:* `my_reverse([1, 2, 3, 4, 5])`  
+*Expected result:* `[5, 4, 3, 2, 1]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def my_reverse(values):
+    return values[::-1]
+
+print(my_reverse([1, 2, 3, 4, 5]))
+```
+:::
+
+::: {.callout-note}
+## Average, Variance, and Standard Deviation
+
+Write a function named `statistics(numbers)` that returns the average, population variance, and standard deviation of a list as `[average, variance, standard_deviation]`.
+
+*Sample input 1:* `statistics([1, 1])`  
+*Expected result 1:* `[1.0, 0.0, 0.0]`
+
+*Sample input 2:* `statistics([4, 9, 16, 25, 36])`  
+*Expected result 2:* `[18.0, 130.8, 11.4368]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def statistics(numbers):
+    average = sum(numbers) / len(numbers)
+
+    squared_differences = []
+    for number in numbers:
+        squared_differences.append((number - average) ** 2)
+
+    variance = sum(squared_differences) / len(numbers)
+    standard_deviation = variance ** 0.5
+
+    return [
+        round(average, 4),
+        round(variance, 4),
+        round(standard_deviation, 4),
+    ]
+
+print(statistics([4, 9, 16, 25, 36]))
+```
+:::
+
+::: {.callout-note}
+## Element-by-Element Multiplication
+
+Write a function named `vecmul(first, second)` that multiplies two lists element by element. If the lists have different lengths, return `"Lists are not the same size"`.
+
+*Sample input 1:* `vecmul([1, 2], [1, 2, 3])`  
+*Expected result 1:* `"Lists are not the same size"`
+
+*Sample input 2:* `vecmul([1, 2, 3], [4, 5, 6])`  
+*Expected result 2:* `[4, 10, 18]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def vecmul(first, second):
+    if len(first) != len(second):
+        return "Lists are not the same size"
+
+    products = []
+    for index in range(len(first)):
+        products.append(first[index] * second[index])
+    return products
+
+print(vecmul([1, 2, 3], [4, 5, 6]))
+```
+:::
+
+::: {.callout-note}
+## List Intersection
+
+Write a function named `intersection(first, second)` that returns a new list containing the elements found in both input lists.
+
+*Sample input 1:* `intersection([1, 2, 3, 4, 5], [3, 4, 5, 6, 7])`  
+*Expected result 1:* `[3, 4, 5]`
+
+*Sample input 2:* `intersection([1, 2, 3], [4, 5, 6])`  
+*Expected result 2:* `[]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def intersection(first, second):
+    common = []
+    for value in first:
+        if value in second and value not in common:
+            common.append(value)
+    return common
+
+print(intersection([1, 2, 3, 4, 5], [3, 4, 5, 6, 7]))
+```
+:::
+
+::: {.callout-warning}
+## Function as a List Transformer
+
+Write a function named `transform_list(numbers, transformation)` that receives a list of numbers and a function. Apply the function to each number and return the transformed list.
+
+*Sample input:* `transform_list([1, 2, 3, 4, 5], lambda x: x**2)`  
+*Expected result:* `[1, 4, 9, 16, 25]`
+:::
+
+::: {.callout-note}
+## Three Consecutive Equal Numbers
+
+Write a function named `has_three_equal(numbers)` that checks whether a list contains the same number in three consecutive positions.
+
+*Sample input 1:* `has_three_equal([1, 2, 2, 2, 6])`  
+*Expected result 1:* `True`
+
+*Sample input 2:* `has_three_equal([1, 3, 4, 6])`  
+*Expected result 2:* `False`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def has_three_equal(numbers):
+    for index in range(len(numbers) - 2):
+        if numbers[index] == numbers[index + 1] == numbers[index + 2]:
+            return True
+    return False
+
+print(has_three_equal([1, 2, 2, 2, 6]))
+```
+:::
+
+::: {.callout-note}
+## Strongest Neighbours
+
+Write a function named `strongest_neighbours(numbers)` that returns the maximum value from every pair of adjacent numbers.
+
+*Sample input 1:* `strongest_neighbours([1, 2, 3, 4, 5])`  
+*Expected result 1:* `[2, 3, 4, 5]`
+
+*Sample input 2:* `strongest_neighbours([3, 1, 3, 5, 2])`  
+*Expected result 2:* `[3, 3, 5, 5]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def strongest_neighbours(numbers):
+    result = []
+    for index in range(len(numbers) - 1):
+        result.append(max(numbers[index], numbers[index + 1]))
+    return result
+
+print(strongest_neighbours([3, 1, 3, 5, 2]))
+```
+:::
+
+::: {.callout-note}
+## Sort by Number of Divisors
+
+Write a function named `sort_by_divisors(numbers)` that sorts positive integers from the greatest number of divisors to the least. Keep their original order when two numbers have the same number of divisors.
+
+*Sample input:* `sort_by_divisors([10, 6, 8, 7])`  
+*Expected result:* `[10, 6, 8, 7]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def count_divisors(number):
+    count = 0
+    for divisor in range(1, number + 1):
+        if number % divisor == 0:
+            count += 1
+    return count
+
+def sort_by_divisors(numbers):
+    return sorted(numbers, key=count_divisors, reverse=True)
+
+print(sort_by_divisors([10, 6, 8, 7]))
+```
+:::
+
+::: {.callout-warning}
+## Sort Bus Lines by Mean Time
+
+Given a list containing bus-line names and route times:
+
+1. Calculate the average route time.
+2. Sort the lines by their distance from the average.
+3. If two lines are equally distant from the average, place the faster line first.
+
+*Sample input:* `[["Line 1", 50], ["Line 2", 30], ["Line 3", 40]]`  
+*Expected result:* `[["Line 3", 40], ["Line 2", 30], ["Line 1", 50]]`
+:::
+
+::: {.callout-note}
+## Sort Square Roots
+
+Write a function named `sort_square_roots(groups)` that:
+
+1. Creates a new list containing the square roots of the non-negative values in each sublist.
+2. Sorts the sublists from the greatest number of roots to the least.
+3. When two sublists contain the same number of roots, places the one with the largest root first.
+
+*Sample input:* `[[4, 1, -3, 9], [16, -9], [1, 25, 36]]`  
+*Expected result:* `[[1.0, 5.0, 6.0], [2.0, 1.0, 3.0], [4.0]]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def sort_square_roots(groups):
+    roots = []
+
+    for group in groups:
+        group_roots = []
+        for number in group:
+            if number >= 0:
+                group_roots.append(number ** 0.5)
+        roots.append(group_roots)
+
+    roots.sort(
+        key=lambda group: (len(group), max(group, default=float("-inf"))),
+        reverse=True,
+    )
+    return roots
+
+print(sort_square_roots([[4, 1, -3, 9], [16, -9], [1, 25, 36]]))
+```
+:::
+
+::: {.callout-note}
+## Classify Words by Syllables
+
+Write a function named `classify_words(sentence)` that places words into three lists: monosyllabic, bisyllabic, and polysyllabic. For this exercise, treat each group of consecutive vowels as one syllable.
+
+*Sample input:* `"She enjoys colorful paintings."`  
+*Expected result:* `mono = ["She"]`, `bi = ["enjoys", "paintings"]`, `poly = ["colorful"]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def count_syllables(word):
+    vowels = "aeiouAEIOU"
+    count = 0
+    previous_was_vowel = False
+
+    for character in word:
+        is_vowel = character in vowels
+        if is_vowel and not previous_was_vowel:
+            count += 1
+        previous_was_vowel = is_vowel
+
+    return count
+
+def classify_words(sentence):
+    mono = []
+    bi = []
+    poly = []
+
+    for word in sentence.split():
+        clean_word = word.strip(".,!?;:")
+        syllables = count_syllables(clean_word)
+
+        if syllables == 1:
+            mono.append(clean_word)
+        elif syllables == 2:
+            bi.append(clean_word)
+        elif syllables >= 3:
+            poly.append(clean_word)
+
+    return mono, bi, poly
+
+print(classify_words("She enjoys colorful paintings."))
+```
+:::
+
 ---
 
 # Tuples
@@ -466,6 +800,102 @@ Python raises a `TypeError`. The `+` operator cannot directly concatenate a list
 ```{python}
 #| eval: false
 print(names_list + list(names_tuple))
+```
+:::
+
+::: {.callout-note}
+## Tuple Unpacking
+
+Write a function named `sentence(person)` that receives a tuple containing `(name, age, gender)`. Unpack the tuple and return a sentence in the format `"Name is X years old and is a Y."`
+
+*Sample input:* `sentence(("Alice", 30, "female"))`  
+*Expected result:* `"Alice is 30 years old and is a female."`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def sentence(person):
+    name, age, gender = person
+    return f"{name} is {age} years old and is a {gender}."
+
+print(sentence(("Alice", 30, "female")))
+```
+:::
+
+::: {.callout-note}
+## Immutable Tuple
+
+Write a function named `replace_zeros(values)` that replaces every zero in a list with `1`.
+
+*Sample input 1:* `replace_zeros([1, 0, 3, 0, 4])`  
+*Expected result 1:* `[1, 1, 3, 1, 4]`
+
+What happens when you pass the tuple `(1, 0, 3, 0, 4)` to the same function? Explain why.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def replace_zeros(values):
+    for index in range(len(values)):
+        if values[index] == 0:
+            values[index] = 1
+    return values
+
+print(replace_zeros([1, 0, 3, 0, 4]))
+```
+
+The function works with a list because lists are mutable. Passing a tuple raises a `TypeError` when the function attempts item assignment because tuples are immutable.
+:::
+
+::: {.callout-warning}
+## Sort Tuples by Age
+
+Write a function named `sort_age(people)` that receives a list of `(name, age)` tuples and returns them sorted by age in ascending order.
+
+*Sample input:* `sort_age([("Alice", 25), ("Bob", 30), ("Charlie", 20)])`  
+*Expected result:* `[("Charlie", 20), ("Alice", 25), ("Bob", 30)]`
+:::
+
+::: {.callout-note}
+## Erasmus Board
+
+Write a function named `erasmus_board(entries)` that receives a list of `(student, destination, status)` tuples.
+
+1. Sort the entries alphabetically by student name, then by destination.
+2. Include only entries whose status is `True`.
+3. Return a numbered board as a single string.
+
+*Sample input:* `[("Alice", "Paris", True), ("Charlie", "Berlin", False)]`  
+*Expected result:* `"1. Alice: Paris"`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def erasmus_board(entries):
+    sorted_entries = sorted(entries, key=lambda entry: (entry[0], entry[1]))
+    lines = []
+
+    for student, destination, status in sorted_entries:
+        if status:
+            lines.append(f"{len(lines) + 1}. {student}: {destination}")
+
+    return "\n".join(lines)
+
+entries = [
+    ("Alice", "Paris", True),
+    ("Charlie", "Berlin", False),
+]
+
+print(erasmus_board(entries))
 ```
 :::
 
@@ -810,6 +1240,178 @@ print(set_1 | set_2)
 ## Solution
 
 The union contains `1`, `2`, `3`, `4`, and `5`. The displayed order may vary.
+:::
+
+::: {.callout-note}
+## Set Union Function
+
+Write a function named `union(first, second)` that returns the union of two sets.
+
+*Sample input:* `union({1, 2, 3, 4}, {3, 4, 5, 6})`  
+*Expected result:* `{1, 2, 3, 4, 5, 6}`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def union(first, second):
+    return first | second
+
+print(union({1, 2, 3, 4}, {3, 4, 5, 6}))
+```
+:::
+
+::: {.callout-note}
+## Set Intersection Function
+
+Write a function named `intersection(first, second)` that returns the intersection of two sets.
+
+*Sample input:* `intersection({1, 2, 3, 4}, {3, 4, 5, 6})`  
+*Expected result:* `{3, 4}`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def intersection(first, second):
+    return first & second
+
+print(intersection({1, 2, 3, 4}, {3, 4, 5, 6}))
+```
+:::
+
+::: {.callout-note}
+## Set Difference Function
+
+Write a function named `difference(first, second)` that returns the elements in `first` that are not in `second`.
+
+*Sample input 1:* `difference({1, 2, 3, 4}, {3, 4, 5, 6})`  
+*Expected result 1:* `{1, 2}`
+
+*Sample input 2:* `difference({3, 4, 5, 6}, {1, 2, 3, 4})`  
+*Expected result 2:* `{5, 6}`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def difference(first, second):
+    return first - second
+
+print(difference({1, 2, 3, 4}, {3, 4, 5, 6}))
+```
+:::
+
+::: {.callout-note}
+## Common Letters and Counts
+
+Write a function named `common_letters(first, second)` that returns tuples containing each common letter, its count in the first string, and its count in the second string.
+
+Sort the tuples by the total number of occurrences, from greatest to least. Break ties alphabetically.
+
+*Sample input:* `common_letters("apple", "peach")`  
+*Expected result:* `[("p", 2, 1), ("a", 1, 1), ("e", 1, 1)]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def common_letters(first, second):
+    common = set(first) & set(second)
+    result = []
+
+    for letter in common:
+        result.append((letter, first.count(letter), second.count(letter)))
+
+    result.sort(key=lambda item: (-(item[1] + item[2]), item[0]))
+    return result
+
+print(common_letters("apple", "peach"))
+```
+:::
+
+::: {.callout-warning}
+## Class Sets
+
+Write a function named `list_students(math, biology)` that receives the student lists for two classes and returns:
+
+1. All students enrolled in either class.
+2. Students enrolled in both classes.
+3. Students enrolled only in Mathematics.
+4. Students enrolled only in Biology.
+
+*Sample input:* `math = ["John", "Luca", "Greta"]`, `biology = ["John", "Mary"]`
+
+*Expected results:*  
+`Total: ["John", "Luca", "Greta", "Mary"]`  
+`Common: ["John"]`  
+`Math only: ["Luca", "Greta"]`  
+`Biology only: ["Mary"]`
+:::
+
+::: {.callout-warning}
+## Second Largest Distinct Number
+
+Write a function that returns the second largest distinct number in a list.
+
+*Sample input:* `[1, 1, 1, 2, 3, 4, 4, 5, 5]`  
+*Expected result:* `4`
+:::
+
+::: {.callout-warning}
+## Find Pairs with a Target Sum
+
+Write a function that finds all distinct pairs of values in a list whose sum equals a given target. Return the pairs as a set of tuples, with the smaller number first in each tuple.
+
+*Sample input:* `numbers = [1, 2, 3, 4, 5]`, `target = 6`  
+*Expected result:* `{(1, 5), (2, 4)}`
+:::
+
+::: {.callout-note}
+## Maximum Product Pair
+
+Write a function named `maximum_product_pair(numbers)` that uses the distinct values in a list and returns the pair whose product is greatest.
+
+*Sample input:* `maximum_product_pair([1, 7, 3, 9, 5])`  
+*Expected result:* `(7, 9)`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def maximum_product_pair(numbers):
+    unique_numbers = list(set(numbers))
+
+    if len(unique_numbers) < 2:
+        return None
+
+    best_pair = None
+    best_product = None
+
+    for first_index in range(len(unique_numbers)):
+        for second_index in range(first_index + 1, len(unique_numbers)):
+            first = unique_numbers[first_index]
+            second = unique_numbers[second_index]
+            product = first * second
+
+            if best_product is None or product > best_product:
+                best_product = product
+                best_pair = tuple(sorted((first, second)))
+
+    return best_pair
+
+print(maximum_product_pair([1, 7, 3, 9, 5]))
+```
 :::
 
 ---
@@ -1257,6 +1859,244 @@ Canada
 ```
 
 Dictionaries preserve insertion order, so each `"name"` value appears before its `"country"` value.
+:::
+
+::: {.callout-note}
+## Print a Dictionary Line by Line
+
+Write a function named `print_dictionary(dictionary)` that prints every key-value pair on a separate line.
+
+*Sample input:* `{"Spain": "Madrid", "Portugal": "Lisbon"}`
+
+*Expected output:*
+
+```text
+Key is Spain, value is Madrid
+Key is Portugal, value is Lisbon
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def print_dictionary(dictionary):
+    for key, value in dictionary.items():
+        print(f"Key is {key}, value is {value}")
+
+capitals = {
+    "Spain": "Madrid",
+    "Portugal": "Lisbon",
+}
+
+print_dictionary(capitals)
+```
+:::
+
+::: {.callout-note}
+## Sum Collection Values
+
+Write a function named `sum_collection_values(dictionary)` that replaces each dictionary value with its sum when that value is a list, tuple, or set of numbers. Leave other values unchanged.
+
+*Sample input:*
+
+```python
+gradebook = {
+    "Alice": [90, 85, 88],
+    "Bob": {78, 92, 87},
+    "Charlie": "Not graded",
+}
+```
+
+*Expected result:*
+
+```python
+{
+    "Alice": 263,
+    "Bob": 257,
+    "Charlie": "Not graded",
+}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def sum_collection_values(dictionary):
+    for key, value in dictionary.items():
+        if isinstance(value, (list, tuple, set)):
+            dictionary[key] = sum(value)
+    return dictionary
+
+gradebook = {
+    "Alice": [90, 85, 88],
+    "Bob": {78, 92, 87},
+    "Charlie": "Not graded",
+}
+
+print(sum_collection_values(gradebook))
+```
+:::
+
+::: {.callout-note}
+## Competition Points
+
+Write a function named `score_range(scores)` that receives a dictionary of players and scores, then reports the maximum and minimum score.
+
+*Sample input:* `score_range({"Homer": 10, "Marge": 25, "Bart": 5})`  
+*Expected result:* `"Max = 25, Min = 5"`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def score_range(scores):
+    maximum = max(scores.values())
+    minimum = min(scores.values())
+    return f"Max = {maximum}, Min = {minimum}"
+
+print(score_range({"Homer": 10, "Marge": 25, "Bart": 5}))
+```
+:::
+
+::: {.callout-note}
+## Unique Dictionary Values
+
+Write a function named `unique_values(dictionary)` that returns a set containing the distinct values in a dictionary.
+
+*Sample input:* `unique_values({"a": 1, "b": 2, "c": 1, "d": 3})`  
+*Expected result:* `{1, 2, 3}`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def unique_values(dictionary):
+    return set(dictionary.values())
+
+print(unique_values({"a": 1, "b": 2, "c": 1, "d": 3}))
+```
+:::
+
+::: {.callout-warning}
+## Encrypted Code
+
+Write a function named `decrypt(message, rules)` that decodes a message using a dictionary of substitution rules.
+
+*Sample input:*
+
+```python
+message = "jimmq yqtmf"
+rules = {
+    "j": "h",
+    "i": "e",
+    "m": "l",
+    "q": "o",
+    "y": "w",
+    "t": "r",
+    "f": "d",
+    " ": " ",
+}
+```
+
+*Expected result:* `"hello world"`
+:::
+
+::: {.callout-note}
+## Anagrams
+
+Write a function named `are_anagrams(first, second)` that uses dictionaries to determine whether two strings are anagrams. Ignore spaces, punctuation, and capitalization.
+
+*Sample input:* `are_anagrams("listen", "silent")`  
+*Expected result:* `True`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def letter_counts(text):
+    counts = {}
+
+    for character in text.lower():
+        if character.isalnum():
+            counts[character] = counts.get(character, 0) + 1
+
+    return counts
+
+def are_anagrams(first, second):
+    return letter_counts(first) == letter_counts(second)
+
+print(are_anagrams("listen", "silent"))
+```
+:::
+
+::: {.callout-warning}
+## Student Gradebook
+
+Create a dictionary whose keys are student names and whose values are lists of test scores. Write functions that calculate each student's average and the overall class average.
+
+*Sample input:*
+
+```python
+gradebook = {
+    "Alice": [90, 85, 88],
+    "Bob": [78, 92, 87],
+    "Charlie": [95, 89, 91],
+}
+```
+
+*Expected results:*
+
+```text
+Alice's average: 87.67
+Bob's average: 85.67
+Charlie's average: 91.67
+Class average: 88.67
+```
+:::
+
+::: {.callout-warning}
+## Word Frequency Counter
+
+Write a function named `word_frequencies(text)` that returns a dictionary whose keys are words and whose values are their frequencies. Ignore punctuation at the beginning or end of each word.
+
+*Sample input:* `"This is a sample sentence. This sentence is a sample."`
+
+*Expected result:*
+
+```python
+{
+    "This": 2,
+    "is": 2,
+    "a": 2,
+    "sample": 2,
+    "sentence": 2,
+}
+```
+:::
+
+::: {.callout-warning}
+## Merge Dictionaries
+
+Write a function named `merge_dictionaries(first, second)` that returns a new dictionary containing the key-value pairs from both inputs. When a key appears in both dictionaries, sum its values.
+
+*Sample input:*
+
+```python
+first = {"a": 10, "b": 20, "c": 30}
+second = {"b": 5, "c": 15, "d": 25}
+```
+
+*Expected result:* `{"a": 10, "b": 25, "c": 45, "d": 25}`
 :::
 
 ---
