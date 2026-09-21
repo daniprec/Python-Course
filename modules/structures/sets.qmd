@@ -1,412 +1,529 @@
 ---
-title: "Sets in Python"
+title: "Sets"
 format: html
 execute:
   error: true
 ---
 
-[Review previous sessions here!](https://drive.google.com/file/d/1pdfubE7_7a44_Mz7O3yK2PqXfD0S0rXH/view?usp=sharing)
-
----
-
 # Data Structures: Sets
 
-Sets are used to store multiple items in a single variable. They can store any kind of immutable data.
+A **set** stores a collection of unique items. Sets are useful when you want to remove duplicates, check membership, or compare groups of items.
+
+## Creating Sets
+
+Create a set by placing comma-separated items inside curly brackets `{}`.
 
 ```{python}
-# A set uses {}
-numbers = {2, 0, 1}  # Take a look at the order of the elements
-print(f"This is a set {numbers}")  # The order has been altered
+numbers = {2, 0, 1}
+
+print(numbers)
 ```
 
-We can initialize a set using the `set()` function.
+The displayed order may differ from the order used to create the set.
 
 ```{python}
-  newset = set()
-  print(f"This is a set {newset}")
-  print(f"Type: {type(newset)}")
+print(type(numbers))
 ```
 
-Why can't we use the curly brackets? This initializes _another_ type of structure, **dictionaries**, that we will see in the next class!
+Use `set()` to create an empty set.
 
 ```{python}
-newdict = {}
-print(f"This is a dictionary {newdict}")
-print(f"Type: {type(newdict)}")
+empty_set = set()
+
+print(empty_set)
 ```
-
----
-
-## Sets with different types of data
-
-
-We can create **sets** containing any type of immutable data (numeric variables, strings, booleans and tuples):
-
-**Strings**: We can have a set of strings, for example to store the names of voters in an election.
-
 
 ```{python}
-#Set with names of voters
-voters_set = {"Alan", "Louis", "Juan", "Lucy"}
-print(voters_set)
+print(type(empty_set))
 ```
 
-**Numeric variables**: We can also have a set of numbers (`int` or `float`), for example to store all divisors of a number
+Empty curly brackets create a dictionary, which we will study in the next session.
 
 ```{python}
-#Set with divisors of 20
-divisors_set = {1, 2, 4, 5, 10, 20}
-print(divisors_set)
+empty_brackets = {}
+
+print(type(empty_brackets))
 ```
 
-**Booleans**: We can include booleans in a set, since they are immutable. But, in Python `True` behaves like 1 and `False` like 0.
+::: {.callout-warning}
+Use `set()`, not `{}`, when you need an empty set.
+:::
+
+## Items in a Set
+
+A set can contain immutable values such as strings, numbers, booleans, and tuples.
+
+### Strings
 
 ```{python}
-#Set with booleans
-set_boolean = {True, False, 1, 0, True, False}
-print(set_boolean)
+voters = {"Alan", "Louis", "Juan", "Lucy"}
+
+print(voters)
 ```
 
-This is not very useful, since we cannot have duplicate elements in a set, and we will not practically use it.
-
-**Tuples**: Tuples are immutable, so they can be part of a set if all of their elements are also immutable.
-
-We can create a set of coordinates, where each coordinate is represented by a tuple.
+### Numbers
 
 ```{python}
-#Set with tuples
-set_coordinates = {(0, 0), (0, 1), (1, 0), (1, 1)}
-print(set_coordinates)
+room_numbers = {101, 205, 310, 412}
+
+print(room_numbers)
 ```
 
-**Mixed**: We can mix different types of immutable data in the same set.
+### Booleans
+
+In Python, `True` behaves like `1`, and `False` behaves like `0`. Since sets remove equivalent values, this set contains only two items.
 
 ```{python}
-#Set with mixed type of data
-set_mixed = {1, "Hello", (0,0)}
-print(set_mixed)
+answers = {True, False, 1, 0, True}
+
+print(answers)
 ```
 
----
+### Tuples
+
+Tuples can be stored in a set if all their items are also immutable.
+
+```{python}
+reserved_seats = {("A", 1), ("A", 2), ("B", 1)}
+
+print(reserved_seats)
+```
+
+### Mixed Types
+
+Different immutable types can appear in the same set.
+
+```{python}
+mixed_values = {1, "Hello", (0, 0)}
+
+print(mixed_values)
+```
+
+Lists cannot be stored in a set because lists are mutable.
+
+```{python}
+#| error: true
+
+invalid_set = {"room A", ["Maya", "Leo"]}
+```
 
 ## Properties of Sets
 
 ### Unordered
 
-Sets are distinct from both lists and tuples in several ways.
-
-For starters, sets are **unordered**, meaning they don't retain the sequence in which elements are added.
-
-Since sets are unordered, they cannot be indexed or accessed using position-based retrieval.
+Sets do not preserve item positions. Therefore, they cannot be indexed or sliced.
 
 ```{python}
-numbers = {2, 0, 1}  # Take a look at the order of the elements
-print(f"This is a set {numbers}")  # The order has been altered
+colors = {"blue", "green", "red"}
+
+print(colors)
 ```
 
 ```{python}
-numbers = {2, 0, 1}
+#| error: true
 
-print(numbers[0])  # This will raise an error
+print(colors[0])
 ```
+
+Use the `in` operator when you want to check whether a value belongs to a set.
+
+```{python}
+print("green" in colors)
+```
+
+::: {.callout-note}
+## Exercise: Check membership
+
+Write two expressions using `in`:
+
+1. Check whether `"Python"` appears in `completed_courses`.
+2. Check whether `"Design"` appears in `completed_courses`.
+
+```python
+completed_courses = {"Python", "Economics", "Statistics"}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+print("Python" in completed_courses)
+```
+
+```python
+print("Design" in completed_courses)
+```
+:::
 
 ### Mutable
 
-However, sets are **mutable**. They can be modified using the `add` and `remove` methods.
+Sets are mutable. Methods such as `add()` and `remove()` change the original set in place.
 
 ```{python}
-numbers = {0, 2, 4}
-print(f"The set before: {numbers}")
+attendees = {"Maya", "Leo", "Nora"}
 
-numbers.add(1)
-# We do not need to re-assign the variable (numbers = ...)
-# because the `add()` method modifies the list in place
-print(f"The set has a new element: {numbers}")
+print(attendees)
 ```
 
 ```{python}
-numbers = {0, 2, 4}
-print(f"The set before: {numbers}")
+attendees.add("Sam")
 
-numbers.remove(2)
-# We do not need to re-assign the variable (numbers = ...)
-# because the `remove()` method modifies the list in place
-print(f"The set has a new element: {numbers}")
-```
-
-### No Duplication
-
-Sets do not store duplicate elements.
-
-```{python}
-numbers = {1, 1, 2, 2, 3, 3}
-
-print(numbers)
+print(attendees)
 ```
 
 ```{python}
-text = {"Hello", "hello", "World"}
+attendees.remove("Leo")
 
-print(text)  # Remember lowercase and uppercase are different
+print(attendees)
 ```
 
----
+`remove()` raises an error if the value is absent. `discard()` removes the value only if it exists.
+
+```{python}
+attendees.discard("Alex")
+
+print(attendees)
+```
+
+### No Duplicate Items
+
+Sets keep only one copy of each value.
+
+```{python}
+votes = {"film", "film", "music", "games", "music"}
+
+print(votes)
+```
+
+Capitalization matters because Python treats `"hello"` and `"Hello"` as different strings.
+
+```{python}
+words = {"Hello", "hello", "World"}
+
+print(words)
+```
+
+::: {.callout-note}
+## Exercise: Remove duplicate usernames
+
+Convert the list below to a set and print the result.
+
+```python
+usernames = ["alex", "maya", "alex", "sam", "maya"]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+usernames = ["alex", "maya", "alex", "sam", "maya"]
+unique_usernames = set(usernames)
+
+print(unique_usernames)
+```
+:::
 
 ## Operations with Sets
 
-Why would we choose to use sets in programming? Sets in programming mirror the characteristics of sets in mathematics! They allow operations like union, intersection, and difference, providing a unique way to handle collections without duplicates.
-
-<p align="center">
-<img src="https://images.projectsgeek.com/2011/04/Set-Operations-program-in-C.gif" width="400" height="auto" />
-</p>
+Set operations make it easy to combine and compare collections.
 
 ```{python}
-odds = {1, 3, 5}
-primes = {2, 3, 5}
+film_club = {"Ava", "Leo", "Nora", "Sam"}
+book_club = {"Nora", "Sam", "Iris", "Omar"}
 
-print(f"Set A: {odds}")
-print(f"Set B: {primes}")
-```
-
-**Union ($\cup$)**
-
-```{python}
-# Union - Option 1
-union = odds.union(primes)
-print(f"Union: {union}")
+print(film_club)
 ```
 
 ```{python}
-# Union - Option 2
-union = odds | primes
-print(f"Union: {union}")
+print(book_club)
 ```
 
-**Intersection ($\cap$)**
+### Union
+
+The **union** contains every item that appears in either set. Use `|` or `.union()`.
 
 ```{python}
-# Intersection - Option 1
-inters = odds.intersection(primes)
-print(f"Intersection: {inters}")
+all_members = film_club | book_club
+
+print(all_members)
 ```
 
-```{python}
-# Intersection - Option 2
-inters = odds & primes
-print(f"Intersection: {inters}")
+The method form gives the same result:
+
+```python
+all_members = film_club.union(book_club)
 ```
 
-**Symetric difference ($\triangle$)** or exclusive OR
+### Intersection
+
+The **intersection** contains only items that appear in both sets. Use `&` or `.intersection()`.
 
 ```{python}
-# Exclusive OR - Option 1
-exclusive = odds.symmetric_difference(primes)
-print(f"Exclusive OR: {exclusive}")
+members_of_both = film_club & book_club
+
+print(members_of_both)
 ```
 
-```{python}
-# Exclusive OR - Option 2
-exclusive = odds ^ primes
-print(f"Exclusive OR: {exclusive}")
+The method form gives the same result:
+
+```python
+members_of_both = film_club.intersection(book_club)
 ```
 
-**Difference ($\setminus$)** or substraction
+### Difference
+
+The **difference** contains items from the first set that do not appear in the second. Use `-` or `.difference()`.
 
 ```{python}
-# Substraction - Option 1
-substraction = odds.difference(primes)
-print(f"Substraction: {substraction}")
+film_only = film_club - book_club
+
+print(film_only)
 ```
 
+The order matters. Reversing the sets produces a different result.
+
 ```{python}
-# Substraction - Option 2
-substraction = odds - primes
-print(f"Substraction: {substraction}")
+book_only = book_club - film_club
+
+print(book_only)
 ```
 
-**Exercise**: You are going to have a party at your house and you asked three friends to give you a list of people to invite.  
+### Symmetric Difference
 
-You want to do the following:  
-  - Get the total list of guests considering everyone proposed.  
-  - Find the guests common to all of your friends.  
-  - See the “exclusive” guests that each of your friends has.
-
-Create a python program to do that for you.
+The **symmetric difference** contains items that appear in exactly one of the sets. Use `^` or `.symmetric_difference()`.
 
 ```{python}
-#Program to decide whom to invite to your party
-guest_set1 = {"Alice", "Emma", "Charlie", "David", "Louis"}
-guest_set2 = {"Charlie", "David", "Emma", "Frank", "Juan"}
-guest_set3 = {"David", "Emma", "Alice", "Helen", "Julia"}
+members_of_one_club = film_club ^ book_club
 
-#Union
-total_set = guest_set1 | guest_set2 | guest_set3
-common_guests = guest_set1 & guest_set2 & guest_set3
-exclusive1 = guest_set1 - (guest_set2 | guest_set3)
-exclusive2 = guest_set2 - (guest_set1 | guest_set3)
-exclusive3 = guest_set3 - (guest_set1 | guest_set1)
+print(members_of_one_club)
+```
 
-print(f"Total guests list: {total_set}")
+::: {.callout-note}
+## Exercise: Predict the result
+
+Without running the code, determine the contents of each result.
+
+```python
+streaming_a = {"Arrival", "Dune", "Moonlight"}
+streaming_b = {"Dune", "Past Lives", "Moonlight"}
+
+available_anywhere = streaming_a | streaming_b
+available_on_both = streaming_a & streaming_b
+only_on_a = streaming_a - streaming_b
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+print(available_anywhere)
+```
+
+This contains `"Arrival"`, `"Dune"`, `"Moonlight"`, and `"Past Lives"`.
+
+```python
+print(available_on_both)
+```
+
+This contains `"Dune"` and `"Moonlight"`.
+
+```python
+print(only_on_a)
+```
+
+This contains only `"Arrival"`.
+:::
+
+## Exercise: Party Invitations
+
+Three friends propose guests for a party. Write a program that finds:
+
+1. Every proposed guest.
+2. Guests proposed by all three friends.
+3. Guests proposed only by friend 1.
+4. Guests proposed only by friend 2.
+5. Guests proposed only by friend 3.
+
+```python
+friend_1 = {"Alice", "Emma", "Charlie", "David", "Louis"}
+friend_2 = {"Charlie", "David", "Emma", "Frank", "Juan"}
+friend_3 = {"David", "Emma", "Alice", "Helen", "Julia"}
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+all_guests = friend_1 | friend_2 | friend_3
+common_guests = friend_1 & friend_2 & friend_3
+only_friend_1 = friend_1 - (friend_2 | friend_3)
+only_friend_2 = friend_2 - (friend_1 | friend_3)
+only_friend_3 = friend_3 - (friend_1 | friend_2)
+```
+
+```python
+print(f"All guests: {all_guests}")
+```
+
+```python
 print(f"Common guests: {common_guests}")
-print(f"Exclusive guests of friend 1: {exclusive1}")
-print(f"Exclusive guests of friend 2: {exclusive2}")
-print(f"Exclusive guests of friend 3: {exclusive3}")
 ```
 
-**Exercise:** What is wrong with the following code?
-
-```{python}
-#Program to get the difference between two sets
-set1 = {0, 1, 2, 2, [0,0]}
-set2 = {1.0, 3.14, (0,0), 2}
-
-difference = set1 - set2
-print(difference)
+```python
+print(f"Only friend 1: {only_friend_1}")
 ```
 
-**Answer:** You cannot have a set of lists.
-
-**Exercise:** What is wrong with the following code?
-
-```{python}
-#Program to modify a set
-set1 = {0, 1, 2, 2, 4}
-
-for element in range(len(set1)):
-  set1[element] += 1
-
-print(set1)
+```python
+print(f"Only friend 2: {only_friend_2}")
 ```
 
-**Answer:** You cannot access specific elements of a set. You could do that using list comprehension. Alternative below:
+```python
+print(f"Only friend 3: {only_friend_3}")
+```
+:::
 
-```{python}
-#Program to modify a set
-set1 = {0, 1, 2, 2, 4}
+## Exercise: Case-insensitive comparison
 
-new_set = {element + 1 for element in set1}
-print(new_set)
+Fix the code so it finds words present in both sets, regardless of capitalization.
+
+```python
+set_1 = {"TABle", "DOOR", "chain", "wire"}
+set_2 = {"pencil", "door", "taBle", "word"}
+
+common_words = set_1 & set_2
+
+print(common_words)
 ```
 
-**Exercise:** Fix the code to get repeated words in both sets regardless of whether they are uppercase or lowercase.
+::: {.callout-tip collapse="true"}
+## Solution
 
-```{python}
-set1 = {"TABle", "DOOR", "chain", "wire"}
-set2 = {"pencil", "door", "taBle", "word"}
+Create two new sets containing lowercase versions of the words. This is a **set comprehension**.
 
-#Intersection
-set3 = set1 & set2
+```python
+lowercase_1 = {word.lower() for word in set_1}
+lowercase_2 = {word.lower() for word in set_2}
+common_words = lowercase_1 & lowercase_2
 
-print(set3)
+print(common_words)
 ```
+:::
+
+## Converting Lists, Tuples, and Sets
+
+Use `list()`, `tuple()`, and `set()` to convert between these data structures.
 
 ```{python}
-#Create two new empty sets
-new_set1 = set()
-new_set2 = set()
+number_list = [1, 2, 2, 3]
 
-#Put each word in lowercase
-new_set1 = {element.lower() for element in set1}
-
-new_set2 = {element.lower() for element in set2}
-
-#Intersection
-new_set3 = new_set1 & new_set2
-
-print(new_set3)
-```
-
----
-
-## Convert between Lists, Tuples and Sets
-
-```{python}
-# Define a list
-ls_numbers = [1, 2, 2, 3]
-
-print(f"List: {ls_numbers}")
-print(f"Type: {type(ls_numbers)}")
+print(number_list)
 ```
 
 ```{python}
-# Define a list
-ls_numbers = [1, 2, 2, 3]
-
-# Convert list to tuple
-tp_numbers = tuple(ls_numbers)
-
-print(f"Tuple: {tp_numbers}")
-print(f"Type: {type(tp_numbers)}")
+print(type(number_list))
 ```
 
 ```{python}
-# Define a list
-ls_numbers = [1, 2, 2, 3]
+number_tuple = tuple(number_list)
 
-# Convert list to set
-set_numbers = set(tp_numbers)
-
-# Duplicated elements are removed!
-print(f"Set: {set_numbers}")
-print(f"Type: {type(set_numbers)}")
+print(number_tuple)
 ```
-
----
-
-**Exercise**: You are at home with your friends and it's time to choose a movie to watch, but you always take too long.
-
-You decide to create a function in Python for this. Each friend has a list of movies they would like to watch, and your function should return the movies that are common to all of them.
 
 ```{python}
-#Program to choose a movie
-friend1 = ["Inception", "The Matrix", "Inception", "Interstellar", "Avatar"]
-friend2 = ["The Godfather", "Gladiator", "Interstellar", "Titanic", "The Lord of the Rings"]
-friend3 = ["Interstellar", "Saving Private Ryan", "Toy Story", "The Dark Knight", "Back to the Future"]
-friend4 = ["Interstellar", "Jurassic Park", "Star Wars", "Forrest Gump", "The Avengers"]
-
-def choose_movie(friend1, friend2, friend3, friend4):
-  #Remove duplicate elements from lists
-  friend1 = set(friend1)
-  friend2 = set(friend2)
-  friend3 = set(friend3)
-  friend4 = set(friend4)
-
-  #Use intersection to choose the movie
-  movie = list(friend1 & friend2 & friend3 & friend4)
-
-  return movie
-
-print(choose_movie(friend1, friend2, friend3, friend4))
+print(type(number_tuple))
 ```
 
-Create another function to store in a list all the proposed movies.
+Converting to a set removes duplicate items.
 
 ```{python}
-#Function to store all proposed movies
-def store_movies(friend1, friend2, friend3, friend4):
-  #Remove duplicate elements from lists
-  friend1 = set(friend1)
-  friend2 = set(friend2)
-  friend3 = set(friend3)
-  friend4 = set(friend4)
+number_set = set(number_list)
 
-  #Use union to store all movie
-  movies = list(friend1 | friend2 | friend3 | friend4)
-
-  return movies
-
-print(store_movies(friend1, friend2, friend3, friend4))
+print(number_set)
 ```
 
-[Practice some more exercises here!](https://colab.research.google.com/drive/1Bxh287q7VpyO1IFY3e4p7FPGmi8LHsTW?usp=sharing)
+```{python}
+print(type(number_set))
+```
 
----
+Converting a set back to a list does not restore its original order.
+
+```{python}
+unique_number_list = list(number_set)
+
+print(unique_number_list)
+```
+
+## Exercise: Choose a Movie
+
+Each friend has a list of movies they would like to watch. Write a function named `choose_movies()` that returns the movies accepted by everyone.
+
+```python
+friend_1 = ["Inception", "The Matrix", "Interstellar", "Avatar"]
+friend_2 = ["The Godfather", "Interstellar", "Titanic", "Arrival"]
+friend_3 = ["Interstellar", "Toy Story", "Arrival", "The Dark Knight"]
+friend_4 = ["Interstellar", "Star Wars", "Arrival", "The Avengers"]
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+def choose_movies(friend_1, friend_2, friend_3, friend_4):
+    common_movies = (
+        set(friend_1)
+        & set(friend_2)
+        & set(friend_3)
+        & set(friend_4)
+    )
+    return list(common_movies)
+```
+
+```python
+print(choose_movies(friend_1, friend_2, friend_3, friend_4))
+```
+:::
+
+## Exercise: Collect Every Proposal
+
+Write a function named `collect_movies()` that returns a list containing every proposed movie without duplicates.
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+def collect_movies(friend_1, friend_2, friend_3, friend_4):
+    all_movies = (
+        set(friend_1)
+        | set(friend_2)
+        | set(friend_3)
+        | set(friend_4)
+    )
+    return list(all_movies)
+```
+
+```python
+print(collect_movies(friend_1, friend_2, friend_3, friend_4))
+```
+:::
+
+## Lists, Tuples, and Sets Compared
+
+| Data structure | Syntax | Ordered | Mutable | Duplicates |
+|---|---|---|---|---|
+| List | `[]` | Yes | Yes | Yes |
+| Tuple | `()` | Yes | No | Yes |
+| Set | `{}` or `set()` | No | Yes | No |
+
+Use a **list** when order matters and the collection may change. Use a **tuple** when order matters and the collection should remain fixed. Use a **set** when uniqueness and membership matter more than order.
 
 ## Summary
 
-| Data Structure | Ordered | Mutable | Duplication |
-|----------------|--------------------------|---------|----------------------|
-| List           | ✅                       | ✅     | ✅                  |
-| Tuple          | ✅                       | ❌     | ✅                  |
-| Set            | ❌                       | ✅     | ❌                  |
-
+- Sets use curly brackets, except an empty set, which uses `set()`.
+- Sets are unordered and mutable.
+- Sets do not allow duplicate items.
+- Set items must be immutable.
+- Union, intersection, difference, and symmetric difference compare sets.
+- Converting a list to a set removes duplicates.
