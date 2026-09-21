@@ -1,0 +1,1603 @@
+---
+title: "Problem Set 2: Data Structures"
+subtitle: "Homework for Module 2"
+---
+
+## Introduction
+
+Use these exercises to practise. None of the exercises are mandatory.
+
+Try each exercise before opening its solution. Every solution is collapsed so you can reveal it when needed.
+
+When an exercise asks you to predict an output or error, explain your reasoning before checking the answer. For programming exercises, test your solution with additional inputs.
+
+---
+
+# Lists
+
+::: {.callout-note}
+## Prepending Values
+
+After running the code, what will `ls_numbers` contain?
+
+```{python}
+#| eval: false
+ls_numbers = []
+
+for number in [1, 2, 3]:
+    ls_numbers = [number] + ls_numbers
+
+print(ls_numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[3, 2, 1]
+```
+
+Each new number is added to the beginning of the list.
+:::
+
+::: {.callout-note}
+## Characters from a String
+
+After running the code, what will `ls_characters` contain?
+
+```{python}
+#| eval: false
+ls_characters = []
+
+for character in "one, two, three":
+    ls_characters.append(character)
+
+print(ls_characters)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+['o', 'n', 'e', ',', ' ', 't', 'w', 'o', ',', ' ', 't', 'h', 'r', 'e', 'e']
+```
+
+A loop over a string visits one character at a time, including commas and spaces.
+:::
+
+::: {.callout-note}
+## Skipping a Value
+
+After running the code, what will `ls_numbers` contain?
+
+```{python}
+#| eval: false
+ls_numbers = []
+
+for number in range(2, 11, 2):
+    if number == 6:
+        continue
+    ls_numbers.append(number)
+
+print(ls_numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[2, 4, 8, 10]
+```
+
+The `continue` statement skips the append operation when `number` is `6`.
+:::
+
+::: {.callout-note}
+## Clearing Inside a Loop
+
+After running the code, what will `ls_numbers` contain?
+
+```{python}
+#| eval: false
+ls_numbers = []
+
+for number in range(10):
+    ls_numbers.clear()
+    ls_numbers.append(number)
+
+print(ls_numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[9]
+```
+
+Every iteration clears the previous value. Only the value added during the final iteration remains.
+:::
+
+::: {.callout-note}
+## Indexing Twice
+
+What will the code print?
+
+```{python}
+#| eval: false
+boardgames = ["Monopoly", "Catan", "UNO"]
+
+print(boardgames[1][0])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+C
+```
+
+`boardgames[1]` is `"Catan"`. Index `0` of that string is `"C"`.
+:::
+
+::: {.callout-note}
+## Sorting Before Inserting
+
+What will `names` contain?
+
+```{python}
+#| eval: false
+names = ["Lucy", "Jack", "Alberto"]
+
+names.sort()
+names.insert(2, "Ben")
+
+print(names)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+['Alberto', 'Jack', 'Ben', 'Lucy']
+```
+
+The original names are sorted first. `"Ben"` is then inserted at index `2`, so the final list is not fully alphabetical.
+:::
+
+::: {.callout-note}
+## Inserting Before Sorting
+
+What will `names` contain?
+
+```{python}
+#| eval: false
+names = ["Lucy", "Jack", "Alberto"]
+
+names.insert(2, "Ben")
+names.sort()
+
+print(names)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+['Alberto', 'Ben', 'Jack', 'Lucy']
+```
+
+The final `sort()` call orders all four names.
+:::
+
+::: {.callout-note}
+## The Return Value of `append()`
+
+What will the code print?
+
+```{python}
+#| eval: false
+numbers = [0, 1, 2, 3]
+numbers = numbers.append(4)
+
+print(numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+None
+```
+
+`append()` changes the list in place and returns `None`. The assignment then stores `None` in `numbers`.
+:::
+
+::: {.callout-note}
+## Chaining `sort()`
+
+What happens when this code runs?
+
+```{python}
+#| eval: false
+names = ["Lucy", "Jack", "Alberto"]
+names.insert(2, "Ben")
+
+first_name = names.sort()[0]
+
+print(first_name)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `TypeError` because `sort()` returns `None`. The expression tries to access index `0` of `None`.
+
+```{python}
+#| eval: false
+names.sort()
+first_name = names[0]
+
+print(first_name)
+```
+:::
+
+---
+
+# Tuples
+
+::: {.callout-note}
+## Slice Then Index
+
+What will the code print?
+
+```{python}
+#| eval: false
+videogames = ("Pokemon", "Candy Crush", "FIFA", "Outer Wilds")
+
+print(videogames[1:3][1])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+FIFA
+```
+
+The slice `videogames[1:3]` produces `("Candy Crush", "FIFA")`. Index `1` of that tuple is `"FIFA"`.
+:::
+
+::: {.callout-note}
+## Invalid Nested Index
+
+What happens when this code runs? How would you correct it if the goal were to extract characters `1` through `3` from `"Superman"`?
+
+```{python}
+#| eval: false
+superheroes = ("Batman", "Ironman", "Superman")
+
+print(superheroes[2[1:4]])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The code raises a `TypeError` because it tries to slice the integer `2`.
+
+```{python}
+#| eval: false
+print(superheroes[2][1:4])
+```
+
+The corrected code prints `upe`.
+:::
+
+::: {.callout-note}
+## Repair the Tuple Code
+
+The following code contains three errors. Identify and correct all of them.
+
+```{python}
+#| eval: false
+colors = ("Blue",)
+colors = ("Green",) + colors
+colors += ("Red,")
+colors.append("Yellow")
+
+print(aliens)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`("Red,")` is a string rather than a one-item tuple, tuples do not have `append()`, and `aliens` is undefined.
+
+```{python}
+#| eval: false
+colors = ("Blue",)
+colors = ("Green",) + colors
+colors += ("Red",)
+colors += ("Yellow",)
+
+print(colors)
+```
+:::
+
+::: {.callout-note}
+## Displaying a Tuple
+
+What will the code print?
+
+```{python}
+#| eval: false
+numbers = (4, 2, 3)
+
+print(numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+(4, 2, 3)
+```
+:::
+
+::: {.callout-note}
+## Changing a Tuple
+
+What happens when this code runs?
+
+```{python}
+#| eval: false
+numbers = (4, 2, 3)
+numbers[0] = 0
+
+print(numbers[0])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `TypeError` because tuples are immutable. Their items cannot be replaced.
+:::
+
+::: {.callout-note}
+## Repeating a Tuple
+
+What will the code print?
+
+```{python}
+#| eval: false
+numbers = (4, 2, 3)
+
+print(2 * numbers)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+(4, 2, 3, 4, 2, 3)
+```
+:::
+
+::: {.callout-note}
+## List to Tuple
+
+What will the code print?
+
+```{python}
+#| eval: false
+names_list = ["Raul", "Ana", "Oscar"]
+names_tuple = tuple(names_list)
+
+print(names_tuple[2])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+Oscar
+```
+:::
+
+::: {.callout-note}
+## Concatenating Tuples
+
+What will the code print?
+
+```{python}
+#| eval: false
+numbers = (5, 2)
+names = ("Raul", "Ana", "Oscar")
+
+print(numbers + names)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+(5, 2, 'Raul', 'Ana', 'Oscar')
+```
+
+Tuples can contain mixed data types.
+:::
+
+::: {.callout-note}
+## Combining a List and a Tuple
+
+What happens when this code runs?
+
+```{python}
+#| eval: false
+names_list = ["Raul", "Ana", "Oscar"]
+names_tuple = ("Raul", "Ana", "Oscar")
+
+print(names_list + names_tuple)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `TypeError`. The `+` operator cannot directly concatenate a list and a tuple.
+
+```{python}
+#| eval: false
+print(names_list + list(names_tuple))
+```
+:::
+
+---
+
+# Sets
+
+::: {.callout-note}
+## Combining Collections into a Set
+
+What values will `names` contain after the code runs?
+
+```{python}
+#| eval: false
+names_list = ["Alberto", "Carol"]
+names_tuple = ("Alberto", "Lucia", "Ramon")
+names = set(names_list + list(names_tuple))
+
+print(names)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The set contains `"Alberto"`, `"Carol"`, `"Lucia"`, and `"Ramon"`. The displayed order may vary, and the duplicate `"Alberto"` appears only once.
+:::
+
+::: {.callout-note}
+## Length of a Union
+
+What will the code print?
+
+```{python}
+#| eval: false
+comedy = {"Airplane!", "Shrek"}
+fantasy = {"Harry Potter", "Shrek", "The Lord of the Rings"}
+movies = comedy | fantasy
+
+print(len(movies))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+4
+```
+
+`"Shrek"` belongs to both sets but appears only once in the union.
+:::
+
+::: {.callout-note}
+## Boolean `and` with Sets
+
+What will the code print? Does `and` calculate a set intersection?
+
+```{python}
+#| eval: false
+comedy = {"Airplane!", "Shrek"}
+fantasy = {"Harry Potter", "Shrek", "The Lord of the Rings"}
+movies = comedy and fantasy
+
+print(len(movies))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The code prints `3`. Both sets are non-empty, so the Boolean operator `and` returns the second set, `fantasy`.
+
+Use `&` for intersection:
+
+```{python}
+#| eval: false
+movies = comedy & fantasy
+
+print(len(movies))
+```
+
+The corrected code prints `1`.
+:::
+
+::: {.callout-note}
+## Comparing Lengths
+
+Which two structures have the same length?
+
+```{python}
+#| eval: false
+message = "A B C"
+even_numbers = [2, 2, 4, 6]
+pairs = ((1, 3), (3, 5), (5, 7))
+squares = {4, 4, 9, 16}
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`pairs` and `squares` both have length `3`.
+
+- `message` has length `5`, including the spaces.
+- `even_numbers` has length `4`, including the duplicate value.
+- `squares` removes the duplicate `4`.
+:::
+
+::: {.callout-note}
+## Which Block Runs?
+
+Only one block runs without an error. Which one?
+
+```python
+# Option A
+numbers = [1, 2, 3]
+numbers[0] = "0"
+```
+
+```python
+# Option B
+numbers = [1, 2, 3]
+numbers = numbers + 4
+```
+
+```python
+# Option C
+numbers = tuple([1, 2, 3])
+numbers[0] = 0
+```
+
+```python
+# Option D
+numbers = set([1, 2, 3])
+numbers[0] = 2
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Option A runs. Lists are mutable and may contain mixed data types.
+
+Option B tries to concatenate a list and an integer. Option C tries to modify a tuple. Option D tries to index a set.
+:::
+
+::: {.callout-note}
+## A Plan Everyone Likes
+
+Write a function named `find_common_plans()` that receives three lists and returns the plans present in all three.
+
+```{python}
+#| eval: false
+laura = ["beach", "cinema", "mountain", "museum", "shopping"]
+jose = ["gym", "mountain", "park", "soccer", "shopping"]
+ana = ["beach", "cinema", "mountain", "park", "party"]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def find_common_plans(list_1, list_2, list_3):
+    set_1 = set(list_1)
+    set_2 = set(list_2)
+    set_3 = set(list_3)
+    return set_1 & set_2 & set_3
+```
+
+```{python}
+#| eval: false
+print(find_common_plans(laura, jose, ana))
+```
+
+The result is `{"mountain"}`.
+:::
+
+::: {.callout-note}
+## Exclusive Plans
+
+Write a function named `find_exclusive_plans()` that receives three lists and returns a tuple containing the plans liked exclusively by each person.
+
+Use the `laura`, `jose`, and `ana` lists from the previous exercise.
+
+Expected structure:
+
+```python
+(laura_only, jose_only, ana_only)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def find_exclusive_plans(list_1, list_2, list_3):
+    set_1 = set(list_1)
+    set_2 = set(list_2)
+    set_3 = set(list_3)
+
+    only_1 = set_1 - set_2 - set_3
+    only_2 = set_2 - set_1 - set_3
+    only_3 = set_3 - set_1 - set_2
+
+    return only_1, only_2, only_3
+```
+
+```{python}
+#| eval: false
+print(find_exclusive_plans(laura, jose, ana))
+```
+:::
+
+::: {.callout-note}
+## Displaying a Set
+
+Can you predict the exact order of the output?
+
+```{python}
+#| eval: false
+names = {"Raul", "Ana", "Oscar"}
+
+print(names)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+You can predict the contents but not the exact displayed order. The set contains `"Raul"`, `"Ana"`, and `"Oscar"`.
+:::
+
+::: {.callout-note}
+## Indexing a Set
+
+What happens when the code runs?
+
+```{python}
+#| eval: false
+names_list = ["Raul", "Ana", "Oscar"]
+names = set(names_list)
+
+print(names[0])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `TypeError` because sets do not support indexing.
+:::
+
+::: {.callout-note}
+## Case-Sensitive Intersection
+
+What does the first cell print? Then modify the code so matching words are found regardless of capitalization.
+
+```{python}
+#| eval: false
+animals_upper = {"DOG", "CAT", "MOUSE"}
+animals_lower = {"dog", "cat", "mouse"}
+
+print(animals_upper & animals_lower)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The original code prints an empty set because string comparison is case-sensitive.
+
+```{python}
+#| eval: false
+normalized_upper = {animal.lower() for animal in animals_upper}
+common_animals = normalized_upper & animals_lower
+
+print(common_animals)
+```
+
+The corrected result contains `"dog"`, `"cat"`, and `"mouse"`.
+:::
+
+::: {.callout-note}
+## Equivalent Numeric Values
+
+What values will the union contain?
+
+```{python}
+#| eval: false
+set_1 = {1, 2, 3}
+set_2 = {1.0, 2.5, 3.0}
+
+print(set_1 | set_2)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The union contains `1`, `2`, `2.5`, and `3`. Python treats `1` and `1.0` as equal, and it also treats `3` and `3.0` as equal.
+:::
+
+::: {.callout-note}
+## Numbers and Numeric Strings
+
+What will the code print?
+
+```{python}
+#| eval: false
+numbers = {1, 2, 3}
+numeric_strings = {"1", "2", "3"}
+
+print(numbers - numeric_strings)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The result is `{1, 2, 3}`. An integer such as `1` is different from the string `"1"`.
+:::
+
+::: {.callout-note}
+## Duplicates and Union
+
+What values will the union contain?
+
+```{python}
+#| eval: false
+set_1 = {1, 1, 2, 2, 3, 3}
+set_2 = set([5, 4])
+
+print(set_1 | set_2)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The union contains `1`, `2`, `3`, `4`, and `5`. The displayed order may vary.
+:::
+
+---
+
+# Dictionaries
+
+::: {.callout-note}
+## Keys Created from Variables
+
+What are the keys of `fruits`?
+
+```{python}
+#| eval: false
+name = "orange"
+
+fruits = {
+    name: 7,
+    "pear": 8,
+    "apple": 9,
+}
+
+print(fruits.keys())
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The keys are `"orange"`, `"pear"`, and `"apple"`. Python evaluates the variable `name` when creating the dictionary.
+:::
+
+::: {.callout-note}
+## Duplicate Keys
+
+What will the code print?
+
+```{python}
+#| eval: false
+name = "orange"
+
+fruits = {
+    name: 7,
+    "pear": 8,
+    "apple": 9,
+    "orange": 10,
+}
+
+print(fruits[name])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+10
+```
+
+Both `name` and `"orange"` create the same key. The last value assigned to that key remains.
+:::
+
+::: {.callout-note}
+## Length with a Repeated Key
+
+What is the length of `fruits`?
+
+```{python}
+#| eval: false
+name = "orange"
+
+fruits = {
+    name: 7,
+    "pear": 8,
+    "apple": 9,
+    "orange": 7,
+}
+
+print(len(fruits))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The length is `3`. Dictionary keys must be unique.
+:::
+
+::: {.callout-note}
+## Duplicate Values
+
+What is the length of `fruits`?
+
+```{python}
+#| eval: false
+fruits = {
+    "pear": 8,
+    "apple": 8,
+    "orange": 8,
+}
+
+print(len(fruits))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The length is `3`. Values may be duplicated because the three keys are different.
+:::
+
+::: {.callout-note}
+## Length of a Nested Dictionary
+
+What is the length of `foods`?
+
+```{python}
+#| eval: false
+fruits = {
+    "pear": 8,
+    "apple": 8,
+    "orange": 8,
+}
+
+foods = {
+    "fruits": fruits,
+    "vegetables": ["carrot", "broccoli"],
+}
+
+print(len(foods))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The length is `2`. `len()` counts only the keys in the outer dictionary.
+:::
+
+::: {.callout-note}
+## Reassigning a Dictionary
+
+What is the final length of `fruits`?
+
+```{python}
+#| eval: false
+fruits = {
+    "pear": 8,
+    "apple": 8,
+    "orange": 8,
+}
+
+fruits = {
+    "fruits": fruits,
+}
+
+print(len(fruits))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The final length is `1`. The new outer dictionary has one key, `"fruits"`, whose value is the original dictionary.
+:::
+
+::: {.callout-note}
+## Building a Score Dictionary
+
+What will `scores` contain after the loop?
+
+```{python}
+#| eval: false
+students = ["A", "B", "C"]
+student_scores = [9, 10, 8.5]
+scores = {}
+
+for index in range(len(students)):
+    scores[students[index]] = student_scores[index]
+
+print(scores)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+{'A': 9, 'B': 10, 'C': 8.5}
+```
+
+The values at matching list positions are paired together.
+:::
+
+::: {.callout-note}
+## Counting Crop Types
+
+What will the code print?
+
+```{python}
+#| eval: false
+number_of_parsnips = 20
+
+crops = {
+    "parsnip": number_of_parsnips,
+    "potato": 5,
+    "cauliflower": 10,
+    "kale": 5,
+}
+
+print(len(crops))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The code prints `4`, one for each key.
+:::
+
+::: {.callout-note}
+## Adding a Key
+
+What will the final length of `person` be?
+
+```{python}
+#| eval: false
+person = {
+    "name": "Trisha",
+    "children": ["Edward", "Alphonse"],
+    "age": 26,
+}
+
+person["gender"] = "female"
+
+print(len(person))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The final length is `4`. Assigning a value to the new key `"gender"` adds a key-value pair.
+:::
+
+::: {.callout-note}
+## Updating and Deleting Keys
+
+What is the value associated with `"area"` after the code runs?
+
+```{python}
+#| eval: false
+farm = {
+    "length": 10,
+    "width": 5,
+    "missing": "area",
+}
+
+farm["area"] = farm["length"] * farm["width"]
+del farm["missing"]
+
+print(farm["area"])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The value is `50`. Deleting `"missing"` does not affect the calculated area.
+:::
+
+::: {.callout-note}
+## Accessing a Nested Value
+
+What will the code print?
+
+```{python}
+#| eval: false
+animal_sounds = {
+    "mammal": {
+        "dog": "woof",
+        "cat": "meow",
+    },
+    "fish": {
+        "tuna": "blub",
+        "salmon": "blub blub",
+    },
+}
+
+print(animal_sounds["mammal"]["dog"])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+woof
+```
+:::
+
+::: {.callout-note}
+## Missing Outer Key
+
+What happens when the code runs?
+
+```{python}
+#| eval: false
+animal_sounds = {
+    "mammal": {
+        "dog": "woof",
+        "cat": "meow",
+    },
+    "fish": {
+        "tuna": "blub",
+        "salmon": "blub blub",
+    },
+}
+
+print(animal_sounds["tuna"])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `KeyError`. The outer dictionary has only the keys `"mammal"` and `"fish"`.
+
+The nested value is available through:
+
+```{python}
+#| eval: false
+print(animal_sounds["fish"]["tuna"])
+```
+:::
+
+::: {.callout-note}
+## Key or Value?
+
+What happens when the code runs?
+
+```{python}
+#| eval: false
+animal_sounds = {
+    "mammal": {
+        "dog": "woof",
+        "cat": "meow",
+    },
+    "fish": {
+        "tuna": "blub",
+        "salmon": "blub blub",
+    },
+}
+
+print(animal_sounds["fish"]["blub"])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `KeyError`. `"blub"` is a value, not a key. The valid nested key is `"tuna"`.
+:::
+
+::: {.callout-note}
+## A List of Dictionaries
+
+What will the code print?
+
+```{python}
+#| eval: false
+people = [
+    {"name": "Manuel", "country": "Spain"},
+    {"name": "Louis", "country": "Canada"},
+]
+
+print(people[-1])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+{'name': 'Louis', 'country': 'Canada'}
+```
+
+Index `-1` selects the final dictionary in the list.
+:::
+
+::: {.callout-note}
+## Incorrect List Index
+
+What happens when the code runs? Correct it so that it prints Manuel's country.
+
+```{python}
+#| eval: false
+people = [
+    {"name": "Manuel", "country": "Spain"},
+    {"name": "Louis", "country": "Canada"},
+]
+
+print(people["Manuel"]["country"])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python raises a `TypeError` because list indices must be integers or slices.
+
+```{python}
+#| eval: false
+print(people[0]["country"])
+```
+
+The corrected code prints `Spain`.
+:::
+
+::: {.callout-note}
+## Looping Through Dictionary Values
+
+Write the four lines produced by the code.
+
+```{python}
+#| eval: false
+people = [
+    {"name": "Manuel", "country": "Spain"},
+    {"name": "Louis", "country": "Canada"},
+]
+
+for person in people:
+    for value in person.values():
+        print(value)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+Manuel
+Spain
+Louis
+Canada
+```
+
+Dictionaries preserve insertion order, so each `"name"` value appears before its `"country"` value.
+:::
+
+---
+
+# Mathematical Applications
+
+These exercises apply data structures to problems from calculus, discrete mathematics, geometry, and linear algebra.
+
+::: {.callout-note}
+## Numerical Continuity Check
+
+Write a function named `is_continuous(f, c)` that performs a numerical check of whether `f` appears continuous at `c`.
+
+Use these tests:
+
+```{python}
+#| eval: false
+f = lambda x: x**2
+
+print(is_continuous(f, 1))
+```
+
+Expected result: `True`.
+
+```{python}
+#| eval: false
+f = lambda x: abs(x)
+
+print(is_continuous(f, 0))
+```
+
+Expected result: `True`.
+
+```{python}
+#| eval: false
+def f(x):
+    if x < 0:
+        return x - 1
+    return x
+
+print(is_continuous(f, 0))
+```
+
+Expected result: `False`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def is_continuous(f, c):
+    epsilon = 1e-4
+    delta = 1e-6
+
+    try:
+        value = f(c)
+        left_value = f(c - delta)
+        right_value = f(c + delta)
+    except (TypeError, ValueError, ZeroDivisionError):
+        return False
+
+    left_is_close = abs(left_value - value) < epsilon
+    right_is_close = abs(right_value - value) < epsilon
+
+    return left_is_close and right_is_close
+```
+
+This is a numerical heuristic, not a mathematical proof of continuity.
+:::
+
+::: {.callout-note}
+## Continuity with Custom Precision
+
+Extend `is_continuous()` with optional keyword arguments named `epsilon` and `delta`. Both should have positive default values. Raise a `ValueError` if either argument is not positive.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def is_continuous(f, c, epsilon=1e-4, delta=1e-6):
+    if epsilon <= 0 or delta <= 0:
+        raise ValueError("epsilon and delta must be positive")
+
+    try:
+        value = f(c)
+        left_value = f(c - delta)
+        right_value = f(c + delta)
+    except (TypeError, ValueError, ZeroDivisionError):
+        return False
+
+    return (
+        abs(left_value - value) < epsilon
+        and abs(right_value - value) < epsilon
+    )
+```
+:::
+
+::: {.callout-note}
+## Counting Three-Element Subsets
+
+Define a function named `count_subsets(sample, size=3)` that returns the number of different subsets of the requested size. The order of the elements does not matter.
+
+```{python}
+#| eval: false
+sample = {1, 2, 3, 4, 5}
+
+print(count_subsets(sample))
+```
+
+Expected result: `10`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+from math import comb
+
+
+def count_subsets(sample, size=3):
+    if size < 0 or size > len(sample):
+        return 0
+
+    return comb(len(sample), size)
+```
+
+The source review called these ordered subsets, but the expected value `10` corresponds to unordered combinations. Five elements would produce `60` ordered arrangements of length three.
+:::
+
+::: {.callout-note}
+## Showing the Subsets
+
+Extend the previous function with a keyword argument named `show_subsets`, which should default to `False`.
+
+- If `show_subsets` is `False`, return only the count.
+- If `show_subsets` is `True`, return a tuple containing the count and a list of the subsets.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+from itertools import combinations
+
+
+def count_subsets(sample, size=3, show_subsets=False):
+    subsets = list(combinations(sample, size))
+
+    if show_subsets:
+        return len(subsets), subsets
+
+    return len(subsets)
+```
+:::
+
+::: {.callout-note}
+## Vector Projection
+
+Write a function named `projection(u, v)` that returns the orthogonal projection of vector `u` onto vector `v`.
+
+Use the formula:
+
+$$
+\operatorname{proj}_{v}(u) = \frac{u \cdot v}{v \cdot v}v
+$$
+
+```{python}
+#| eval: false
+u = [2, 2]
+v = [1, 0]
+
+print(projection(u, v))
+```
+
+Expected result: `[2.0, 0.0]`.
+
+```{python}
+#| eval: false
+u = [3, 1, 2]
+v = [1, 0, 1]
+
+print(projection(u, v))
+```
+
+Expected result: `[2.5, 0.0, 2.5]`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def dot_product(vector_1, vector_2):
+    if len(vector_1) != len(vector_2):
+        raise ValueError("Vectors must have the same length")
+
+    return sum(
+        value_1 * value_2
+        for value_1, value_2 in zip(vector_1, vector_2)
+    )
+
+
+def projection(u, v):
+    denominator = dot_product(v, v)
+
+    if denominator == 0:
+        raise ValueError("Cannot project onto the zero vector")
+
+    scale = dot_product(u, v) / denominator
+    return [scale * coordinate for coordinate in v]
+```
+:::
+
+::: {.callout-note}
+## Linear Independence
+
+Implement a function named `is_independent(vectors)` that determines whether a list of vectors is linearly independent.
+
+```{python}
+#| eval: false
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [1, 1, 0]
+
+print(is_independent([v1, v2, v3]))
+```
+
+Expected result: `False`.
+
+```{python}
+#| eval: false
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [1, 0, 1]
+
+print(is_independent([v1, v2, v3]))
+```
+
+Expected result: `True`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def matrix_rank(matrix, tolerance=1e-10):
+    if not matrix:
+        return 0
+
+    column_count = len(matrix[0])
+
+    if any(len(row) != column_count for row in matrix):
+        raise ValueError("All vectors must have the same length")
+
+    work = [list(map(float, row)) for row in matrix]
+    row_count = len(work)
+    rank = 0
+
+    for column in range(column_count):
+        pivot_row = None
+
+        for row in range(rank, row_count):
+            if abs(work[row][column]) > tolerance:
+                pivot_row = row
+                break
+
+        if pivot_row is None:
+            continue
+
+        work[rank], work[pivot_row] = work[pivot_row], work[rank]
+        pivot = work[rank][column]
+
+        for current_column in range(column, column_count):
+            work[rank][current_column] /= pivot
+
+        for row in range(row_count):
+            if row == rank:
+                continue
+
+            factor = work[row][column]
+
+            for current_column in range(column, column_count):
+                work[row][current_column] -= (
+                    factor * work[rank][current_column]
+                )
+
+        rank += 1
+
+        if rank == row_count:
+            break
+
+    return rank
+
+
+def is_independent(vectors):
+    return matrix_rank(vectors) == len(vectors)
+```
+:::
+
+::: {.callout-note}
+## Find an Independent Subset
+
+Write a function named `independent_indices(vectors)` that returns the positions of a linearly independent subset. Number the vectors starting at `1`.
+
+```{python}
+#| eval: false
+v1 = [1, 0, 0]
+v2 = [0, 1, 0]
+v3 = [2, 0, 0]
+
+print(independent_indices([v1, v2, v3]))
+```
+
+Expected result: `[1, 2]`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+This solution uses `matrix_rank()` from the previous exercise.
+
+```{python}
+#| eval: false
+def independent_indices(vectors):
+    basis = []
+    selected_indices = []
+
+    for index, vector in enumerate(vectors, 1):
+        previous_rank = matrix_rank(basis)
+        candidate_rank = matrix_rank(basis + [vector])
+
+        if candidate_rank > previous_rank:
+            basis.append(vector)
+            selected_indices.append(index)
+
+    return selected_indices
+```
+:::
