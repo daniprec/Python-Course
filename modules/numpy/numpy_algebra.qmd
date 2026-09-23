@@ -1,5 +1,5 @@
 ---
-title: "Numpy Algebra"
+title: "Application: Numerical Linear Algebra"
 subtitle: "Module 3: NumPy"
 format: html
 ---
@@ -8,9 +8,11 @@ format: html
 import numpy as np
 ```
 
+This session combines NumPy array operations with mathematical algorithms. Each task begins with a clear specification; attempt it before opening the example solution.
+
 ---
 
-## Centering Matrix
+## Centering a Matrix
 
 Given a matrix, write a function `center_matrix(matrix)` to "center" it by subtracting the mean of each column from every entry in that column.
 
@@ -44,7 +46,8 @@ arr = np.array([
 # print(center_matrix(arr))
 ```
 
-### Solution
+::: {.callout-tip collapse="true"}
+### Example Solution
 
 ```{python}
 def center_matrix(matrix: np.ndarray) -> np.ndarray:
@@ -65,6 +68,8 @@ def center_matrix(matrix: np.ndarray) -> np.ndarray:
 
 print(center_matrix(arr))
 ```
+
+:::
 
 ---
 
@@ -128,7 +133,8 @@ v = np.array([
 #  [ 0.70710678 -0.70710678]]
 ```
 
-### Solution
+::: {.callout-tip collapse="true"}
+### Example Solution
 
 ```{python}
 def gram_schmidt(v: np.ndarray) -> np.ndarray:
@@ -157,6 +163,8 @@ def gram_schmidt(v: np.ndarray) -> np.ndarray:
 u = gram_schmidt(v)
 print("Orthonormal Vectors:\n", u)
 ```
+
+:::
 
 ---
 
@@ -292,7 +300,8 @@ max_iter = 1000
 # print("Solution x:", x)
 ```
 
-### Solution
+::: {.callout-tip collapse="true"}
+### Example Solution
 
 ```{python}
 def conjugate_gradient(A: np.ndarray, b: np.ndarray, x0: np.ndarray, tol: float, max_iter: int) -> np.ndarray:
@@ -351,6 +360,8 @@ def conjugate_gradient(A: np.ndarray, b: np.ndarray, x0: np.ndarray, tol: float,
 x = conjugate_gradient(A, b, x0, tol, max_iter)
 print("Solution x:", x)
 ```
+
+:::
 
 ---
 
@@ -417,7 +428,6 @@ The notation is:
 - $b^{(k)}$: Approximate eigenvector at iteration $k$.
 - $\lambda$: Approximate dominant eigenvalue.
 - $\| b \|$: Norm (magnitude) of vector $b$, typically the Euclidean norm.
-d other eigenvalues.
 
 ```{python}
 # Example usage
@@ -432,7 +442,8 @@ A = np.array([
 # print("Corresponding Eigenvector:", eigenvector)
 ```
 
-### Solution
+::: {.callout-tip collapse="true"}
+### Example Solution
 
 ```{python}
 def power_method(A: np.ndarray, num_iterations: int) -> tuple[float, np.ndarray]:
@@ -475,3 +486,16 @@ eigenvalue, eigenvector = power_method(A, num_iterations=100)
 print("Estimated Largest Eigenvalue:", eigenvalue)
 print("Corresponding Eigenvector:", eigenvector)
 ```
+
+:::
+
+---
+
+## Summary and Reflection
+
+- Centering uses broadcasting to subtract one column mean from every row.
+- Gram–Schmidt combines dot products, vector subtraction, and norms.
+- Conjugate gradient solves suitable linear systems iteratively.
+- The power method estimates the eigenvalue of largest magnitude and a corresponding eigenvector.
+
+For each algorithm, identify which operations are vectorized and which steps still require a loop.

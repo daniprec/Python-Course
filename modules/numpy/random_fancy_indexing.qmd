@@ -1,12 +1,12 @@
 ---
-title: "Numpy Random Fancy Indexing"
+title: "Random Numbers and Fancy Indexing"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
-# NumPy: Random Number Generation & Advanced Indexing
+# Random Numbers and Fancy Indexing
 
-# The Monty Hall problem
+## The Monty Hall Problem
 
 Suppose you are on a game show, and you are given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what is behind the doors, opens another door, say No. 3, which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it to your advantage to switch your choice?
 
@@ -60,10 +60,10 @@ What about the type of its elements?
 print("Types inside the x:", x.dtype)
 ```
 
-By default, `numpy` initializes matrices with type `float` (floating point number). This is an unnecesay use of memory, we can change the type to `int` (integer).
+By default, NumPy initializes arrays of zeros with a floating-point data type. For this game we only need `0` and `1`, so we can request integers directly.
 
 ```{python}
-x = x.astype(int)
+x = np.zeros((n_games, 3), dtype=int)
 
 print("Types inside x:", x.dtype)
 
@@ -92,7 +92,7 @@ print("First element of x (first door of first game): ", x[0, 0])
 
 As of now, all doors have a goat behind (a `0`).
 
-As numpy arrays are mutable objects, we can easily assign new values to their elements.
+NumPy arrays are mutable, so we can assign new values to their elements.
 
 ```{python}
 # Add a car to the first door of the first game
@@ -148,9 +148,10 @@ idy = [0, 1, 2]
 print(y[idx, idy])
 ```
 
-If the list does not have the same length, this will fail.
+If the index arrays do not have compatible shapes, indexing fails.
 
 ```{python}
+#| eval: false
 # Sample matrix
 y = np.array([
     [1, 2, 3],
@@ -176,6 +177,7 @@ x[[a0, a1], [b0, b1], [c0, c1]]
 ```
 
 ```{python}
+#| eval: false
 # Sample matrix
 y = np.array([
     [1, 2, 3],
@@ -188,6 +190,7 @@ print(y[(0, 0), (1, 1), (2, 2)])
 ```
 
 ```{python}
+#| eval: false
 # Sample matrix
 y = np.array([
     [1, 2, 3],
@@ -270,23 +273,18 @@ print(n)
 Knowing this information, lets create a function that generates any number $N$ of Monty Hall games, represented by a matrix $N x 3$:
 
 ```{python}
-def monty_hall_init(n_games: int, verbose: bool=False) -> np.ndarray:
-  # Initialize the matrix of doors, containing all goats
-  x = np.zeros((n_games, 3)).astype(int)
+def monty_hall_init(n_games: int, verbose: bool = False) -> np.ndarray:
+    """Create one randomly positioned car for each simulated game."""
+    games = np.zeros((n_games, 3), dtype=int)
+    game_indices = np.arange(n_games)
+    car_indices = np.random.randint(0, 3, size=n_games)
 
-  # Indexes of games can be generated through arange
-  ls_id_game = np.arange(n_games)
-  # Indexes of cars are chosen randomly between (0, 1, 2)
-  ls_id_car = np.random.randint(0, 3, size=n_games)
+    if verbose:
+        print("Game indices:", game_indices)
+        print("Car indices: ", car_indices)
 
-  if verbose:
-    print("List of index for games:", ls_id_game)
-    print("List of index for cars: ", ls_id_car)
-
-  # Assign cars through list indexing
-  x[ls_id_game, ls_id_car] = 1
-
-  return x
+    games[game_indices, car_indices] = 1
+    return games
 
 x = monty_hall_init(1000, verbose=True)
 print(x)
@@ -332,14 +330,14 @@ In this first run, we (the guest) will pick one door and stick to it. There is n
 
 ```{python}
 # Reinitialize the matrix of doors, this time with 10,000 games
-game = monty_hall_init(1000000)
+game = monty_hall_init(10000)
 
 print(game.mean(axis=0))
 ```
 
 ```{python}
 # Reinitialize the matrix of doors, this time with 10,000 games
-game = monty_hall_init(1000000)
+game = monty_hall_init(10000)
 
 # Get the number of games
 n_games, n_doors = game.shape
@@ -372,6 +370,7 @@ To handle the host intervention, we will use sets:
 - Guest swaps to the only door available in subset {1, 2, 3} - {B, C}.
 
 ```{python}
+#| eval: false
 game = [0, 0, 1]
 my_pick = input("Pick a door:  ")  # Im picking door 1 (index 0)
 my_pick = int(my_pick)
@@ -387,6 +386,7 @@ print(doors)
 ```
 
 ```{python}
+#| eval: false
 game = [0, 0, 0]
 idx_car = np.random.randint(0, 3)
 game[idx_car] = 1
@@ -416,7 +416,7 @@ We guess one door at random. How can we make the host reveal one of the other tw
 
 ```{python}
 # Make a random choice between the doors (0, 1, 2)
-id_guest = np.random.randint(0, 2)
+id_guest = np.random.randint(0, 3)
 print(f"Our choice: {id_guest}")
 ```
 
@@ -496,7 +496,7 @@ sum_car = 0
 # Loop through every game
 for id_game in range(n_games):
   # Make a random choice between the doors (0, 1, 2)
-  id_guest = np.random.randint(0, 2)
+  id_guest = np.random.randint(0, 3)
 
   # Where is the car? Check our array with car indexes
   id_car = np.argmax(game[id_game])
@@ -545,7 +545,7 @@ Why add `% 3`? Is our way to ensure the ID stays in the interval (0, 2). In the 
 
 - When guest picks 0: `(3 - 0 - 0) = 3` → `3 % 3 = 0`
 - When guest picks 1: `(3 - 1 - 1) = 1` → `1 % 3 = 1`
-- When guest picks 2: `(3 - 2 - 2) = -1` → `0 % 3 = 2`
+- When the guest picks 2: `(3 - 2 - 2) = -1` → `-1 % 3 = 2`
 
 Then we can adjust by randomly adding 1 or 2 so that the host picks one of the other two doors.
 
@@ -568,7 +568,7 @@ sum_car = 0
 # Loop through every game
 for id_game in range(n_games):
   # Make a random choice between the doors (0, 1, 2)
-  id_guest = np.random.randint(0, 2)
+  id_guest = np.random.randint(0, 3)
 
   # Where is the car? Check our array with car indexes
   id_car = np.argmax(game[id_game])
@@ -601,3 +601,21 @@ The code we have above works fine, but it takes some time to compute one million
 By the end of module 3, we will see how to write faster NumPy code! Our key goal: remove for loops and replace it with NumPy broadcasting.
 
 ---
+
+## Summary and Reflection
+
+- Fancy indexing uses arrays of indices to select several positions at once.
+- Paired row and column index arrays select coordinate pairs, not a rectangular block.
+- Random integer upper bounds are excluded: `randint(0, 3)` can produce `0`, `1`, or `2`.
+- A random seed makes a simulation reproducible.
+- Repeated simulation lets us estimate probabilities such as the chance of winning the Monty Hall game.
+
+Explain why ten simulated games are not enough to estimate the switching probability reliably. What changes as the number of simulations increases?
+
+---
+
+# Homework and Review
+
+Work through the Session 16 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-16-random-numbers-and-fancy-indexing){.btn .btn-primary}

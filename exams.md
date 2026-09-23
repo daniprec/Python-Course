@@ -26,6 +26,7 @@ Module 2 has no separate quizzes because it is assessed in the midterm exam. Mod
 ### Module 1: Fundamentals
 - 2024 Quiz: [24_quiz_01_fundamentals.pdf](exams/24_quiz_01_fundamentals.pdf) — <a href="exams/24_quiz_01_fundamentals.pdf" download>Download</a>
 - 2025 Quiz: [25_quiz_01_fundamentals.pdf](exams/25_quiz_01_fundamentals.pdf) — <a href="exams/25_quiz_01_fundamentals.pdf" download>Download</a>
+- 2026 Quiz: [26_quiz_01_fundamentals.pdf](exams/26_quiz_01_fundamentals.pdf) — <a href="exams/26_quiz_01_fundamentals.pdf" download>Download</a>
 
 ### Module 3: NumPy
 - 2024 Quiz: [24_quiz_02_numpy.pdf](exams/24_quiz_02_numpy.pdf) — <a href="exams/24_quiz_02_numpy.pdf" download>Download</a>

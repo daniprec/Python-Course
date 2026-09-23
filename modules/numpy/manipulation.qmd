@@ -1,10 +1,12 @@
 ---
-title: "Numpy Manipulation"
+title: "NumPy Array Manipulation"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
 # NumPy: Array Manipulation
+
+Numerical data does not always arrive in the shape a calculation needs. In this lesson, we will reorganize the same values, combine compatible arrays, and divide arrays into useful pieces.
 
 ```{python}
 import numpy as np
@@ -142,7 +144,7 @@ print(f"Flattened:\n{flattened}")
 
 ---
 
-## Joinning Arrays
+## Joining Arrays
 
 In data processing and analysis, you often need to combine arrays. This can be done in several ways depending on the structure and the desired outcome. Below, we'll explore some common methods for joining arrays using NumPy.
 
@@ -227,6 +229,7 @@ print("We 'squeeze' the values sideways:\n  ->\n  -> \n  ->\n", result)
 Pay attention to the following errors:
 
 ```{python}
+#| eval: false
 # You cannot concatenate on a non-existing axis
 array1 = np.array([[1, 2], [3, 4]])
 array2 = np.array([[5, 6], [7, 8]])
@@ -234,6 +237,7 @@ arr = np.concatenate((array1, array2), axis=2)
 ```
 
 ```{python}
+#| eval: false
 # The arrays must have the same number of dimensions
 arr1 = np.array([[1, 2, 3], [4, 5, 6]])
 arr2 = np.array([7, 8, 9])
@@ -357,20 +361,18 @@ A non-homogeneous system of linear equations $Ax=b$ with $n$ variables has a sol
 
 ```{python}
 def rouche_frobenius_theorem(A, b):
-  # We need to turn vector `b` (N) into a matrix `B` (1 x N)
-  B = b.reshape(-1, 1)
-  # Use the horizontal stack
-  Ab = np.hstack((A, B))
-  rank_A = np.linalg.matrix_rank(A)
-  rank_Ab = np.linalg.matrix_rank(Ab)
+    # Turn vector b with shape (N,) into a column with shape (N, 1).
+    B = b.reshape(-1, 1)
+    Ab = np.hstack((A, B))
+    rank_A = np.linalg.matrix_rank(A)
+    rank_Ab = np.linalg.matrix_rank(Ab)
 
-  if rank_A == rank_Ab:
-    if rank_A == A.shape:
-      return "The system is consistent and has a unique solution."
+    if rank_A == rank_Ab:
+        if rank_A == A.shape[1]:
+            return "The system is consistent and has a unique solution."
+        return "The system is consistent and has infinitely many solutions."
     else:
-      return "The system is consistent and has infinitely many solutions."
-  else:
-    return "The system is inconsistent."
+        return "The system is inconsistent."
 
 # Example usage
 A = np.array([[2, 1, -1], [1, 3, 2], [1, -1, 2]])
@@ -442,7 +444,7 @@ arr = np.array([1, 2, 3, 4, 5, 6])
 split_array = np.split(arr, 3)
 
 for idx in range(len(split_array)):
-  print(f"Split {idx+1}:\n{split_array[idx]}")
+    print(f"Split {idx + 1}:\n{split_array[idx]}")
 ```
 
 ### Array Split
@@ -456,7 +458,7 @@ For an array of length `l`  that should be split into `n` sections, it returns `
 split_array_unequal = np.array_split(arr, 4)
 
 for idx in range(len(split_array_unequal)):
-  print(f"Split {idx+1}:\n{split_array_unequal[idx]}")
+    print(f"Split {idx + 1}:\n{split_array_unequal[idx]}")
 ```
 
 ### Horizontal Split
@@ -472,7 +474,7 @@ array_2d = np.array([[1, 2, 3], [4, 5, 6]])
 hsplit_array = np.hsplit(array_2d, 3)
 
 for idx in range(len(hsplit_array)):
-  print(f"Split {idx+1}:\n{hsplit_array[idx]}")
+    print(f"Split {idx + 1}:\n{hsplit_array[idx]}")
 ```
 
 ### Vertical Split
@@ -484,15 +486,29 @@ The `np.vsplit()` function splits an array vertically (row-wise).
 vsplit_array = np.vsplit(array_2d, 2)
 
 for idx in range(len(vsplit_array)):
-  print(f"Split {idx+1}:\n{vsplit_array[idx]}")
+    print(f"Split {idx + 1}:\n{vsplit_array[idx]}")
 ```
 
 ---
 
 ## Summary
 
-Today, we explored various methods for reshaping, joining, and splitting arrays. Remember, you don't need to memorize all these methods: your coding tools and AI are here to help with that.
+You do not need to memorize every joining and splitting function. Focus on the shape of each input, the shape you want as output, and the axis along which the operation acts.
 
-What's important is to **understand** that these operations exist in NumPy and to develop an intuition for how they work. Pay special attention to reshaping and joining arrays, as these are fundamental skills for any data-related tasks! And remember how the choice of axis affects the concatenation operations.
+- `reshape()` changes the arrangement of values but not their count.
+- `flatten()` returns a one-dimensional copy.
+- `concatenate()` joins arrays along an existing axis.
+- `stack()`, `vstack()`, and `hstack()` provide common arrangements.
+- `split()` requires equal pieces; `array_split()` also permits unequal pieces.
+
+Before running any joining operation, predict the output shape. Then explain why all non-joining dimensions must match.
+
+---
+
+# Homework and Review
+
+Work through the Session 14 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-14-array-manipulation){.btn .btn-primary}
 
 ---

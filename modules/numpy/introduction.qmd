@@ -1,23 +1,26 @@
 ---
-title: "Numpy Introduction"
+title: "Introduction to NumPy"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
-# NumPy: Introduction
+# Introduction to NumPy
 
 ## What is NumPy?
 
-NumPy (Numerical Python) is one of the most fundamental packages for numerical computations in Python. It provides support for large multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays.
+Python lists can store numerical data, but calculations with many values often require loops. NumPy gives us arrays that can perform the same calculation on every value at once.
+
+NumPy (Numerical Python) is a package for numerical computing. It provides multidimensional arrays and mathematical functions designed to operate on those arrays efficiently.
 
 <p align="center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/NumPy_logo_2020.svg/1200px-NumPy_logo_2020.svg.png" width="400" height="auto" />
 </p>
 
-### Why use NumPy?
-- Efficient storage and manipulation of numerical arrays is fundamental to many forms of scientific and data analysis.
-- It's much faster than traditional Python lists for numerical operations.
-- Behind the scenes optimizations written in C.
+### Why Use NumPy?
+
+- Arrays store numerical data efficiently.
+- Array operations usually require less code than equivalent list-based loops.
+- NumPy's optimized implementation makes large calculations fast.
 
 
 ```{python}
@@ -56,18 +59,20 @@ arr = np.array((1, 2, 3, 4, 5))
 print(arr)
 ```
 
-What happens when we initialize a numpy array with a set?
+What happens when we initialize a NumPy array with a set?
 
 The [np.array documentation](https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html) says that the object argument must be "an array, any object exposing the array interface, an object whose `__array__` method returns an array, **or any (nested) sequence**".
 
-A set is not a [sequence](https://docs.python.org/3/glossary.html#term-sequence). Specifically, sets are unordered and do not support the `__getitem__` method. Hence we cannot create an array from a set like we trying to with the list.
+A set is not a [sequence](https://docs.python.org/3/glossary.html#term-sequence). It is unordered and does not support indexing. NumPy therefore treats the complete set as one Python object instead of turning its members into array elements.
 
 
 ```{python}
-# Just do not do this...
+# This creates a zero-dimensional object array, not five integer elements.
 arr = np.array({1, 2, 3, 4, 5})
 
 print(arr)
+print(arr.shape)
+print(arr.dtype)
 ```
 
 ::: {.callout-note}
@@ -96,6 +101,7 @@ The elements of the array will all be of type `float64`. NumPy automatically upc
 What will be the value of `arr`? Which value type will their elements have?
 
 ```{python}
+#| eval: false
 arr = np.array(1, 2.0, 3)
 
 print(arr)
@@ -114,7 +120,7 @@ This code raises an error. The `np.array` function expects one main object argum
 
 ### Array Types
 
-NumPy arrays are restricted to a single data type. The hierarchy of data types is as follows: string > float > integer. Other data types are not permitted.
+Every NumPy array has one data type, available through its `dtype` property. NumPy supports many types, including booleans, integers, floating-point numbers, complex numbers, and strings. When the input mixes types, NumPy chooses one type capable of representing every value.
 
 ```{python}
 # Array of strings
@@ -169,6 +175,7 @@ print(matrix)
 ```
 
 ```{python}
+#| eval: false
 # All nested list must have the same length!
 row_0 = [1, 2, 3]
 row_1 = [4, 5, 6, 0]
@@ -189,9 +196,9 @@ print(matrix)
 # Best format - helps clarity
 # Create a 2D array (Matrix)
 matrix = np.array([
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
 ])
 print(matrix)
 ```
@@ -211,8 +218,8 @@ How would we create a 3D matrix?
 
 ```{python}
 matrix_3d = np.array([
-  [[1, 2], [3, 4]],
-  [[5, 6], [7, 8]]
+    [[1, 2], [3, 4]],
+    [[5, 6], [7, 8]]
 ])
 print(matrix_3d)
 print(matrix_3d.shape)
@@ -259,7 +266,7 @@ print(range_array)
 ::: {.callout-note}
 ## Exercise
 
-**Exercise:** Create an array containing all odd numbers between 25 and 50.
+Create an array containing all odd numbers between 25 and 50.
 
 ```{python}
 # Try it!
@@ -267,15 +274,35 @@ print(range_array)
 
 :::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+odd_numbers = np.arange(25, 50, 2)
+print(odd_numbers)
+```
+:::
+
 ::: {.callout-note}
 ## Exercise
 
-**Exercise:** Imagine you have a rope that is 12 meters long. You want to cut this rope into 7 equal lengths. Using numpy, create an array that shows at which points (in meters) you should make the cuts to obtain these 7 equal lengths.
+Imagine you have a rope that is 12 meters long. You want to cut it into 7 equal lengths. Using NumPy, create an array that shows the six positions where you should make the cuts.
 
 ```{python}
 # Try it!
 ```
 
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+cut_points = np.linspace(0, 12, 8)[1:-1]
+print(cut_points)
+```
+
+Eight equally spaced endpoints divide the rope into seven equal intervals. We remove the beginning and end because they are not cuts.
 :::
 
 ---
@@ -292,11 +319,23 @@ arr = np.zeros((5, 4))
 print(arr.ndim)
 ```
 
-`shape`: Returns a tuple representing the dimensions of the array. For a matrix with n rows and m columns, the shape will be (n,m).
+`shape`: Returns a tuple representing the dimensions of the array. For a matrix with `n` rows and `m` columns, the shape is `(n, m)`.
 
 ```{python}
 # shape returns a tuple
 print(arr.shape)
+```
+
+`size`: Reports the total number of elements.
+
+```{python}
+print(arr.size)
+```
+
+`dtype`: Reports the data type used by the elements.
+
+```{python}
+print(arr.dtype)
 ```
 
 ---
@@ -333,7 +372,7 @@ print(matrix[1, 2])  # second row, third column
 ::: {.callout-note}
 ## Exercise
 
-What will be the value of `x`?
+What will Python print?
 
 ```{python}
 matrix = np.array([[0, 1, 2], [3, 4, 5]])
@@ -346,9 +385,10 @@ print(matrix[-1, 0])
 ::: {.callout-note}
 ## Exercise
 
-What will be the value of `x`?
+What happens when this code runs? Explain why.
 
 ```{python}
+#| eval: false
 matrix = [[0, 1, 2], [3, 4, 5]]
 
 print(matrix[2, 1])
@@ -420,6 +460,14 @@ arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
 :::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+print(arr[2:7:2])
+```
+:::
+
 ::: {.callout-note}
 ## Exercise
 
@@ -431,6 +479,14 @@ arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
 :::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+print(arr[7:0:-3])
+```
+:::
+
 ::: {.callout-note}
 ## Exercise
 
@@ -438,14 +494,22 @@ What slicing should we take to retrieve the array `[2, 4, 6]`?
 
 ```{python}
 arr = np.array([
-  [0, 1, 2],
-  [1, 2, 3],
-  [2, 3, 4],
-  [3, 4, 5],
-  [4, 5, 6]
-  ])
+    [0, 1, 2],
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+    [4, 5, 6]
+])
 ```
 
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+print(arr[::2, 2])
+```
 :::
 
 ::: {.callout-note}
@@ -461,14 +525,22 @@ $$\begin{pmatrix}
 
 ```{python}
 arr = np.array([
-  [0, 1, 2],
-  [1, 2, 3],
-  [2, 3, 4],
-  [3, 4, 5],
-  [4, 5, 6]
-  ])
+    [0, 1, 2],
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+    [4, 5, 6]
+])
 ```
 
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+print(arr[::2, 1:])
+```
 :::
 
 ---
@@ -476,6 +548,8 @@ arr = np.array([
 ## Practice
 
 Deactivate AI assistant tools, and try the following exercises.
+
+The `reshape()` method reorganizes an array without changing its values. The requested shape must contain the same number of elements as the original array.
 
 ::: {.callout-note}
 ## Exercise
@@ -530,3 +604,22 @@ print(arr[0, 3])
 ```
 
 :::
+
+---
+
+## Summary and Reflection
+
+- A NumPy array stores elements using one data type.
+- `ndim`, `shape`, `size`, and `dtype` describe an array.
+- Indexing selects individual values; slicing selects ranges along one or more axes.
+- Slice stopping positions are excluded, just as they are for lists.
+
+Explain in your own words why `matrix[1, 2]` works for a NumPy array but not for a nested Python list.
+
+---
+
+# Homework and Review
+
+Work through the Session 11 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-11-introduction-to-numpy){.btn .btn-primary}

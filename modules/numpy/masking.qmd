@@ -1,16 +1,57 @@
 ---
-title: "Numpy Masking Dog"
+title: "NumPy Masking"
 subtitle: "Module 3: NumPy"
 format: html
+execute:
+  enabled: false
 ---
 
-# NumPy: Masking
+# NumPy Masking
 
 Welcome to our interactive exploration of masking using NumPy! Masking means utilizing boolean arrays to select or modify specific portions of an array.
 
 What arrays are we working with today? Images! Since images are essentially arrays of pixel values, tools like NumPy allow us to manipulate these arrays, achieving various visual effects.
 
-For instance, in this we will use masking to overlap images.
+In this lesson, we will first use a small numerical array to understand the mechanism. We will then apply the same idea to image pixels and place one image inside another.
+
+## Masking with Numbers
+
+Suppose we only want the temperatures below freezing.
+
+```{python}
+import numpy as np
+
+temperatures = np.array([4, -2, 7, -5, 0])
+below_freezing = temperatures < 0
+
+print(below_freezing)
+print(temperatures[below_freezing])
+```
+
+The comparison creates one Boolean value for each temperature. Indexing with that Boolean array selects the values whose mask is `True`.
+
+::: {.callout-note}
+## Exercise
+
+Predict the result before running the code. Then modify it to select values greater than or equal to `5`.
+
+```{python}
+values = np.array([2, 5, 8, 1, 9])
+mask = values % 2 == 1
+print(values[mask])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The original mask selects the odd values, so Python prints `[5 1 9]`.
+
+```{python}
+mask = values >= 5
+print(values[mask])
+```
+:::
 
 ---
 
@@ -390,3 +431,23 @@ show_image(schrodinger)
 # Your first step is to split that image into two (the skelleton and the cat)
 # Then you will have to flip one of them so that both look at the same direction
 ```
+
+---
+
+## Summary and Reflection
+
+- A Boolean mask has the same relevant shape as the data it selects.
+- `array[mask]` retrieves values where the mask is `True`.
+- `array[mask] = value` modifies only the selected values.
+- Combine conditions with `&`, `|`, and `~`; place each comparison in parentheses.
+- An image is an array, so the same masking rules apply to pixels.
+
+Explain why Python's scalar operators `and`, `or`, and `not` cannot be used directly with Boolean arrays.
+
+---
+
+# Homework and Review
+
+Work through the Session 15 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-15-masking){.btn .btn-primary}

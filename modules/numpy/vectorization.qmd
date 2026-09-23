@@ -1,12 +1,12 @@
 ---
-title: "Numpy Vectorization"
+title: "NumPy Vectorization"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
-# NumPy: Vectorization & Masking
+# NumPy Vectorization
 
-In this notebook, we will explore how vectorization and masking can help optimize code by reducing the need for loops and replacing them with efficient NumPy operations. This will dramatically improve the performance of our computations.
+Suppose a simulation contains one million values. A Python loop can process them one at a time, but NumPy can express the same work as an operation on the complete array. This style is called vectorization. It often produces shorter, clearer, and faster numerical code.
 
 ```{python}
 import numpy as np
@@ -103,6 +103,7 @@ print(result)
 But what happens when we have an `if` clause? That does not work for arrays.
 
 ```{python}
+#| eval: false
 arr = np.array([1, 2, 3, 4, 5])
 
 if arr > 0:
@@ -119,6 +120,7 @@ print(mask)  # This is a NumPy boolean array
 ```
 
 ```{python}
+#| eval: false
 # We cannot use a "not" with boolean arrays!
 print(not mask)
 ```
@@ -147,14 +149,14 @@ print(not mask.any())
 
 Some other functions cannot broadcast. This happens, for instance, when using conditions inside the function that rely on scalar comparisons (like `if` statements), which are not inherently compatible with array inputs. In these cases, NumPy cannot apply the function to the entire array at once because the function was designed to handle only one value at a time.
 
-For such cases, we use `np.vectorize` to convert the scalar function into one that can be applied element-wise across an array.
+For convenience, `np.vectorize()` can adapt a scalar function so it accepts arrays. Despite its name, it does not provide the main performance benefit of true NumPy vectorization; it still calls the Python function element by element. When possible, prefer array expressions, masks, or `np.where()`.
 
 **Example.** You are given two NumPy arrays, `numerators` and `denominators`. Your task is to write a function that performs element-wise division between the arrays, but handle cases where the denominator is zero. If the denominator is zero, return $10^{10}$, instead of causing an error.
 
 ```{python}
 def safe_division(numerator, denominator):
   if denominator == 0:
-    return 100
+    return 1e10
   else:
     return numerator / denominator
 
@@ -168,19 +170,14 @@ print(fun(numerators, denominators))
 ```
 
 ```{python}
-def safe_division(numerator, denominator):
-  if denominator == 0:
-    return 1e10  # Python understand 10^10
-  else:
-    return numerator / denominator
-
-# Vectorize the safe_division
-fun = np.vectorize(safe_division)
-
 numerators = np.array([1, 2, 3])
 denominators = np.array([0, 1, 2])
 
-print(fun(numerators, denominators))
+result = np.full(numerators.shape, 1e10, dtype=float)
+nonzero = denominators != 0
+result[nonzero] = numerators[nonzero] / denominators[nonzero]
+
+print(result)
 ```
 
 ---
@@ -314,6 +311,7 @@ As we have seen, replacing values in an array using a mask can be done in two wa
 **Example.** Given a 1D array, replace all negative values $x$ with $x^2$.
 
 ```{python}
+#| eval: false
 # Define a 1D array
 arr = np.array([-3, -2, -1, 0, 1, 2, 3])
 
@@ -431,7 +429,7 @@ sum_car = 0
 # Loop through every game
 for id_game in range(n_games):
   # Make a random choice between the doors (0, 1, 2)
-  id_guest = np.random.randint(0, 2)
+  id_guest = np.random.randint(0, 3)
 
   # Where is the car? Check our array with car indexes
   id_car = np.argmax(game[id_game])
@@ -522,3 +520,22 @@ print("Win probability:", sum_car / n_games)
 ```
 
 ---
+
+## Summary and Reflection
+
+- Vectorization replaces element-by-element Python loops with array operations.
+- Broadcasting lets compatible shapes participate in one expression.
+- A comparison with an array creates a Boolean array, not one Boolean value.
+- Use `&`, `|`, and `~` for element-wise Boolean logic.
+- Use `.all()` or `.any()` when an `if` statement needs one Boolean result.
+- `np.vectorize()` changes an interface but usually does not make a scalar Python function faster.
+
+Choose one loop from this lesson and explain which array operation replaces each part of the loop.
+
+---
+
+# Homework and Review
+
+Work through the Session 19 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-19-vectorization){.btn .btn-primary}

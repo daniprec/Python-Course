@@ -1,12 +1,12 @@
 ---
-title: "Numpy Statistics"
+title: "Statistics and Simulation with NumPy"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
-# NumPy: Statistics
+# Statistics and Simulation with NumPy
 
-In this lesson, we'll explore several key statistical concepts through practical Python coding exercises. We'll start by simulating random walks to understand their properties and distribution.
+NumPy can summarize observed data and generate random data from a model. We will begin with descriptive statistics, then use simulations to study random walks, hypothesis tests, and Monte Carlo estimation.
 
 
 ## Setup
@@ -19,6 +19,91 @@ import numpy as np  # for numerical operations on arrays
 import matplotlib.pyplot as plt  # to display images
 import matplotlib.cm as cm  # to define colormaps
 ```
+
+To make the examples reproducible, we set a random seed. Running the page again with the same seed produces the same pseudo-random sequence.
+
+```{python}
+np.random.seed(7)
+```
+
+---
+
+## Descriptive Statistics
+
+Begin with a small set of measurements whose values we can inspect by hand.
+
+```{python}
+measurements = np.array([12.1, 11.8, 12.5, 12.0, 11.6, 12.4])
+
+print("Mean:", np.mean(measurements))
+print("Median:", np.median(measurements))
+print("Standard deviation:", np.std(measurements))
+print("Minimum and maximum:", np.min(measurements), np.max(measurements))
+```
+
+For a two-dimensional dataset, the `axis` argument decides whether NumPy summarizes columns or rows.
+
+```{python}
+scores = np.array([
+    [7, 8, 6],
+    [9, 7, 8],
+    [6, 8, 7],
+    [8, 9, 9]
+])
+
+print("Mean of each subject:", np.mean(scores, axis=0))
+print("Mean of each student:", np.mean(scores, axis=1))
+```
+
+::: {.callout-note}
+## Exercise
+
+Before running the code, predict the shapes of both mean arrays. Then compute the standard deviation of each subject.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Both results have shape `(3,)` because the three subject columns remain after reducing axis `0`.
+
+```{python}
+subject_std = np.std(scores, axis=0)
+print(subject_std)
+```
+:::
+
+### Correlation and Covariance
+
+Covariance describes whether two variables tend to vary together. Correlation rescales that relationship to the interval from `-1` to `1`.
+
+```{python}
+study_hours = np.array([1, 2, 3, 4, 5, 6])
+exam_scores = np.array([52, 55, 65, 71, 78, 85])
+
+print("Covariance matrix:\n", np.cov(study_hours, exam_scores))
+print("Correlation matrix:\n", np.corrcoef(study_hours, exam_scores))
+```
+
+The matrices are symmetric. Their off-diagonal values describe the relationship between the two different variables.
+
+---
+
+## A Simulation-Based Hypothesis Test
+
+Suppose a coin produces 62 heads in 100 flips. If the coin were fair, how often would a result at least this far from 50 occur?
+
+```{python}
+n_simulations = 10_000
+simulated_heads = np.random.binomial(100, 0.5, size=n_simulations)
+
+distance_from_fifty = np.abs(simulated_heads - 50)
+observed_distance = abs(62 - 50)
+p_value = np.mean(distance_from_fifty >= observed_distance)
+
+print("Estimated two-sided p-value:", p_value)
+```
+
+This p-value is a simulated probability under the fair-coin model. It is not the probability that the hypothesis itself is true.
 
 ```{python}
 # YOU CAN SKIP THIS CELL
@@ -113,6 +198,7 @@ print(ser)
 ```
 
 ```{python}
+#| eval: false
 # "choice" does not work with strings
 ser = np.random.choice("-1, 1", size=steps)
 
@@ -259,8 +345,9 @@ plot_series(arr_sim.T, xlabel="Step", ylabel="Position", title="Random Walk Simu
 Where did the 5th walker end up after 17 steps?
 
 ```{python}
-# We use NumPy fancy indexing: row 4, column 16
-position = arr_sim[4, 16]
+# Row 4 is the fifth walker. Column 17 is the position after 17 steps
+# because column 0 stores the starting position.
+position = arr_sim[4, 17]
 
 print(position)
 ```
@@ -480,3 +567,41 @@ Write the `monte_carlo_pi` function to approximate $\pi$. It should:
 #| eval: false
 
 ```
+
+::: {.callout-tip collapse="true"}
+## Example Solution
+
+```{python}
+def monte_carlo_pi(num_points: int) -> float:
+    """Estimate pi using uniformly sampled points in a square."""
+    points = np.random.uniform(-1, 1, size=(num_points, 2))
+    squared_distance = points[:, 0] ** 2 + points[:, 1] ** 2
+    inside_circle = squared_distance <= 1
+    return 4 * np.mean(inside_circle)
+
+print(monte_carlo_pi(100_000))
+```
+
+The Boolean mean is the proportion of points inside the circle because NumPy treats `True` as `1` and `False` as `0` in this calculation.
+:::
+
+---
+
+## Summary and Reflection
+
+- Descriptive statistics summarize a dataset; `axis` controls the direction of a reduction.
+- Covariance and correlation describe how pairs of variables vary together.
+- Random sampling lets us model distributions and repeat experiments.
+- A simulation-based p-value measures how unusual an observation is under a stated null model.
+- Cumulative sums turn random steps into random walks.
+- Monte Carlo methods estimate quantities using repeated random samples.
+
+Explain why estimates from 100,000 simulations are usually more stable than estimates from 100 simulations, while still not being exact.
+
+---
+
+# Homework and Review
+
+Work through the Session 17 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-17-statistics-and-simulation){.btn .btn-primary}

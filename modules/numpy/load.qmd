@@ -1,10 +1,12 @@
 ---
-title: "Numpy Load"
+title: "Loading and Saving NumPy Data"
 subtitle: "Module 3: NumPy"
 format: html
+execute:
+  enabled: false
 ---
 
-# 🎃 Happy Halloween! 🎃
+# Loading and Saving Data: Ghost Hunting
 
 Instead of our regular lesson today, we are embarking on a _chilling_ adventure: **Ghost Hunting!**
 
@@ -22,7 +24,7 @@ For our safety, we'll be monitoring the house remotely. Here's what we did:
 1. **Visited during broad daylight:** To ensure safety, we set up our monitoring devices during mid-day.
 2. **Placed three monitoring devices in each room:**
     - **EMF (Electro-Magnetic Frequency) Reader:** Ghosts are believed to have a unique electromagnetic field around them. This device detects intensity levels ranging from 0 to 5. An intensity above 3 is considered a potential ghostly presence.
-    - **Microphone:** Let's capture those ghostly whispers! This will measure noise levels in decibels. We now that background noise in the house is about 20 dB.
+    - **Microphone:** Let's capture those ghostly whispers! This will measure noise levels in decibels. We know that background noise in the house is about 20 dB.
     - **Thermometer:** Legend has it that a ghost's presence can drastically drop room temperatures, sometimes even below 0 degrees!
 
 <p align="center">
@@ -39,7 +41,13 @@ For instance, the ghost is in a room if the temperature there drops below 0 degr
 
 We set our devices to record from 9 pm to 8 am. After setting everything up, we headed back to the safety of our homes. The next morning, we collected our equipment and now have recordings sampled every second. You can identify each recording by its name format: `Device-Room-Time.txt`.
 
-Ready to unravel the mysteries? Let's go! 🕵🏻‍♂️👻
+Ready to unravel the mystery? Let's go!
+
+::: {.callout-note}
+## Colab Activity
+
+This lesson downloads a prepared dataset and is intended to run in Google Colab. The page displays the code without executing it during website rendering.
+:::
 
 ---
 
@@ -126,7 +134,7 @@ NumPy provides the `np.loadtxt()` function, which allows us to quickly load data
 
 ```{python}
 # Load one txt file
-filename = "emf-Hall-1am.txt"
+filename = "emf-Hall-0am.txt"
 x = np.loadtxt(filename)
 
 print(filename)
@@ -250,6 +258,28 @@ activity = (emf > 3).astype(int) + (temp < 0).astype(int) + (noise > 30).astype(
 plot_recordings(activity)
 ```
 
+---
+
+## Saving Arrays
+
+Use `np.savetxt()` when the data should remain readable as plain text. A later Python session can recover the array with `np.loadtxt()`.
+
+```{python}
+hourly_activity = np.array([0, 1, 0, 2, 1])
+np.savetxt("hourly_activity.txt", hourly_activity, fmt="%d")
+
+loaded_activity = np.loadtxt("hourly_activity.txt", dtype=int)
+print(loaded_activity)
+```
+
+NumPy's binary `.npy` format preserves the array's shape and data type exactly.
+
+```{python}
+np.save("hourly_activity.npy", hourly_activity)
+loaded_binary = np.load("hourly_activity.npy")
+print(loaded_binary)
+```
+
 Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we'll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.
 
 ## The Next Steps
@@ -263,3 +293,23 @@ To ensure thoroughness, we need to extend our investigation to every room. Manua
 ---
 
 Choose a partner and start the ghost hunting! 👻
+
+---
+
+## Summary and Reflection
+
+- `np.loadtxt()` loads numerical text data into an array.
+- `np.savetxt()` saves an array as readable text.
+- `np.save()` and `np.load()` preserve NumPy arrays in binary form.
+- `np.concatenate()` joins consecutive recordings into one array.
+- Boolean comparisons can convert sensor readings into activity masks.
+
+Explain why filenames, array shapes, and sampling order must remain consistent when several recordings are concatenated.
+
+---
+
+# Homework and Review
+
+Work through the Session 13 homework exercises available here.
+
+[Homework](homework_numpy.qmd#session-13-loading-and-saving-data){.btn .btn-primary}

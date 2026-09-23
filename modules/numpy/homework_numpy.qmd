@@ -1,0 +1,1206 @@
+---
+title: "Problem Set 3: NumPy"
+subtitle: "Homework for Module 3"
+format: html
+---
+
+## Introduction
+
+These exercises collect the former NumPy review and quiz material in the sessions where each concept is taught. Try each exercise before opening its collapsed solution.
+
+There are currently no mandatory exercises in this problem set, so every exercise includes a solution. If mandatory exercises are added later, they should use red warning callouts and omit the solution.
+
+```{python}
+import numpy as np
+```
+
+---
+
+# Session 11: Introduction to NumPy
+
+::: {.callout-note}
+## Shadowing the NumPy Alias
+
+Predict what happens when this code runs. Why does `np.array()` fail?
+
+```{python}
+#| eval: false
+np = 4
+arr = np.array([2, 3, np, 5])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The assignment `np = 4` replaces the NumPy alias with an integer. An integer has no `array` attribute, so Python raises an `AttributeError`. Restore the alias before using NumPy again:
+
+```{python}
+import numpy as np
+arr = np.array([2, 3, 4, 5])
+print(arr)
+```
+:::
+
+::: {.callout-note}
+## Replacing a Sum Loop
+
+Which NumPy expression replaces the loop and returns one total?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+total = 0
+for value in arr:
+    total = total + value
+```
+
+Choose among `np.cumsum(arr)`, `np.sum(arr)`, and `np.loop(arr)`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+total = np.sum(arr)
+print(total)
+```
+
+`np.cumsum(arr)` returns every running total, while `np.sum(arr)` returns one value. NumPy has no `np.loop()` function.
+:::
+
+::: {.callout-note}
+## Array Dimensions
+
+Which expression reports the number of dimensions of this array?
+
+```{python}
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+```
+
+Choose among `arr.shape`, `arr.ndim`, `arr.ndim()`, and `np.arr.ndim`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`arr.ndim` is the integer `2`. It is a property, so it does not use parentheses. `arr.shape` is `(2, 3)` and answers a different question.
+:::
+
+::: {.callout-note}
+## Image Shape
+
+A color image uses a three-dimensional array. Which assignment retrieves its height and width without storing the color-channel count?
+
+```{python}
+img = np.array([
+    [[1, 2, 3], [4, 5, 6]],
+    [[7, 8, 9], [10, 11, 12]]
+])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+height, width, _ = img.shape
+print(height, width)
+```
+
+The shape is `(height, width, channels)`. The underscore records that the third value is intentionally unused.
+:::
+
+::: {.callout-note}
+## Empty Arrays
+
+Which expressions correctly create an empty NumPy array?
+
+```{python}
+# Option A
+# x = np.array()
+
+# Option B
+x = np.array([])
+
+# Option C
+y = np.zeros(0, dtype=int)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Options B and C work and produce arrays with shape `(0,)`. Option A fails because `np.array()` requires an object argument.
+:::
+
+::: {.callout-note}
+## Array-Creation Debugging
+
+Determine which lines work. For each valid line, give the output shape and data type.
+
+```{python}
+a = np.zeros(3).astype(float)
+c = np.ones(5, dtype=bool)
+d = np.ones((5, 5))
+
+# Deliberately incorrect
+# b = np.zeros(3, 3)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+- `a` has shape `(3,)` and a floating-point dtype.
+- `c` has shape `(5,)` and Boolean dtype.
+- `d` has shape `(5, 5)` and a floating-point dtype.
+- `np.zeros(3, 3)` is invalid because the shape must be supplied as one tuple for a 2D array: `np.zeros((3, 3))`.
+:::
+
+---
+
+# Session 12: Array Arithmetic and Broadcasting
+
+::: {.callout-note}
+## Matrix Multiplication
+
+Which expressions perform matrix multiplication for these two-dimensional arrays?
+
+```{python}
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+```
+
+Choose among `a * b`, `a.b`, `a @ b`, and `np.matmul(a, b)`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Both `a @ b` and `np.matmul(a, b)` perform matrix multiplication. The expression `a * b` multiplies element by element, while `a.b` is not valid syntax for this operation.
+:::
+
+::: {.callout-note}
+## Assigning One Value to a Row
+
+Predict the final value of `x`.
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+x[0] = 0
+print(x)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The scalar `0` broadcasts across the first row:
+
+```text
+[[0 0]
+ [3 4]]
+```
+:::
+
+::: {.callout-note}
+## Fixing Vector Addition
+
+The following code should add `[1, 2, 3]` and `[4, 5, 6]`. Fix both array-creation errors.
+
+```{python}
+#| eval: false
+x = np.array(1, 2, 3)
+y = np.arange(4, 6, 1)
+print(x + y)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = np.array([1, 2, 3])
+y = np.arange(4, 7)
+print(x + y)
+```
+
+`np.array()` receives one collection, and the stopping value of `np.arange()` is excluded.
+:::
+
+::: {.callout-note}
+## Broadcasting a Row Vector
+
+Predict the shape and values of `c`.
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([[4, 5, 6], [7, 8, 9]])
+c = b > a
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The shape is `(2, 3)`. NumPy compares `a` with every row of `b`:
+
+```text
+[[ True  True  True]
+ [ True  True  True]]
+```
+:::
+
+::: {.callout-note}
+## Incompatible Shapes
+
+Explain why this comparison fails.
+
+```{python}
+#| eval: false
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6, 7])
+c = b > a
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The trailing dimensions are `4` and `3`. They are neither equal nor `1`, so the arrays are not broadcast-compatible.
+:::
+
+::: {.callout-note}
+## Row and Column Assignment
+
+Predict the two outputs.
+
+```{python}
+rows = np.array([[1, 2], [3, 4]])
+rows[1, :] = 0
+
+columns = np.array([[1, 2], [3, 4]])
+columns[:, 0] = 0
+
+print(rows)
+print(columns)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[[1 2]
+ [0 0]]
+
+[[0 2]
+ [0 4]]
+```
+
+The colon selects every position along the corresponding axis.
+:::
+
+---
+
+# Session 13: Loading and Saving Data
+
+::: {.callout-note}
+## Text and Binary Formats
+
+Write code that saves the array below once as readable text and once in NumPy's binary format. Then load both files and compare their shapes.
+
+```{python}
+measurements = np.array([[1.2, 1.4], [1.8, 2.1]])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+np.savetxt("measurements.txt", measurements)
+np.save("measurements.npy", measurements)
+
+from_text = np.loadtxt("measurements.txt")
+from_binary = np.load("measurements.npy")
+
+print(from_text.shape)
+print(from_binary.shape)
+```
+
+Both loaded arrays have shape `(2, 2)`. The `.npy` format also preserves NumPy-specific dtype and shape information exactly.
+:::
+
+---
+
+# Session 14: Array Manipulation
+
+::: {.callout-note}
+## Joining Two Vectors
+
+Join `a` and `b` into one one-dimensional array.
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+c = np.concatenate([a, b])
+print(c)
+```
+
+Adding the arrays would produce `[5, 7, 9]`; it would not join them.
+:::
+
+::: {.callout-note}
+## Predicting a Reshape
+
+What are the shape and values of `reshaped`?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+reshaped = arr.reshape(2, 3)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The result has two rows and three columns:
+
+```text
+[[1 2 3]
+ [4 5 6]]
+```
+:::
+
+::: {.callout-note}
+## Vertical Stacking
+
+Stack `a = [1, 2, 3]` and `b = [4, 5, 6]` as two rows of one matrix.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+stacked = np.vstack([a, b])
+print(stacked)
+```
+
+The result has shape `(2, 3)`.
+:::
+
+::: {.callout-note}
+## Sliding Windows
+
+Fix the code so it creates
+
+```text
+[[ 1,  2,  3,  4],
+ [ 2,  3,  4,  5],
+ ...
+ [11, 12, 13, 14]]
+```
+
+from `z = np.arange(1, 15)`.
+
+```{python}
+z = np.arange(1, 15)
+windows = []
+
+for index in range(1, len(z) - 3):
+    windows.append(z[index:index + 3])
+
+result = np.array(windows)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+z = np.arange(1, 15)
+windows = []
+
+for index in range(len(z) - 3):
+    windows.append(z[index:index + 4])
+
+result = np.array(windows)
+print(result)
+```
+
+The first window starts at index `0`, and each slice must contain four values.
+:::
+
+::: {.callout-note}
+## `reshape()` Does Not Modify in Place
+
+Fix the code so it creates the requested matrix.
+
+```{python}
+#| eval: false
+x = np.linspace(1, 9, 9)
+x.reshape((3, 3))
+x[1, 1] = 0
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = np.linspace(1, 9, 9)
+x = x.reshape((3, 3))
+x[1, 1] = 0
+print(x)
+```
+
+`reshape()` returns the reshaped array. Assign that return value to a variable before using two indices.
+:::
+
+::: {.callout-note}
+## Fibonacci Array Debugging
+
+The function should return the first `n` Fibonacci values as an integer array. Fix the initialization and return statement.
+
+```{python}
+#| eval: false
+def fibonacci_sequence(n: int):
+    arr = np.array()
+
+    for index in range(n):
+        if index <= 1:
+            new_element = 1
+        else:
+            new_element = arr[-2] + arr[-1]
+        arr = np.append(arr, new_element)
+
+    return int(arr)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def fibonacci_sequence(n: int) -> np.ndarray:
+    arr = np.array([], dtype=int)
+
+    for index in range(n):
+        if index <= 1:
+            new_element = 1
+        else:
+            new_element = arr[-2] + arr[-1]
+        arr = np.append(arr, new_element)
+
+    return arr
+
+
+print(fibonacci_sequence(10))
+```
+
+`np.array([])` creates an empty array; `int(arr)` incorrectly tries to turn the complete array into one integer.
+:::
+
+::: {.callout-note}
+## Concatenating an Empty Array
+
+Predict the output.
+
+```{python}
+x = np.array([])
+y = np.zeros(3)
+a = np.concatenate([x, y])
+print(a)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python prints `[0. 0. 0.]`. Concatenating an empty array contributes no elements, and `np.zeros(3)` uses a floating-point dtype by default.
+:::
+
+---
+
+# Session 15: Masking
+
+::: {.callout-note}
+## Mask Length
+
+Explain why this code fails, then repair it.
+
+```{python}
+#| eval: false
+arr = np.arange(4)
+arr_bool = np.array([True, False, True, False, True])
+selected = arr[arr_bool]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+A Boolean mask must have the same length as the axis it selects. Either extend `arr` to five elements or shorten the mask:
+
+```{python}
+arr = np.arange(4)
+arr_bool = np.array([True, False, True, False])
+selected = arr[arr_bool]
+print(selected)
+```
+:::
+
+::: {.callout-note}
+## Filtering Values
+
+Without a loop, select every value less than or equal to `3`.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+result = arr[arr <= 3]
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Selecting Even Values
+
+Predict the output.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+mask = arr % 2 == 0
+print(arr[mask])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python prints `[2 4]`. The mask is `True` exactly where the remainder after division by `2` is zero.
+:::
+
+::: {.callout-note}
+## Replacing Selected Values
+
+Replace every value greater than `3` with `10`.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr[arr > 3] = 10
+print(arr)
+```
+
+Assigning to a loop variable would only rebind that variable; it would not modify the array.
+:::
+
+::: {.callout-note}
+## Selecting Odd Values
+
+Write one Boolean expression that selects all odd values from the array.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+odds = arr[arr % 2 != 0]
+print(odds)
+```
+:::
+
+::: {.callout-note}
+## Combining Two Conditions
+
+The code should return the positive odd values `[1, 3]`, but its second mask has the wrong length. Fix it.
+
+```{python}
+#| eval: false
+arr = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4])
+mask_odd = arr % 2 != 0
+mask_positive = arr[mask_odd] > 0
+result = arr[mask_positive]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Build both masks from the original array and combine them element by element:
+
+```{python}
+arr = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4])
+mask_odd = arr % 2 != 0
+mask_positive = arr > 0
+result = arr[mask_odd & mask_positive]
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Mixed Data Types
+
+Why can this array not be compared directly with the integer `2`?
+
+```{python}
+#| eval: false
+arr = np.array(["a", 1, "b", 2, "c", 3, "d", 4])
+result = arr[arr > 2]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+NumPy chooses one dtype for the complete array. Because strings are present, all values become strings, so comparing them with an integer is invalid. If mixed Python types are required, keep a list and test each element explicitly:
+
+```{python}
+values = ["a", 1, "b", 2, "c", 3, "d", 4]
+result = [value for value in values if type(value) is int and value > 2]
+print(result)
+```
+:::
+
+::: {.callout-note}
+## Three Ways to Select Positions
+
+Predict all three outputs and explain why the first differs from the other two.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+
+print(arr[1::2])
+print(arr[arr % 2 != 0])
+print(arr[(arr.astype(int) / 2) != (arr / 2)])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The outputs are `[2 4]`, `[1 3 5]`, and `[1 3 5]`. The first expression selects odd **indices**. The other expressions select odd **values**, although `arr % 2 != 0` is much clearer than comparing two division results.
+:::
+
+---
+
+# Session 16: Random Numbers and Fancy Indexing
+
+::: {.callout-note}
+## A 50% Event
+
+Complete the condition so `"Welcome"` is printed with probability `0.5`.
+
+```{python}
+#| eval: false
+p = np.random.uniform(0, 100)
+
+if ...:
+    print("Welcome")
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+p = np.random.uniform(0, 100)
+
+if p >= 50:
+    print("Welcome")
+```
+
+A continuous uniform sample is equally likely to fall below or above `50`.
+:::
+
+::: {.callout-note}
+## Simulating Dice Rolls
+
+Fix the code so each player receives an integer from `1` through `6`.
+
+```{python}
+players = ["A", "B", "C"]
+results = np.random.uniform(1, 6, size=3)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+players = ["A", "B", "C"]
+results = np.random.randint(1, 7, size=len(players))
+player_results = dict(zip(players, results))
+print(player_results)
+```
+
+The upper bound `7` is excluded, so the possible results are `1` through `6`.
+:::
+
+::: {.callout-note}
+## Replacing the First and Last Values
+
+Fix the indexing so both positions become `100` in one assignment.
+
+```{python}
+#| eval: false
+arr = np.array([1, 2, 3, 4, 5])
+arr[0, -1] = 100
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+arr[[0, -1]] = 100
+print(arr)
+```
+
+The outer brackets create one array of fancy indices for the one-dimensional array.
+:::
+
+::: {.callout-note}
+## Repeated Fancy Indices
+
+Predict the output.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+print(arr[[0, 0, 1]])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Python prints `[1 1 2]`. Fancy indices may repeat, and the output preserves their order.
+:::
+
+::: {.callout-note}
+## Correcting Row and Column Indices
+
+Fix the code so it extracts the third row and second column.
+
+```{python}
+#| eval: false
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+third_row = matrix[3, :]
+second_column = matrix[:, 2]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+third_row = matrix[2, :]
+second_column = matrix[:, 1]
+
+print(third_row)
+print(second_column)
+```
+
+Python indices begin at zero.
+:::
+
+::: {.callout-note}
+## Extracting a Diagonal
+
+Use fancy indexing to extract the diagonal of this matrix.
+
+```{python}
+matrix = np.array([
+    [10, 20, 30, 40],
+    [50, 60, 70, 80],
+    [90, 100, 110, 120],
+    [130, 140, 150, 160]
+])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+indices = np.arange(matrix.shape[0])
+diagonal = matrix[indices, indices]
+print(diagonal)
+```
+
+`np.diag(matrix)` is also valid, but the paired indices make the fancy-indexing mechanism visible.
+:::
+
+::: {.callout-note}
+## Reversing an Array
+
+Fix the slice so it reverses this one-dimensional array.
+
+```{python}
+#| eval: false
+arr = np.array([1, 2, 3, 4, 5])
+reversed_arr = arr[::-1, :]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+reversed_arr = arr[::-1]
+print(reversed_arr)
+```
+
+A one-dimensional array has only one axis, so a second slice is invalid.
+:::
+
+::: {.callout-note}
+## Top-Left Subarray
+
+Extract the top-left `2 × 2` block.
+
+```{python}
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+subarray = matrix[0:2, 0:2]
+print(subarray)
+```
+:::
+
+::: {.callout-note}
+## Random Seeds and Reassignment
+
+Explain what the seed controls and what value type `x` has at the end.
+
+```{python}
+x = 10
+np.random.seed(x)
+x = np.random.randint(low=0, high=1000)
+print(x)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The seed fixes the pseudo-random sequence, so rerunning the code with the same NumPy random generator produces the same result. The final assignment replaces `x = 10` with one NumPy integer sampled from `0` through `999`.
+:::
+
+::: {.callout-note}
+## Monty Hall Columns
+
+The value `1` marks the winning door in each game. Select door number 2 from every game and compute the overall proportion of winning entries.
+
+```{python}
+games = np.array([
+    [0, 1, 0],
+    [1, 0, 0],
+    [0, 1, 0]
+])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+door_two = games[:, 1]
+gain_rate = np.mean(games)
+
+print(door_two)
+print(gain_rate)
+```
+
+Door number 2 uses index `1`. Because each row contains one car, one third of all entries are winning entries.
+:::
+
+---
+
+# Session 17: Statistics and Simulation
+
+::: {.callout-note}
+## Row Means
+
+Fix the code so it prints `[2, 5, 8]`.
+
+```{python}
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+mean = int(np.mean(arr))
+print(mean)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+row_means = np.mean(arr, axis=1).astype(int)
+print(row_means)
+```
+
+Reducing axis `1` combines the values across each row.
+:::
+
+::: {.callout-note}
+## Means Along Every Axis
+
+Fix the loop so it stores the mean along axis `0` and axis `1` in a dictionary.
+
+```{python}
+#| eval: false
+arr = np.array([[1, 2], [1, 3], [1, 7]])
+axes = arr.shape
+dict_means = {}
+
+for axis in axes:
+    key = f"mean_{axis}"
+    value = np.mean(arr, axis=axis)
+    dict_stats.append({key: value})
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([[1, 2], [1, 3], [1, 7]])
+dict_means = {}
+
+for axis in range(arr.ndim):
+    dict_means[f"mean_{axis}"] = np.mean(arr, axis=axis)
+
+print(dict_means)
+```
+
+`arr.shape` contains axis sizes `(3, 2)`, not axis numbers. A 2D array has axes `0` and `1`.
+:::
+
+::: {.callout-note}
+## Normalizing a Vector
+
+The normalized vector should have mean `0`. Correct the formula.
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+mean = np.mean(arr)
+std = np.std(arr)
+arr_norm = arr - mean / std
+print(np.mean(arr_norm))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr_norm = (arr - mean) / std
+print(np.mean(arr_norm))
+```
+
+The subtraction must happen before division. Floating-point arithmetic may display a value extremely close to zero rather than exactly zero.
+:::
+
+::: {.callout-note}
+## Accumulation or One Final Total?
+
+Predict each output. Which NumPy expression reproduces the final value of the loop?
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+result = 1
+
+for value in arr:
+    result = result - value
+
+print(result)
+print(1 - np.cumsum(arr))
+print(1 - np.sum(arr))
+print(1 - np.diff(arr))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+- The loop ends at `-14`.
+- `1 - np.cumsum(arr)` returns `[0, -2, -5, -9, -14]`.
+- `1 - np.sum(arr)` returns `-14`, matching the loop's final value.
+- `1 - np.diff(arr)` returns `[0, 0, 0, 0]`.
+:::
+
+---
+
+# Session 18: Linear Algebra
+
+::: {.callout-note}
+## A Matrix Times Its Inverse
+
+Predict `z`. Why might some entries not display as exact integers?
+
+```{python}
+x = np.array([[1, 2], [3, 4]])
+y = np.linalg.inv(x)
+z = x @ y
+print(z)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Mathematically, `z` is the identity matrix. Floating-point calculations may produce tiny errors such as `2.22044605e-16` instead of zero. Use `np.allclose(z, np.eye(2))` to test approximate equality:
+
+```{python}
+print(np.allclose(z, np.eye(2)))
+```
+
+Converting directly to integers is unsafe because conversion truncates rather than rounds.
+:::
+
+::: {.callout-note}
+## Finding Eigenvalues
+
+Which call returns the eigenvalues and eigenvectors of a square matrix?
+
+```{python}
+X = np.array([[1, 2], [3, 4]])
+```
+
+Choose among `np.eigen(X)`, `np.eigvals(X)`, and `np.linalg.eig(X)`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+eigenvalues, eigenvectors = np.linalg.eig(X)
+print(eigenvalues)
+print(eigenvectors)
+```
+
+`np.linalg.eig()` returns both results. `np.linalg.eigvals()` returns only eigenvalues; `np.eigvals()` and `np.eigen()` do not exist.
+:::
+
+---
+
+# Session 19: Vectorization
+
+::: {.callout-note}
+## Element-Wise Comparison
+
+Predict `c`.
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+c = a > b
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`c` is `[False, False, False]`. NumPy performs the comparison element by element.
+:::
+
+::: {.callout-note}
+## Broadcasting a Column and a Row
+
+Predict the shape and values of `c`.
+
+```{python}
+a = np.array([[1], [2], [3]])
+b = np.array([4, 5, 6])
+c = a > b
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`a` has shape `(3, 1)` and `b` has shape `(3,)`, which behaves like `(1, 3)`. Broadcasting produces a `(3, 3)` array. Every comparison is false because each value in `a` is smaller than every value in `b`.
+:::
+
+::: {.callout-note}
+## Broadcasting Failure
+
+Why does this comparison raise a `ValueError`?
+
+```{python}
+#| eval: false
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6, 7])
+c = a > b
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The one-dimensional shapes `(3,)` and `(4,)` are incompatible because their only dimensions differ and neither equals `1`.
+:::
+
+---
+
+# Further Practice
+
+- [NumPy 100 Exercises](https://github.com/rougier/numpy-100)
+- [From Python to NumPy](https://www.labri.fr/perso/nrougier/from-python-to-numpy/)
+- [Project Euler](https://projecteuler.net/)
+- [Advent of Code](https://adventofcode.com/)

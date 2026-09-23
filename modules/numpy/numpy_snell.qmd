@@ -1,136 +1,129 @@
 ---
-title: "Numpy Snell"
+title: "Application: Snell's Law"
 subtitle: "Module 3: NumPy"
 format: html
 ---
+
+# Estimating a Refractive Index
+
+When light moves from one medium to another, its path bends. This phenomenon is called **refraction**. Snell's law relates the angle of incidence $\theta_1$ to the angle of refraction $\theta_2$:
+
+$$
+n_1 \sin(\theta_1) = n_2 \sin(\theta_2),
+$$
+
+where $n_1$ and $n_2$ are the refractive indices of the two media. Air has a refractive index close to `1`, while water has a refractive index close to `1.33`.
+
+In this application, you will use vectorized trigonometric functions and descriptive statistics to estimate the refractive index of an unknown material.
 
 ```{python}
 import numpy as np
 ```
 
+## Experimental Data
+
+Each row contains an incidence angle followed by its corresponding refraction angle. Both are measured in degrees.
+
+```{python}
+# Columns: theta_1, theta_2
+angles = np.array([
+    [30, 18],
+    [32, 19],
+    [34, 21],
+    [36, 22],
+    [38, 23],
+    [40, 24],
+    [42, 25],
+    [44, 26],
+    [46, 27],
+    [48, 28],
+    [50, 29],
+    [52, 30],
+    [54, 31],
+    [56, 32],
+    [58, 33],
+    [60, 33]
+], dtype=float)
+
+print(angles.shape)
+```
+
+::: {.callout-note}
+## Task A: Calculate Relative Refractive Indices
+
+Write a function named `index_of_refraction(theta_1, theta_2)` that accepts two arrays of angles in degrees and returns
+
+$$
+\frac{\sin(\theta_1)}{\sin(\theta_2)}.
+$$
+
+Remember that NumPy's trigonometric functions expect radians.
+:::
+
+::: {.callout-note}
+## Task B: Summarize the Measurements
+
+Write a function named `mean_and_std(values)` that returns the mean and population standard deviation in the format `mean +/- standard deviation`. Display both numbers with two decimal places.
+
+For `[1, 1.41, 1.22]`, the result should be `1.21 +/- 0.17`.
+:::
+
+::: {.callout-note}
+## Task C: Estimate the Unknown Index
+
+Write a function named `estimate_index(angles_2d, n_1=1.0)` that:
+
+1. extracts the incidence and refraction columns;
+2. calls `index_of_refraction()`;
+3. calculates $n_2 = n_1\sin(\theta_1)/\sin(\theta_2)$;
+4. calls `mean_and_std()`; and
+5. returns the formatted estimate.
+
+Estimate the unknown material first with air as the initial medium and then with water, using `n_1=1.33`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Example Solution
+
+```{python}
+def index_of_refraction(
+    theta_1: np.ndarray,
+    theta_2: np.ndarray
+) -> np.ndarray:
+    """Return sin(theta_1) / sin(theta_2) for angles in degrees."""
+    theta_1_rad = np.radians(theta_1)
+    theta_2_rad = np.radians(theta_2)
+    return np.sin(theta_1_rad) / np.sin(theta_2_rad)
+
+
+def mean_and_std(values: np.ndarray) -> str:
+    """Format the mean and population standard deviation."""
+    mean = np.mean(values)
+    standard_deviation = np.std(values)
+    return f"{mean:.2f} +/- {standard_deviation:.2f}"
+
+
+def estimate_index(angles_2d: np.ndarray, n_1: float = 1.0) -> str:
+    """Estimate the refractive index of the second medium."""
+    incidence_angles = angles_2d[:, 0]
+    refracted_angles = angles_2d[:, 1]
+    relative_indices = index_of_refraction(
+        incidence_angles,
+        refracted_angles
+    )
+    n_2_values = n_1 * relative_indices
+    return mean_and_std(n_2_values)
+
+
+print("From air:", estimate_index(angles))
+print("From water:", estimate_index(angles, n_1=1.33))
+```
+:::
+
 ---
 
-## Snell's Law
+## Summary and Reflection
 
-When light travels from one medium to another (e.g., from air to water), its path bends, a phenomenon called refraction. The relationship between the angle of incidence ($ \theta_1 $) and the angle of refraction ($ \theta_2 $) is given by Snell's Law:
+This application combines two-dimensional slicing, degree-to-radian conversion, vectorized trigonometric functions, and statistical aggregation.
 
-$$
-n_1 \sin(\theta_1) = n_2 \sin(\theta_2)
-$$
-
-Where:
-
-- $ n_1 $ is the index of refraction of the first medium (e.g., air).
-- $ n_2 $ is the index of refraction of the second medium (e.g., water or an unknown material in our case).
-- $ \theta_1 $ is the angle of incidence, i.e., the angle between the incident ray and the normal to the surface.
-- $ \theta_2 $ is the angle of refraction, i.e., the angle between the refracted ray and the normal to the surface.
-
-The index of refraction indicates how much a ray of light is bent, or refracted, when entering a material. For example, air typically has an index of refraction of about 1.0003, while water has an index around 1.33.
-
-<p align="center">
-<img src="https://media.geeksforgeeks.org/wp-content/uploads/20220514021809/snelllaw1.png" width="400" height="auto" />
-</p>
-
-### Exercise
-
-You've been conducting optical experiments, directing light from air into an unknown material and measuring the angles of incidence and refraction. Your objective is to estimate the refractive index ($ n_2 $) of this unknown material using Snell's Law.
-
-### Data
-
-You have a list of pairs of measurements. Each pair consists of an angle of incidence and its corresponding angle of refraction, in degrees.
-
-```{python}
-# [theta_1, theta_2]
-angles = [
-  [30, 18],
-  [32, 19],
-  [34, 21],
-  [36, 22],
-  [38, 23],
-  [40, 24],
-  [42, 25],
-  [44, 26],
-  [46, 27],
-  [48, 28],
-  [50, 29],
-  [52, 30],
-  [54, 31],
-  [56, 32],
-  [58, 33],
-  [60, 33]]
-```
-
-### Task A: Calculating Refraction Indices
-
-Create a function `index_of_refraction` to estimate the relative index of refraction for various angles of incidence and refraction. The function tales two input parameters:
-
-- `theta_1`: An array of incidence angles in degrees.
-- `theta_2`: An array of refracted angles in degrees.
-
-The function should return an array representing the ratio of the sine of the incidence angles to the sine of the refracted angles:
-
-$\sin(\theta_1) / \sin(\theta_2)$
-
-**Example:** For the given incidence and refracted angles:
-
-$\theta_1 = [90, 45, 60]$
-
-$\theta_2 = [90, 30, 45]$
-
-The function should output: $[1, 1.41, 1.22]$.
-
-```{python}
-#| eval: false
-
-```
-
-### Task B: Calculating Average and Standard Deviation
-
-Create a function `mean_and_std` to compute the average and standard deviation of a given array of values. The function should format the results with two significant figures and return them as a string. The input is:
-
-- `n`: An array of numerical values.
-
-And the output should be a string representing the average followed by the standard deviation in the format: `average +/- standard deviation`.
-
-**Example:** For the input array:
-
-$n = [1, 1.41, 1.22]$
-
-The function should output: `1.21 +/- 0.17`.
-
-```{python}
-#| eval: false
-
-```
-
-### Task C: Estimating the Index of Refraction
-
-Design a function named `estimate_index` to determine the estimated index of refraction based on given incidence and refracted angles. The input is:
-
-- `angles_2d`: A 2D array where each row consists of a pair of incidence and refracted angles, both in degrees.
-- `n_1`: A keyword parameter representing the refraction index of the first medium. It defaults to 1, which is the typical refraction index of air.
-
-The function should perform the following steps:
-
-1. Separate the 2D array `angles_2d` into two arrays:
-   - `incidence_angles` for the first values of each pair ($\theta_1$).
-   - `refracted_angles` for the second values of each pair ($\theta_1$).
-2. Utilize the `index_of_refraction` function to obtain an array of values for $\sin{\theta_1} / \sin{\theta_2}$.
-3. Compute the array `n_2_values` representing the refraction indices for the second medium using the formula:
-$$n_2 = n_1 \cdot \sin{\theta_1} / \sin{\theta_2}$$
-4. Feed the `n_2_values` array into the `mean_and_std` function to determine the estimated index of refraction.
-5. Display the result with a message like: "The estimated index of refraction is..."
-
-Now put all work together and compute the refraction coefficient. What material were we studying?
-
-If we were shooting our beams through water ($n_1 = 1.33)$ instead of air, and got the same refracted angles, what would the second material be?
-
-```{python}
-# Use these functions as mock functions,
-# until your team mates give you the good ones
-def index_of_refraction(theta_1, theta_2):
-  return np.zeros(len(theta_1))
-
-def mean_and_std(x):
-  return "1.00 +/- 0.00"
-```
+Explain why the angles must be converted to radians before calling `np.sin()`. Then describe how measurement variability appears in the reported result.
