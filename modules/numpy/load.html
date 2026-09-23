@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computer Programming I (Python) - Numpy Load</title>
+<title>Computer Programming I (Python) - Loading and Saving NumPy Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/load.html">Loading Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/load.html">Loading and Saving Data</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -340,13 +340,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/arithmetics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Array Arithmetics</span></a>
+ <span class="menu-text">Array Arithmetic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/load.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Loading Data</span></a>
+ <span class="menu-text">Loading and Saving Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -364,13 +364,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/random_fancy_indexing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Random &amp; Fancy Indexing</span></a>
+ <span class="menu-text">Random Numbers &amp; Fancy Indexing</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/statistics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Statistics</span></a>
+ <span class="menu-text">Statistics and Simulation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -388,7 +388,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/numpy_algebra.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Application: Linear Algebra</span></a>
+ <span class="menu-text">Application: Numerical Linear Algebra</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -405,8 +405,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../modules/numpy/review_numpy.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Review</span></a>
+  <a href="../../modules/numpy/homework_numpy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
   </div>
 </li>
       </ul>
@@ -450,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#happy-halloween" id="toc-happy-halloween" class="nav-link active" data-scroll-target="#happy-halloween">🎃 Happy Halloween! 🎃</a>
+  <li><a href="#loading-and-saving-data-ghost-hunting" id="toc-loading-and-saving-data-ghost-hunting" class="nav-link active" data-scroll-target="#loading-and-saving-data-ghost-hunting">Loading and Saving Data: Ghost Hunting</a>
   <ul class="collapse">
   <li><a href="#the-house-of-the-seven-chimneys" id="toc-the-house-of-the-seven-chimneys" class="nav-link" data-scroll-target="#the-house-of-the-seven-chimneys">The House of the Seven Chimneys</a>
   <ul class="collapse">
@@ -468,17 +468,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#how-do-we-load-the-data" id="toc-how-do-we-load-the-data" class="nav-link" data-scroll-target="#how-do-we-load-the-data">How do we load the data?</a></li>
   </ul></li>
   <li><a href="#combining-data-joining-arrays" id="toc-combining-data-joining-arrays" class="nav-link" data-scroll-target="#combining-data-joining-arrays">Combining Data: Joining Arrays</a></li>
+  <li><a href="#saving-arrays" id="toc-saving-arrays" class="nav-link" data-scroll-target="#saving-arrays">Saving Arrays</a></li>
   <li><a href="#the-next-steps" id="toc-the-next-steps" class="nav-link" data-scroll-target="#the-next-steps">The Next Steps</a></li>
+  <li><a href="#summary-and-reflection" id="toc-summary-and-reflection" class="nav-link" data-scroll-target="#summary-and-reflection">Summary and Reflection</a></li>
   </ul></li>
+  <li><a href="#homework-and-review" id="toc-homework-and-review" class="nav-link" data-scroll-target="#homework-and-review">Homework and Review</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/load.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/load.html">Loading Data</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/load.html">Loading and Saving Data</a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Numpy Load</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Loading and Saving NumPy Data</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 <p class="subtitle lead">Module 3: NumPy</p>
 </div>
 
@@ -496,8 +499,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="happy-halloween" class="level1">
-<h1>🎃 Happy Halloween! 🎃</h1>
+<section id="loading-and-saving-data-ghost-hunting" class="level1">
+<h1>Loading and Saving Data: Ghost Hunting</h1>
 <p>Instead of our regular lesson today, we are embarking on a <em>chilling</em> adventure: <strong>Ghost Hunting!</strong></p>
 <section id="the-house-of-the-seven-chimneys" class="level2">
 <h2 class="anchored" data-anchor-id="the-house-of-the-seven-chimneys">The House of the Seven Chimneys</h2>
@@ -511,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Placed three monitoring devices in each room:</strong>
 <ul>
 <li><strong>EMF (Electro-Magnetic Frequency) Reader:</strong> Ghosts are believed to have a unique electromagnetic field around them. This device detects intensity levels ranging from 0 to 5. An intensity above 3 is considered a potential ghostly presence.</li>
-<li><strong>Microphone:</strong> Let’s capture those ghostly whispers! This will measure noise levels in decibels. We now that background noise in the house is about 20 dB.</li>
+<li><strong>Microphone:</strong> Let’s capture those ghostly whispers! This will measure noise levels in decibels. We know that background noise in the house is about 20 dB.</li>
 <li><strong>Thermometer:</strong> Legend has it that a ghost’s presence can drastically drop room temperatures, sometimes even below 0 degrees!</li>
 </ul></li>
 </ol>
@@ -526,7 +529,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="recording-details" class="level3">
 <h3 class="anchored" data-anchor-id="recording-details">Recording Details</h3>
 <p>We set our devices to record from 9 pm to 8 am. After setting everything up, we headed back to the safety of our homes. The next morning, we collected our equipment and now have recordings sampled every second. You can identify each recording by its name format: <code>Device-Room-Time.txt</code>.</p>
-<p>Ready to unravel the mysteries? Let’s go! 🕵🏻‍♂️👻</p>
+<p>Ready to unravel the mystery? Let’s go!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Colab Activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This lesson downloads a prepared dataset and is intended to run in Google Colab. The page displays the code without executing it during website rendering.</p>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -537,260 +553,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>🛑 <strong>Troubleshooting Tip:</strong> If you encounter any issues while executing the cell, try the following steps: 1. Navigate to <strong>“Runtime”</strong> in the menu. 2. Select <strong>“Disconnect and delete runtime”</strong>. 3. After doing so, attempt to execute the cell once more.</p>
 </blockquote>
-<div id="700c13a1" class="cell" data-execution_count="1">
+<div id="5498f351" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the ZIP file from the provided Google Drive link</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="st">'https://drive.google.com/uc?export=download&amp;id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ'</span> <span class="op">-</span>O myfile.<span class="bu">zip</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the ZIP file</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip <span class="op">-</span>o myfile.<span class="bu">zip</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>--2026-09-23 10:48:33--  https://drive.google.com/uc?export=download&amp;id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ
-Resolving drive.google.com (drive.google.com)... 142.251.218.142, 2607:f8b0:4005:808::200e
-Connecting to drive.google.com (drive.google.com)|142.251.218.142|:443... connected.
-HTTP request sent, awaiting response... 303 See Other
-Location: https://drive.usercontent.google.com/download?id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ&amp;export=download [following]
---2026-09-23 10:48:33--  https://drive.usercontent.google.com/download?id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ&amp;export=download
-Resolving drive.usercontent.google.com (drive.usercontent.google.com)... 142.251.218.65, 2607:f8b0:4005:808::2001
-Connecting to drive.usercontent.google.com (drive.usercontent.google.com)|142.251.218.65|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 418652 (409K) [application/octet-stream]
-Saving to: ‘myfile.zip’
-
-myfile.zip            0%[                    ]       0  --.-KB/s               myfile.zip          100%[===================&gt;] 408.84K  --.-KB/s    in 0.08s   
-
-2026-09-23 10:48:35 (5.27 MB/s) - ‘myfile.zip’ saved [418652/418652]
-
-Archive:  myfile.zip
-  inflating: emf-Bathroom-0am.txt    
-  inflating: emf-Bathroom-10pm.txt   
-  inflating: emf-Bathroom-11pm.txt   
-  inflating: emf-Bathroom-1am.txt    
-  inflating: emf-Bathroom-2am.txt    
-  inflating: emf-Bathroom-3am.txt    
-  inflating: emf-Bathroom-4am.txt    
-  inflating: emf-Bathroom-5am.txt    
-  inflating: emf-Bathroom-6am.txt    
-  inflating: emf-Bathroom-7am.txt    
-  inflating: emf-Bathroom-8am.txt    
-  inflating: emf-Bathroom-9pm.txt    
-  inflating: emf-ChildrenBedroom-0am.txt  
-  inflating: emf-ChildrenBedroom-10pm.txt  
-  inflating: emf-ChildrenBedroom-11pm.txt  
-  inflating: emf-ChildrenBedroom-1am.txt  
-  inflating: emf-ChildrenBedroom-2am.txt  
-  inflating: emf-ChildrenBedroom-3am.txt  
-  inflating: emf-ChildrenBedroom-4am.txt  
-  inflating: emf-ChildrenBedroom-5am.txt  
-  inflating: emf-ChildrenBedroom-6am.txt  
-  inflating: emf-ChildrenBedroom-7am.txt  
-  inflating: emf-ChildrenBedroom-8am.txt  
-  inflating: emf-ChildrenBedroom-9pm.txt  
-  inflating: emf-Hall-0am.txt        
-  inflating: emf-Hall-10pm.txt       
-  inflating: emf-Hall-11pm.txt       
-  inflating: emf-Hall-1am.txt        
-  inflating: emf-Hall-2am.txt        
-  inflating: emf-Hall-3am.txt        
-  inflating: emf-Hall-4am.txt        
-  inflating: emf-Hall-5am.txt        
-  inflating: emf-Hall-6am.txt        
-  inflating: emf-Hall-7am.txt        
-  inflating: emf-Hall-8am.txt        
-  inflating: emf-Hall-9pm.txt        
-  inflating: emf-Kitchen-0am.txt     
-  inflating: emf-Kitchen-10pm.txt    
-  inflating: emf-Kitchen-11pm.txt    
-  inflating: emf-Kitchen-1am.txt     
-  inflating: emf-Kitchen-2am.txt     
-  inflating: emf-Kitchen-3am.txt     
-  inflating: emf-Kitchen-4am.txt     
-  inflating: emf-Kitchen-5am.txt     
-  inflating: emf-Kitchen-6am.txt     
-  inflating: emf-Kitchen-7am.txt     
-  inflating: emf-Kitchen-8am.txt     
-  inflating: emf-Kitchen-9pm.txt     
-  inflating: emf-LivingRoom-0am.txt  
-  inflating: emf-LivingRoom-10pm.txt  
-  inflating: emf-LivingRoom-11pm.txt  
-  inflating: emf-LivingRoom-1am.txt  
-  inflating: emf-LivingRoom-2am.txt  
-  inflating: emf-LivingRoom-3am.txt  
-  inflating: emf-LivingRoom-4am.txt  
-  inflating: emf-LivingRoom-5am.txt  
-  inflating: emf-LivingRoom-6am.txt  
-  inflating: emf-LivingRoom-7am.txt  
-  inflating: emf-LivingRoom-8am.txt  
-  inflating: emf-LivingRoom-9pm.txt  
-  inflating: emf-MainBedroom-0am.txt  
-  inflating: emf-MainBedroom-10pm.txt  
-  inflating: emf-MainBedroom-11pm.txt  
-  inflating: emf-MainBedroom-1am.txt  
-  inflating: emf-MainBedroom-2am.txt  
-  inflating: emf-MainBedroom-3am.txt  
-  inflating: emf-MainBedroom-4am.txt  
-  inflating: emf-MainBedroom-5am.txt  
-  inflating: emf-MainBedroom-6am.txt  
-  inflating: emf-MainBedroom-7am.txt  
-  inflating: emf-MainBedroom-8am.txt  
-  inflating: emf-MainBedroom-9pm.txt  
-  inflating: noise-Bathroom-0am.txt  
-  inflating: noise-Bathroom-10pm.txt  
-  inflating: noise-Bathroom-11pm.txt  
-  inflating: noise-Bathroom-1am.txt  
-  inflating: noise-Bathroom-2am.txt  
-  inflating: noise-Bathroom-3am.txt  
-  inflating: noise-Bathroom-4am.txt  
-  inflating: noise-Bathroom-5am.txt  
-  inflating: noise-Bathroom-6am.txt  
-  inflating: noise-Bathroom-7am.txt  
-  inflating: noise-Bathroom-8am.txt  
-  inflating: noise-Bathroom-9pm.txt  
-  inflating: noise-ChildrenBedroom-0am.txt  
-  inflating: noise-ChildrenBedroom-10pm.txt  
-  inflating: noise-ChildrenBedroom-11pm.txt  
-  inflating: noise-ChildrenBedroom-1am.txt  
-  inflating: noise-ChildrenBedroom-2am.txt  
-  inflating: noise-ChildrenBedroom-3am.txt  
-  inflating: noise-ChildrenBedroom-4am.txt  
-  inflating: noise-ChildrenBedroom-5am.txt  
-  inflating: noise-ChildrenBedroom-6am.txt  
-  inflating: noise-ChildrenBedroom-7am.txt  
-  inflating: noise-ChildrenBedroom-8am.txt  
-  inflating: noise-ChildrenBedroom-9pm.txt  
-  inflating: noise-Hall-0am.txt      
-  inflating: noise-Hall-10pm.txt     
-  inflating: noise-Hall-11pm.txt     
-  inflating: noise-Hall-1am.txt      
-  inflating: noise-Hall-2am.txt      
-  inflating: noise-Hall-3am.txt      
-  inflating: noise-Hall-4am.txt      
-  inflating: noise-Hall-5am.txt      
-  inflating: noise-Hall-6am.txt      
-  inflating: noise-Hall-7am.txt      
-  inflating: noise-Hall-8am.txt      
-  inflating: noise-Hall-9pm.txt      
-  inflating: noise-Kitchen-0am.txt   
-  inflating: noise-Kitchen-10pm.txt  
-  inflating: noise-Kitchen-11pm.txt  
-  inflating: noise-Kitchen-1am.txt   
-  inflating: noise-Kitchen-2am.txt   
-  inflating: noise-Kitchen-3am.txt   
-  inflating: noise-Kitchen-4am.txt   
-  inflating: noise-Kitchen-5am.txt   
-  inflating: noise-Kitchen-6am.txt   
-  inflating: noise-Kitchen-7am.txt   
-  inflating: noise-Kitchen-8am.txt   
-  inflating: noise-Kitchen-9pm.txt   
-  inflating: noise-LivingRoom-0am.txt  
-  inflating: noise-LivingRoom-10pm.txt  
-  inflating: noise-LivingRoom-11pm.txt  
-  inflating: noise-LivingRoom-1am.txt  
-  inflating: noise-LivingRoom-2am.txt  
-  inflating: noise-LivingRoom-3am.txt  
-  inflating: noise-LivingRoom-4am.txt  
-  inflating: noise-LivingRoom-5am.txt  
-  inflating: noise-LivingRoom-6am.txt  
-  inflating: noise-LivingRoom-7am.txt  
-  inflating: noise-LivingRoom-8am.txt  
-  inflating: noise-LivingRoom-9pm.txt  
-  inflating: noise-MainBedroom-0am.txt  
-  inflating: noise-MainBedroom-10pm.txt  
-  inflating: noise-MainBedroom-11pm.txt  
-  inflating: noise-MainBedroom-1am.txt  
-  inflating: noise-MainBedroom-2am.txt  
-  inflating: noise-MainBedroom-3am.txt  
-  inflating: noise-MainBedroom-4am.txt  
-  inflating: noise-MainBedroom-5am.txt  
-  inflating: noise-MainBedroom-6am.txt  
-  inflating: noise-MainBedroom-7am.txt  
-  inflating: noise-MainBedroom-8am.txt  
-  inflating: noise-MainBedroom-9pm.txt  
-  inflating: temp-Bathroom-0am.txt   
-  inflating: temp-Bathroom-10pm.txt  
-  inflating: temp-Bathroom-11pm.txt  
-  inflating: temp-Bathroom-1am.txt   
-  inflating: temp-Bathroom-2am.txt   
-  inflating: temp-Bathroom-3am.txt   
-  inflating: temp-Bathroom-4am.txt   
-  inflating: temp-Bathroom-5am.txt   
-  inflating: temp-Bathroom-6am.txt   
-  inflating: temp-Bathroom-7am.txt   
-  inflating: temp-Bathroom-8am.txt   
-  inflating: temp-Bathroom-9pm.txt   
-  inflating: temp-ChildrenBedroom-0am.txt  
-  inflating: temp-ChildrenBedroom-10pm.txt  
-  inflating: temp-ChildrenBedroom-11pm.txt  
-  inflating: temp-ChildrenBedroom-1am.txt  
-  inflating: temp-ChildrenBedroom-2am.txt  
-  inflating: temp-ChildrenBedroom-3am.txt  
-  inflating: temp-ChildrenBedroom-4am.txt  
-  inflating: temp-ChildrenBedroom-5am.txt  
-  inflating: temp-ChildrenBedroom-6am.txt  
-  inflating: temp-ChildrenBedroom-7am.txt  
-  inflating: temp-ChildrenBedroom-8am.txt  
-  inflating: temp-ChildrenBedroom-9pm.txt  
-  inflating: temp-Hall-0am.txt       
-  inflating: temp-Hall-10pm.txt      
-  inflating: temp-Hall-11pm.txt      
-  inflating: temp-Hall-1am.txt       
-  inflating: temp-Hall-2am.txt       
-  inflating: temp-Hall-3am.txt       
-  inflating: temp-Hall-4am.txt       
-  inflating: temp-Hall-5am.txt       
-  inflating: temp-Hall-6am.txt       
-  inflating: temp-Hall-7am.txt       
-  inflating: temp-Hall-8am.txt       
-  inflating: temp-Hall-9pm.txt       
-  inflating: temp-Kitchen-0am.txt    
-  inflating: temp-Kitchen-10pm.txt   
-  inflating: temp-Kitchen-11pm.txt   
-  inflating: temp-Kitchen-1am.txt    
-  inflating: temp-Kitchen-2am.txt    
-  inflating: temp-Kitchen-3am.txt    
-  inflating: temp-Kitchen-4am.txt    
-  inflating: temp-Kitchen-5am.txt    
-  inflating: temp-Kitchen-6am.txt    
-  inflating: temp-Kitchen-7am.txt    
-  inflating: temp-Kitchen-8am.txt    
-  inflating: temp-Kitchen-9pm.txt    
-  inflating: temp-LivingRoom-0am.txt  
-  inflating: temp-LivingRoom-10pm.txt  
-  inflating: temp-LivingRoom-11pm.txt  
-  inflating: temp-LivingRoom-1am.txt  
-  inflating: temp-LivingRoom-2am.txt  
-  inflating: temp-LivingRoom-3am.txt  
-  inflating: temp-LivingRoom-4am.txt  
-  inflating: temp-LivingRoom-5am.txt  
-  inflating: temp-LivingRoom-6am.txt  
-  inflating: temp-LivingRoom-7am.txt  
-  inflating: temp-LivingRoom-8am.txt  
-  inflating: temp-LivingRoom-9pm.txt  
-  inflating: temp-MainBedroom-0am.txt  
-  inflating: temp-MainBedroom-10pm.txt  
-  inflating: temp-MainBedroom-11pm.txt  
-  inflating: temp-MainBedroom-1am.txt  
-  inflating: temp-MainBedroom-2am.txt  
-  inflating: temp-MainBedroom-3am.txt  
-  inflating: temp-MainBedroom-4am.txt  
-  inflating: temp-MainBedroom-5am.txt  
-  inflating: temp-MainBedroom-6am.txt  
-  inflating: temp-MainBedroom-7am.txt  
-  inflating: temp-MainBedroom-8am.txt  
-  inflating: temp-MainBedroom-9pm.txt  </code></pre>
-</div>
 </div>
 <hr>
 </section>
 <section id="setting-up-our-toolkit" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-our-toolkit">Setting Up Our Toolkit</h2>
 <p>Before we dive into the analysis, let’s gather the tools we’ll need. It’s a best practice to import all the libraries at the beginning to ensure we have everything ready and to avoid any disruptions later on.</p>
-<div id="578d9e8c" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># To plot the recordings</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># This library will help us load the files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>ModuleNotFoundError: No module named 'matplotlib'</code></pre>
-</div>
+<div id="e302591c" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># To plot the recordings</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># This library will help us load the files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="working-with-files-using-os" class="level2">
@@ -799,39 +577,36 @@ Archive:  myfile.zip
 <section id="what-are-we-using-os-for" class="level3">
 <h3 class="anchored" data-anchor-id="what-are-we-using-os-for">What are we using <code>os</code> for?</h3>
 <p><strong>Looping Over Files:</strong> The <code>os</code> library allows us to iterate over all the files in a directory, making it much simpler to process large sets of data.</p>
-<div id="11a34eab" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> list_txt_files_from_directory(directory: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">  List all the TXT files from the specified directory.</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">  directory : str</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">      The path to the directory containing the TXT files.</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">  list[str]</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">      A list of filenames of the TXT files in the directory.</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize the list where filenames will be stored</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  filenames <span class="op">=</span> []</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through the directory</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> filename <span class="kw">in</span> os.listdir(directory):</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the file is a TXT file</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename.endswith(<span class="st">".txt"</span>):</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add the filename to the list</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      filenames.append(filename)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">sorted</span>(filenames)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>list_files <span class="op">=</span> list_txt_files_from_directory(<span class="st">"."</span>)</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(list_files[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'os' is not defined</code></pre>
-</div>
+<div id="0a4e71d8" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> list_txt_files_from_directory(directory: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">  List all the TXT files from the specified directory.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">  directory : str</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">      The path to the directory containing the TXT files.</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">  list[str]</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">      A list of filenames of the TXT files in the directory.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize the list where filenames will be stored</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  filenames <span class="op">=</span> []</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through the directory</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> filename <span class="kw">in</span> os.listdir(directory):</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the file is a TXT file</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename.endswith(<span class="st">".txt"</span>):</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add the filename to the list</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      filenames.append(filename)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">sorted</span>(filenames)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>list_files <span class="op">=</span> list_txt_files_from_directory(<span class="st">"."</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(list_files[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -842,70 +617,58 @@ Archive:  myfile.zip
 <section id="how-do-we-load-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-we-load-the-data">How do we load the data?</h3>
 <p>NumPy provides the <code>np.loadtxt()</code> function, which allows us to quickly load data from a text file directly into a NumPy array.</p>
-<div id="32fa53b6" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="2b35501f" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-0am.txt"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Given that our files contain dense, second-by-second recordings, simply reading the data won’t be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.</p>
 <p>To assist us in this visualization process, we’ve prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!</p>
-<div id="d09d2085" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_recordings(arr: np.ndarray, units: <span class="bu">str</span><span class="op">=</span><span class="st">""</span>):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""Plots any given recordings defined in a numpy array"""</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.arange(<span class="bu">len</span>(arr)) <span class="op">/</span> <span class="dv">60</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  plt.figure(figsize<span class="op">=</span>(x.<span class="bu">max</span>() <span class="op">/</span> <span class="dv">10</span>, <span class="dv">2</span>))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, arr)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the units if any</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  units <span class="op">=</span> units.lower()</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> units <span class="op">==</span> <span class="st">"emf"</span>:</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"EMF intensity"</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> (units <span class="op">==</span> <span class="st">"noise"</span>) <span class="kw">or</span> (units <span class="op">==</span> <span class="st">"db"</span>):</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Noise (dB)"</span>)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">15</span>, <span class="dv">45</span>)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> units.startswith(<span class="st">"temp"</span>) <span class="kw">or</span> units.startswith(<span class="st">"deg"</span>):</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Temperature (ºC)"</span>)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  plt.xlabel(<span class="st">"Minutes"</span>)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>plot_recordings(x, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="769714c3" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_recordings(arr: np.ndarray, units: <span class="bu">str</span><span class="op">=</span><span class="st">""</span>):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""Plots any given recordings defined in a numpy array"""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.arange(<span class="bu">len</span>(arr)) <span class="op">/</span> <span class="dv">60</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  plt.figure(figsize<span class="op">=</span>(x.<span class="bu">max</span>() <span class="op">/</span> <span class="dv">10</span>, <span class="dv">2</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, arr)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the units if any</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  units <span class="op">=</span> units.lower()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> units <span class="op">==</span> <span class="st">"emf"</span>:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"EMF intensity"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> (units <span class="op">==</span> <span class="st">"noise"</span>) <span class="kw">or</span> (units <span class="op">==</span> <span class="st">"db"</span>):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Noise (dB)"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">15</span>, <span class="dv">45</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> units.startswith(<span class="st">"temp"</span>) <span class="kw">or</span> units.startswith(<span class="st">"deg"</span>):</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Temperature (ºC)"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  plt.xlabel(<span class="st">"Minutes"</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plot_recordings(x, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The graph you just observed represents the EMF readings from just one room (the hall), spanning a mere hour. There seems to be no activity there.</p>
 <p>Let’s extend our analysis. By plotting the EMF records for the subsequent two hours, we can get a more comprehensive view of the paranormal activity in that room.</p>
-<div id="5aef0d1d" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plot_recordings(y, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
+<div id="60984c4a" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plot_recordings(y, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<div id="fc36af45" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-2am.txt"</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plot_recordings(z, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="1f69a842" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-2am.txt"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plot_recordings(z, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -914,47 +677,38 @@ Archive:  myfile.zip
 <h2 class="anchored" data-anchor-id="combining-data-joining-arrays">Combining Data: Joining Arrays</h2>
 <p>For a comprehensive analysis, it’s beneficial to have consecutive records combined into one cohesive array. This will allow us to examine data trends over extended periods without interruptions.</p>
 <p>We’ll use the <code>np.concatenate(&lt;list_of_arrays&gt;)</code> function, which stitches together arrays from a given list into a single unified array.</p>
-<div id="2db8b3b6" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all numpy arrays together</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>emf <span class="op">=</span> np.concatenate((x, y, z))</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plot_recordings(emf, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="60949591" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all numpy arrays together</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>emf <span class="op">=</span> np.concatenate((x, y, z))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plot_recordings(emf, units<span class="op">=</span><span class="st">"emf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With the EMF recordings from the hall between 0am and 2am in hand, we’ve witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.</p>
 <p>Thus, solely relying on EMF spikes won’t confirm their presence. We need to corroborate these findings with our other sensors.</p>
 <p>Let’s examine the data from the microphone. Will these readings confirm the ghostly suspicions raised by the EMF?</p>
-<div id="1527254d" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ls_noise <span class="op">=</span> []</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"noise-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  ls_noise.append(arr)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.concatenate(ls_noise)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plot_recordings(noise, units<span class="op">=</span><span class="st">"noise"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="9fa3dae5" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ls_noise <span class="op">=</span> []</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"noise-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  ls_noise.append(arr)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.concatenate(ls_noise)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plot_recordings(noise, units<span class="op">=</span><span class="st">"noise"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Our microphone has picked up some uncanny noises emanating from the hall. While there appear to be overlaps in activity across our devices, these instances are very short. Our quest isn’t for momentary glitches, we’re on the lookout for undeniable evidence of the supernatural.</p>
 <p>We are going to check the thermometer. If chilling temperatures accompany the auditory anomalies, we could be onto something truly spine-tingling!</p>
-<div id="b3859b5c" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ls_temp <span class="op">=</span> []</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"temp-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  ls_temp.append(arr)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> np.concatenate(ls_temp)</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>plot_recordings(temp, units<span class="op">=</span><span class="st">"temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'np' is not defined</code></pre>
-</div>
+<div id="4a83d2fa" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ls_temp <span class="op">=</span> []</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"temp-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  ls_temp.append(arr)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> np.concatenate(ls_temp)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>plot_recordings(temp, units<span class="op">=</span><span class="st">"temp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The thermometer shows some chilling temperatures here and there. And what is more relevant, these temperatures match with the noise at 1:15. There was a real ghost manifesting at the hall during that time!</p>
 <p>To visualize these simultaneous activities more clearly, let’s follow a strategic approach:</p>
@@ -963,15 +717,30 @@ Archive:  myfile.zip
 <li><strong>Summing the Arrays:</strong> By adding up the values from our three binary arrays for each timestamp, we can measure the intensity of paranormal activity.</li>
 <li><strong>The Ghostly Threshold:</strong> An accumulated value exceeding 1 at any given time is our clue! This indicates that multiple devices registered activity simultaneously, signaling the presence of our elusive ghost.</li>
 </ol>
-<div id="cf74320f" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We sum the binary activity values</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It is important to turn them into integer values</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>activity <span class="op">=</span> (emf <span class="op">&gt;</span> <span class="dv">3</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (temp <span class="op">&lt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (noise <span class="op">&gt;</span> <span class="dv">30</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plot_recordings(activity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'emf' is not defined</code></pre>
+<div id="eedc1473" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We sum the binary activity values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It is important to turn them into integer values</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>activity <span class="op">=</span> (emf <span class="op">&gt;</span> <span class="dv">3</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (temp <span class="op">&lt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (noise <span class="op">&gt;</span> <span class="dv">30</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plot_recordings(activity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<hr>
+</section>
+<section id="saving-arrays" class="level2">
+<h2 class="anchored" data-anchor-id="saving-arrays">Saving Arrays</h2>
+<p>Use <code>np.savetxt()</code> when the data should remain readable as plain text. A later Python session can recover the array with <code>np.loadtxt()</code>.</p>
+<div id="5d7a7e71" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hourly_activity <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>np.savetxt(<span class="st">"hourly_activity.txt"</span>, hourly_activity, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>loaded_activity <span class="op">=</span> np.loadtxt(<span class="st">"hourly_activity.txt"</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loaded_activity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>NumPy’s binary <code>.npy</code> format preserves the array’s shape and data type exactly.</p>
+<div id="5fb91f34" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"hourly_activity.npy"</span>, hourly_activity)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>loaded_binary <span class="op">=</span> np.load(<span class="st">"hourly_activity.npy"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loaded_binary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we’ll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.</p>
 </section>
@@ -981,11 +750,29 @@ Archive:  myfile.zip
 <p><strong>Our Objective:</strong> - Automate the analysis process for each room. - Generate a list detailing ghost sightings, including the room in which the manifestation occurred and the corresponding timestamps.</p>
 <hr>
 <p>Choose a partner and start the ghost hunting! 👻</p>
+<hr>
+</section>
+<section id="summary-and-reflection" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-reflection">Summary and Reflection</h2>
+<ul>
+<li><code>np.loadtxt()</code> loads numerical text data into an array.</li>
+<li><code>np.savetxt()</code> saves an array as readable text.</li>
+<li><code>np.save()</code> and <code>np.load()</code> preserve NumPy arrays in binary form.</li>
+<li><code>np.concatenate()</code> joins consecutive recordings into one array.</li>
+<li>Boolean comparisons can convert sensor readings into activity masks.</li>
+</ul>
+<p>Explain why filenames, array shapes, and sampling order must remain consistent when several recordings are concatenated.</p>
+<hr>
+</section>
+</section>
+<section id="homework-and-review" class="level1">
+<h1>Homework and Review</h1>
+<p>Work through the Session 13 homework exercises available here.</p>
+<p><a href="../../modules/numpy/homework_numpy.html#session-13-loading-and-saving-data" class="btn btn-primary">Homework</a></p>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1429,8 +1216,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../modules/numpy/arithmetics.html" class="pagination-link  aria-label=" array="" arithmetics"="">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Array Arithmetics</span>
+      <a href="../../modules/numpy/arithmetics.html" class="pagination-link  aria-label=" array="" arithmetic"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Array Arithmetic</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1439,271 +1226,321 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb23" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Numpy Load"</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># 🎃 Happy Halloween! 🎃</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>Instead of our regular lesson today, we are embarking on a _chilling_ adventure: **Ghost Hunting!**</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## The House of the Seven Chimneys</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>A mysterious mansion in the heart of Madrid has caught our attention. Although it stands proudly near the Plaza del Rey and has seen centuries of history, locals whisper of a restless spirit said to wander through its six rooms, forever bound to the shadows beneath its seven chimneys.</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisD1FyBEP1rsT_IqnBHAxh-j5UcS4cDCHF2Ma0SpohTX90HVz9FKEJb4ZDPbbNAEbDPcJWmNOCDk_y7m4MiT0_saPMUtQIlXaxzH8xCCmmc76YdaxApOHK5L_Box7h6FN8JRLqLhd_q3_p/s1600/casa-siete-chimeneas-antigua_02.jpg" width="600" /&gt;</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>For our safety, we'll be monitoring the house remotely. Here's what we did:</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Visited during broad daylight:** To ensure safety, we set up our monitoring devices during mid-day.</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Placed three monitoring devices in each room:**</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**EMF (Electro-Magnetic Frequency) Reader:** Ghosts are believed to have a unique electromagnetic field around them. This device detects intensity levels ranging from 0 to 5. An intensity above 3 is considered a potential ghostly presence.</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**Microphone:** Let's capture those ghostly whispers! This will measure noise levels in decibels. We now that background noise in the house is about 20 dB.</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**Thermometer:** Legend has it that a ghost's presence can drastically drop room temperatures, sometimes even below 0 degrees!</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://drive.google.com/uc?export=view&amp;id=13UDr7EDvj9ihHptHEAmhQRp5oJDjTOH7" width="400" /&gt;</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Do We Identify a Ghost?</span></span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>The ghost can occasionally cause paranormal disturbances. However, a genuine manifestation occurs when two or more anomalies are detected simultaneously. That's our signal!</span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>For instance, the ghost is in a room if the temperature there drops below 0 degrees and the EMF detects a signal above 4.</span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### Recording Details</span></span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>We set our devices to record from 9 pm to 8 am. After setting everything up, we headed back to the safety of our homes. The next morning, we collected our equipment and now have recordings sampled every second. You can identify each recording by its name format: <span class="in">`Device-Room-Time.txt`</span>.</span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>Ready to unravel the mysteries? Let's go! 🕵🏻‍♂️👻</span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Downloading the Ghostly Records</span></span>
-<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>To begin our analysis, let's first download the recorded data into our Colaboratory session.</span>
-<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>Execute the cell below to start the download.</span>
-<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🛑 **Troubleshooting Tip:**</span></span>
-<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; If you encounter any issues while executing the cell, try the following steps:</span></span>
-<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 1. Navigate to **"Runtime"** in the menu.</span></span>
-<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 2. Select **"Disconnect and delete runtime"**.</span></span>
-<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 3. After doing so, attempt to execute the cell once more.</span></span>
-<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the ZIP file from the provided Google Drive link</span></span>
-<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="st">'https://drive.google.com/uc?export=download&amp;id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ'</span> <span class="op">-</span>O myfile.<span class="bu">zip</span></span>
-<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the ZIP file</span></span>
-<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip <span class="op">-</span>o myfile.<span class="bu">zip</span></span>
-<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting Up Our Toolkit</span></span>
-<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>Before we dive into the analysis, let's gather the tools we'll need. It's a best practice to import all the libraries at the beginning to ensure we have everything ready and to avoid any disruptions later on.</span>
-<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># To plot the recordings</span></span>
-<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># This library will help us load the files</span></span>
-<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working with Files using `os`</span></span>
-<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a>For our ghost hunting analysis, we need to process multiple recorded data files. The Python <span class="in">`os`</span> library will come in handy for this! It provides a way to use operating system-dependent functionality, like reading or writing to the file system.</span>
-<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a><span class="fu">### What are we using `os` for?</span></span>
-<span id="cb23-87"><a href="#cb23-87" aria-hidden="true" tabindex="-1"></a>**Looping Over Files:** The <span class="in">`os`</span> library allows us to iterate over all the files in a directory, making it much simpler to process large sets of data.</span>
-<span id="cb23-88"><a href="#cb23-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> list_txt_files_from_directory(directory: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
-<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
-<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a><span class="co">  List all the TXT files from the specified directory.</span></span>
-<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
-<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
-<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a><span class="co">  directory : str</span></span>
-<span id="cb23-99"><a href="#cb23-99" aria-hidden="true" tabindex="-1"></a><span class="co">      The path to the directory containing the TXT files.</span></span>
-<span id="cb23-100"><a href="#cb23-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
-<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
-<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a><span class="co">  list[str]</span></span>
-<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a><span class="co">      A list of filenames of the TXT files in the directory.</span></span>
-<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
-<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize the list where filenames will be stored</span></span>
-<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a>  filenames <span class="op">=</span> []</span>
-<span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through the directory</span></span>
-<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> filename <span class="kw">in</span> os.listdir(directory):</span>
-<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the file is a TXT file</span></span>
-<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename.endswith(<span class="st">".txt"</span>):</span>
-<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add the filename to the list</span></span>
-<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a>      filenames.append(filename)</span>
-<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">sorted</span>(filenames)</span>
-<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a>list_files <span class="op">=</span> list_txt_files_from_directory(<span class="st">"."</span>)</span>
-<span id="cb23-119"><a href="#cb23-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-120"><a href="#cb23-120" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(list_files[:<span class="dv">5</span>])</span>
-<span id="cb23-121"><a href="#cb23-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-122"><a href="#cb23-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-123"><a href="#cb23-123" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb23-124"><a href="#cb23-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-125"><a href="#cb23-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading Data into NumPy Arrays</span></span>
-<span id="cb23-126"><a href="#cb23-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-127"><a href="#cb23-127" aria-hidden="true" tabindex="-1"></a>Now that we've listed all our files, it's time to dive into the data they contain. To efficiently handle and process this data, we'll be using **NumPy**.</span>
-<span id="cb23-128"><a href="#cb23-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-129"><a href="#cb23-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### How do we load the data?</span></span>
-<span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a>NumPy provides the <span class="in">`np.loadtxt()`</span> function, which allows us to quickly load data from a text file directly into a NumPy array.</span>
-<span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
-<span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb23-141"><a href="#cb23-141" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
-<span id="cb23-142"><a href="#cb23-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a>Given that our files contain dense, second-by-second recordings, simply reading the data won't be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.</span>
-<span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a>To assist us in this visualization process, we've prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!</span>
-<span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_recordings(arr: np.ndarray, units: <span class="bu">str</span><span class="op">=</span><span class="st">""</span>):</span>
-<span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""Plots any given recordings defined in a numpy array"""</span></span>
-<span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.arange(<span class="bu">len</span>(arr)) <span class="op">/</span> <span class="dv">60</span></span>
-<span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a>  plt.figure(figsize<span class="op">=</span>(x.<span class="bu">max</span>() <span class="op">/</span> <span class="dv">10</span>, <span class="dv">2</span>))</span>
-<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, arr)</span>
-<span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the units if any</span></span>
-<span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a>  units <span class="op">=</span> units.lower()</span>
-<span id="cb23-159"><a href="#cb23-159" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> units <span class="op">==</span> <span class="st">"emf"</span>:</span>
-<span id="cb23-160"><a href="#cb23-160" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"EMF intensity"</span>)</span>
-<span id="cb23-161"><a href="#cb23-161" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb23-162"><a href="#cb23-162" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> (units <span class="op">==</span> <span class="st">"noise"</span>) <span class="kw">or</span> (units <span class="op">==</span> <span class="st">"db"</span>):</span>
-<span id="cb23-163"><a href="#cb23-163" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Noise (dB)"</span>)</span>
-<span id="cb23-164"><a href="#cb23-164" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">15</span>, <span class="dv">45</span>)</span>
-<span id="cb23-165"><a href="#cb23-165" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> units.startswith(<span class="st">"temp"</span>) <span class="kw">or</span> units.startswith(<span class="st">"deg"</span>):</span>
-<span id="cb23-166"><a href="#cb23-166" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Temperature (ºC)"</span>)</span>
-<span id="cb23-167"><a href="#cb23-167" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>)</span>
-<span id="cb23-168"><a href="#cb23-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-169"><a href="#cb23-169" aria-hidden="true" tabindex="-1"></a>  plt.xlabel(<span class="st">"Minutes"</span>)</span>
-<span id="cb23-170"><a href="#cb23-170" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
-<span id="cb23-171"><a href="#cb23-171" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
-<span id="cb23-172"><a href="#cb23-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-173"><a href="#cb23-173" aria-hidden="true" tabindex="-1"></a>plot_recordings(x, units<span class="op">=</span><span class="st">"emf"</span>)</span>
-<span id="cb23-174"><a href="#cb23-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-175"><a href="#cb23-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-176"><a href="#cb23-176" aria-hidden="true" tabindex="-1"></a>The graph you just observed represents the EMF readings from just one room (the hall), spanning a mere hour. There seems to be no activity there.</span>
-<span id="cb23-177"><a href="#cb23-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-178"><a href="#cb23-178" aria-hidden="true" tabindex="-1"></a>Let's extend our analysis. By plotting the EMF records for the subsequent two hours, we can get a more comprehensive view of the paranormal activity in that room.</span>
-<span id="cb23-179"><a href="#cb23-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-182"><a href="#cb23-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-183"><a href="#cb23-183" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb23-184"><a href="#cb23-184" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
-<span id="cb23-185"><a href="#cb23-185" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb23-186"><a href="#cb23-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-187"><a href="#cb23-187" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb23-188"><a href="#cb23-188" aria-hidden="true" tabindex="-1"></a>plot_recordings(y, units<span class="op">=</span><span class="st">"emf"</span>)</span>
-<span id="cb23-189"><a href="#cb23-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-190"><a href="#cb23-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-193"><a href="#cb23-193" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-194"><a href="#cb23-194" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
-<span id="cb23-195"><a href="#cb23-195" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-2am.txt"</span></span>
-<span id="cb23-196"><a href="#cb23-196" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb23-197"><a href="#cb23-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-198"><a href="#cb23-198" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
-<span id="cb23-199"><a href="#cb23-199" aria-hidden="true" tabindex="-1"></a>plot_recordings(z, units<span class="op">=</span><span class="st">"emf"</span>)</span>
-<span id="cb23-200"><a href="#cb23-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-201"><a href="#cb23-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-202"><a href="#cb23-202" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb23-203"><a href="#cb23-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-204"><a href="#cb23-204" aria-hidden="true" tabindex="-1"></a><span class="fu">## Combining Data: Joining Arrays</span></span>
-<span id="cb23-205"><a href="#cb23-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-206"><a href="#cb23-206" aria-hidden="true" tabindex="-1"></a>For a comprehensive analysis, it's beneficial to have consecutive records combined into one cohesive array. This will allow us to examine data trends over extended periods without interruptions.</span>
-<span id="cb23-207"><a href="#cb23-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-208"><a href="#cb23-208" aria-hidden="true" tabindex="-1"></a>We'll use the <span class="in">`np.concatenate(&lt;list_of_arrays&gt;)`</span> function, which stitches together arrays from a given list into a single unified array.</span>
-<span id="cb23-209"><a href="#cb23-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-212"><a href="#cb23-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-213"><a href="#cb23-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all numpy arrays together</span></span>
-<span id="cb23-214"><a href="#cb23-214" aria-hidden="true" tabindex="-1"></a>emf <span class="op">=</span> np.concatenate((x, y, z))</span>
-<span id="cb23-215"><a href="#cb23-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-216"><a href="#cb23-216" aria-hidden="true" tabindex="-1"></a>plot_recordings(emf, units<span class="op">=</span><span class="st">"emf"</span>)</span>
-<span id="cb23-217"><a href="#cb23-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-218"><a href="#cb23-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-219"><a href="#cb23-219" aria-hidden="true" tabindex="-1"></a>With the EMF recordings from the hall between 0am and 2am in hand, we've witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.</span>
-<span id="cb23-220"><a href="#cb23-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-221"><a href="#cb23-221" aria-hidden="true" tabindex="-1"></a>Thus, solely relying on EMF spikes won't confirm their presence. We need to corroborate these findings with our other sensors.</span>
-<span id="cb23-222"><a href="#cb23-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-223"><a href="#cb23-223" aria-hidden="true" tabindex="-1"></a>Let's examine the data from the microphone. Will these readings confirm the ghostly suspicions raised by the EMF?</span>
-<span id="cb23-224"><a href="#cb23-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-227"><a href="#cb23-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-228"><a href="#cb23-228" aria-hidden="true" tabindex="-1"></a>ls_noise <span class="op">=</span> []</span>
-<span id="cb23-229"><a href="#cb23-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-230"><a href="#cb23-230" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
-<span id="cb23-231"><a href="#cb23-231" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"noise-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
-<span id="cb23-232"><a href="#cb23-232" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb23-233"><a href="#cb23-233" aria-hidden="true" tabindex="-1"></a>  ls_noise.append(arr)</span>
-<span id="cb23-234"><a href="#cb23-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-235"><a href="#cb23-235" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.concatenate(ls_noise)</span>
-<span id="cb23-236"><a href="#cb23-236" aria-hidden="true" tabindex="-1"></a>plot_recordings(noise, units<span class="op">=</span><span class="st">"noise"</span>)</span>
-<span id="cb23-237"><a href="#cb23-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-238"><a href="#cb23-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-239"><a href="#cb23-239" aria-hidden="true" tabindex="-1"></a>Our microphone has picked up some uncanny noises emanating from the hall. While there appear to be overlaps in activity across our devices, these instances are very short. Our quest isn't for momentary glitches, we're on the lookout for undeniable evidence of the supernatural.</span>
-<span id="cb23-240"><a href="#cb23-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-241"><a href="#cb23-241" aria-hidden="true" tabindex="-1"></a>We are going to check the thermometer. If chilling temperatures accompany the auditory anomalies, we could be onto something truly spine-tingling!</span>
-<span id="cb23-242"><a href="#cb23-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-245"><a href="#cb23-245" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-246"><a href="#cb23-246" aria-hidden="true" tabindex="-1"></a>ls_temp <span class="op">=</span> []</span>
-<span id="cb23-247"><a href="#cb23-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-248"><a href="#cb23-248" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
-<span id="cb23-249"><a href="#cb23-249" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"temp-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
-<span id="cb23-250"><a href="#cb23-250" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
-<span id="cb23-251"><a href="#cb23-251" aria-hidden="true" tabindex="-1"></a>  ls_temp.append(arr)</span>
-<span id="cb23-252"><a href="#cb23-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-253"><a href="#cb23-253" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> np.concatenate(ls_temp)</span>
-<span id="cb23-254"><a href="#cb23-254" aria-hidden="true" tabindex="-1"></a>plot_recordings(temp, units<span class="op">=</span><span class="st">"temp"</span>)</span>
-<span id="cb23-255"><a href="#cb23-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-256"><a href="#cb23-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-257"><a href="#cb23-257" aria-hidden="true" tabindex="-1"></a>The thermometer shows some chilling temperatures here and there. And what is more relevant, these temperatures match with the noise at 1:15. There was a real ghost manifesting at the hall during that time!</span>
-<span id="cb23-258"><a href="#cb23-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-259"><a href="#cb23-259" aria-hidden="true" tabindex="-1"></a>To visualize these simultaneous activities more clearly, let's follow a strategic approach:</span>
-<span id="cb23-260"><a href="#cb23-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-261"><a href="#cb23-261" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Binary Transformation:** Convert each recording into a binary array. If there's activity detected by a particular sensor, mark it as "yes" (1), and if not, "no" (0).</span>
-<span id="cb23-262"><a href="#cb23-262" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Summing the Arrays:** By adding up the values from our three binary arrays for each timestamp, we can measure the intensity of paranormal activity.</span>
-<span id="cb23-263"><a href="#cb23-263" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The Ghostly Threshold:** An accumulated value exceeding 1 at any given time is our clue! This indicates that multiple devices registered activity simultaneously, signaling the presence of our elusive ghost.</span>
-<span id="cb23-264"><a href="#cb23-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-267"><a href="#cb23-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb23-268"><a href="#cb23-268" aria-hidden="true" tabindex="-1"></a><span class="co"># We sum the binary activity values</span></span>
-<span id="cb23-269"><a href="#cb23-269" aria-hidden="true" tabindex="-1"></a><span class="co"># It is important to turn them into integer values</span></span>
-<span id="cb23-270"><a href="#cb23-270" aria-hidden="true" tabindex="-1"></a>activity <span class="op">=</span> (emf <span class="op">&gt;</span> <span class="dv">3</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (temp <span class="op">&lt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (noise <span class="op">&gt;</span> <span class="dv">30</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb23-271"><a href="#cb23-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-272"><a href="#cb23-272" aria-hidden="true" tabindex="-1"></a>plot_recordings(activity)</span>
-<span id="cb23-273"><a href="#cb23-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-274"><a href="#cb23-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-275"><a href="#cb23-275" aria-hidden="true" tabindex="-1"></a>Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we'll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.</span>
-<span id="cb23-276"><a href="#cb23-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-277"><a href="#cb23-277" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Next Steps</span></span>
-<span id="cb23-278"><a href="#cb23-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-279"><a href="#cb23-279" aria-hidden="true" tabindex="-1"></a>To ensure thoroughness, we need to extend our investigation to every room. Manual analysis for each room would be time-consuming, so automation is the way to go!</span>
-<span id="cb23-280"><a href="#cb23-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-281"><a href="#cb23-281" aria-hidden="true" tabindex="-1"></a>**Our Objective:**</span>
-<span id="cb23-282"><a href="#cb23-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Automate the analysis process for each room.</span>
-<span id="cb23-283"><a href="#cb23-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Generate a list detailing ghost sightings, including the room in which the manifestation occurred and the corresponding timestamps.</span>
-<span id="cb23-284"><a href="#cb23-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-285"><a href="#cb23-285" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb23-286"><a href="#cb23-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-287"><a href="#cb23-287" aria-hidden="true" tabindex="-1"></a>Choose a partner and start the ghost hunting! 👻</span>
+<div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Loading and Saving NumPy Data"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">  enabled: false</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># Loading and Saving Data: Ghost Hunting</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>Instead of our regular lesson today, we are embarking on a _chilling_ adventure: **Ghost Hunting!**</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## The House of the Seven Chimneys</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>A mysterious mansion in the heart of Madrid has caught our attention. Although it stands proudly near the Plaza del Rey and has seen centuries of history, locals whisper of a restless spirit said to wander through its six rooms, forever bound to the shadows beneath its seven chimneys.</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisD1FyBEP1rsT_IqnBHAxh-j5UcS4cDCHF2Ma0SpohTX90HVz9FKEJb4ZDPbbNAEbDPcJWmNOCDk_y7m4MiT0_saPMUtQIlXaxzH8xCCmmc76YdaxApOHK5L_Box7h6FN8JRLqLhd_q3_p/s1600/casa-siete-chimeneas-antigua_02.jpg" width="600" /&gt;</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>For our safety, we'll be monitoring the house remotely. Here's what we did:</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Visited during broad daylight:** To ensure safety, we set up our monitoring devices during mid-day.</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Placed three monitoring devices in each room:**</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**EMF (Electro-Magnetic Frequency) Reader:** Ghosts are believed to have a unique electromagnetic field around them. This device detects intensity levels ranging from 0 to 5. An intensity above 3 is considered a potential ghostly presence.</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**Microphone:** Let's capture those ghostly whispers! This will measure noise levels in decibels. We know that background noise in the house is about 20 dB.</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**Thermometer:** Legend has it that a ghost's presence can drastically drop room temperatures, sometimes even below 0 degrees!</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://drive.google.com/uc?export=view&amp;id=13UDr7EDvj9ihHptHEAmhQRp5oJDjTOH7" width="400" /&gt;</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Do We Identify a Ghost?</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>The ghost can occasionally cause paranormal disturbances. However, a genuine manifestation occurs when two or more anomalies are detected simultaneously. That's our signal!</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>For instance, the ghost is in a room if the temperature there drops below 0 degrees and the EMF detects a signal above 4.</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### Recording Details</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>We set our devices to record from 9 pm to 8 am. After setting everything up, we headed back to the safety of our homes. The next morning, we collected our equipment and now have recordings sampled every second. You can identify each recording by its name format: <span class="in">`Device-Room-Time.txt`</span>.</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>Ready to unravel the mystery? Let's go!</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Colab Activity</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>This lesson downloads a prepared dataset and is intended to run in Google Colab. The page displays the code without executing it during website rendering.</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Downloading the Ghostly Records</span></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>To begin our analysis, let's first download the recorded data into our Colaboratory session.</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>Execute the cell below to start the download.</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🛑 **Troubleshooting Tip:**</span></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; If you encounter any issues while executing the cell, try the following steps:</span></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 1. Navigate to **"Runtime"** in the menu.</span></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 2. Select **"Disconnect and delete runtime"**.</span></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 3. After doing so, attempt to execute the cell once more.</span></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the ZIP file from the provided Google Drive link</span></span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="st">'https://drive.google.com/uc?export=download&amp;id=1KZueyRos6wkT3SEW7WSCdeEF2rwQlfuJ'</span> <span class="op">-</span>O myfile.<span class="bu">zip</span></span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the ZIP file</span></span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip <span class="op">-</span>o myfile.<span class="bu">zip</span></span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting Up Our Toolkit</span></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>Before we dive into the analysis, let's gather the tools we'll need. It's a best practice to import all the libraries at the beginning to ensure we have everything ready and to avoid any disruptions later on.</span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># To plot the recordings</span></span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># This library will help us load the files</span></span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working with Files using `os`</span></span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>For our ghost hunting analysis, we need to process multiple recorded data files. The Python <span class="in">`os`</span> library will come in handy for this! It provides a way to use operating system-dependent functionality, like reading or writing to the file system.</span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a><span class="fu">### What are we using `os` for?</span></span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>**Looping Over Files:** The <span class="in">`os`</span> library allows us to iterate over all the files in a directory, making it much simpler to process large sets of data.</span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> list_txt_files_from_directory(directory: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a><span class="co">  List all the TXT files from the specified directory.</span></span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a><span class="co">  directory : str</span></span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a><span class="co">      The path to the directory containing the TXT files.</span></span>
+<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a><span class="co">  list[str]</span></span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a><span class="co">      A list of filenames of the TXT files in the directory.</span></span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize the list where filenames will be stored</span></span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>  filenames <span class="op">=</span> []</span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through the directory</span></span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> filename <span class="kw">in</span> os.listdir(directory):</span>
+<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the file is a TXT file</span></span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename.endswith(<span class="st">".txt"</span>):</span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add the filename to the list</span></span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>      filenames.append(filename)</span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">sorted</span>(filenames)</span>
+<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a>list_files <span class="op">=</span> list_txt_files_from_directory(<span class="st">"."</span>)</span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(list_files[:<span class="dv">5</span>])</span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading Data into NumPy Arrays</span></span>
+<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>Now that we've listed all our files, it's time to dive into the data they contain. To efficiently handle and process this data, we'll be using **NumPy**.</span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### How do we load the data?</span></span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>NumPy provides the <span class="in">`np.loadtxt()`</span> function, which allows us to quickly load data from a text file directly into a NumPy array.</span>
+<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-0am.txt"</span></span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>Given that our files contain dense, second-by-second recordings, simply reading the data won't be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.</span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a>To assist us in this visualization process, we've prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!</span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_recordings(arr: np.ndarray, units: <span class="bu">str</span><span class="op">=</span><span class="st">""</span>):</span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""Plots any given recordings defined in a numpy array"""</span></span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.arange(<span class="bu">len</span>(arr)) <span class="op">/</span> <span class="dv">60</span></span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>  plt.figure(figsize<span class="op">=</span>(x.<span class="bu">max</span>() <span class="op">/</span> <span class="dv">10</span>, <span class="dv">2</span>))</span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, arr)</span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the units if any</span></span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>  units <span class="op">=</span> units.lower()</span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> units <span class="op">==</span> <span class="st">"emf"</span>:</span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"EMF intensity"</span>)</span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> (units <span class="op">==</span> <span class="st">"noise"</span>) <span class="kw">or</span> (units <span class="op">==</span> <span class="st">"db"</span>):</span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Noise (dB)"</span>)</span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="dv">15</span>, <span class="dv">45</span>)</span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>  <span class="cf">elif</span> units.startswith(<span class="st">"temp"</span>) <span class="kw">or</span> units.startswith(<span class="st">"deg"</span>):</span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Temperature (ºC)"</span>)</span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>)</span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>  plt.xlabel(<span class="st">"Minutes"</span>)</span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>plot_recordings(x, units<span class="op">=</span><span class="st">"emf"</span>)</span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a>The graph you just observed represents the EMF readings from just one room (the hall), spanning a mere hour. There seems to be no activity there.</span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a>Let's extend our analysis. By plotting the EMF records for the subsequent two hours, we can get a more comprehensive view of the paranormal activity in that room.</span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-1am.txt"</span></span>
+<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a>plot_recordings(y, units<span class="op">=</span><span class="st">"emf"</span>)</span>
+<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a><span class="co"># Load one txt file</span></span>
+<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"emf-Hall-2am.txt"</span></span>
+<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filename)</span>
+<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a>plot_recordings(z, units<span class="op">=</span><span class="st">"emf"</span>)</span>
+<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-211"><a href="#cb14-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## Combining Data: Joining Arrays</span></span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a>For a comprehensive analysis, it's beneficial to have consecutive records combined into one cohesive array. This will allow us to examine data trends over extended periods without interruptions.</span>
+<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a>We'll use the <span class="in">`np.concatenate(&lt;list_of_arrays&gt;)`</span> function, which stitches together arrays from a given list into a single unified array.</span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all numpy arrays together</span></span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a>emf <span class="op">=</span> np.concatenate((x, y, z))</span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a>plot_recordings(emf, units<span class="op">=</span><span class="st">"emf"</span>)</span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>With the EMF recordings from the hall between 0am and 2am in hand, we've witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.</span>
+<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a>Thus, solely relying on EMF spikes won't confirm their presence. We need to corroborate these findings with our other sensors.</span>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a>Let's examine the data from the microphone. Will these readings confirm the ghostly suspicions raised by the EMF?</span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a>ls_noise <span class="op">=</span> []</span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"noise-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>  ls_noise.append(arr)</span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.concatenate(ls_noise)</span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>plot_recordings(noise, units<span class="op">=</span><span class="st">"noise"</span>)</span>
+<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>Our microphone has picked up some uncanny noises emanating from the hall. While there appear to be overlaps in activity across our devices, these instances are very short. Our quest isn't for momentary glitches, we're on the lookout for undeniable evidence of the supernatural.</span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>We are going to check the thermometer. If chilling temperatures accompany the auditory anomalies, we could be onto something truly spine-tingling!</span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a>ls_temp <span class="op">=</span> []</span>
+<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> hour <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">3</span>):</span>
+<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a>  filename <span class="op">=</span> <span class="ss">f"temp-Hall-</span><span class="sc">{</span>hour<span class="sc">}</span><span class="ss">am.txt"</span></span>
+<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> np.loadtxt(filename)</span>
+<span id="cb14-259"><a href="#cb14-259" aria-hidden="true" tabindex="-1"></a>  ls_temp.append(arr)</span>
+<span id="cb14-260"><a href="#cb14-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> np.concatenate(ls_temp)</span>
+<span id="cb14-262"><a href="#cb14-262" aria-hidden="true" tabindex="-1"></a>plot_recordings(temp, units<span class="op">=</span><span class="st">"temp"</span>)</span>
+<span id="cb14-263"><a href="#cb14-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-264"><a href="#cb14-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-265"><a href="#cb14-265" aria-hidden="true" tabindex="-1"></a>The thermometer shows some chilling temperatures here and there. And what is more relevant, these temperatures match with the noise at 1:15. There was a real ghost manifesting at the hall during that time!</span>
+<span id="cb14-266"><a href="#cb14-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-267"><a href="#cb14-267" aria-hidden="true" tabindex="-1"></a>To visualize these simultaneous activities more clearly, let's follow a strategic approach:</span>
+<span id="cb14-268"><a href="#cb14-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-269"><a href="#cb14-269" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Binary Transformation:** Convert each recording into a binary array. If there's activity detected by a particular sensor, mark it as "yes" (1), and if not, "no" (0).</span>
+<span id="cb14-270"><a href="#cb14-270" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Summing the Arrays:** By adding up the values from our three binary arrays for each timestamp, we can measure the intensity of paranormal activity.</span>
+<span id="cb14-271"><a href="#cb14-271" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The Ghostly Threshold:** An accumulated value exceeding 1 at any given time is our clue! This indicates that multiple devices registered activity simultaneously, signaling the presence of our elusive ghost.</span>
+<span id="cb14-272"><a href="#cb14-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-275"><a href="#cb14-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-276"><a href="#cb14-276" aria-hidden="true" tabindex="-1"></a><span class="co"># We sum the binary activity values</span></span>
+<span id="cb14-277"><a href="#cb14-277" aria-hidden="true" tabindex="-1"></a><span class="co"># It is important to turn them into integer values</span></span>
+<span id="cb14-278"><a href="#cb14-278" aria-hidden="true" tabindex="-1"></a>activity <span class="op">=</span> (emf <span class="op">&gt;</span> <span class="dv">3</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (temp <span class="op">&lt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>) <span class="op">+</span> (noise <span class="op">&gt;</span> <span class="dv">30</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb14-279"><a href="#cb14-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-280"><a href="#cb14-280" aria-hidden="true" tabindex="-1"></a>plot_recordings(activity)</span>
+<span id="cb14-281"><a href="#cb14-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-282"><a href="#cb14-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-283"><a href="#cb14-283" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-284"><a href="#cb14-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-285"><a href="#cb14-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## Saving Arrays</span></span>
+<span id="cb14-286"><a href="#cb14-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-287"><a href="#cb14-287" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`np.savetxt()`</span> when the data should remain readable as plain text. A later Python session can recover the array with <span class="in">`np.loadtxt()`</span>.</span>
+<span id="cb14-288"><a href="#cb14-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a>hourly_activity <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a>np.savetxt(<span class="st">"hourly_activity.txt"</span>, hourly_activity, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>loaded_activity <span class="op">=</span> np.loadtxt(<span class="st">"hourly_activity.txt"</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb14-296"><a href="#cb14-296" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loaded_activity)</span>
+<span id="cb14-297"><a href="#cb14-297" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-298"><a href="#cb14-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-299"><a href="#cb14-299" aria-hidden="true" tabindex="-1"></a>NumPy's binary <span class="in">`.npy`</span> format preserves the array's shape and data type exactly.</span>
+<span id="cb14-300"><a href="#cb14-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-303"><a href="#cb14-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb14-304"><a href="#cb14-304" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"hourly_activity.npy"</span>, hourly_activity)</span>
+<span id="cb14-305"><a href="#cb14-305" aria-hidden="true" tabindex="-1"></a>loaded_binary <span class="op">=</span> np.load(<span class="st">"hourly_activity.npy"</span>)</span>
+<span id="cb14-306"><a href="#cb14-306" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loaded_binary)</span>
+<span id="cb14-307"><a href="#cb14-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-308"><a href="#cb14-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-309"><a href="#cb14-309" aria-hidden="true" tabindex="-1"></a>Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we'll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.</span>
+<span id="cb14-310"><a href="#cb14-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-311"><a href="#cb14-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Next Steps</span></span>
+<span id="cb14-312"><a href="#cb14-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-313"><a href="#cb14-313" aria-hidden="true" tabindex="-1"></a>To ensure thoroughness, we need to extend our investigation to every room. Manual analysis for each room would be time-consuming, so automation is the way to go!</span>
+<span id="cb14-314"><a href="#cb14-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-315"><a href="#cb14-315" aria-hidden="true" tabindex="-1"></a>**Our Objective:**</span>
+<span id="cb14-316"><a href="#cb14-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Automate the analysis process for each room.</span>
+<span id="cb14-317"><a href="#cb14-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Generate a list detailing ghost sightings, including the room in which the manifestation occurred and the corresponding timestamps.</span>
+<span id="cb14-318"><a href="#cb14-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-319"><a href="#cb14-319" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-320"><a href="#cb14-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-321"><a href="#cb14-321" aria-hidden="true" tabindex="-1"></a>Choose a partner and start the ghost hunting! 👻</span>
+<span id="cb14-322"><a href="#cb14-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-323"><a href="#cb14-323" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-324"><a href="#cb14-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-325"><a href="#cb14-325" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
+<span id="cb14-326"><a href="#cb14-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-327"><a href="#cb14-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.loadtxt()`</span> loads numerical text data into an array.</span>
+<span id="cb14-328"><a href="#cb14-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.savetxt()`</span> saves an array as readable text.</span>
+<span id="cb14-329"><a href="#cb14-329" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.save()`</span> and <span class="in">`np.load()`</span> preserve NumPy arrays in binary form.</span>
+<span id="cb14-330"><a href="#cb14-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.concatenate()`</span> joins consecutive recordings into one array.</span>
+<span id="cb14-331"><a href="#cb14-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Boolean comparisons can convert sensor readings into activity masks.</span>
+<span id="cb14-332"><a href="#cb14-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-333"><a href="#cb14-333" aria-hidden="true" tabindex="-1"></a>Explain why filenames, array shapes, and sampling order must remain consistent when several recordings are concatenated.</span>
+<span id="cb14-334"><a href="#cb14-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-335"><a href="#cb14-335" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-336"><a href="#cb14-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-337"><a href="#cb14-337" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
+<span id="cb14-338"><a href="#cb14-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-339"><a href="#cb14-339" aria-hidden="true" tabindex="-1"></a>Work through the Session 13 homework exercises available here.</span>
+<span id="cb14-340"><a href="#cb14-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-341"><a href="#cb14-341" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#session-13-loading-and-saving-data)</span>{.btn .btn-primary}</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
