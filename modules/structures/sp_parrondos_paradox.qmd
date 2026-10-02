@@ -1,0 +1,143 @@
+---
+title: "Parrondo's Paradox"
+subtitle: "Side Project for Extra Credit"
+format: html
+---
+
+Can two games that lose when played separately produce a winning outcome when combined? In this project, you will explore a simple parity-based version of Parrondo's paradox through simulation.
+
+Main concepts: random numbers, loops, functions as arguments, and parity. You will use a supplied plotting function.
+
+<p align="center">
+<img alt="Portrait accompanying the introduction to Parrondo's paradox." src="https://static.wixstatic.com/media/c7de9f_34a2afb04532431bbfa3546b19437222.jpg/v1/fill/w_353,h_235,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/c7de9f_34a2afb04532431bbfa3546b19437222.jpg" width="400" style="max-width: 100%; height: auto;" />
+</p>
+
+Optional background: [Parrondo's paradox](https://en.wikipedia.org/wiki/Parrondo%27s_paradox).
+
+Your balance is an integer, and it may become negative. Keep playing for the requested number of rounds even if the balance reaches zero.
+
+## Step 1: Implement Game A
+
+Create `play_game_A(current_balance)`:
+
+- With probability 5%, add one point.
+- With probability 95%, subtract one point.
+- Return the updated balance.
+
+Use the `random` module to generate a number:
+
+```{python}
+import random
+
+random.random()  # A random number from 0 (included) to 1 (excluded).
+```
+
+The condition `random.random() < 0.05` is true with probability 5%. Generate one random number per round.
+
+We will study imports later in the course. For now, run `import random` once before using the module.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 2: Implement Game B
+
+Create `play_game_B(current_balance)`:
+
+- If the current balance is even, add three points.
+- If the current balance is odd, subtract five points.
+- Return the updated balance.
+
+Check parity before changing the balance. Unlike Game A, Game B contains no random choice.
+
+Test it with positive, zero, and negative balances. For example, balances of `10`, `13`, `0`, and `-1` should become `13`, `8`, `3`, and `-6`, respectively.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 3: Simulate each game separately
+
+Create `simulate_game(game, rounds=1000, initial_capital=10)`.
+
+- `game` is the function to play, such as `play_game_A` or `play_game_B`.
+- `rounds` is a non-negative integer giving the number of individual plays.
+- `initial_capital` is the starting balance.
+
+Start a list with the initial balance. On each round, call `game` with the current balance, update the balance, and append it to the list. Return the complete list, which should contain `rounds + 1` entries.
+
+You can pass a function as an argument without calling it. For example, `simulate_game(play_game_A)` passes the function itself; `play_game_A(10)` calls it immediately.
+
+Run both games and store their histories in a dictionary with labels such as `"Game A"` and `"Game B"`. Plot the dictionary using the helper below. You do not need to recreate or explain the plotting code.
+
+```{python}
+#| eval: false
+
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+
+def plot_results(results):
+    """Plot balance histories, including the starting balance at round zero."""
+    fig, ax = plt.subplots()
+    for label, balances in results.items():
+        ax.plot(range(len(balances)), balances, label=label)
+    ax.set_xlabel("Rounds played")
+    ax.set_ylabel("Balance")
+    ax.legend()
+    ax.grid(alpha=0.3)
+    plt.show()
+    plt.close(fig)
+
+
+# Example histories, supplied only to demonstrate the plotting function.
+example_results = {
+    "Game A": [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+    "Game B": [10, 13, 8, 11, 6, 9, 4, 7, 2, 5, 0]
+}
+plot_results(example_results)
+```
+
+Explain why each game loses over time when played on its own. For Game A, consider the average change per round. For Game B, consider two consecutive rounds.
+
+## Step 4: Alternate the games
+
+Create `simulate_alternating_games(game_A, game_B, rounds=1000, initial_capital=10, start_with="B")`.
+
+Alternate between the two functions, starting with the game named by `start_with`, which may be `"A"` or `"B"`. Here, `rounds` counts individual plays, not pairs: four rounds starting with B means B, A, B, A.
+
+As before, return the initial balance followed by the balance after every round.
+
+First use the default starting balance of 10 and start with B. Add this history to your results dictionary and plot all three strategies together.
+
+Then repeat the alternating simulation starting with A. Add this fourth history and plot again.
+
+```{python}
+#| eval: false
+
+```
+
+## Explain what happened
+
+Use your results to answer these questions:
+
+1. Why do both games change the parity of the balance on every play?
+2. Starting from 10, what parity does Game B encounter when you start with B? What changes when you start with A?
+3. Why does the order change the outcome?
+
+Trace the first four plays by hand to support your explanation. You do not need advanced probability calculations.
+
+## Stretch goals (optional)
+
+- Repeat the experiment with an odd initial balance. Predict what will happen before running it.
+- Run each strategy several times and compare the results. Use `random.seed(42)` once before an experiment if you want to reproduce the same sequence of random draws. Do not reset the seed inside either game function.
+
+## Before you submit
+
+Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.
+
+Include tests of the game rules, plots of the four strategies, and your explanation of the role of parity. Follow the notebook and AI-use guidance on the [Side Projects page](side_projects.qmd).
