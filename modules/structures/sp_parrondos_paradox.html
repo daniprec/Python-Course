@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computer Programming I (Python) - Review: Guessing Game</title>
+<title>Computer Programming I (Python) - Parrondo’s Paradox</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -432,17 +432,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#guessing-game" id="toc-guessing-game" class="nav-link active" data-scroll-target="#guessing-game">Guessing Game</a></li>
+  <li><a href="#step-1-implement-game-a" id="toc-step-1-implement-game-a" class="nav-link active" data-scroll-target="#step-1-implement-game-a">Step 1: Implement Game A</a></li>
+  <li><a href="#step-2-implement-game-b" id="toc-step-2-implement-game-b" class="nav-link" data-scroll-target="#step-2-implement-game-b">Step 2: Implement Game B</a></li>
+  <li><a href="#step-3-simulate-each-game-separately" id="toc-step-3-simulate-each-game-separately" class="nav-link" data-scroll-target="#step-3-simulate-each-game-separately">Step 3: Simulate each game separately</a></li>
+  <li><a href="#step-4-alternate-the-games" id="toc-step-4-alternate-the-games" class="nav-link" data-scroll-target="#step-4-alternate-the-games">Step 4: Alternate the games</a></li>
+  <li><a href="#explain-what-happened" id="toc-explain-what-happened" class="nav-link" data-scroll-target="#explain-what-happened">Explain what happened</a></li>
+  <li><a href="#stretch-goals-optional" id="toc-stretch-goals-optional" class="nav-link" data-scroll-target="#stretch-goals-optional">Stretch goals (optional)</a></li>
+  <li><a href="#before-you-submit" id="toc-before-you-submit" class="nav-link" data-scroll-target="#before-you-submit">Before you submit</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/ides/review_guessing_game.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/structures/sp_parrondos_paradox.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Review: Guessing Game</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">Module 4: IDEs &amp; Tools</p>
+<div class="quarto-title-block"><div><h1 class="title">Parrondo’s Paradox</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Side Project for Extra Credit</p>
 </div>
 
 
@@ -459,63 +465,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="guessing-game" class="level2">
-<h2 class="anchored" data-anchor-id="guessing-game">Guessing Game</h2>
-<p>Generate a random number between 1 and 9 (including 1 and 9). Ask the user to guess the number, then tell them whether they guessed too low, too high, or exactly right. - Keep the game going until the user types ÔÇ£exitÔÇØ - Keep track of how many guesses the user has taken, and when the game ends, print this out.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Try the exercise on your own first, then compare with the worked solution below.</p>
-<div id="96d13173" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution</span></span>
+<p>Can two games that lose when played separately produce a winning outcome when combined? In this project, you will explore a simple parity-based version of Parrondo’s paradox through simulation.</p>
+<p>Main concepts: random numbers, loops, functions as arguments, and parity. You will use a supplied plotting function.</p>
+<p align="center">
+<img alt="Portrait accompanying the introduction to Parrondo's paradox." src="https://static.wixstatic.com/media/c7de9f_34a2afb04532431bbfa3546b19437222.jpg/v1/fill/w_353,h_235,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/c7de9f_34a2afb04532431bbfa3546b19437222.jpg" width="400" style="max-width: 100%; height: auto;">
+</p>
+<p>Optional background: <a href="https://en.wikipedia.org/wiki/Parrondo%27s_paradox">Parrondo’s paradox</a>.</p>
+<p>Your balance is an integer, and it may become negative. Keep playing for the requested number of rounds even if the balance reaches zero.</p>
+<section id="step-1-implement-game-a" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-implement-game-a">Step 1: Implement Game A</h2>
+<p>Create <code>play_game_A(current_balance)</code>:</p>
+<ul>
+<li>With probability 5%, add one point.</li>
+<li>With probability 95%, subtract one point.</li>
+<li>Return the updated balance.</li>
+</ul>
+<p>Use the <code>random</code> module to generate a number:</p>
+<div id="7397c1a2" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> guessing_game():</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate a random number between 1 and 9</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  number <span class="op">=</span> np.random.randint(<span class="dv">1</span>, <span class="dv">9</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  guesses <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="va">True</span>:</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    guess <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Guess a number between 1 and 9, or type 'exit' to end the game: "</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> guess.lower() <span class="op">==</span> <span class="st">'exit'</span>:</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    guess <span class="op">=</span> <span class="bu">int</span>(guess)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    guesses <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> guess <span class="op">&lt;</span> number:</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Too low!"</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> guess <span class="op">&gt;</span> number:</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Too high!"</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Exactly right!"</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"Game over. You took </span><span class="sc">{</span>guesses<span class="sc">}</span><span class="ss"> guesses."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>random.random()  <span class="co"># A random number from 0 (included) to 1 (excluded).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.5250622978692073</code></pre>
+</div>
+</div>
+<p>The condition <code>random.random() &lt; 0.05</code> is true with probability 5%. Generate one random number per round.</p>
+<p>We will study imports later in the course. For now, run <code>import random</code> once before using the module.</p>
+</section>
+<section id="step-2-implement-game-b" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-implement-game-b">Step 2: Implement Game B</h2>
+<p>Create <code>play_game_B(current_balance)</code>:</p>
+<ul>
+<li>If the current balance is even, add three points.</li>
+<li>If the current balance is odd, subtract five points.</li>
+<li>Return the updated balance.</li>
+</ul>
+<p>Check parity before changing the balance. Unlike Game A, Game B contains no random choice.</p>
+<p>Test it with positive, zero, and negative balances. For example, balances of <code>10</code>, <code>13</code>, <code>0</code>, and <code>-1</code> should become <code>13</code>, <code>8</code>, <code>3</code>, and <code>-6</code>, respectively.</p>
+</section>
+<section id="step-3-simulate-each-game-separately" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-simulate-each-game-separately">Step 3: Simulate each game separately</h2>
+<p>Create <code>simulate_game(game, rounds=1000, initial_capital=10)</code>.</p>
+<ul>
+<li><code>game</code> is the function to play, such as <code>play_game_A</code> or <code>play_game_B</code>.</li>
+<li><code>rounds</code> is a non-negative integer giving the number of individual plays.</li>
+<li><code>initial_capital</code> is the starting balance.</li>
+</ul>
+<p>Start a list with the initial balance. On each round, call <code>game</code> with the current balance, update the balance, and append it to the list. Return the complete list, which should contain <code>rounds + 1</code> entries.</p>
+<p>You can pass a function as an argument without calling it. For example, <code>simulate_game(play_game_A)</code> passes the function itself; <code>play_game_A(10)</code> calls it immediately.</p>
+<p>Run both games and store their histories in a dictionary with labels such as <code>"Game A"</code> and <code>"Game B"</code>. Plot the dictionary using the helper below. You do not need to recreate or explain the plotting code.</p>
+<div id="4bbd4a24" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_results(results):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Plot balance histories, including the starting balance at round zero."""</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label, balances <span class="kw">in</span> results.items():</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="bu">range</span>(<span class="bu">len</span>(balances)), balances, label<span class="op">=</span>label)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Rounds played"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Balance"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Example histories, supplied only to demonstrate the plotting function.</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>example_results <span class="op">=</span> {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Game A"</span>: [<span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Game B"</span>: [<span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">0</span>]</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plot_results(example_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>ModuleNotFoundError: No module named 'numpy'</code></pre>
+<pre><code>ModuleNotFoundError: No module named 'matplotlib'</code></pre>
 </div>
 </div>
-<div id="6c9f8870" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>guessing_game()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'guessing_game' is not defined</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
+<p>Explain why each game loses over time when played on its own. For Game A, consider the average change per round. For Game B, consider two consecutive rounds.</p>
+</section>
+<section id="step-4-alternate-the-games" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-alternate-the-games">Step 4: Alternate the games</h2>
+<p>Create <code>simulate_alternating_games(game_A, game_B, rounds=1000, initial_capital=10, start_with="B")</code>.</p>
+<p>Alternate between the two functions, starting with the game named by <code>start_with</code>, which may be <code>"A"</code> or <code>"B"</code>. Here, <code>rounds</code> counts individual plays, not pairs: four rounds starting with B means B, A, B, A.</p>
+<p>As before, return the initial balance followed by the balance after every round.</p>
+<p>First use the default starting balance of 10 and start with B. Add this history to your results dictionary and plot all three strategies together.</p>
+<p>Then repeat the alternating simulation starting with A. Add this fourth history and plot again.</p>
+</section>
+<section id="explain-what-happened" class="level2">
+<h2 class="anchored" data-anchor-id="explain-what-happened">Explain what happened</h2>
+<p>Use your results to answer these questions:</p>
+<ol type="1">
+<li>Why do both games change the parity of the balance on every play?</li>
+<li>Starting from 10, what parity does Game B encounter when you start with B? What changes when you start with A?</li>
+<li>Why does the order change the outcome?</li>
+</ol>
+<p>Trace the first four plays by hand to support your explanation. You do not need advanced probability calculations.</p>
+</section>
+<section id="stretch-goals-optional" class="level2">
+<h2 class="anchored" data-anchor-id="stretch-goals-optional">Stretch goals (optional)</h2>
+<ul>
+<li>Repeat the experiment with an odd initial balance. Predict what will happen before running it.</li>
+<li>Run each strategy several times and compare the results. Use <code>random.seed(42)</code> once before an experiment if you want to reproduce the same sequence of random draws. Do not reset the seed inside either game function.</li>
+</ul>
+</section>
+<section id="before-you-submit" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-submit">Before you submit</h2>
+<p>Upload your completed notebook to the <strong>Side Projects</strong> section on Blackboard <strong>before the final exam</strong>.</p>
+<p>Include tests of the game rules, plots of the four strategies, and your explanation of the role of parity. Follow the notebook and AI-use guidance on the <a href="../../modules/structures/side_projects.html">Side Projects page</a>.</p>
 
 
 <!-- -->
@@ -962,56 +1018,148 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Review: Guessing Game"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 4: IDEs &amp; Tools"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Parrondo's Paradox"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Side Project for Extra Credit"</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Guessing Game</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Can two games that lose when played separately produce a winning outcome when combined? In this project, you will explore a simple parity-based version of Parrondo's paradox through simulation.</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Generate a random number between 1 and 9 (including 1 and 9). Ask the user to guess the number, then tell them whether they guessed too low, too high, or exactly right.</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keep the game going until the user types ÔÇ£exitÔÇØ</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keep track of how many guesses the user has taken, and when the game ends, print this out.</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Try the exercise on your own first, then compare with the worked solution below.</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Main concepts: random numbers, loops, functions as arguments, and parity. You will use a supplied plotting function.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>&lt;img alt="Portrait accompanying the introduction to Parrondo's paradox." src="https://static.wixstatic.com/media/c7de9f_34a2afb04532431bbfa3546b19437222.jpg/v1/fill/w_353,h_235,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/c7de9f_34a2afb04532431bbfa3546b19437222.jpg" width="400" style="max-width: 100%; height: auto;" /&gt;</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Optional background: <span class="co">[</span><span class="ot">Parrondo's paradox</span><span class="co">](https://en.wikipedia.org/wiki/Parrondo%27s_paradox)</span>.</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> guessing_game():</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate a random number between 1 and 9</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  number <span class="op">=</span> np.random.randint(<span class="dv">1</span>, <span class="dv">9</span>)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  guesses <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>Your balance is an integer, and it may become negative. Keep playing for the requested number of rounds even if the balance reaches zero.</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 1: Implement Game A</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`play_game_A(current_balance)`</span>:</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With probability 5%, add one point.</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With probability 95%, subtract one point.</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Return the updated balance.</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>Use the <span class="in">`random`</span> module to generate a number:</span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="va">True</span>:</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    guess <span class="op">=</span> <span class="bu">input</span>(<span class="st">"Guess a number between 1 and 9, or type 'exit' to end the game: "</span>)</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> guess.lower() <span class="op">==</span> <span class="st">'exit'</span>:</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    guess <span class="op">=</span> <span class="bu">int</span>(guess)</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    guesses <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> guess <span class="op">&lt;</span> number:</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Too low!"</span>)</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> guess <span class="op">&gt;</span> number:</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Too high!"</span>)</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"Exactly right!"</span>)</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>random.random()  <span class="co"># A random number from 0 (included) to 1 (excluded).</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>The condition <span class="in">`random.random() &lt; 0.05`</span> is true with probability 5%. Generate one random number per round.</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>We will study imports later in the course. For now, run <span class="in">`import random`</span> once before using the module.</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="ss">f"Game over. You took </span><span class="sc">{</span>guesses<span class="sc">}</span><span class="ss"> guesses."</span>)</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>guessing_game()</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 2: Implement Game B</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`play_game_B(current_balance)`</span>:</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>If the current balance is even, add three points.</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>If the current balance is odd, subtract five points.</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Return the updated balance.</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>Check parity before changing the balance. Unlike Game A, Game B contains no random choice.</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>Test it with positive, zero, and negative balances. For example, balances of <span class="in">`10`</span>, <span class="in">`13`</span>, <span class="in">`0`</span>, and <span class="in">`-1`</span> should become <span class="in">`13`</span>, <span class="in">`8`</span>, <span class="in">`3`</span>, and <span class="in">`-6`</span>, respectively.</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 3: Simulate each game separately</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`simulate_game(game, rounds=1000, initial_capital=10)`</span>.</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`game`</span> is the function to play, such as <span class="in">`play_game_A`</span> or <span class="in">`play_game_B`</span>.</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`rounds`</span> is a non-negative integer giving the number of individual plays.</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`initial_capital`</span> is the starting balance.</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>Start a list with the initial balance. On each round, call <span class="in">`game`</span> with the current balance, update the balance, and append it to the list. Return the complete list, which should contain <span class="in">`rounds + 1`</span> entries.</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>You can pass a function as an argument without calling it. For example, <span class="in">`simulate_game(play_game_A)`</span> passes the function itself; <span class="in">`play_game_A(10)`</span> calls it immediately.</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>Run both games and store their histories in a dictionary with labels such as <span class="in">`"Game A"`</span> and <span class="in">`"Game B"`</span>. Plot the dictionary using the helper below. You do not need to recreate or explain the plotting code.</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_results(results):</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Plot balance histories, including the starting balance at round zero."""</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label, balances <span class="kw">in</span> results.items():</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="bu">range</span>(<span class="bu">len</span>(balances)), balances, label<span class="op">=</span>label)</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Rounds played"</span>)</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Balance"</span>)</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Example histories, supplied only to demonstrate the plotting function.</span></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>example_results <span class="op">=</span> {</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Game A"</span>: [<span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Game B"</span>: [<span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">0</span>]</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>plot_results(example_results)</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>Explain why each game loses over time when played on its own. For Game A, consider the average change per round. For Game B, consider two consecutive rounds.</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 4: Alternate the games</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`simulate_alternating_games(game_A, game_B, rounds=1000, initial_capital=10, start_with="B")`</span>.</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>Alternate between the two functions, starting with the game named by <span class="in">`start_with`</span>, which may be <span class="in">`"A"`</span> or <span class="in">`"B"`</span>. Here, <span class="in">`rounds`</span> counts individual plays, not pairs: four rounds starting with B means B, A, B, A.</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>As before, return the initial balance followed by the balance after every round.</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>First use the default starting balance of 10 and start with B. Add this history to your results dictionary and plot all three strategies together.</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>Then repeat the alternating simulation starting with A. Add this fourth history and plot again.</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Explain what happened</span></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>Use your results to answer these questions:</span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Why do both games change the parity of the balance on every play?</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Starting from 10, what parity does Game B encounter when you start with B? What changes when you start with A?</span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Why does the order change the outcome?</span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>Trace the first four plays by hand to support your explanation. You do not need advanced probability calculations.</span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stretch goals (optional)</span></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Repeat the experiment with an odd initial balance. Predict what will happen before running it.</span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Run each strategy several times and compare the results. Use <span class="in">`random.seed(42)`</span> once before an experiment if you want to reproduce the same sequence of random draws. Do not reset the seed inside either game function.</span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="fu">## Before you submit</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.</span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>Include tests of the game rules, plots of the four strategies, and your explanation of the role of parity. Follow the notebook and AI-use guidance on the <span class="co">[</span><span class="ot">Side Projects page</span><span class="co">](side_projects.qmd)</span>.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
@@ -1022,7 +1170,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/ides/review_guessing_game.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/structures/sp_parrondos_paradox.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
