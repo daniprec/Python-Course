@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computer Programming I (Python) - Module 4: IDEs &amp; Tools</title>
+<title>Computer Programming I (Python) - MNIST Digit Recognition</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,8 +64,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../modules/ides/review_general.html" rel="next">
-<link href="../../modules/numpy/sp_snell.html" rel="prev">
+<link href="../../modules/numpy/sp_snell.html" rel="next">
+<link href="../../modules/numpy/sp_numerical_linear_algebra.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -103,6 +103,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -115,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/ides/index.html">Module 4: IDEs &amp; Tools</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/side_projects.html">Side Projects</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/sp_mnist.html">MNIST Digit Recognition</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -336,11 +365,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../../modules/numpy/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Module 3: NumPy</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/introduction.html" class="sidebar-item-text sidebar-link">
@@ -405,11 +434,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../../modules/numpy/side_projects.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Side Projects</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/numpy/sp_numerical_linear_algebra.html" class="sidebar-item-text sidebar-link">
@@ -418,7 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../modules/numpy/sp_mnist.html" class="sidebar-item-text sidebar-link">
+  <a href="../../modules/numpy/sp_mnist.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">MNIST Digit Recognition</span></a>
   </div>
 </li>
@@ -434,13 +463,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../modules/ides/index.html" class="sidebar-item-text sidebar-link active">
+            <a href="../../modules/ides/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Module 4: IDEs &amp; Tools</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/ides/review_general.html" class="sidebar-item-text sidebar-link">
@@ -471,25 +500,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#from-notebooks-to-professional-tools" id="toc-from-notebooks-to-professional-tools" class="nav-link active" data-scroll-target="#from-notebooks-to-professional-tools">From Notebooks to Professional Tools</a></li>
-  <li><a href="#core-topics" id="toc-core-topics" class="nav-link" data-scroll-target="#core-topics">Core Topics</a></li>
-  <li><a href="#practical-applications" id="toc-practical-applications" class="nav-link" data-scroll-target="#practical-applications">Practical Applications</a></li>
-  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals">Learning Goals</a></li>
-  <li><a href="#flow-of-this-module" id="toc-flow-of-this-module" class="nav-link" data-scroll-target="#flow-of-this-module">Flow of This Module</a></li>
-  <li><a href="#what-you-will-build" id="toc-what-you-will-build" class="nav-link" data-scroll-target="#what-you-will-build">What You Will Build</a></li>
-  <li><a href="#practice-and-review" id="toc-practice-and-review" class="nav-link" data-scroll-target="#practice-and-review">Practice and Review</a></li>
-  <li><a href="#how-to-use-this-material" id="toc-how-to-use-this-material" class="nav-link" data-scroll-target="#how-to-use-this-material">How to Use This Material</a></li>
-  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link active" data-scroll-target="#the-data">The data</a></li>
+  <li><a href="#step-1-compute-the-mean-image-of-each-digit" id="toc-step-1-compute-the-mean-image-of-each-digit" class="nav-link" data-scroll-target="#step-1-compute-the-mean-image-of-each-digit">Step 1: Compute the mean image of each digit</a></li>
+  <li><a href="#step-2-measure-the-distance-between-two-images" id="toc-step-2-measure-the-distance-between-two-images" class="nav-link" data-scroll-target="#step-2-measure-the-distance-between-two-images">Step 2: Measure the distance between two images</a></li>
+  <li><a href="#step-3-classify-an-image" id="toc-step-3-classify-an-image" class="nav-link" data-scroll-target="#step-3-classify-an-image">Step 3: Classify an image</a></li>
+  <li><a href="#step-4-score-and-explain-your-model" id="toc-step-4-score-and-explain-your-model" class="nav-link" data-scroll-target="#step-4-score-and-explain-your-model">Step 4: Score and explain your model</a></li>
+  <li><a href="#stretch-goals-optional" id="toc-stretch-goals-optional" class="nav-link" data-scroll-target="#stretch-goals-optional">Stretch goals (optional)</a></li>
+  <li><a href="#before-you-submit" id="toc-before-you-submit" class="nav-link" data-scroll-target="#before-you-submit">Before you submit</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/ides/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/sp_mnist.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/side_projects.html">Side Projects</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/sp_mnist.html">MNIST Digit Recognition</a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Module 4: IDEs &amp; Tools</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">Professional Development Environment</p>
+<div class="quarto-title-block"><div><h1 class="title">MNIST Digit Recognition</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Side Project for Extra Credit</p>
 </div>
 
 
@@ -506,75 +533,101 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This module covers the tools and environments that professional Python developers use. You’ll learn about different IDEs, debugging techniques, and best practices for organizing your code.</p>
-<section id="from-notebooks-to-professional-tools" class="level2">
-<h2 class="anchored" data-anchor-id="from-notebooks-to-professional-tools">From Notebooks to Professional Tools</h2>
-<p>While Jupyter notebooks are excellent for learning and exploration, professional development often requires more sophisticated tools. In this module, you’ll learn about integrated development environments (IDEs) and the workflows they enable.</p>
-<p>The key skill here is understanding which tool to use for which task, and how to leverage debugging, version control, and code organization to write better software.</p>
+<p>Build a “toy AI model” that identifies handwritten digits. You will use the MNIST dataset, a large database of handwritten digits commonly used to train image processing systems, and a simple idea: a new digit should look more like the average drawing of its own class than like the average of any other.</p>
+<p>Main concepts: image arrays, boolean masks, <code>axis</code>, array arithmetic, distances, and accuracy.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Colab activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This project downloads MNIST through TensorFlow. Run it in Google Colab or in an environment with <code>tensorflow</code> installed. The page displays its code without executing it during website rendering.</p>
+</div>
+</div>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The data</h2>
+<p>The following cell loads the dataset and displays one drawing. You do not need to understand the plotting function yet.</p>
+<div id="f005933f" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.datasets <span class="im">import</span> mnist</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(x: np.ndarray, y: <span class="bu">int</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display a square image with an optional predicted digit as title."""</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x.ndim <span class="op">==</span> <span class="dv">2</span>, <span class="st">"The image must have 2 dimensions"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x.shape[<span class="dv">0</span>] <span class="op">==</span> x.shape[<span class="dv">1</span>], <span class="st">"The image must be a square"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    plt.imshow(x, cmap<span class="op">=</span><span class="st">"gray"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"Predicted: </span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>(x_train, y_train), (x_test, y_test) <span class="op">=</span> mnist.load_data()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"x_train shape: </span><span class="sc">{</span>x_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"y_train shape: </span><span class="sc">{</span>y_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>show_image(x_train[<span class="dv">0</span>], y_train[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here <code>x</code> represents the data we have (the drawings, as arrays of pixels) and <code>y</code> represents the value to predict (the digit each drawing represents). Before you continue, make sure you can explain every dimension printed above.</p>
 </section>
-<section id="core-topics" class="level2">
-<h2 class="anchored" data-anchor-id="core-topics">Core Topics</h2>
-<p>Review general Python concepts and prepare for advanced topics.</p>
-<p><a href="../../modules/ides/review_general.html" class="btn btn-primary">General Review</a></p>
+<section id="step-1-compute-the-mean-image-of-each-digit" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-compute-the-mean-image-of-each-digit">Step 1: Compute the mean image of each digit</h2>
+<p>Create a dictionary <code>dict_mean</code> that maps every digit, from <code>0</code> to <code>9</code>, to the average image of that digit in the training set.</p>
+<ol type="1">
+<li>Use <code>np.unique(y_train)</code> to loop over the digits.</li>
+<li>Use a boolean mask on <code>y_train</code> to select the images of one digit.</li>
+<li>Average them along <code>axis=0</code>, so the result is a <code>28 x 28</code> image.</li>
+</ol>
+<p>Display the mean image of one digit with <code>show_image</code>.</p>
 </section>
-<section id="practical-applications" class="level2">
-<h2 class="anchored" data-anchor-id="practical-applications">Practical Applications</h2>
-<p>Apply your knowledge to cryptography:</p>
-<p><a href="../../modules/ides/rsa.html" class="btn btn-secondary">RSA Encryption</a></p>
+<section id="step-2-measure-the-distance-between-two-images" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-measure-the-distance-between-two-images">Step 2: Measure the distance between two images</h2>
+<p>Create <code>pairwise_distance(A, B)</code>, which returns the Euclidean distance between two matrices of the same shape:</p>
+<p><span class="math display">\[d = \sqrt{ \sum_{i} \sum_{j} {(A_{ij} - B_{ij})^{2}}}\]</span></p>
+<ol type="1">
+<li>Check with <code>assert</code> that <code>A</code> and <code>B</code> have the same shape.</li>
+<li>Subtract the matrices, square the result, add all entries, and take the square root.</li>
+</ol>
+<p>Do not use loops. Compare your result with <code>np.linalg.norm(A - B)</code>.</p>
 </section>
-<section id="learning-goals" class="level2">
-<h2 class="anchored" data-anchor-id="learning-goals">Learning Goals</h2>
+<section id="step-3-classify-an-image" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-classify-an-image">Step 3: Classify an image</h2>
+<p>Create <code>classify_image(x)</code>, which returns the digit whose mean image is closest to <code>x</code>.</p>
+<ol type="1">
+<li>Compute the distance from <code>x</code> to the mean image of each digit.</li>
+<li>Return the digit with the smallest distance.</li>
+</ol>
+<p>Try it with one image of the test set and display the result with <code>show_image(x, y_pred)</code>.</p>
+</section>
+<section id="step-4-score-and-explain-your-model" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-score-and-explain-your-model">Step 4: Score and explain your model</h2>
+<p><strong>Accuracy</strong> measures how often the model predicts the correct digit:</p>
+<p><span class="math display">\[ \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}} \]</span></p>
+<p>Predict every image of the test set and compute the accuracy. Use the test set only to evaluate the model, never to build the mean images. You should obtain an accuracy close to 82%.</p>
+<p>Then answer:</p>
 <ul>
-<li>Understand different Python development environments</li>
-<li>Use Jupyter notebooks effectively for exploration</li>
-<li>Navigate and use IDEs like VS Code</li>
-<li>Apply debugging techniques to find and fix errors</li>
-<li>Organize code into modules and packages</li>
-<li>Follow Python best practices and style guidelines</li>
-<li>Use version control effectively</li>
+<li>Which digits does the model confuse most often? Display a few misclassified images.</li>
+<li>Describe one reason why an average image may fail to represent all the different ways people write the same digit.</li>
+<li>Why must accuracy be measured on images that were not used to construct the model?</li>
 </ul>
 </section>
-<section id="flow-of-this-module" class="level2">
-<h2 class="anchored" data-anchor-id="flow-of-this-module">Flow of This Module</h2>
-<ul>
-<li>Review fundamental concepts from previous modules</li>
-<li>Explore different development environments</li>
-<li>Learn debugging strategies and tools</li>
-<li>Apply knowledge to a cryptographic application</li>
-</ul>
+<section id="stretch-goals-optional" class="level2">
+<h2 class="anchored" data-anchor-id="stretch-goals-optional">Stretch goals (optional)</h2>
+<ol type="1">
+<li>Add the test set to the images used to build the mean images, using <code>np.concatenate</code>, and measure the accuracy again on the test set. Does it improve? Explain why, or why not.</li>
+<li>Build a confusion matrix of size <code>10 x 10</code> that counts how many times each real digit was predicted as each other digit.</li>
+<li>In Colab, use the <code>ipycanvas</code> library to draw a digit with your mouse and let your model predict it. You will need to convert the drawing to grayscale and resize it to <code>28 x 28</code>.</li>
+</ol>
 </section>
-<section id="what-you-will-build" class="level2">
-<h2 class="anchored" data-anchor-id="what-you-will-build">What You Will Build</h2>
-<p>Throughout this module, you will:</p>
-<ul>
-<li>Review and consolidate your Python knowledge</li>
-<li>Implement RSA encryption algorithm</li>
-<li>Practice professional code organization</li>
-<li>Use debugging tools to troubleshoot issues</li>
-</ul>
-</section>
-<section id="practice-and-review" class="level2">
-<h2 class="anchored" data-anchor-id="practice-and-review">Practice and Review</h2>
-<p>The module includes:</p>
-<ul>
-<li><strong>Reviews</strong>: <a href="../../modules/ides/review_general.html">General Review</a></li>
-<li><strong>Advanced Project</strong>: <a href="../../modules/ides/rsa.html">RSA Encryption</a></li>
-</ul>
-</section>
-<section id="how-to-use-this-material" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-use-this-material">How to Use This Material</h2>
-<ul>
-<li>Complete the general review first to ensure solid foundation</li>
-<li>Experiment with different IDEs to find your preference</li>
-<li>Work through the RSA project to see everything come together</li>
-<li>Practice debugging techniques on your own code</li>
-<li>Apply best practices to all your Python projects</li>
-</ul>
-</section>
-<section id="whats-next" class="level2">
-<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
-<p>After completing this module, you’ll have a solid foundation in Python programming, from basic syntax to professional development practices. You’ll be ready to explore specialized libraries and frameworks for data science, web development, or scientific computing.</p>
-<p><a href="../../index.html" class="btn btn-secondary">Back to Course Home</a></p>
+<section id="before-you-submit" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-submit">Before you submit</h2>
+<p>Upload your completed notebook to the <strong>Side Projects</strong> section on Blackboard <strong>before the final exam</strong>.</p>
+<p>Include your functions, saved outputs, the accuracy of your model, and a short explanation of one limitation of classifying by average image. Follow the notebook and AI-use guidance on the <a href="../../modules/structures/side_projects.html">Side Projects page</a>.</p>
 
 
 <!-- -->
@@ -1022,88 +1075,139 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../modules/numpy/sp_snell.html" class="pagination-link  aria-label=" snell&#39;s="" law"="">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Snell’s Law</span>
+      <a href="../../modules/numpy/sp_numerical_linear_algebra.html" class="pagination-link  aria-label=" numerical="" linear="" algebra"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Numerical Linear Algebra</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../modules/ides/review_general.html" class="pagination-link" aria-label="General Review">
-        <span class="nav-page-text">General Review</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../modules/numpy/sp_snell.html" class="pagination-link" aria-label="Snell's Law">
+        <span class="nav-page-text">Snell’s Law</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Module 4: IDEs &amp; Tools"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Professional Development Environment"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>This module covers the tools and environments that professional Python developers use. You'll learn about different IDEs, debugging techniques, and best practices for organizing your code.</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## From Notebooks to Professional Tools</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>While Jupyter notebooks are excellent for learning and exploration, professional development often requires more sophisticated tools. In this module, you'll learn about integrated development environments (IDEs) and the workflows they enable.</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>The key skill here is understanding which tool to use for which task, and how to leverage debugging, version control, and code organization to write better software.</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Topics</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Review general Python concepts and prepare for advanced topics.</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">General Review</span><span class="co">](review_general.qmd)</span>{.btn .btn-primary}</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical Applications</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Apply your knowledge to cryptography:</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">RSA Encryption</span><span class="co">](rsa.qmd)</span>{.btn .btn-secondary}</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning Goals</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Understand different Python development environments</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use Jupyter notebooks effectively for exploration</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Navigate and use IDEs like VS Code</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply debugging techniques to find and fix errors</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Organize code into modules and packages</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Follow Python best practices and style guidelines</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use version control effectively</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Flow of This Module</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Review fundamental concepts from previous modules</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explore different development environments</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learn debugging strategies and tools</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply knowledge to a cryptographic application</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## What You Will Build</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Throughout this module, you will:</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Review and consolidate your Python knowledge</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Implement RSA encryption algorithm</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Practice professional code organization</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use debugging tools to troubleshoot issues</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practice and Review</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>The module includes:</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reviews**: <span class="co">[</span><span class="ot">General Review</span><span class="co">](review_general.qmd)</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Advanced Project**: <span class="co">[</span><span class="ot">RSA Encryption</span><span class="co">](rsa.qmd)</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to Use This Material</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Complete the general review first to ensure solid foundation</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Experiment with different IDEs to find your preference</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Work through the RSA project to see everything come together</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Practice debugging techniques on your own code</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply best practices to all your Python projects</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## What's Next?</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>After completing this module, you'll have a solid foundation in Python programming, from basic syntax to professional development practices. You'll be ready to explore specialized libraries and frameworks for data science, web development, or scientific computing.</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Course Home</span><span class="co">](../../index.qmd)</span>{.btn .btn-secondary}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "MNIST Digit Recognition"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Side Project for Extra Credit"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  enabled: false</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Build a "toy AI model" that identifies handwritten digits. You will use the MNIST dataset, a large database of handwritten digits commonly used to train image processing systems, and a simple idea: a new digit should look more like the average drawing of its own class than like the average of any other.</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Main concepts: image arrays, boolean masks, <span class="in">`axis`</span>, array arithmetic, distances, and accuracy.</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Colab activity</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>This project downloads MNIST through TensorFlow. Run it in Google Colab or in an environment with <span class="in">`tensorflow`</span> installed. The page displays its code without executing it during website rendering.</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## The data</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>The following cell loads the dataset and displays one drawing. You do not need to understand the plotting function yet.</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.datasets <span class="im">import</span> mnist</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(x: np.ndarray, y: <span class="bu">int</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display a square image with an optional predicted digit as title."""</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x.ndim <span class="op">==</span> <span class="dv">2</span>, <span class="st">"The image must have 2 dimensions"</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x.shape[<span class="dv">0</span>] <span class="op">==</span> x.shape[<span class="dv">1</span>], <span class="st">"The image must be a square"</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    plt.imshow(x, cmap<span class="op">=</span><span class="st">"gray"</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"Predicted: </span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>(x_train, y_train), (x_test, y_test) <span class="op">=</span> mnist.load_data()</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"x_train shape: </span><span class="sc">{</span>x_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"y_train shape: </span><span class="sc">{</span>y_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>show_image(x_train[<span class="dv">0</span>], y_train[<span class="dv">0</span>])</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>Here <span class="in">`x`</span> represents the data we have (the drawings, as arrays of pixels) and <span class="in">`y`</span> represents the value to predict (the digit each drawing represents). Before you continue, make sure you can explain every dimension printed above.</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 1: Compute the mean image of each digit</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>Create a dictionary <span class="in">`dict_mean`</span> that maps every digit, from <span class="in">`0`</span> to <span class="in">`9`</span>, to the average image of that digit in the training set.</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Use <span class="in">`np.unique(y_train)`</span> to loop over the digits.</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Use a boolean mask on <span class="in">`y_train`</span> to select the images of one digit.</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Average them along <span class="in">`axis=0`</span>, so the result is a <span class="in">`28 x 28`</span> image.</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Display the mean image of one digit with <span class="in">`show_image`</span>.</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 2: Measure the distance between two images</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`pairwise_distance(A, B)`</span>, which returns the Euclidean distance between two matrices of the same shape:</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>$$d = \sqrt{ \sum_{i} \sum_{j} {(A_{ij} - B_{ij})^{2}}}$$</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Check with <span class="in">`assert`</span> that <span class="in">`A`</span> and <span class="in">`B`</span> have the same shape.</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Subtract the matrices, square the result, add all entries, and take the square root.</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>Do not use loops. Compare your result with <span class="in">`np.linalg.norm(A - B)`</span>.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 3: Classify an image</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>Create <span class="in">`classify_image(x)`</span>, which returns the digit whose mean image is closest to <span class="in">`x`</span>.</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Compute the distance from <span class="in">`x`</span> to the mean image of each digit.</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Return the digit with the smallest distance.</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>Try it with one image of the test set and display the result with <span class="in">`show_image(x, y_pred)`</span>.</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 4: Score and explain your model</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>**Accuracy** measures how often the model predicts the correct digit:</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>$$ \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}} $$</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>Predict every image of the test set and compute the accuracy. Use the test set only to evaluate the model, never to build the mean images. You should obtain an accuracy close to 82%.</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>Then answer:</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Which digits does the model confuse most often? Display a few misclassified images.</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe one reason why an average image may fail to represent all the different ways people write the same digit.</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Why must accuracy be measured on images that were not used to construct the model?</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stretch goals (optional)</span></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add the test set to the images used to build the mean images, using <span class="in">`np.concatenate`</span>, and measure the accuracy again on the test set. Does it improve? Explain why, or why not.</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build a confusion matrix of size <span class="in">`10 x 10`</span> that counts how many times each real digit was predicted as each other digit.</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>In Colab, use the <span class="in">`ipycanvas`</span> library to draw a digit with your mouse and let your model predict it. You will need to convert the drawing to grayscale and resize it to <span class="in">`28 x 28`</span>.</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Before you submit</span></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>Include your functions, saved outputs, the accuracy of your model, and a short explanation of one limitation of classifying by average image. Follow the notebook and AI-use guidance on the <span class="co">[</span><span class="ot">Side Projects page</span><span class="co">](../structures/side_projects.qmd)</span>.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1113,7 +1217,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/ides/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/sp_mnist.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
