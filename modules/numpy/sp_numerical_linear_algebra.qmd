@@ -1,0 +1,185 @@
+---
+title: "Numerical Linear Algebra"
+subtitle: "Side Project for Extra Credit"
+format: html
+---
+
+Implement four classic algorithms of numerical linear algebra using only NumPy arrays: centering a matrix, orthonormalizing vectors, solving a linear system iteratively, and finding the dominant eigenvalue of a matrix. Each one is a short recipe, but together they show how much of linear algebra reduces to dot products, norms, and matrix-vector products.
+
+Main concepts: broadcasting, `axis`, dot products, norms, the `@` operator, and iterative algorithms.
+
+## Step 1: Center a matrix
+
+Create `center_matrix(matrix)`, which "centers" a matrix by subtracting the mean of each column from every entry in that column.
+
+For instance:
+
+$$
+A=
+\begin{pmatrix}
+1 & 1 & 2 \\
+1 & 0 & 4 \\
+1 & -1 & 6 \\
+\end{pmatrix}
+\rightarrow
+A'=
+\begin{pmatrix}
+0 & 1 & -2 \\
+0 & 0 & 0 \\
+0 & -1 & 2 \\
+\end{pmatrix}
+$$
+
+Do not use loops: broadcasting can subtract the column means from every row at once.
+
+```{python}
+import numpy as np
+
+arr = np.array([
+    [1, 1, 2],
+    [1, 0, 4],
+    [1, -1, 6]
+])
+```
+
+```{python}
+#| eval: false
+
+```
+
+## Step 2: Gram-Schmidt method
+
+Create `gram_schmidt(V)`, which takes a set of linearly independent vectors $V = \{v_1, v_2, \dots, v_n\}$ and returns an orthonormal set $U = \{u_1, u_2, \dots, u_n\}$.
+
+- **Input:** a NumPy array `V` of shape `(n, m)`, where each row is a vector in $\mathbb{R}^m$.
+- **Output:** a NumPy array `U` of the same shape, whose rows are orthonormal.
+
+For each vector $\mathbf{v}_k$, compute $\mathbf{u}_k$ as follows:
+
+1. Subtract its projections onto all previous $\mathbf{u}_j$ vectors:
+
+   $$
+   \mathbf{w}_k = \mathbf{v}_k - \sum_{j=1}^{k-1} \langle \mathbf{v}_k, \mathbf{u}_j \rangle \, \mathbf{u}_j
+   $$
+
+2. Normalize the result:
+
+   $$
+   \mathbf{u}_k = \frac{\mathbf{w}_k}{\| \mathbf{w}_k \|}
+   $$
+
+Here $\langle \mathbf{a}, \mathbf{b} \rangle$ is the dot product of $\mathbf{a}$ and $\mathbf{b}$, and $\| \mathbf{a} \|$ is its Euclidean norm. Because every $\mathbf{u}_j$ already has unit length, the projection does not need to be divided by $\langle \mathbf{u}_j, \mathbf{u}_j \rangle$.
+
+For the vectors below, the expected output is:
+
+```{python}
+v = np.array([
+    [1, 1],
+    [1, 0]
+])
+
+# Expected output:
+#  [[ 0.70710678  0.70710678]
+#  [ 0.70710678 -0.70710678]]
+```
+
+```{python}
+#| eval: false
+
+```
+
+## Step 3: Conjugate gradient method
+
+Create `conjugate_gradient(A, b, x0, tol, max_iter)`, which solves the system $Ax = b$, where $A$ is a symmetric positive-definite matrix, using the conjugate gradient method.
+
+- **Input:** the matrix `A` of shape `(n, n)`, the vector `b` of shape `(n,)`, an initial guess `x0` of shape `(n,)`, a tolerance `tol`, and a maximum number of iterations `max_iter`.
+- **Output:** an approximate solution `x` of $Ax = b$.
+
+The method iteratively refines an approximate solution $x_k$:
+
+1. **Initialize.** Compute the residual $r_0 = b - A x_0$, set the search direction $p_0 = r_0$, and compute $\delta_0 = r_0^T r_0$.
+2. **Iterate.** While $\sqrt{\delta_k} > \text{tol}$ and $k < \text{max\_iter}$:
+
+   1. $q_k = A p_k$
+   2. $\alpha_k = \delta_k / (p_k^T q_k)$
+   3. $x_{k+1} = x_k + \alpha_k p_k$
+   4. $r_{k+1} = r_k - \alpha_k q_k$
+   5. $\delta_{k+1} = r_{k+1}^T r_{k+1}$
+   6. $\beta_k = \delta_{k+1} / \delta_k$
+   7. $p_{k+1} = r_{k+1} + \beta_k p_k$
+
+3. **Output.** Return the last approximate solution.
+
+```{python}
+A = np.array([
+    [4, 1],
+    [1, 3]
+], dtype=float)
+
+b = np.array([1, 2], dtype=float)
+x0 = np.zeros_like(b)
+tol = 1e-6
+max_iter = 1000
+```
+
+```{python}
+#| eval: false
+
+```
+
+Compare your result with `np.linalg.solve(A, b)`. For this system, the solution is approximately `[0.0909, 0.6364]`.
+
+## Step 4: The power method
+
+Create `power_method(A, num_iterations)`, which estimates the largest eigenvalue, in magnitude, and its eigenvector for a square matrix $A$.
+
+- **Input:** a square matrix `A` of shape `(n, n)` and a number of iterations.
+- **Output:** the estimated eigenvalue and the corresponding eigenvector.
+
+The steps are:
+
+1. Start with a random non-zero vector $b^{(0)}$ and normalize it to have unit length.
+2. For $k = 1$ to `num_iterations`, compute $b^{(k)} = A b^{(k-1)}$ and normalize it.
+3. Estimate the eigenvalue as $\lambda = b^{(k)} \cdot (A b^{(k)})$.
+
+```{python}
+A = np.array([
+    [2, 1],
+    [1, 2]
+], dtype=float)
+```
+
+```{python}
+#| eval: false
+
+```
+
+For this matrix, the largest eigenvalue is `3` and the eigenvector is proportional to `[1, 1]`.
+
+## Step 5: Test and explain your algorithms
+
+Compare each function with NumPy: `np.mean`, `np.linalg.qr`, `np.linalg.solve`, and `np.linalg.eig`. Then design small tests for:
+
+- A matrix that is already centered, which should not change.
+- Gram-Schmidt output `U` satisfying `U @ U.T` equal to the identity matrix, up to rounding.
+- A conjugate gradient run that starts at the exact solution.
+- The power method on a diagonal matrix, where you know the answer in advance.
+
+For each test, write the expected result before running your code. For each algorithm, identify which operations are vectorized and which steps still require a loop.
+
+```{python}
+#| eval: false
+
+```
+
+## Stretch goals (optional)
+
+1. Make `gram_schmidt` raise an error when the input vectors are linearly dependent, instead of returning `nan` values.
+2. Count how many iterations conjugate gradient needs for matrices of size 5, 50, and 500. What do you observe?
+3. Use the power method to estimate the second largest eigenvalue by removing the contribution of the first eigenvector.
+
+## Before you submit
+
+Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.
+
+Include your functions, tests, saved outputs, and a short explanation of which steps of each algorithm are vectorized. Follow the notebook and AI-use guidance on the [Side Projects page](../structures/side_projects.qmd).

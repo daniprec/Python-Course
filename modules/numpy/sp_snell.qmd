@@ -1,0 +1,118 @@
+---
+title: "Snell's Law"
+subtitle: "Side Project for Extra Credit"
+format: html
+---
+
+Estimate the refractive index of an unknown material from measured angles. When light moves from one medium to another, its path bends. This phenomenon is called **refraction**, and Snell's law relates the angle of incidence $\theta_1$ to the angle of refraction $\theta_2$:
+
+$$
+n_1 \sin(\theta_1) = n_2 \sin(\theta_2),
+$$
+
+where $n_1$ and $n_2$ are the refractive indices of the two media. Air has a refractive index close to `1`, while water has a refractive index close to `1.33`.
+
+Main concepts: two-dimensional slicing, vectorized trigonometric functions, degree-to-radian conversion, and descriptive statistics.
+
+## The data
+
+Each row contains an incidence angle followed by its corresponding refraction angle. Both are measured in degrees.
+
+```{python}
+import numpy as np
+
+# Columns: theta_1, theta_2
+angles = np.array([
+    [30, 18],
+    [32, 19],
+    [34, 21],
+    [36, 22],
+    [38, 23],
+    [40, 24],
+    [42, 25],
+    [44, 26],
+    [46, 27],
+    [48, 28],
+    [50, 29],
+    [52, 30],
+    [54, 31],
+    [56, 32],
+    [58, 33],
+    [60, 33]
+], dtype=float)
+
+print(angles.shape)
+```
+
+Our goal is to estimate $n_2$, the refractive index of the unknown material, given the index $n_1$ of the first medium. Every measurement gives one estimate, so we will summarize all of them with a mean and a standard deviation.
+
+## Step 1: Calculate relative refractive indices
+
+Create `index_of_refraction(theta_1, theta_2)`.
+
+1. Accept two arrays of angles in degrees.
+2. Convert both arrays to radians. NumPy's trigonometric functions expect radians.
+3. Return the array of ratios $\sin(\theta_1) / \sin(\theta_2)$.
+
+Do not use loops: the function should work on whole arrays at once.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 2: Summarize the measurements
+
+Create `mean_and_std(values)`.
+
+1. Calculate the mean and the population standard deviation of the array.
+2. Return a string in the format `mean +/- standard deviation`, with both numbers displayed with two decimal places.
+
+For `[1, 1.41, 1.22]`, the result should be `1.21 +/- 0.17`.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 3: Estimate the unknown index
+
+Create `estimate_index(angles_2d, n_1=1.0)`.
+
+1. Extract the incidence and refraction columns from the two-dimensional array.
+2. Call `index_of_refraction()`.
+3. Calculate $n_2 = n_1\sin(\theta_1)/\sin(\theta_2)$ for every measurement.
+4. Call `mean_and_std()` and return the formatted estimate.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 4: Test and explain your estimate
+
+Estimate the unknown material first with air as the initial medium and then with water, using `n_1=1.33`. Your results should be close to `1.58 +/- 0.02` and `2.10 +/- 0.02`, respectively.
+
+Then design small tests for:
+
+- Equal incidence and refraction angles, which should give a ratio of `1`.
+- Your `mean_and_std` function with a list whose mean and standard deviation you can calculate by hand.
+- A single measurement, which should have a standard deviation of `0.00`.
+
+For each test, write the expected result before running your code. Explain why the angles must be converted to radians before calling `np.sin()`, and describe how measurement variability appears in the reported result.
+
+```{python}
+#| eval: false
+
+```
+
+## Stretch goals (optional)
+
+1. Plot $\sin(\theta_2)$ against $\sin(\theta_1)$. According to Snell's law, the points should lie close to a straight line. Fit that line and compare its slope with your estimate.
+2. The last measurement, `[60, 33]`, looks slightly different from the rest. Estimate the index again without it and explain how much the result changes.
+
+## Before you submit
+
+Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.
+
+Include your functions, tests, saved outputs, and a short explanation of how measurement variability affects your estimate. Follow the notebook and AI-use guidance on the [Side Projects page](../structures/side_projects.qmd).

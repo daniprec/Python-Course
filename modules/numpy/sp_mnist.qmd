@@ -1,0 +1,122 @@
+---
+title: "MNIST Digit Recognition"
+subtitle: "Side Project for Extra Credit"
+format: html
+execute:
+  enabled: false
+---
+
+Build a "toy AI model" that identifies handwritten digits. You will use the MNIST dataset, a large database of handwritten digits commonly used to train image processing systems, and a simple idea: a new digit should look more like the average drawing of its own class than like the average of any other.
+
+Main concepts: image arrays, boolean masks, `axis`, array arithmetic, distances, and accuracy.
+
+::: {.callout-note}
+## Colab activity
+
+This project downloads MNIST through TensorFlow. Run it in Google Colab or in an environment with `tensorflow` installed. The page displays its code without executing it during website rendering.
+:::
+
+## The data
+
+The following cell loads the dataset and displays one drawing. You do not need to understand the plotting function yet.
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+from tensorflow.keras.datasets import mnist
+
+
+def show_image(x: np.ndarray, y: int = None) -> None:
+    """Display a square image with an optional predicted digit as title."""
+    assert x.ndim == 2, "The image must have 2 dimensions"
+    assert x.shape[0] == x.shape[1], "The image must be a square"
+    plt.imshow(x, cmap="gray")
+    plt.title(f"Predicted: {y}")
+    plt.show()
+    plt.close()
+
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+print(f"x_train shape: {x_train.shape}")
+print(f"y_train shape: {y_train.shape}")
+show_image(x_train[0], y_train[0])
+```
+
+Here `x` represents the data we have (the drawings, as arrays of pixels) and `y` represents the value to predict (the digit each drawing represents). Before you continue, make sure you can explain every dimension printed above.
+
+## Step 1: Compute the mean image of each digit
+
+Create a dictionary `dict_mean` that maps every digit, from `0` to `9`, to the average image of that digit in the training set.
+
+1. Use `np.unique(y_train)` to loop over the digits.
+2. Use a boolean mask on `y_train` to select the images of one digit.
+3. Average them along `axis=0`, so the result is a `28 x 28` image.
+
+Display the mean image of one digit with `show_image`.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 2: Measure the distance between two images
+
+Create `pairwise_distance(A, B)`, which returns the Euclidean distance between two matrices of the same shape:
+
+$$d = \sqrt{ \sum_{i} \sum_{j} {(A_{ij} - B_{ij})^{2}}}$$
+
+1. Check with `assert` that `A` and `B` have the same shape.
+2. Subtract the matrices, square the result, add all entries, and take the square root.
+
+Do not use loops. Compare your result with `np.linalg.norm(A - B)`.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 3: Classify an image
+
+Create `classify_image(x)`, which returns the digit whose mean image is closest to `x`.
+
+1. Compute the distance from `x` to the mean image of each digit.
+2. Return the digit with the smallest distance.
+
+Try it with one image of the test set and display the result with `show_image(x, y_pred)`.
+
+```{python}
+#| eval: false
+
+```
+
+## Step 4: Score and explain your model
+
+**Accuracy** measures how often the model predicts the correct digit:
+
+$$ \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}} $$
+
+Predict every image of the test set and compute the accuracy. Use the test set only to evaluate the model, never to build the mean images. You should obtain an accuracy close to 82%.
+
+Then answer:
+
+- Which digits does the model confuse most often? Display a few misclassified images.
+- Describe one reason why an average image may fail to represent all the different ways people write the same digit.
+- Why must accuracy be measured on images that were not used to construct the model?
+
+```{python}
+#| eval: false
+
+```
+
+## Stretch goals (optional)
+
+1. Add the test set to the images used to build the mean images, using `np.concatenate`, and measure the accuracy again on the test set. Does it improve? Explain why, or why not.
+2. Build a confusion matrix of size `10 x 10` that counts how many times each real digit was predicted as each other digit.
+3. In Colab, use the `ipycanvas` library to draw a digit with your mouse and let your model predict it. You will need to convert the drawing to grayscale and resize it to `28 x 28`.
+
+## Before you submit
+
+Upload your completed notebook to the **Side Projects** section on Blackboard **before the final exam**.
+
+Include your functions, saved outputs, the accuracy of your model, and a short explanation of one limitation of classifying by average image. Follow the notebook and AI-use guidance on the [Side Projects page](../structures/side_projects.qmd).
