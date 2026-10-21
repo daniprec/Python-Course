@@ -18,7 +18,7 @@ The midterm had 11 exercises:
 
 To keep things simple, you mark every exercise from `0` (nothing correct) to `1` (fully correct). Later, each mark will be multiplied by the value of its exercise. You store your marks in a table: **one row per student, one column per exercise**.
 
-Throughout this session, you will manage this table. You will start with the tools you already know, see where they become uncomfortable, and then switch to the right tool for tables of numbers: **NumPy**.
+Throughout this session, you will manage this table. You will start with the tools you already know, see where they become uncomfortable, and then switch to the right tool for tables of numbers (arrays): **NumPy**.
 
 ## The Problem: Marks Stored in Lists
 
@@ -72,7 +72,7 @@ print(last_question)
 ```
 :::
 
-This works, but every new question needs a new loop or comprehension, and the code no longer looks like the question we asked. A list does not know that it is a table: it only knows that it contains other lists. We need a tool that understands rows and columns.
+This works, but every new question needs a new loop or comprehension, and the code no longer looks like the question we asked. A list does not know that it is a array: it only knows that it contains other lists. We need a tool that understands rows and columns.
 
 ## What is NumPy?
 
@@ -178,7 +178,7 @@ print(chloe_debugging, chloe_debugging.dtype)
 The first array only contains integers, so it keeps an integer type. In the second, a single `0.5` is enough to turn every element into a float, so the array has one data type. (On some Windows installations the integer type may show as `int32`.)
 :::
 
-This rule has a consequence. Why don't we store the student names inside the table, as the first column?
+This rule has a consequence. Why don't we store the student names inside the array, as the first column?
 
 ```{python}
 row = np.array(["Alice", 0.75, 1, 0.5])
@@ -237,11 +237,11 @@ marks = np.array(marks_list)
 print(marks)
 ```
 
-Compare this output with `print(marks_list)`: NumPy prints the table as a table, with aligned rows and columns.
+Compare this output with `print(marks_list)`: NumPy prints the array as a table, with aligned rows and columns.
 
 In NumPy, the order of dimensions is indicated by the nesting of brackets. The outermost brackets represent the first dimension (dimension 0, the **rows**, here the students). The next level of brackets represents the second dimension (dimension 1, the **columns**, here the exercises). Each new level of nesting adds one more dimension.
 
-A table must be rectangular: every row needs the same number of values. What if you forget to type one of Diego's marks?
+An array must be rectangular: every row needs the same number of values. What if you forget to type one of Diego's marks?
 
 ```{python}
 broken = np.array([
@@ -279,7 +279,7 @@ We need three levels of brackets, so the array is three-dimensional: campuses, t
 
 ## Basic Properties of Arrays
 
-An array knows its own structure. Unlike methods, properties don't require parentheses when accessed. Here are four key properties, applied to our table of marks.
+An array knows its own structure. Unlike methods, properties don't require parentheses when accessed. Here are four key properties, applied to our array of marks.
 
 `ndim`: the number of dimensions of the array.
 
@@ -287,7 +287,7 @@ An array knows its own structure. Unlike methods, properties don't require paren
 print(marks.ndim)
 ```
 
-`shape`: a tuple with the length of each dimension. For a table with `n` rows and `m` columns, the shape is `(n, m)`: here, 6 students and 11 exercises.
+`shape`: a tuple with the length of each dimension. For an array with `n` rows and `m` columns, the shape is `(n, m)`: here, 6 students and 11 exercises.
 
 ```{python}
 print(marks.shape)
@@ -309,7 +309,7 @@ print(marks.dtype)
 ## Exercise: Shapes That Must Agree
 
 1. Print the shape of `weights`. Which number of `marks.shape` must it match, and why?
-2. A seventh student takes the exam late, and you add a bonus exercise 12 for everyone. Without running any code, predict the `ndim`, `shape`, and `size` of the new table of marks.
+2. A seventh student takes the exam late, and you add a bonus exercise 12 for everyone. Without running any code, predict the `ndim`, `shape`, and `size` of the new array of marks.
 3. Predict the same three properties for `campuses`.
 :::
 
@@ -317,7 +317,7 @@ print(marks.dtype)
 ## Solution
 
 1. `weights.shape` is `(11,)`: one value per exercise. It must match the number of **columns** of `marks`, `marks.shape[1]`, because every column is one exercise.
-2. The new table has `ndim` 2, `shape` `(7, 12)`, and `size` 84.
+2. The new array has `ndim` 2, `shape` `(7, 12)`, and `size` 84.
 3. For `campuses`:
 
 ```{python}
@@ -332,7 +332,7 @@ print(campuses.ndim, campuses.shape, campuses.size)
 
 Typing every value is fine for six students, but the other group has 30. NumPy can build arrays of any shape for us.
 
-`np.zeros()` creates an array full of zeros. It is an **empty table of marks** for 30 students and 11 exercises, waiting to be filled. Note that the shape is passed as one tuple.
+`np.zeros()` creates an array full of zeros. It is an **empty array of marks** for 30 students and 11 exercises, waiting to be filled. Note that the shape is passed as one tuple.
 
 ```{python}
 new_group = np.zeros((30, 11))
@@ -398,7 +398,7 @@ print(open_rubric)
 `np.arange()` excludes its stopping value, so we must stop one step after `1`. `np.linspace()` includes both ends and asks for the number of values instead of the step, which is usually easier for rubrics.
 :::
 
-### Reshape: From a Form to a Table
+### Reshape: From a Form to an Array
 
 Imagine that you graded the exams in an online form, which exports all the marks as one long list: first the 11 marks of the first student, then the 11 marks of the second, and so on.
 
@@ -430,13 +430,13 @@ table = form_export.reshape(6, 10)
 ::: {.callout-note}
 ## Exercise: Grading Exercise by Exercise
 
-Many professors grade **exercise by exercise**: first exercise 1 for every student, then exercise 2 for every student, and so on. A form filled in that order exports the 6 marks of exercise 1, then the 6 marks of exercise 2, and so on. Which `reshape()` gives a table with the right structure? What is its shape, and what does each row represent?
+Many professors grade **exercise by exercise**: first exercise 1 for every student, then exercise 2 for every student, and so on. A form filled in that order exports the 6 marks of exercise 1, then the 6 marks of exercise 2, and so on. Which `reshape()` gives an array with the right structure? What is its shape, and what does each row represent?
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-`.reshape(11, 6)`, which gives a table with shape `(11, 6)`: one row per **exercise** and one column per student. Reshape fills the new array row by row, so the reshape must follow the order in which the values arrive. Turning this table into one row per student is a different operation (transposing), which we will see in a later session.
+`.reshape(11, 6)`, which gives an array with shape `(11, 6)`: one row per **exercise** and one column per student. Reshape fills the new array row by row, so the reshape must follow the order in which the values arrive. Turning this array into one row per student is a different operation (transposing), which we will see in a later session.
 :::
 
 ---
@@ -549,7 +549,7 @@ print(x)
 ::: {.callout-note}
 ## Exercise: Grade Revision
 
-Emma also asked for a revision. Her open problem in **exercise 2** deserves full marks. Update the table using `students.index()` and the exercise number, then print Emma's row.
+Emma also asked for a revision. Her open problem in **exercise 2** deserves full marks. Update the array using `students.index()` and the exercise number, then print Emma's row.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -743,9 +743,9 @@ print(exam[:, :2, :2])
 
 ---
 
-## Extra: An Image Is Also a Table
+## Extra: An Image Is Also an Array
 
-A table of marks is a table of numbers. What else could be stored as a table of numbers? A **picture**.
+A table of marks is an array of numbers. What else could be stored as an array of numbers? A **picture**.
 
 A digital image is a grid of small squares called **pixels**. In a grayscale image, each pixel is one number: `0` is black, `1` is white, and the values in between are shades of gray. So an image is just a two-dimensional array, where the shape is `(height, width)`.
 

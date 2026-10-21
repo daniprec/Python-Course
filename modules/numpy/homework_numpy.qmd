@@ -193,6 +193,84 @@ print(board)
 Using `dtype=int` keeps the board readable when printed. Slices place the whole ship in one assignment, which with nested lists would require a loop.
 :::
 
+::: {.callout-note}
+## Exam Versions
+
+To avoid copying, no two students sitting next to each other (left, right, in front, or behind) may get the same version of the exam. Using only `np.zeros()`, `np.arange()`, `reshape()`, indexing, and slicing (no loops):
+
+1. Write a function named `seating_plan(n_rows, n_cols)` that returns a 2D array with the seat numbers of the room, starting at 1 and numbered row by row.
+2. Write a function named `exam_versions(n_rows, n_cols)` that returns a 2D integer array with the version of each seat: `0` for version A and `1` for version B. The seat in the first row and first column gets version A.
+
+*Sample input 1:* `seating_plan(3, 4)`  
+*Expected result 1:*
+
+```text
+[[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]]
+```
+
+*Sample input 2:* `exam_versions(3, 4)`  
+*Expected result 2:*
+
+```text
+[[0 1 0 1]
+ [1 0 1 0]
+ [0 1 0 1]]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def seating_plan(n_rows, n_cols):
+    return np.arange(1, n_rows * n_cols + 1).reshape(n_rows, n_cols)
+
+
+def exam_versions(n_rows, n_cols):
+    versions = np.zeros((n_rows, n_cols), dtype=int)
+    versions[::2, 1::2] = 1   # even rows, odd columns
+    versions[1::2, ::2] = 1   # odd rows, even columns
+    return versions
+
+
+print(seating_plan(3, 4))
+print(exam_versions(3, 4))
+```
+:::
+
+::: {.callout-warning}
+## Holiday Lights
+
+*Inspired by [Advent of Code 2015, Day 6](https://adventofcode.com/2015/day/6).*
+
+You have a grid of lights, all of them off (`0`). Each instruction switches on (`1`) or off (`0`) a whole rectangle of lights, given by two opposite corners `(r1, c1)` and `(r2, c2)`, both included.
+
+Write a Python function `switch(grid, action, r1, c1, r2, c2)` that applies one instruction to the grid, where `action` is either `"on"` or `"off"`. Do not use loops.
+
+*Sample input:*
+
+```python
+grid = np.zeros((6, 6), dtype=int)
+switch(grid, "on", 0, 0, 3, 3)
+switch(grid, "off", 1, 1, 2, 2)
+switch(grid, "on", 2, 4, 5, 5)
+print(grid)
+```
+
+*Expected result:*
+
+```text
+[[1 1 1 1 0 0]
+ [1 0 0 1 0 0]
+ [1 0 0 1 1 1]
+ [1 1 1 1 1 1]
+ [0 0 0 0 1 1]
+ [0 0 0 0 1 1]]
+```
+:::
+
 ---
 
 # Array Arithmetic and Broadcasting
@@ -337,6 +415,126 @@ print(columns)
 The colon selects every position along the corresponding axis.
 :::
 
+::: {.callout-note}
+## Final Grades with Any Weights
+
+Write a function named `final_grades(marks, weights)` that receives a 2D array of marks between `0` and `1` (one row per student, one column per exercise) and a 1D array with the points of each exercise. It must return the final grade of each student **out of 10**, without loops.
+
+The points do not necessarily add up to 100, so divide by the total number of points of the exam.
+
+*Sample input:*
+
+```python
+marks = np.array([[1, 0.5, 0], [0.5, 1, 1]])
+weights = np.array([50, 30, 20])
+final_grades(marks, weights)
+```
+
+*Expected result:* `[6.5 7.5]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def final_grades(marks, weights):
+    return 10 * (marks @ weights) / np.sum(weights)
+
+
+marks = np.array([[1, 0.5, 0], [0.5, 1, 1]])
+weights = np.array([50, 30, 20])
+print(final_grades(marks, weights))
+```
+
+`marks @ weights` gives the points of each student, and dividing by the total points of the exam turns them into a fraction of the maximum.
+:::
+
+::: {.callout-note}
+## Factorial, Revisited
+
+In Module 1 you computed factorials with a loop. Now do it without one:
+
+1. Write a function `factorial(n)` that uses `np.arange()` and `np.prod()`.
+2. Create an array with the factorials of 1 to 10 in a single line, using `np.cumprod()`.
+3. Compute `factorial(21)`. Is the result correct? Why?
+
+*Sample input:* `factorial(5)`  
+*Expected result:* `120`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def factorial(n):
+    return np.prod(np.arange(1, n + 1))
+
+
+print(factorial(5))
+print(np.cumprod(np.arange(1, 11)))
+print(factorial(21))
+```
+
+$21! \approx 5.1 \cdot 10^{19}$ does not fit in a 64-bit integer (the maximum is about $9.2 \cdot 10^{18}$), so the result **overflows** and NumPy returns a wrong (even negative) number without any error. Python integers have no such limit, which is why `math.factorial(21)` is correct. With floats, `np.prod(np.arange(1, n + 1, dtype=float))` gives an approximation instead.
+:::
+
+::: {.callout-note}
+## Polynomial Operation, Revisited
+
+In Module 1 you evaluated these functions one value of `x` at a time, with $a = 1$, $b = 1$, $c = -6$:
+
+$$f(x) = a \cdot x^2+b \cdot x+c \qquad g(x) = \frac{a}{x} \qquad h(x) = \frac{f(x)}{g(x)}$$
+
+1. Store the points $x = -2, 0, 2.1$ in one array and compute $f$, $g$, and $h$ for all of them at once, without loops.
+2. Plain Python raised a `ZeroDivisionError` at $x = 0$. What does NumPy do instead? What are the values of $g(0)$ and $h(0)$?
+3. Compute the simplified version, $h(x) = x^3 + \frac{b}{a} x^2 + \frac{c}{a} x$, on the same array. Do both versions agree at every point?
+4. Evaluate the simplified $h$ on 101 evenly spaced points between $-3$ and $3$, and find the smallest value and the `x` where it happens.
+
+*Expected result for steps 1 and 2:* `f = [-4. -6. 0.51]`, `g = [-0.5 inf 0.476...]`, `h = [8. -0. 1.071]`, with a warning about a division by zero.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+a, b, c = 1, 1, -6
+x = np.array([-2, 0, 2.1])
+
+f = a * x**2 + b * x + c
+g = a / x
+h = f / g
+print(f, g, h)
+
+h_simplified = x**3 + (b / a) * x**2 + (c / a) * x
+print(h_simplified)
+
+x_grid = np.linspace(-3, 3, 101)
+h_grid = x_grid**3 + (b / a) * x_grid**2 + (c / a) * x_grid
+i = np.argmin(h_grid)
+print(h_grid[i], x_grid[i])
+```
+
+NumPy does not raise an error when dividing by zero: it shows a `RuntimeWarning` and returns `inf`. Then $h(0) = -6 / \infty = -0$, which matches the simplified version, $h(0) = 0$. Both versions agree at every point.
+:::
+
+::: {.callout-warning}
+## Squares, Sums, and Powers
+
+*Inspired by Project Euler, [Problem 6](https://projecteuler.net/problem=6) and [Problem 29](https://projecteuler.net/problem=29).*
+
+The sum of the squares of the first ten natural numbers is $1^2 + 2^2 + \dots + 10^2 = 385$, while the square of their sum is $(1 + 2 + \dots + 10)^2 = 3025$. The difference between them is $3025 - 385 = 2640$.
+
+Write a Python function `sum_square_difference(n)` that computes this difference for the first `n` natural numbers, without loops.
+
+Now consider all the powers $a^b$ with $2 \le a \le 5$ and $2 \le b \le 5$. Some of them are repeated, such as $2^4 = 4^2 = 16$, so there are only 15 distinct values. Write a Python function `distinct_powers(n)` that counts the distinct values of $a^b$ for $2 \le a \le n$ and $2 \le b \le n$, without loops. Why does your function fail for `n = 100`?
+
+*Sample input 1:* `sum_square_difference(10)`  
+*Expected result 1:* `2640`
+
+*Sample input 2:* `distinct_powers(5)`  
+*Expected result 2:* `15`
+:::
+
 ---
 
 # Loading and Saving Data
@@ -367,6 +565,46 @@ print(from_binary.shape)
 ```
 
 Both loaded arrays have shape `(2, 2)`. The `.npy` format also preserves NumPy-specific dtype and shape information exactly.
+:::
+
+::: {.callout-note}
+## Join Daily Recordings
+
+A sensor saves one text file per day, with one value per line. Write a function named `join_recordings(filenames)` that receives a list of file names, loads each file with `np.loadtxt()`, and returns a single 1D array with all the values in the order of the list.
+
+Then save the joined array as a binary `.npy` file, load it back, and check that it is identical to the original.
+
+*Sample input:*
+
+```python
+np.savetxt("day1.txt", [1, 2, 3])
+np.savetxt("day2.txt", [4, 5])
+join_recordings(["day1.txt", "day2.txt"])
+```
+
+*Expected result:* `[1. 2. 3. 4. 5.]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+def join_recordings(filenames):
+    arrays = []
+    for filename in filenames:
+        arrays.append(np.loadtxt(filename))
+    return np.concatenate(arrays)
+
+
+np.savetxt("day1.txt", [1, 2, 3])
+np.savetxt("day2.txt", [4, 5])
+joined = join_recordings(["day1.txt", "day2.txt"])
+print(joined)
+
+np.save("joined.npy", joined)
+print(np.array_equal(np.load("joined.npy"), joined))  # True
+```
 :::
 
 ---
@@ -567,6 +805,69 @@ print(a)
 Python prints `[0. 0. 0.]`. Concatenating an empty array contributes no elements, and `np.zeros(3)` uses a floating-point dtype by default.
 :::
 
+::: {.callout-note}
+## Points per Part
+
+An exam is divided into parts, each made of consecutive exercises. Write a function named `part_points(marks, weights, cuts)` that receives:
+
+- `marks`: a 2D array of marks between `0` and `1`, one row per student and one column per exercise.
+- `weights`: a 1D array with the points of each exercise.
+- `cuts`: a list with the column indices where each new part starts.
+
+It must return a 2D array with one row per student and one column per part, containing the points of each student in each part. Use the splitting and stacking functions of this session.
+
+*Sample input:*
+
+```python
+marks = np.array([[1, 0.5, 1, 0, 1], [0.5, 0.5, 0, 1, 1]])
+weights = np.array([20, 20, 10, 10, 40])
+part_points(marks, weights, [2, 4])
+```
+
+*Expected result:*
+
+```text
+[[30. 10. 40.]
+ [20. 10. 40.]]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def part_points(marks, weights, cuts):
+    mark_parts = np.hsplit(marks, cuts)
+    weight_parts = np.split(weights, cuts)
+
+    columns = []
+    for m, w in zip(mark_parts, weight_parts):
+        columns.append(np.sum(m * w, axis=1))
+    return np.column_stack(columns)
+
+
+marks = np.array([[1, 0.5, 1, 0, 1], [0.5, 0.5, 0, 1, 1]])
+weights = np.array([20, 20, 10, 10, 40])
+print(part_points(marks, weights, [2, 4]))
+```
+:::
+
+::: {.callout-warning}
+## Largest Product in a Series
+
+*Inspired by Project Euler, [Problem 8](https://projecteuler.net/problem=8).*
+
+In the series of digits `"123456789"`, the three adjacent digits with the largest product are `7`, `8`, and `9`, with $7 \cdot 8 \cdot 9 = 504$.
+
+Write a Python function `largest_product(digits, k)` that receives a string of digits and returns the largest product of `k` adjacent digits, together with those digits. Do not loop over the positions of the series. Hint: you can build a 2D array where each row contains `k` adjacent digits.
+
+*Sample input 1:* `largest_product("123456789", 3)`  
+*Expected result 1:* `(504, "789")`
+
+*Sample input 2:* `largest_product("3141592653589793238462643383279", 4)`  
+*Expected result 2:* `(4536, "8979")`
+:::
+
 ---
 
 # Masking
@@ -744,6 +1045,159 @@ print(arr[(arr.astype(int) / 2) != (arr / 2)])
 ## Solution
 
 The outputs are `[2 4]`, `[1 3 5]`, and `[1 3 5]`. The first expression selects odd **indices**. The other expressions select odd **values**, although `arr % 2 != 0` is much clearer than comparing two division results.
+:::
+
+::: {.callout-note}
+## Bonus Points
+
+The professor gives the same bonus to every student, but no grade can go above 10. Write a function named `apply_bonus(grades, bonus)` that, without loops:
+
+1. Adds the bonus to every grade.
+2. Uses a mask to cap every grade above 10 at exactly 10.
+3. Returns the new grades and a Boolean array saying which students pass (grade of at least 5).
+
+The original `grades` array must not be modified.
+
+*Sample input:* `apply_bonus(np.array([9.5, 4.5, 7, 3]), 1)`  
+*Expected result:* `([10.  5.5  8.  4. ], [ True  True  True False])`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def apply_bonus(grades, bonus):
+    new_grades = grades + bonus          # a new array: grades is not modified
+    new_grades[new_grades > 10] = 10
+    return new_grades, new_grades >= 5
+
+
+print(apply_bonus(np.array([9.5, 4.5, 7, 3]), 1))
+```
+
+`grades + bonus` creates a new array, so the assignment with the mask only changes the copy.
+:::
+
+::: {.callout-note}
+## Character Replacement, Revisited
+
+In Module 1 you replaced every occurrence of the first character of a string with `"$"`, except the first one. Do it again with a mask: turn the string into an array of characters, build a Boolean mask, switch off its first position, and assign `"$"`.
+
+*Sample input 1:* `replace_first("excellent")`  
+*Expected result 1:* `"exc$ll$nt"`
+
+*Sample input 2:* `replace_first("crocodile")`  
+*Expected result 2:* `"cro$odile"`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def replace_first(s):
+    chars = np.array(list(s))
+    mask = chars == chars[0]
+    mask[0] = False
+    chars[mask] = "$"
+    return "".join(chars)
+
+
+print(replace_first("excellent"))
+print(replace_first("crocodile"))
+```
+:::
+
+::: {.callout-note}
+## Prime Number Checker, Revisited
+
+Write a function `is_prime(n)` without loops. Build the array of candidate divisors from 2 to $\sqrt{n}$, compute all the remainders at once, and check that none of them is zero.
+
+*Sample input:* `[is_prime(k) for k in [1, 2, 7, 9, 97, 100]]`  
+*Expected result:* `[False, True, True, False, True, False]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def is_prime(n):
+    if n < 2:
+        return False
+    divisors = np.arange(2, int(n ** 0.5) + 1)
+    return bool(np.all(n % divisors != 0))
+
+
+print([is_prime(k) for k in [1, 2, 7, 9, 97, 100]])
+```
+
+For `n = 2` and `n = 3` the array of divisors is empty, and `np.all()` of an empty array is `True`.
+:::
+
+::: {.callout-note}
+## Amicable Numbers, Revisited
+
+In Module 1 you wrote `sum_of_divisors(num)` and `are_amicable(num1, num2)` with loops. Write them again without loops:
+
+1. `sum_of_divisors(num)` builds the array of candidates from 1 to `num`, uses a mask to keep those that divide `num`, and returns their sum.
+2. `are_amicable(num1, num2)` uses it to check whether two **different** numbers are amicable: the sum of the proper divisors (all divisors except the number itself) of each one equals the other.
+
+*Sample input 1:* `sum_of_divisors(12)`, `sum_of_divisors(16)`  
+*Expected result 1:* `28`, `31`
+
+*Sample input 2:* `are_amicable(220, 284)`, `are_amicable(1184, 1210)`, `are_amicable(6, 6)`  
+*Expected result 2:* `True`, `True`, `False`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def sum_of_divisors(num):
+    candidates = np.arange(1, num + 1)
+    return np.sum(candidates[num % candidates == 0])
+
+
+def are_amicable(num1, num2):
+    if num1 == num2:
+        return False
+    return (sum_of_divisors(num1) - num1 == num2) and (sum_of_divisors(num2) - num2 == num1)
+
+
+print(sum_of_divisors(12), sum_of_divisors(16))
+print(are_amicable(220, 284), are_amicable(1184, 1210), are_amicable(6, 6))
+```
+
+We subtract the number itself to keep only its proper divisors.
+:::
+
+::: {.callout-warning}
+## Multiples of 3 or 5
+
+*Inspired by Project Euler, [Problem 1](https://projecteuler.net/problem=1).*
+
+The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6, and 9, and their sum is 23.
+
+Write a Python function `multiples_3_or_5(n)` that returns the sum of all the natural numbers below `n` that are multiples of 3 or 5. Use a mask instead of a loop.
+
+*Sample input 1:* `multiples_3_or_5(10)`  
+*Expected result 1:* `23`
+
+*Sample input 2:* `multiples_3_or_5(20)`  
+*Expected result 2:* `78`
+:::
+
+::: {.callout-warning}
+## Sieve of Eratosthenes
+
+
+The Sieve of Eratosthenes is an ancient method to find all the prime numbers up to a given limit $n$. Write down all the numbers from 2 to $n$. Take the first number that is not crossed out, 2, and cross out all its multiples. Then take the next number that is not crossed out, 3, and cross out all its multiples. Repeat until you reach $\sqrt{n}$: the numbers that remain are the primes.
+
+Write a Python function `sieve(n)` that returns an array with all the primes up to `n`, using a Boolean mask to keep track of the crossed-out numbers. You may loop over the numbers up to $\sqrt{n}$, but cross out all the multiples of each one in a single assignment.
+
+How many primes are there below 1000?
+
+*Sample input:* `sieve(30)`  
+*Expected result:* `[ 2  3  5  7 11 13 17 19 23 29]`
 :::
 
 ---
@@ -1000,6 +1454,112 @@ print(gain_rate)
 Door number 2 uses index `1`. Because each row contains one car, one third of all entries are winning entries.
 :::
 
+::: {.callout-note}
+## Passing by Guessing
+
+The multiple-choice part of an exam has 6 questions with 4 options each. A student who did not study answers every question at random. What is the probability that they get **at least half** of the questions right?
+
+Write a function named `guess_probability(n_students, n_questions, n_options)` that, without loops:
+
+1. Generates a random answer key, one correct option per question.
+2. Generates the random answers of `n_students` students in a 2D array.
+3. Compares the answers with the key to count the correct answers of each student.
+4. Returns the fraction of students with at least half of the questions right.
+
+*Sample input:* `guess_probability(100_000, 6, 4)`  
+*Expected result:* approximately `0.17` (it will change slightly with every run)
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def guess_probability(n_students, n_questions, n_options):
+    key = np.random.randint(0, n_options, size=n_questions)
+    answers = np.random.randint(0, n_options, size=(n_students, n_questions))
+
+    correct = np.sum(answers == key, axis=1)   # key is broadcast to every row
+    return np.mean(correct >= n_questions / 2)
+
+
+print(guess_probability(100_000, 6, 4))
+```
+
+The mean of a Boolean array is the fraction of `True` values. The exact probability, from the binomial distribution, is about `0.169`.
+:::
+
+::: {.callout-note}
+## Encrypted Code, Revisited
+
+In Module 2 you decoded messages with a dictionary of substitution rules. Now build a random substitution cipher with NumPy. Work with lowercase messages without spaces, and represent each letter by its position in the alphabet (`"a"` is 0, `"z"` is 25; `ord(ch) - ord("a")` gives it).
+
+```python
+alphabet = np.array(list("abcdefghijklmnopqrstuvwxyz"))
+```
+
+1. Write `make_key(seed)` that fixes the random seed and returns a random permutation of the numbers 0 to 25 (`np.random.permutation()`). The letter at position `i` is encrypted as the letter at position `key[i]`.
+2. Write `encrypt(message, key)` that turns the message into an array of positions and encrypts **all the letters at once** with fancy indexing.
+3. Write `decrypt(message, key)`. Hint: `np.argsort(key)` gives the inverse permutation.
+
+*Sample input:*
+
+```python
+key = make_key(42)
+secret = encrypt("helloworld", key)
+print(secret)
+print(decrypt(secret, key))
+```
+
+*Expected result:* `blmmekewmy` and `helloworld`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+alphabet = np.array(list("abcdefghijklmnopqrstuvwxyz"))
+
+
+def make_key(seed):
+    np.random.seed(seed)
+    return np.random.permutation(26)
+
+
+def to_positions(message):
+    return np.array([ord(ch) - ord("a") for ch in message])
+
+
+def encrypt(message, key):
+    return "".join(alphabet[key[to_positions(message)]])
+
+
+def decrypt(message, key):
+    inverse = np.argsort(key)
+    return "".join(alphabet[inverse[to_positions(message)]])
+
+
+key = make_key(42)
+secret = encrypt("helloworld", key)
+print(secret)
+print(decrypt(secret, key))
+```
+
+`key[positions]` applies the substitution to every letter at once. If `key[i] = j`, then `np.argsort(key)[j] = i`, which undoes the substitution.
+:::
+
+::: {.callout-warning}
+## Secret Santa
+
+A group of `n` friends write their names on pieces of paper, shuffle them, and each one draws a name. The draw fails if somebody draws their own name. What is the probability that the draw works?
+
+Write a Python function `secret_santa(n, n_trials)` that simulates `n_trials` random draws and returns the fraction of them where nobody draws their own name. Do not use loops. Hint: a draw can be represented as a random permutation of `np.arange(n)`, where friend `i` gives a present to friend `perm[i]`.
+
+Try it with a growing number of friends. Which number does the probability approach?
+
+*Sample input:* `secret_santa(10, 100_000)`  
+*Expected result:* approximately `0.37` (it will change slightly with every run)
+:::
+
 ---
 
 # Statistics and Simulation
@@ -1119,6 +1679,109 @@ print(1 - np.diff(arr))
 - `1 - np.diff(arr)` returns `[0, 0, 0, 0]`.
 :::
 
+::: {.callout-note}
+## Exercise Report
+
+Write a function named `exercise_report(marks)` that receives a 2D array of marks (one row per student, one column per exercise) and returns three values:
+
+1. The average mark of each exercise.
+2. The number (starting at 1) of the hardest exercise, the one with the lowest average.
+3. The number (starting at 1) of the exercise whose marks have the highest correlation with the total score of the students. This exercise is the one that best separates strong and weak students.
+
+You may loop over the exercises to compute the correlations. Assume no exercise has the same mark for every student.
+
+*Sample input:*
+
+```python
+marks = np.array([
+    [1, 0.5, 1, 0],
+    [0.5, 0, 1, 1],
+    [1, 1, 1, 0],
+    [0, 0, 1, 0.5],
+    [1, 0.5, 0, 1],
+])
+exercise_report(marks)
+```
+
+*Expected result:* `([0.7 0.4 0.8 0.5], 2, 1)`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def exercise_report(marks):
+    averages = np.mean(marks, axis=0)
+    hardest = np.argmin(averages) + 1
+
+    total = np.sum(marks, axis=1)
+    correlations = np.zeros(marks.shape[1])
+    for j in range(marks.shape[1]):
+        correlations[j] = np.corrcoef(marks[:, j], total)[0, 1]
+    best = np.argmax(correlations) + 1
+
+    return averages, hardest, best
+
+
+marks = np.array([
+    [1, 0.5, 1, 0],
+    [0.5, 0, 1, 1],
+    [1, 1, 1, 0],
+    [0, 0, 1, 0.5],
+    [1, 0.5, 0, 1],
+])
+print(exercise_report(marks))
+```
+:::
+
+::: {.callout-note}
+## Bus Lines, Revisited
+
+In Module 2 you sorted bus lines by how far their route time is from the average time. Do it again with NumPy, without loops. Write `sort_lines(names, times)` that:
+
+1. Computes the average route time and the distance of each line from it.
+2. Sorts the lines by that distance, from closest to farthest.
+3. When two lines are equally distant, places the faster one first. Hint: `np.lexsort((times, distances))` sorts by `distances` and breaks ties with `times`.
+4. Returns the sorted names and times as two arrays.
+
+*Sample input 1:* `sort_lines(["Line 1", "Line 2", "Line 3"], [50, 30, 40])`  
+*Expected result 1:* `['Line 3' 'Line 2' 'Line 1']` and `[40 30 50]`
+
+*Sample input 2:* `sort_lines(["A", "B", "C", "D", "E"], [20, 35, 50, 30, 40])`  
+*Expected result 2:* `['B' 'D' 'E' 'A' 'C']` and `[35 30 40 20 50]`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def sort_lines(names, times):
+    names = np.array(names)
+    times = np.array(times)
+    distances = np.abs(times - np.mean(times))
+
+    order = np.lexsort((times, distances))  # last key is the primary key
+    return names[order], times[order]
+
+
+print(sort_lines(["Line 1", "Line 2", "Line 3"], [50, 30, 40]))
+print(sort_lines(["A", "B", "C", "D", "E"], [20, 35, 50, 30, 40]))
+```
+:::
+
+::: {.callout-warning}
+## Dice Duel
+
+*Inspired by Project Euler, [Problem 205](https://projecteuler.net/problem=205).*
+
+Alice rolls five four-sided dice (faces 1 to 4) and Bob rolls three six-sided dice (faces 1 to 6). The player with the highest total wins, and equal totals are a tie.
+
+Write a Python function `dice_duel(n_games)` that simulates `n_games` games without loops, and returns the estimated probabilities that Alice wins, that Bob wins, and that they tie. How much do the estimates change when you simulate 100, 1,000, or 100,000 games?
+
+*Sample input:* `dice_duel(100_000)`  
+*Expected result:* approximately `(0.65, 0.26, 0.09)` (it will change slightly with every run)
+:::
+
 ---
 
 # Linear Algebra
@@ -1170,6 +1833,60 @@ print(eigenvectors)
 ```
 
 `np.linalg.eig()` returns both results. `np.linalg.eigvals()` returns only eigenvalues; `np.eigvals()` and `np.eigen()` do not exist.
+:::
+
+::: {.callout-note}
+## Recover the Weights
+
+A colleague published the total points of three students, but forgot to say how many points each of the three exercises was worth. You know the marks (between `0` and `1`) of each student. Write a function named `recover_weights(marks, scores)` that finds the points of each exercise by solving a system of linear equations with `np.linalg.solve()`.
+
+*Sample input:*
+
+```python
+marks = np.array([[1, 0.5, 0], [0.5, 1, 1], [1, 1, 0.5]])
+scores = np.array([65, 75, 90])
+recover_weights(marks, scores)
+```
+
+*Expected result:* `[50. 30. 20.]`
+
+Explain why this would not work if two students had exactly the same marks.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def recover_weights(marks, scores):
+    return np.linalg.solve(marks, scores)
+
+
+marks = np.array([[1, 0.5, 0], [0.5, 1, 1], [1, 1, 0.5]])
+scores = np.array([65, 75, 90])
+print(recover_weights(marks, scores))
+```
+
+If two students had the same marks, two rows of the matrix would be equal. The matrix would be singular (determinant zero), the system would have fewer independent equations than unknowns, and `np.linalg.solve()` would raise a `LinAlgError`.
+:::
+
+::: {.callout-warning}
+## Fibonacci with Matrices
+
+*Inspired by Project Euler, [Problem 2](https://projecteuler.net/problem=2).*
+
+The Fibonacci numbers can be computed with powers of a matrix:
+
+$$\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}^n = \begin{pmatrix} F_{n+1} & F_n \\ F_n & F_{n-1} \end{pmatrix}$$
+
+Write a Python function `fibonacci(n)` that returns $F_n$ using `np.linalg.matrix_power()`. Use it to add up the even Fibonacci numbers that do not exceed a given limit.
+
+Then compute the eigenvalues of the matrix. Do you recognize them? Binet's formula, $F_n = \frac{\varphi^n - \psi^n}{\sqrt{5}}$, uses these two eigenvalues to compute $F_n$ directly. Compare it with your function for $n = 1, \dots, 80$. Do they always agree?
+
+*Sample input 1:* `fibonacci(10)`  
+*Expected result 1:* `55`
+
+*Sample input 2:* the even Fibonacci numbers not exceeding 100  
+*Expected result 2:* `44` (that is, $2 + 8 + 34$)
 :::
 
 ---
@@ -1229,6 +1946,139 @@ c = a > b
 ## Solution
 
 The one-dimensional shapes `(3,)` and `(4,)` are incompatible because their only dimensions differ and neither equals `1`.
+:::
+
+::: {.callout-note}
+## Vectorize the Grader
+
+The following function computes the final grade of each student, applying a 10% penalty to those who delivered late. Write a function named `grade_vectorized(marks, weights, late)` that returns the same result **without any loop**, where `marks` is a 2D array, `weights` a 1D array, and `late` a Boolean array with one value per student.
+
+```python
+def grade_loop(marks, weights, late):
+    grades = []
+    for i in range(len(marks)):
+        total = 0
+        for j in range(len(weights)):
+            total = total + marks[i][j] * weights[j]
+        grade = total / 10
+        if late[i]:
+            grade = grade * 0.9
+        grades.append(round(grade, 2))
+    return grades
+```
+
+*Sample input:*
+
+```python
+marks = np.array([[1, 0.5, 1, 0.5], [0.75, 1, 0, 1], [0.5, 0.5, 0.5, 0.5]])
+weights = np.array([40, 30, 20, 10])
+late = np.array([False, True, False])
+grade_vectorized(marks, weights, late)
+```
+
+*Expected result:* `[8.  6.3 5. ]`
+
+Then create random marks for 10,000 students and 11 exercises, check that both functions return the same grades, and compare their running times with `%timeit`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def grade_vectorized(marks, weights, late):
+    grades = marks @ weights / 10
+    grades[late] = grades[late] * 0.9
+    return np.round(grades, 2)
+
+
+marks = np.array([[1, 0.5, 1, 0.5], [0.75, 1, 0, 1], [0.5, 0.5, 0.5, 0.5]])
+weights = np.array([40, 30, 20, 10])
+late = np.array([False, True, False])
+print(grade_vectorized(marks, weights, late))
+```
+
+To compare with the loop version on a large class:
+
+```python
+big_marks = np.random.rand(10_000, 11)
+big_weights = np.array([20, 20, 10, 10, 10, 5, 5, 5, 5, 5, 5])
+big_late = np.random.rand(10_000) < 0.1
+
+print(np.allclose(grade_loop(big_marks, big_weights, big_late),
+                  grade_vectorized(big_marks, big_weights, big_late)))
+
+%timeit grade_loop(big_marks, big_weights, big_late)
+%timeit grade_vectorized(big_marks, big_weights, big_late)
+```
+:::
+
+::: {.callout-note}
+## Pythagorean Triples, Revisited
+
+In Module 1 you checked whether three given numbers form a Pythagorean triple. Now **find all of them** at once, without loops. Write `pythagorean_triples(n)` that returns a 2D array with one row `[a, b, c]` for every triple with $a < b$ and $c \le n$:
+
+1. Build a column of values `a` and a row of values `b`, both from 1 to `n`, and let broadcasting create the table of all $a^2 + b^2$.
+2. Compute the candidate `c` with `np.sqrt()` and keep only the cells where it is an integer, $a < b$, and $c \le n$.
+3. Stack the selected `a`, `b`, and `c` as the three columns of the result.
+
+*Sample input:* `pythagorean_triples(20)`  
+*Expected result:*
+
+```text
+[[ 3  4  5]
+ [ 5 12 13]
+ [ 6  8 10]
+ [ 8 15 17]
+ [ 9 12 15]
+ [12 16 20]]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def pythagorean_triples(n):
+    a = np.arange(1, n + 1).reshape(-1, 1)   # column
+    b = np.arange(1, n + 1).reshape(1, -1)   # row
+    c_squared = a**2 + b**2                  # table (n, n)
+    c = np.round(np.sqrt(c_squared)).astype(int)
+
+    mask = (c**2 == c_squared) & (a < b) & (c <= n)
+    rows, cols = np.nonzero(mask)
+    return np.column_stack((rows + 1, cols + 1, c[mask]))
+
+
+print(pythagorean_triples(20))
+```
+
+`np.nonzero(mask)` returns the row and column indices of the `True` cells; adding 1 turns indices into the values of `a` and `b`.
+:::
+
+::: {.callout-warning}
+## Low Points
+
+*Inspired by [Advent of Code 2021, Day 9](https://adventofcode.com/2021/day/9).*
+
+A height map of a cave floor is stored as a 2D array of digits, from 0 (lowest) to 9 (highest). A low point is a cell that is strictly lower than all its neighbours: up, down, left, and right. Diagonals do not count, and cells on the border have fewer neighbours.
+
+Write a Python function `low_points(heights)` that returns a Boolean mask of the low points, without loops. Hint: `np.pad(heights, 1, constant_values=10)` surrounds the map with a border of 10s, so every cell has four neighbours.
+
+The risk level of a low point is its height plus one. What is the sum of the risk levels of all the low points?
+
+*Sample input:*
+
+```python
+heights = np.array([
+    [5, 3, 4, 8, 9, 7, 6, 5, 6, 7],
+    [4, 6, 7, 8, 9, 8, 5, 4, 5, 6],
+    [6, 7, 8, 9, 7, 6, 7, 8, 9, 3],
+    [8, 8, 9, 6, 5, 6, 8, 9, 8, 4],
+    [9, 7, 6, 5, 6, 7, 9, 9, 7, 5],
+])
+```
+
+*Expected result:* 6 low points with heights `[3 4 4 3 5 5]`, and a total risk level of `30`.
 :::
 
 ---
