@@ -42,23 +42,29 @@ x = np.zeros((n_games, 3))
 print(x)
 ```
 
-What is the shape of `x`?
+::: {.callout-note}
+## Exercise: Inspect the game matrix
+
+Without running any code, answer these three questions about `x`:
+
+1. What is its shape?
+2. What is the type of the variable `x`?
+3. What is the type of its elements?
+
+Then check your answers with code.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
-print("Shape of the x:", x.shape)
-```
-
-What is the type of variable `x`?
-
-```{python}
+print("Shape of x:", x.shape)
 print("Type of x:", type(x))
+print("Types inside x:", x.dtype)
 ```
 
-What about the type of its elements?
-
-```{python}
-print("Types inside the x:", x.dtype)
-```
+The shape is `(10, 3)`: one row per game and one column per door. `x` is a NumPy array (`numpy.ndarray`), and its elements are `float64`.
+:::
 
 By default, NumPy initializes arrays of zeros with a floating-point data type. For this game we only need `0` and `1`, so we can request integers directly.
 
@@ -70,13 +76,18 @@ print("Types inside x:", x.dtype)
 print(x)
 ```
 
-Lets review some basic concepts:
+::: {.callout-note}
+## Exercise: Rows, columns, elements
 
-- Show the first row of the array.
-- Show the first column.
-- Show the first element.
+Let's review some basic concepts. Knowing how to do this will help in the next steps. Print:
 
-Knowing how to do this will help in the next steps.
+1. The first row of `x` (the doors of the first game).
+2. The first column of `x` (the first door of each game).
+3. The first element of `x` (the first door of the first game).
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 print("First row of x (doors of the first game):   ", x[0, :])
@@ -89,6 +100,7 @@ print("First column of x (first door of each game):", x[:, 0])
 ```{python}
 print("First element of x (first door of first game): ", x[0, 0])
 ```
+:::
 
 As of now, all doors have a goat behind (a `0`).
 
@@ -148,23 +160,36 @@ idy = [0, 1, 2]
 print(y[idx, idy])
 ```
 
-If the index arrays do not have compatible shapes, indexing fails.
+::: {.callout-note}
+## Exercise: Mismatched index lists
 
-```{python}
-#| eval: false
-# Sample matrix
+Without running the code, decide whether it works. If it fails, explain why.
+
+```python
 y = np.array([
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
 ])
 
-# Take elements (0, 0), (1, 1) and (2, 2)
 idx = [0, 1]
 idy = [0, 1, 2]
 
 print(y[idx, idy])
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+It raises an error:
+
+```text
+IndexError: shape mismatch: indexing arrays could not be broadcast together with shapes (2,) (3,)
+```
+
+The row list has two indices and the column list has three, so NumPy cannot pair them into coordinates. If the index arrays do not have compatible shapes, indexing fails.
+:::
 
 Pay attention to the structure of advanced indexing:
 
@@ -176,51 +201,81 @@ x[[a0, b0, c0], [a1, b1, c1]]
 x[[a0, a1], [b0, b1], [c0, c1]]
 ```
 
-```{python}
-#| eval: false
-# Sample matrix
+::: {.callout-note}
+## Exercise: Coordinates in the wrong order
+
+The programmer wants the diagonal elements `(0, 0)`, `(1, 1)` and `(2, 2)` of `y`. Without running the code, explain what goes wrong. Then fix it.
+
+```python
 y = np.array([
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
 ])
 
-# Wrong indexing
 print(y[(0, 0), (1, 1), (2, 2)])
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+It raises an error:
+
+```text
+IndexError: too many indices for array: array is 2-dimensional, but 3 were indexed
+```
+
+Each group was written as one coordinate pair, so NumPy receives three index groups for a 2D array. Group all row indices first, then all column indices:
 
 ```{python}
-#| eval: false
-# Sample matrix
 y = np.array([
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
 ])
 
-# Take elements (0, 0), (1, 1) and (2, 2)
+print(y[[0, 1, 2], [0, 1, 2]])
+```
+:::
+
+::: {.callout-note}
+## Exercise: Negative index lists
+
+The programmer wants to read the matrix from the bottom row upwards. Without running the code, explain why it fails. Then fix it so it prints `[7 5 3]`.
+
+```python
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
 idx = [0, 1, 2]
 idy = [0, 1, 2]
 
-# List cannot be negative
 print(y[-idx, -idy])
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+It raises `TypeError: bad operand type for unary -: 'list'`. A list cannot be negated, but the indices inside a list can be negative.
 
 ```{python}
-# Sample matrix
 y = np.array([
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
 ])
 
-# Take elements (0, 0), (1, 1) and (2, 2)
 idx = [-1, -2, -3]
 idy = [0, 1, 2]
 
-# List cannot be negative, but indices inside can!
 print(y[idx, idy])
 ```
+:::
 
 ### Random Integer Generator
 
@@ -290,13 +345,20 @@ x = monty_hall_init(1000, verbose=True)
 print(x)
 ```
 
-Review time! To make sure the array we generated is right, we want to check:
+::: {.callout-note}
+## Exercise: Check the generated games
 
-- The minimum and maximum values, which should be 0 and 1 respectively.
-- The total number of cars. Should be the same as the number of games (10).
-- The average number of cars in total. Should be 33%.
-- The average number of cars per door.
-- The number of cars per game. Should be 1 in all cases.
+Review time! To make sure the array `x` we generated is right, write code that checks:
+
+1. The minimum and maximum values, which should be 0 and 1 respectively.
+2. The total number of cars. It should be the same as the number of games (1000).
+3. The average number of cars in total. It should be about 33%.
+4. The average number of cars per door.
+5. The number of cars per game. It should be 1 in all cases.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 print("Range of values: ", x.min(), "to", x.max())
@@ -317,6 +379,7 @@ print("Average of cars per door:  ", x.mean(axis=0))
 ```{python}
 print("Number of cars per attempt:", x.sum(axis=1))
 ```
+:::
 
 ---
 
@@ -599,6 +662,58 @@ The code we have above works fine, but it takes some time to compute one million
 </p>
 
 By the end of module 3, we will see how to write faster NumPy code! Our key goal: remove for loops and replace it with NumPy broadcasting.
+
+---
+
+## Challenge: Monty Hall with Four Doors
+
+Now the show has four doors: one car and three goats. The guest picks a door, the host opens **one** goat door that the guest did not pick, and the guest switches to one of the two remaining closed doors at random.
+
+1. Write a function `monty_hall_init_4(n_games)` that returns an `(n_games, 4)` matrix with one car per row in a random position.
+2. Simulate 10,000 games where the guest keeps the first pick.
+3. Simulate 10,000 games where the guest switches.
+4. Compare both win probabilities. Is switching still a good idea?
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+def monty_hall_init_4(n_games: int) -> np.ndarray:
+    """Create one randomly positioned car for each four-door game."""
+    games = np.zeros((n_games, 4), dtype=int)
+    car_indices = np.random.randint(0, 4, size=n_games)
+    games[np.arange(n_games), car_indices] = 1
+    return games
+
+
+np.random.seed(19)
+game = monty_hall_init_4(10000)
+n_games, n_doors = game.shape
+doors = np.arange(n_doors)
+
+sum_keep = 0
+sum_swap = 0
+
+for id_game in range(n_games):
+    id_guest = np.random.randint(0, n_doors)
+    id_car = np.argmax(game[id_game])
+
+    # Keep strategy
+    sum_keep += game[id_game, id_guest]
+
+    # Host opens one goat door not chosen by the guest
+    id_host = np.random.choice(np.setdiff1d(doors, [id_guest, id_car]))
+
+    # Guest switches to one of the remaining closed doors
+    id_swap = np.random.choice(np.setdiff1d(doors, [id_guest, id_host]))
+    sum_swap += game[id_game, id_swap]
+
+print("Win probability (keep):  ", sum_keep / n_games)
+print("Win probability (switch):", sum_swap / n_games)
+```
+
+Keeping wins about 1/4 of the games. Switching wins about 3/8: the first pick is wrong 3/4 of the time, and then the guest finds the car with probability 1/2. Switching is still better.
+:::
 
 ---
 

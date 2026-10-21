@@ -31,11 +31,11 @@ print(temperatures[below_freezing])
 The comparison creates one Boolean value for each temperature. Indexing with that Boolean array selects the values whose mask is `True`.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Predict the Mask
 
-Predict the result before running the code. Then modify it to select values greater than or equal to `5`.
+Without running the code, write what it prints. Then modify it to select the values greater than or equal to `5`.
 
-```{python}
+```python
 values = np.array([2, 5, 8, 1, 9])
 mask = values % 2 == 1
 print(values[mask])
@@ -45,11 +45,15 @@ print(values[mask])
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The original mask selects the odd values, so Python prints `[5 1 9]`.
+```text
+[5 1 9]
+```
 
-```{python}
+The mask is `True` for the odd values, so only those are selected.
+
+```python
 mask = values >= 5
-print(values[mask])
+print(values[mask])  # [5 8 9]
 ```
 :::
 
@@ -215,21 +219,23 @@ show_image(beach)
 
 ---
 
-## Exercise 0: Adjusting Color and Size
+## Practice
+
+::: {.callout-note}
+## Exercise: Adjusting Color and Size
 
 Try to do the same thing using this other image. You will realise two issues:
+
 1. There is a white border around the image! How can you use masking to get rid of it?
 2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?
 
-
-```{python}
+```python
 url_dog_2 = "https://a.pinatafarm.com/1139x1138/f55da91a83/cheems.jpg"
 ```
+:::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
-
-
 
 ```{python}
 # Load and display the image
@@ -292,9 +298,8 @@ show_image(beach_2)
 
 :::
 
----
-
-## Exercise 1: 3D Array
+::: {.callout-note}
+## Exercise: Color Images
 
 Call the function `load_image` setting the argument `color=True`. This will load the images in color!
 
@@ -303,60 +308,117 @@ Repeat the exercise but now using 3D arrays, i.e. RGB images.
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&id=1f7BPWmgheYVFMY8GA7D5w1X82k9-a3Pd" width="300" />
 </p>
+:::
 
-```{python}
-#| eval: false
+::: {.callout-tip collapse="true"}
+## Solution
 
+A color image has shape `(height, width, 3)`. The mask has the same shape, so the same indexing works; we only need to unpack three values from `shape`.
+
+```python
+dog_rgb = load_image(url_dog, color=True)
+beach_rgb = load_image(url_beach, color=True)
+print(dog_rgb.shape, beach_rgb.shape)
+
+mask_dog_rgb = dog_rgb > 0
+
+mask_beach_rgb = np.zeros(beach_rgb.shape).astype(bool)
+h, w, _ = mask_dog_rgb.shape
+mask_beach_rgb[-h:, -w:] = mask_dog_rgb
+
+beach_rgb[mask_beach_rgb] = dog_rgb[mask_dog_rgb]
+show_image(beach_rgb)
 ```
+:::
 
----
-
-## Exercise 2: Different Position
+::: {.callout-note}
+## Exercise: Different Position
 
 Now try to insert the puppy on the bottom left corner.
 
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&id=10vrFfW0Zls-2jjr3-6hcQhwPHC1UGRNS" width="300" />
 </p>
+:::
 
-```{python}
-#| eval: false
+::: {.callout-tip collapse="true"}
+## Solution
 
+Only the column slice changes: the first `w` columns instead of the last `w`.
+
+```python
+beach_3 = load_image(url_beach)
+
+mask_beach_3 = np.zeros(beach_3.shape).astype(bool)
+h, w = mask_dog.shape
+mask_beach_3[-h:, :w] = mask_dog
+
+beach_3[mask_beach_3] = dog[mask_dog]
+show_image(beach_3)
 ```
+:::
 
----
-
-## Exercise 3: Flipping Arrays
+::: {.callout-note}
+## Exercise: Flipping Arrays
 
 The puppy would rather look at the beach. Can you flip it?
 
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&id=1GbaBEoZdwe_aHYKBBJ9vau_g0WmwnYCX" width="300" />
 </p>
+:::
 
-```{python}
-#| eval: false
+::: {.callout-tip collapse="true"}
+## Solution
 
+A negative step on the column axis reverses the columns, which mirrors the image horizontally.
+
+```python
+dog_flipped = dog[:, ::-1]
+mask_flipped = dog_flipped > 0
+
+beach_4 = load_image(url_beach)
+mask_beach_4 = np.zeros(beach_4.shape).astype(bool)
+h, w = mask_flipped.shape
+mask_beach_4[-h:, -w:] = mask_flipped
+
+beach_4[mask_beach_4] = dog_flipped[mask_flipped]
+show_image(beach_4)
 ```
+:::
 
----
-
-## Exercise 4: Green Dog
+::: {.callout-note}
+## Exercise: Green Dog
 
 Can you change the dog's color to green?
 
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&id=14QLrn4VuY3eM7ON4iR1vZVYTrLCVTYQn" width="300" />
 </p>
+:::
 
-```{python}
-#| eval: false
+::: {.callout-tip collapse="true"}
+## Solution
 
+Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning `[0, 255, 0]` to a masked selection paints every selected pixel pure green.
+
+```python
+dog_green = load_image(url_dog, color=True)
+mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
+dog_green[mask_pixels] = [0, 255, 0]
+
+beach_5 = load_image(url_beach, color=True)
+mask_beach_5 = np.zeros(beach_5.shape[:2]).astype(bool)
+h, w = mask_pixels.shape
+mask_beach_5[-h:, -w:] = mask_pixels
+
+beach_5[mask_beach_5] = dog_green[mask_pixels]
+show_image(beach_5)
 ```
+:::
 
----
-
-## Exercise 5: Harder Masking
+::: {.callout-note}
+## Exercise: Harder Masking
 
 Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.
 
@@ -364,30 +426,64 @@ Speaking about green, the dog has a cat friend, but its image appears with a gre
 <img src="https://drive.google.com/uc?export=view&id=1XOP8a1xOaeSmXFuczE6iZDRlGzxJbg03" width="300" />
 </p>
 
-
-
-```{python}
+```python
 url_cat = "https://img.freepik.com/premium-photo/cute-little-grey-white-fluffy-kitten-green-background_548832-7905.jpg"
 ```
+:::
 
----
+::: {.callout-tip collapse="true"}
+## Possible solution
 
-## Exercise 6: Invert Colors
+A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at `show_image(mask_cat)`.
+
+```python
+cat = load_image(url_cat, color=True)
+cat = cat[::2, ::2]  # make it smaller if it does not fit
+
+red = cat[:, :, 0].astype(int)
+green = cat[:, :, 1].astype(int)
+blue = cat[:, :, 2].astype(int)
+
+background = (green > red + 30) & (green > blue + 30)
+mask_cat = ~background
+show_image(mask_cat)
+
+beach_6 = load_image(url_beach, color=True)
+mask_beach_6 = np.zeros(beach_6.shape[:2]).astype(bool)
+h, w = mask_cat.shape
+mask_beach_6[-h:, :w] = mask_cat
+
+beach_6[mask_beach_6] = cat[mask_cat]
+show_image(beach_6)
+```
+
+We convert the channels to `int` before comparing because `uint8` values wrap around when adding (for example, `250 + 30` becomes `24`).
+:::
+
+::: {.callout-note}
+## Exercise: Invert Colors
 
 Lets finish with something easier. Invert the colors of the image.
 
 <p align="center">
 <img src="https://drive.google.com/uc?export=view&id=16qRn0MD3zg4-O3WrzarcTo5-prRWXKjC" width="300" />
 </p>
+:::
 
-```{python}
-#| eval: false
+::: {.callout-tip collapse="true"}
+## Solution
 
+Pixel values go from `0` to `255`, so the inverse of a value `v` is `255 - v`. Broadcasting applies it to every pixel at once.
+
+```python
+inverted = 255 - beach_2
+show_image(inverted)
 ```
+:::
 
 ---
 
-## Advanced Challenge: Image Superposition with Schrödinger's Cat
+## Challenge: Schrödinger's Cat
 
 In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a scenario where a cat is simultaneously both alive and dead until it is observed. As a nod to this concept, let's create an image representation where both a live cat and a skeletal cat are superimposed.
 
@@ -402,7 +498,7 @@ Produce an image where both the alive cat and the skeletal cat appear superimpos
 ### Instructions:
 1. Consider two images: one representing a live cat (denoted by 'a') and the other representing a skeletal cat (denoted by 'd').
 2. To superimpose the images, alternate the pixels such that each pixel from one image is surrounded by pixels from the other image. This will give the effect of both images being merged into one.
-   
+
 For instance, your pixel arrangement might look like this:
 
 ```
@@ -431,6 +527,34 @@ show_image(schrodinger)
 # Your first step is to split that image into two (the skelleton and the cat)
 # Then you will have to flip one of them so that both look at the same direction
 ```
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```python
+h, w = schrodinger.shape
+half = w // 2
+
+# Split the picture into its two halves (same width for both)
+left = schrodinger[:, :half]
+right = schrodinger[:, half:2 * half]
+
+# Flip the right half so both animals face the same direction
+right = right[:, ::-1]
+
+# Checkerboard mask: True where (row + column) is even
+checkerboard = np.zeros(left.shape).astype(bool)
+checkerboard[::2, ::2] = True
+checkerboard[1::2, 1::2] = True
+
+superposition = right.copy()
+superposition[checkerboard] = left[checkerboard]
+
+show_image(superposition)
+```
+
+If the result looks like two shifted animals, crop a few columns from one half so both figures line up before combining them.
+:::
 
 ---
 

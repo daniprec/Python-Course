@@ -56,15 +56,15 @@ print("Mean of each student:", np.mean(scores, axis=1))
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Shapes of the means
 
-Before running the code, predict the shapes of both mean arrays. Then compute the standard deviation of each subject.
+Without running the code, predict the shapes of both mean arrays. Then compute the standard deviation of each subject.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-Both results have shape `(3,)` because the three subject columns remain after reducing axis `0`.
+The mean of each subject has shape `(3,)` because reducing axis `0` collapses the four students and keeps the three subject columns. The mean of each student has shape `(4,)` because reducing axis `1` collapses the subjects and keeps the four student rows.
 
 ```{python}
 subject_std = np.std(scores, axis=0)
@@ -167,9 +167,13 @@ A random walk is a process where each step is determined randomly. It's a simple
 For our example, we can image someone walking forward, but tumbling randomly to the left (-1) or right (+1) in each step they take.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Random steps
 
-Generate an array of random steps, that can be either -1 or 1.
+Generate an array of 10 random steps, stored in a variable `ser`. Each step can be either -1 or 1.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # Option A
@@ -197,22 +201,25 @@ ser = np.random.choice([-1, 1], size=steps)
 print(ser)
 ```
 
-```{python}
-#| eval: false
+Be careful: `choice` needs an array-like of options, not a string.
+
+```python
 # "choice" does not work with strings
 ser = np.random.choice("-1, 1", size=steps)
-
-print(ser)
 ```
 
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Cumulative steps
 
-Add these steps cumulatively.
+Add the steps of `ser` cumulatively.
 
-For instance, `[1, -1, -1, -1, 1]` should output `[1, 0, -1, -2, -1]`
+For instance, `[1, -1, -1, -1, 1]` should output `[1, 0, -1, -2, -1]`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 ser_cumul = np.cumsum(ser)
@@ -223,11 +230,15 @@ print(ser_cumul)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Start at zero
 
-Add the steps cumulatively but ensure we start at 0.
+Add the steps cumulatively, but ensure the walk starts at 0.
 
-For instance, `[1, -1, -1, -1, 1]` should output `[0, 1, 0, -1, -2, -1]`
+For instance, `[1, -1, -1, -1, 1]` should output `[0, 1, 0, -1, -2, -1]`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # Option A
@@ -240,6 +251,15 @@ ser = np.random.choice([-1, 1], size=steps)
 arr[1:] = np.cumsum(ser)
 
 print(arr)  # This is a float! How can we make them integers?
+```
+
+To get integers, create the zeros array with `dtype=int`:
+
+```{python}
+arr = np.zeros(steps + 1, dtype=int)
+arr[1:] = np.cumsum(ser)
+
+print(arr)
 ```
 
 :::
@@ -291,9 +311,13 @@ plot_series(ls_sim, xlabel="Step", ylabel="Position", title="Random Walk Simulat
 ---
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Many walks at once
 
-**Exercise:** Improve the `random_walk` function so that it can generate any number of random walk simulations all at once. Then plot a hundred of these walks.
+Improve the `random_walk` function so that it can generate any number of random walk simulations all at once. Call it `random_walks(steps, num)`, store a hundred walks of 100 steps in `arr_sim`, and plot them.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 def random_walks(steps: int, num: int=1) -> np.ndarray:
@@ -340,9 +364,13 @@ plot_series(arr_sim.T, xlabel="Step", ylabel="Position", title="Random Walk Simu
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: The fifth walker
 
-Where did the 5th walker end up after 17 steps?
+Using `arr_sim`, find where the 5th walker ended up after 17 steps.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # Row 4 is the fifth walker. Column 17 is the position after 17 steps
@@ -355,9 +383,13 @@ print(position)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Move the origin
 
-The walk begins at an origin of 0. How can we start at -30 instead?
+The walks in `arr_sim` begin at an origin of 0. Shift them so they start at -30 instead, and plot them.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # We use NumPy broadcasting
@@ -369,13 +401,19 @@ plot_series(arr_new.T, xlabel="Step", ylabel="Position", title="Random Walk Simu
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Walking together
 
 Imagine two people taking a random walk independently, but they only move when both agree on the direction:
 
 - Both choose +1, then move +1.
 - Both choose -1, then move -1.
 - If one chooses +1 and the other -1 (or vice versa), they stay in place.
+
+Simulate 100 steps of this joint walk, starting at 0, and plot it.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 n_steps = 100
@@ -472,19 +510,44 @@ endpoints = arr_walks[:, -1]
 plot_distribution(endpoints, name="Random Walk Endpoints", xlabel="End position")
 ```
 
-We did 1000 simulations of 100 steps each, and stored each individual step in `arr_walks`. So, what should be the shape of this array?
+::: {.callout-note}
+## Exercise: Shape of the walks
+
+We did 1000 simulations of 100 steps each, and stored each individual position in `arr_walks`. Without running any code, what should be the shape of this array?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 print(arr_walks.shape)
 ```
 
-And how can we get the final position of each simulation?
+There is one row per simulation and one column per position. Each walk has 101 positions because the starting position 0 is included.
+:::
+
+::: {.callout-note}
+## Exercise: Final positions
+
+Get the final position of each simulation in `arr_walks`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 print(arr_walks[:, -1])
 ```
+:::
 
-How could we compute the average final position over the 1000 simulations?
+::: {.callout-note}
+## Exercise: Average final position
+
+Compute the average final position over the 1000 simulations.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # OPTION 1 (bad option, but viable)
@@ -504,6 +567,9 @@ print(mean / len(arr))
 
 print(np.mean(arr))
 ```
+
+The average is close to 0 because steps of -1 and +1 are equally likely.
+:::
 
 Let's go back to the distribution for a second:
 
@@ -541,9 +607,7 @@ plot_distribution(endpoints, name="Random Walk Endpoints", xlabel="End position"
 
 ---
 
-## Exercise: Approximating Pi with Monte Carlo
-
-
+## Challenge: Approximating Pi with Monte Carlo
 
 Consider a square with a circle inside it. We randomly generate points within this square. The image below illustrates this with blue points inside the circle and red points outside.
 
@@ -563,13 +627,8 @@ Write the `monte_carlo_pi` function to approximate $\pi$. It should:
 - Calculate $\pi$ following the equation above.
 - Return this estimated value of $\pi$.
 
-```{python}
-#| eval: false
-
-```
-
 ::: {.callout-tip collapse="true"}
-## Example Solution
+## Possible solution
 
 ```{python}
 def monte_carlo_pi(num_points: int) -> float:

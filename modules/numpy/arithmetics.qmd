@@ -53,11 +53,9 @@ print(c)
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Fifty Eights
 
-**Exercise:** How would you create an array containing 50 eights?
-
-Try to solve this exercise in your notebook (using Python code) before opening the solution.
+Create an array containing 50 eights.
 
 :::
 
@@ -72,10 +70,9 @@ print(arr)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Powers of Two
 
-**Exercise:** How would you create an array containing all the powers of 2 from $2^0$ to $2^{10}$?
-
+Create an array containing all the powers of 2 from $2^0$ to $2^{10}$, without writing a loop.
 
 :::
 
@@ -138,7 +135,6 @@ Example of broadcasting:
 - The array `A` has `m` rows and `n` columns, while the vector `v` has `n` elements.
 
 ```{python}
-#| eval: false
 A = np.array([[1, 2],
               [3, 4],
               [5, 6]])
@@ -182,9 +178,9 @@ print(result)
 Deactivate AI assistant tools, and try the following exercises.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Scale and Broadcast
 
-**Exercise:** Perform the following operation:
+Compute the following operation, where the products are element-wise:
 
 $$5 \cdot A \cdot v$$
 
@@ -193,7 +189,6 @@ Where $$A=\begin{pmatrix}
 5 & 6 & 7 & 8\\
 9 & 10 & 11 & 12
 \end{pmatrix}$$ and $v = [-2, -1, 0, 1]$
-
 
 :::
 
@@ -215,9 +210,9 @@ print(result)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Column Weights
 
-**Exercise:** Given any matrix $A$, multiply the elements of its first column times 1, the second column times 2, the third times 3, and so on.
+Given any matrix $A$, multiply the elements of its first column times 1, the second column times 2, the third times 3, and so on.
 
 For instance:
 
@@ -232,6 +227,7 @@ $$A' = \begin{pmatrix}
 4 & 10 & 18\\
 \end{pmatrix}$$
 
+Your code should work for a matrix with any number of columns.
 
 :::
 
@@ -408,9 +404,9 @@ print(b)
 Determinants provide information about the matrix's invertibility, while the inverse of a matrix is crucial for solving systems of linear equations.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Matrix Product with a Transpose
 
-Assuming the matrix you created is $A$, perform the following matrix operation:
+Let $A$ be the $3 \times 4$ matrix containing the integers from 1 to 12, ordered by rows. Compute the following matrix operation:
 
 $$A B^T / 6$$
 
@@ -421,7 +417,6 @@ $$B=\begin{pmatrix}
 0 & 1 & 1 & 0\\
 1 & -1 & 1 & -1
 \end{pmatrix}$$
-
 
 :::
 
@@ -536,10 +531,13 @@ print("Variance:", np.var(arr))
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Grade Report
 
-**Exercise:** Given a set of student grades, compute the mean, median, mode, standard deviation, and variance.
+Given the student grades below, compute the mean, median, mode, standard deviation, and variance.
 
+```python
+grades = np.array([85, 90, 78, 92, 88, 90])
+```
 
 :::
 
@@ -551,7 +549,9 @@ grades = np.array([85, 90, 78, 92, 88, 90])
 
 print("Mean:", np.mean(grades))
 print("Median:", np.median(grades))
-print("Mode:", 90)
+# NumPy has no mode function: count each unique value and pick the most frequent
+values, counts = np.unique(grades, return_counts=True)
+print("Mode:", values[np.argmax(counts)])
 print("Standard Deviation:", np.std(grades))
 print("Variance:", np.var(grades))
 ```
@@ -628,9 +628,9 @@ print(f"Product: {product}")
 Deactivate AI assistant tools, and try the following exercises.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Normalize a Matrix
 
-**Exercise:** Given a "magic square" matrix $A$:
+Given a "magic square" matrix $A$:
 
 $$A = \begin{pmatrix}
 23 & 28 & 21\\
@@ -641,7 +641,6 @@ $$A = \begin{pmatrix}
 Normalize its values (subtract mean and divide by standard deviation). We call the new matrix $B$.
 
 $$B[i,j] = \frac{A[i,j] - \text{mean}(A)}{\text{std}(A)}$$
-
 
 :::
 
@@ -657,10 +656,9 @@ print(b)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Transpose the Result
 
-**Exercise:** Compute $B^T$.
-
+Compute $B^T$, using the matrix $B$ from the previous exercise.
 
 :::
 
@@ -676,10 +674,9 @@ print(b.T)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Matrix Product
 
-**Exercise:** Compute $A \cdot B^T$.
-
+Compute the matrix product $A B^T$.
 
 :::
 
@@ -694,12 +691,17 @@ print(arr @ b.T)
 
 :::
 
-**Example:** Can you find some interesting properties about this magic square matrix $A$?
+::: {.callout-note}
+## Exercise: Magic Square Properties
 
-Try to sum its rows, its columns, its diagonal.
+What makes $A$ a "magic square"? Compute the sum of each row, the sum of each column, and the sum of the main diagonal.
+
+:::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
+Every row, every column, and the diagonal add up to the same number: 72.
 
 ```{python}
 arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
@@ -709,6 +711,45 @@ print(np.sum(arr, axis=1))
 print(np.trace(arr))
 ```
 
+:::
+
+---
+
+## Challenge: Weather Station Report
+
+Two weather stations recorded the temperature (in Celsius) at three times of day. Each row is a station; each column is a time.
+
+```python
+temps_c = np.array([
+    [21.5, 23.0, 19.8],
+    [25.1, 26.4, 24.0]
+])
+```
+
+Without writing any loop:
+
+1. Convert every value to Fahrenheit using $F = C \cdot 9/5 + 32$.
+2. Compute the average temperature (in Fahrenheit) of each station.
+3. Find the index of the time of day with the highest average across both stations.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+temps_c = np.array([
+    [21.5, 23.0, 19.8],
+    [25.1, 26.4, 24.0]
+])
+
+temps_f = temps_c * 9 / 5 + 32
+print(temps_f)
+
+station_means = np.mean(temps_f, axis=1)
+print(f"Average per station: {station_means}")
+
+warmest_time = np.argmax(np.mean(temps_f, axis=0))
+print(f"Warmest time of day: {warmest_time}")
+```
 :::
 
 ---

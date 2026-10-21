@@ -141,6 +141,24 @@ print(filename)
 print(x)
 ```
 
+::: {.callout-note}
+## Exercise: One Hour of Data
+
+Each file holds one hour of recordings, sampled once per second. Without running any code, predict the `shape`, `ndim`, and `size` of `x`. Then check your answer.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+One hour has $60 \times 60 = 3600$ seconds, so `x` is a one-dimensional array with 3600 values.
+
+```python
+print(x.shape)  # (3600,)
+print(x.ndim)   # 1
+print(x.size)   # 3600
+```
+:::
+
 Given that our files contain dense, second-by-second recordings, simply reading the data won't be very intuitive. To get a clear overview of the patterns and anomalies in the data, visual representation is essential.
 
 To assist us in this visualization process, we've prepared a special plot function. This will transform the lengthy numerical data into easy-to-read graphs, making our ghost hunting analysis both fun and insightful!
@@ -208,6 +226,22 @@ emf = np.concatenate((x, y, z))
 plot_recordings(emf, units="emf")
 ```
 
+::: {.callout-note}
+## Exercise: Predict the Combined Shape
+
+Without running the code, what is `emf.shape`? How many minutes of recordings does it cover?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+(10800,)
+```
+
+`np.concatenate()` joins the three one-dimensional arrays end to end: $3 \times 3600 = 10800$ seconds, which is 180 minutes.
+:::
+
 With the EMF recordings from the hall between 0am and 2am in hand, we've witnessed some spooky hints of activity. But remember, a real ghostly presence is indicated by multiple simultaneous paranormal events.
 
 Thus, solely relying on EMF spikes won't confirm their presence. We need to corroborate these findings with our other sensors.
@@ -258,6 +292,24 @@ activity = (emf > 3).astype(int) + (temp < 0).astype(int) + (noise > 30).astype(
 plot_recordings(activity)
 ```
 
+::: {.callout-note}
+## Exercise: Count the Manifestation
+
+A manifestation happens whenever `activity` is greater than `1`. Write code that prints how many seconds, and how many minutes, the ghost was present in the hall.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`True` counts as `1` when summed, so the sum of a Boolean array counts the seconds that satisfy the condition.
+
+```python
+seconds = (activity > 1).sum()
+print(f"Seconds with a manifestation: {seconds}")
+print(f"Minutes with a manifestation: {seconds / 60:.1f}")
+```
+:::
+
 ---
 
 ## Saving Arrays
@@ -280,6 +332,29 @@ loaded_binary = np.load("hourly_activity.npy")
 print(loaded_binary)
 ```
 
+::: {.callout-note}
+## Exercise: Save the Evidence
+
+Save the `activity` array of the hall twice: once as `hall_activity.txt` and once as `hall_activity.npy`. Load both files back and check that they contain the same values as `activity`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+np.savetxt("hall_activity.txt", activity, fmt="%d")
+np.save("hall_activity.npy", activity)
+
+from_text = np.loadtxt("hall_activity.txt", dtype=int)
+from_binary = np.load("hall_activity.npy")
+
+print((from_text == activity).all())    # True
+print((from_binary == activity).all())  # True
+```
+
+Without `dtype=int`, `np.loadtxt()` would return floats. The `.npy` file keeps the original data type automatically.
+:::
+
 Our diligent research has paid off! The evidence is clear: between 75 to 90 minutes (1:15 to 1:30), a ghost made its presence known in the hall. While there were a few sporadic spikes in activity, we'll focus on the more prolonged events as they present a stronger case for genuine paranormal activity.
 
 ## The Next Steps
@@ -292,7 +367,52 @@ To ensure thoroughness, we need to extend our investigation to every room. Manua
 
 ---
 
+## Challenge: Hunt in Every Room
+
 Choose a partner and start the ghost hunting! 👻
+
+Write a function `hunt_room(room)` that loads the EMF, noise, and temperature recordings of one room from 9 pm to 8 am, joins them in time order, and returns the minutes (counted from 9 pm) when two or more devices registered activity. Then use `list_txt_files_from_directory()` to find every room and print a report of ghost sightings.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```python
+HOURS = ["9pm", "10pm", "11pm", "0am", "1am", "2am", "3am",
+         "4am", "5am", "6am", "7am"]
+
+
+def load_device(device: str, room: str) -> np.ndarray:
+    """Load and join all hourly recordings of one device in one room."""
+    ls_arrays = []
+    for hour in HOURS:
+        filename = f"{device}-{room}-{hour}.txt"
+        if os.path.exists(filename):
+            ls_arrays.append(np.loadtxt(filename))
+    return np.concatenate(ls_arrays)
+
+
+def hunt_room(room: str) -> np.ndarray:
+    """Return the minutes (from 9 pm) with a ghost manifestation."""
+    emf = load_device("emf", room)
+    noise = load_device("noise", room)
+    temp = load_device("temp", room)
+    activity = (emf > 3).astype(int) + (temp < 0).astype(int) + (noise > 30).astype(int)
+    seconds = np.arange(len(activity))
+    return np.unique(seconds[activity > 1] // 60)
+
+
+rooms = sorted({name.split("-")[1] for name in list_txt_files_from_directory(".")})
+
+for room in rooms:
+    minutes = hunt_room(room)
+    if len(minutes) > 0:
+        print(f"{room}: ghost seen during {len(minutes)} minutes, starting at minute {minutes[0]}")
+    else:
+        print(f"{room}: no ghost")
+```
+
+Check the exact hour labels with `print(list_files)`; adapt `HOURS` if the files use a different naming.
+:::
 
 ---
 

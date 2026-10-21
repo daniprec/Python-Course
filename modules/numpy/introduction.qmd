@@ -76,44 +76,43 @@ print(arr.dtype)
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Mixed Numbers
 
-What will be the value of `arr`? Which value type will their elements have?
+Without running the code, write down what it prints. Which data type will the elements have?
 
-```{python}
+```python
 arr = np.array((1, 2.0, 3))
 
 print(arr)
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The elements of the array will all be of type `float64`. NumPy automatically upcasts the integer values to floats so the full array has a single consistent data type.
+```text
+[1. 2. 3.]
+```
 
+The elements are all of type `float64`. NumPy upcasts the integers to floats so the whole array has a single data type.
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Three Arguments
 
-What will be the value of `arr`? Which value type will their elements have?
+Without running the code, decide what happens.
 
-```{python}
-#| eval: false
+```python
 arr = np.array(1, 2.0, 3)
 
 print(arr)
 ```
-
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-This code raises an error. The `np.array` function expects one main object argument, typically a list or tuple, but here it receives three separate values instead.
-
+The code raises a `TypeError`. `np.array()` expects one object (typically a list or tuple) as its first argument, but here it receives three separate values. The fix is `np.array([1, 2.0, 3])`.
 :::
 
 ---
@@ -206,11 +205,9 @@ print(matrix)
 In NumPy, the order of dimensions is indicated by the nesting of brackets. The outermost bracket (purple) represents the first dimension, indexed as dimension 0. The next level of brackets inside (blue) represents the second dimension, or dimension 1. If you continue adding more nested brackets, each new level represents a higher dimension. For example, the third level of brackets would be dimension 2, and so on. This hierarchical structure helps in understanding the shape and structure of multi-dimensional arrays.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Build a 3D Array
 
-How would we create a 3D matrix?
-
-
+Create a three-dimensional array with shape `(2, 2, 2)` and print its shape.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -264,14 +261,9 @@ print(range_array)
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Odd Numbers
 
 Create an array containing all odd numbers between 25 and 50.
-
-```{python}
-# Try it!
-```
-
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -284,14 +276,9 @@ print(odd_numbers)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Cut the Rope
 
 Imagine you have a rope that is 12 meters long. You want to cut it into 7 equal lengths. Using NumPy, create an array that shows the six positions where you should make the cuts.
-
-```{python}
-# Try it!
-```
-
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -370,40 +357,51 @@ print(matrix[1, 2])  # second row, third column
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Negative Row Index
 
-What will Python print?
+Without running the code, write down what it prints.
 
-```{python}
+```python
 matrix = np.array([[0, 1, 2], [3, 4, 5]])
 
 print(matrix[-1, 0])
 ```
+:::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+3
+```
+
+`-1` selects the last row, `[3, 4, 5]`, and `0` selects its first element.
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Lists Are Not Arrays
 
 What happens when this code runs? Explain why.
 
-```{python}
-#| eval: false
+```python
 matrix = [[0, 1, 2], [3, 4, 5]]
 
 print(matrix[2, 1])
 ```
-
 :::
 
-This raises an error because **lists** cannot be indexed with tuples.
+::: {.callout-tip collapse="true"}
+## Solution
+
+The code raises `TypeError: list indices must be integers or slices, not tuple`. `matrix` is a nested **list**, and lists cannot be indexed with a tuple. Use `matrix[1][1]` for a list, or convert it with `np.array(matrix)` first. (Even then, `[2, 1]` would fail with an `IndexError`, because there is no third row.)
+:::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: A List of Arrays
 
-What will be the value of `x`?
+Without running the code, find the value of `x`.
 
-```{python}
+```python
 arr_A = np.array([[0, 1, 2], [3, 4, 5]])
 arr_B = np.array([[6, 7, 8], [9, 10, 11]])
 
@@ -413,7 +411,16 @@ x = ls_arrays[1][0, 2]
 
 print(x)
 ```
+:::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+8
+```
+
+`ls_arrays[1]` is a list index that returns `arr_B`. Then `[0, 2]` is an array index: first row, third column.
 :::
 
 ---
@@ -450,7 +457,7 @@ print(arr[0:5:2])  # Start at 0, go to 5, step by 2
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Every Other Element
 
 What slicing should we take to retrieve the array `[2, 4, 6]`?
 
@@ -469,7 +476,7 @@ print(arr[2:7:2])
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Slice Backwards
 
 What slicing should we take to retrieve the array `[7, 4, 1]`?
 
@@ -488,7 +495,7 @@ print(arr[7:0:-3])
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Column Slice
 
 What slicing should we take to retrieve the array `[2, 4, 6]`?
 
@@ -513,7 +520,7 @@ print(arr[::2, 2])
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Submatrix Slice
 
 What slicing should we take to retrieve the following matrix?
 
@@ -552,11 +559,9 @@ Deactivate AI assistant tools, and try the following exercises.
 The `reshape()` method reorganizes an array without changing its values. The requested shape must contain the same number of elements as the original array.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: From 1 to 12
 
-**Exercise:** Create an array filled with integers ordered from 1 to 12.
-
-
+Create an array filled with integers ordered from 1 to 12.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -566,15 +571,12 @@ The `reshape()` method reorganizes an array without changing its values. The req
 arr = np.arange(1, 13)
 print(arr)
 ```
-
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Reshape to a Matrix
 
-**Exercise:** Reshape it to a $3 \times 4$ matrix.
-
-
+Reshape it to a $3 \times 4$ matrix.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -584,15 +586,12 @@ print(arr)
 arr = np.arange(1, 13).reshape(3, 4)
 print(arr)
 ```
-
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Pick One Value
 
-**Exercise:** Print its value at the first row, fourth column.
-
-
+Print its value at the first row, fourth column.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -602,7 +601,29 @@ print(arr)
 arr = np.arange(1, 13).reshape(3, 4)
 print(arr[0, 3])
 ```
+:::
 
+## Challenge: Monthly Calendar
+
+The months of a year can be numbered 1 to 12 and arranged as four quarters of three months each.
+
+1. Build a $4 \times 3$ array `calendar` containing the numbers 1 to 12, one quarter per row.
+2. Print its `shape`, `ndim`, and `size`.
+3. Print the months of the third quarter.
+4. Print the first month of every quarter.
+5. Print the last two quarters in reverse order (fourth quarter first).
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+calendar = np.arange(1, 13).reshape(4, 3)
+
+print(calendar.shape, calendar.ndim, calendar.size)
+print(calendar[2])
+print(calendar[:, 0])
+print(calendar[3:1:-1])
+```
 :::
 
 ---

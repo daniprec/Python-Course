@@ -57,7 +57,7 @@ print("Check:", A @ x)
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Solve a 2x2 System
 
 Solve the following system and verify the result with matrix multiplication:
 
@@ -331,15 +331,28 @@ show_image(compressed_image[w:, :h])
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Measure the Compression
 
-**Exercise:** Calculate the reduction in data size. How many values have we effectively eliminated through this compression technique?
+Calculate the reduction in data size. How many values have we effectively eliminated through this compression technique? Express the result both as a number of values and as a percentage of the original image size.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The original image stores `img.size` values. The compressed version stores the `k` eigenvalues plus the `k` eigenvectors, each of length `2 * w` (the symmetric matrix is twice as large as the image).
 
 ```{python}
-#| eval: false
+original_size = img.size
+compressed_size = top_k_eigenvalues.size + top_k_eigenvectors.size
+eliminated = original_size - compressed_size
 
+print(f"Original values:   {original_size}")
+print(f"Compressed values: {compressed_size}")
+print(f"Eliminated values: {eliminated}")
+print(f"Reduction: {100 * eliminated / original_size:.1f}%")
 ```
 
+For an $N \times N$ image, the compressed version needs $k + 2Nk$ values instead of $N^2$. Compression only pays off when $k$ is small compared to $N / 2$; for a very small image the "compressed" version can even be larger.
 :::
 
 ---
@@ -392,11 +405,12 @@ show_image(compressed_image)
 
 ---
 
-## Exercise: RGB Image
+::: {.callout-note}
+## Exercise: Compress an RGB Image
 
-Now you want to compress a RGB image. How would you do it?
+Now you want to compress an RGB image. How would you do it? Load the image below and produce a compressed version that keeps only the top `k` singular values.
 
-```{python}
+```python
 # Link to the image
 url_dog = "https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"
 
@@ -406,11 +420,64 @@ print(f"The array has dimension: {dog_color.ndim}")
 print(f"The array contains values of type: {dog_color.dtype}\n")
 show_image(dog_color)
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+An RGB image has shape `(height, width, 3)`, so SVD cannot be applied to it directly. Treat each color channel as a separate grayscale matrix, compress it, and stack the three results back together.
 
 ```{python}
-#| eval: false
+k = 50
+compressed_color = np.zeros(dog_color.shape)
 
+for channel in range(3):
+  U, S, Vt = np.linalg.svd(dog_color[:, :, channel], full_matrices=False)
+  compressed_color[:, :, channel] = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]
+
+# Values must stay in the valid pixel range [0, 255]
+compressed_color = np.clip(compressed_color, 0, 255).astype(np.uint8)
+
+show_image(compressed_color)
 ```
+:::
+
+---
+
+## Challenge: Verify an Eigen Decomposition
+
+Build a symmetric $3 \times 3$ matrix from
+
+```python
+M = np.array([[1, 2, 0], [0, 3, 1], [4, 0, 2]])
+```
+
+by computing `B = M + M.T`. Then:
+
+1. Compute its eigenvalues and eigenvectors with `np.linalg.eigh()`.
+2. Check, for every pair, that $B\mathbf{v}=\lambda\mathbf{v}$ holds (use `np.allclose()`).
+3. Reconstruct `B` as $Q\,\Lambda\,Q^T$ and check that it matches the original matrix.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+M = np.array([[1, 2, 0], [0, 3, 1], [4, 0, 2]])
+B = M + M.T
+
+eigenvalues, eigenvectors = np.linalg.eigh(B)
+print("Eigenvalues:", eigenvalues)
+
+for i in range(len(eigenvalues)):
+  v = eigenvectors[:, i]
+  print(np.allclose(B @ v, eigenvalues[i] * v))
+
+reconstructed = eigenvectors @ np.diag(eigenvalues) @ eigenvectors.T
+print(np.allclose(reconstructed, B))
+```
+
+Every check prints `True`. Because `B` is symmetric, its eigenvalues are real and the eigenvector matrix satisfies $Q^{-1} = Q^T$.
+:::
 
 ---
 

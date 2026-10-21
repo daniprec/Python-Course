@@ -37,16 +37,15 @@ print(f"Reshaped:\n{reshaped}")
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Reshape a Range
 
-**Exercise:** Create the following matrix without using the function `np.array`.
+Create the following matrix without using the function `np.array`.
 
 $\begin{pmatrix}
 1 & 2\\
 3 & 4\\
 5 & 6
 \end{pmatrix}$
-
 
 :::
 
@@ -61,16 +60,15 @@ print(arr)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Fill by Columns
 
-**Exercise:** Create the following matrix without using the function `np.array`.
+Create the following matrix without using the function `np.array`.
 
 $\begin{pmatrix}
 1 & 4\\
 2 & 5\\
 3 & 6
 \end{pmatrix}$
-
 
 :::
 
@@ -85,9 +83,9 @@ print(arr)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Reshape and Slice
 
-**Exercise:** Create the following matrix without using the function `np.array`.
+Create the following matrix without using the function `np.array`.
 
 $\begin{pmatrix}
 0 & 1 & 2 & 3\\
@@ -102,7 +100,6 @@ $\begin{pmatrix}
 6 & 7\\
 10 & 11\\
 \end{pmatrix}$
-
 
 :::
 
@@ -350,14 +347,26 @@ print("\nConcatenated shape:", concatenated_columns.shape)
 ```
 
 ::: {.callout-note}
-## Exercise
-
-**Exercise. Rouché-Frobenius Theorem**
+## Exercise: Rouché-Frobenius Theorem
 
 A non-homogeneous system of linear equations $Ax=b$ with $n$ variables has a solution if and only if the rank of its coefficient matrix $A$ is equal to the rank of its augmented matrix $[A|b]$. If there are solutions, we can find that:
 
 - if $rank(A) = n$, the solution is unique,
 - if $rank(A) < n$, there are infinite solutions.
+
+Write a function `rouche_frobenius_theorem(A, b)` that builds the augmented matrix $[A|b]$ with a stacking function and returns a message saying whether the system is inconsistent, has a unique solution, or has infinitely many solutions. Use `np.linalg.matrix_rank()` to compute ranks.
+
+Test it with:
+
+```python
+A = np.array([[2, 1, -1], [1, 3, 2], [1, -1, 2]])
+b = np.array([8, 13, 3])
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 def rouche_frobenius_theorem(A, b):
@@ -381,6 +390,8 @@ b = np.array([8, 13, 3])
 result = rouche_frobenius_theorem(A, b)
 print(result)
 ```
+
+The vector `b` must be reshaped into a column before `np.hstack()` can place it next to `A`.
 
 :::
 
@@ -488,6 +499,43 @@ vsplit_array = np.vsplit(array_2d, 2)
 for idx in range(len(vsplit_array)):
     print(f"Split {idx + 1}:\n{vsplit_array[idx]}")
 ```
+
+---
+
+## Challenge: Weekly Step Counter
+
+A fitness app stored four weeks of daily step counts as one long array:
+
+```python
+steps = np.arange(4000, 11000, 250)
+```
+
+Without writing any loop:
+
+1. Reshape `steps` into a matrix with one row per week and one column per day.
+2. Compute the total number of steps of each week.
+3. Split the matrix into the first two weeks and the last two weeks, and print the shape of each part.
+4. Build a two-column report where the first column is the week number (1 to 4) and the second column is the weekly total.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+steps = np.arange(4000, 11000, 250)
+
+weeks = steps.reshape(4, 7)  # or steps.reshape(-1, 7)
+print(weeks)
+
+totals = np.sum(weeks, axis=1)
+print(f"Weekly totals: {totals}")
+
+first_half, second_half = np.vsplit(weeks, 2)
+print(first_half.shape, second_half.shape)
+
+report = np.column_stack((np.arange(1, 5), totals))
+print(report)
+```
+:::
 
 ---
 

@@ -49,11 +49,11 @@ print(result)
 When we define a function, sometimes it is able to be applied to the whole array directly, thanks to **NumPy's inherent broadcasting** capabilities. This allows NumPy to automatically apply the function element-wise to each element in the array without needing loops.
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Vectorize a Polynomial
 
-Define a function $f(x) = x^2+2x+1$, and apply it to each element of the array `[1, 2, 3, 4, 5]`.
+The code below defines the function $f(x) = x^2+2x+1$ and applies it to each element of the array `[1, 2, 3, 4, 5]` with a loop. Rewrite it without the loop.
 
-```{python}
+```python
 # Without vectorization
 
 # Define the function
@@ -72,6 +72,10 @@ for i in range(len(arr)):
 
 print(result)
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 # How can we vectorize the function?
@@ -228,14 +232,21 @@ print(filtered)
 ```
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Filter Values Above 5
 
 Given the array below, use masking to create a new array that only contains values greater than 5.
+
+```python
+arr = np.array([2, 5, 7, 9, 3])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 arr = np.array([2, 5, 7, 9, 3])
 
-# Your solution here
 apple = arr > 5  # mask named "apple"
 print(apple)
 
@@ -308,10 +319,12 @@ As we have seen, replacing values in an array using a mask can be done in two wa
 
 
 
-**Example.** Given a 1D array, replace all negative values $x$ with $x^2$.
+::: {.callout-note}
+## Exercise: Fix the Program
 
-```{python}
-#| eval: false
+The programmer wants to replace every negative value $x$ with $x^2$, but the code raises an error. Without running it, name the error and explain why it happens. Then fix the assignment line.
+
+```python
 # Define a 1D array
 arr = np.array([-3, -2, -1, 0, 1, 2, 3])
 
@@ -328,11 +341,35 @@ arr[mask_neg] = replacement_values
 
 print(arr)
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+It raises a `ValueError`. The mask selects three elements, but `replacement_values` has only two, so NumPy cannot match the shapes. The replacement must come from the selected elements themselves:
+
+```{python}
+arr = np.array([-3, -2, -1, 0, 1, 2, 3])
+mask_neg = arr < 0
+
+arr[mask_neg] = arr[mask_neg] ** 2
+
+print(arr)
+```
+:::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Random Replacements
 
-Given a 1D array, change all negative values with positive random integers between 1 and 10.
+Given a 1D array, replace all negative values with random integers between 1 and 10.
+
+```python
+arr = np.array([1, -1, 2, -2, 3, -3])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 arr = np.array([1, -1, 2, -2, 3, -3])
@@ -357,9 +394,18 @@ print(arr)
 :::
 
 ::: {.callout-note}
-## Exercise
+## Exercise: Safe Division with Masks
 
-Given two arrays, one of numerators and one of denominators, perform a safe division. when a denominator is 0, the result is $10^{10}$.
+Given two arrays, one of numerators and one of denominators, perform a safe division without `np.vectorize()`. When a denominator is 0, the result is $10^{10}$.
+
+```python
+numerators = np.array([1, 2, 3])
+denominators = np.array([0, 1, 2])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
 
 ```{python}
 numerators = np.array([1, 2, 3])
@@ -518,6 +564,43 @@ sum_car = np.sum(game[np.arange(n_games), id_swap])
 
 print("Win probability:", sum_car / n_games)
 ```
+
+---
+
+## Challenge: Curve the Grades
+
+A teacher curves exam scores with the loop below: every score gets 5 extra points, any score above 100 is capped at 100, and any score still below 50 is raised to 50. Rewrite it without a loop. Then print, with a single Boolean each, whether **all** students now pass (score at least 50) and whether **any** student got the maximum score.
+
+```python
+scores = np.array([38, 47, 62, 95, 99, 71, 44])
+
+curved = np.zeros(scores.shape)
+for i in range(len(scores)):
+  new_score = scores[i] + 5
+  if new_score > 100:
+    new_score = 100
+  if new_score < 50:
+    new_score = 50
+  curved[i] = new_score
+
+print(curved)
+```
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+scores = np.array([38, 47, 62, 95, 99, 71, 44])
+
+curved = scores + 5            # broadcasting
+curved[curved > 100] = 100     # mask + broadcast assignment
+curved[curved < 50] = 50
+
+print(curved)
+print("All pass:", (curved >= 50).all())
+print("Any 100: ", (curved == 100).any())
+```
+:::
 
 ---
 
