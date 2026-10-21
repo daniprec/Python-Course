@@ -16,19 +16,53 @@ In this lesson, we will first use a small numerical array to understand the mech
 
 ## Masking with Numbers
 
-Suppose we only want the temperatures below freezing.
+Let's go back to the midterm one last time. In Session 15 we computed the final grade of every student, but we left one question open: **who passed?**
 
 ```{python}
 import numpy as np
 
-temperatures = np.array([4, -2, 7, -5, 0])
-below_freezing = temperatures < 0
+students = np.array(["Ana", "Bruno", "Chloe", "Diego", "Emma", "Farid"])
+final_grades = np.array([8, 5, 9, 4.5, 9, 5])
 
-print(below_freezing)
-print(temperatures[below_freezing])
+passed = final_grades >= 5
+
+print(passed)
+print(final_grades[passed])
 ```
 
-The comparison creates one Boolean value for each temperature. Indexing with that Boolean array selects the values whose mask is `True`.
+The comparison creates one Boolean value for each grade. Indexing with that Boolean array selects the values whose mask is `True`. Because `students` is also an array with the same length, the same mask selects the names:
+
+```{python}
+print(students[passed])
+print(students[~passed])  # ~ negates the mask: who failed
+```
+
+`True` counts as `1` and `False` as `0`, so summing a mask counts how many elements satisfy the condition:
+
+```{python}
+print(np.sum(passed), "students passed")
+```
+
+::: {.callout-note}
+## Exercise: Passing Point, Revisited
+
+In Session 15 we read from the output after which exercise Ana reached 50 points. Now let NumPy find it: combine a mask with `np.argmax()`, which returns the position of the first `True`.
+
+```python
+ana_cumulative = np.array([15, 35, 40, 50, 55, 60, 65, 65, 70, 75, 80])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```python
+reached = ana_cumulative >= 50
+print(np.argmax(reached) + 1)  # 4
+```
+
+`np.argmax()` on a Boolean array returns the index of the first `True` (since `True` is the maximum). We add `1` to turn the index into an exercise number.
+:::
 
 ::: {.callout-note}
 ## Exercise: Predict the Mask

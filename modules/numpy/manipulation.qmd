@@ -6,10 +6,28 @@ format: html
 
 # NumPy: Array Manipulation
 
-Numerical data does not always arrive in the shape a calculation needs. In this lesson, we will reorganize the same values, combine compatible arrays, and divide arrays into useful pieces.
+Numerical data does not always arrive in the shape a calculation needs. Think back to the midterm we graded in the last sessions:
+
+- Some professors grade **exercise by exercise**, so their marks arrive with one row per exercise instead of one row per student.
+- The marks of the **Segovia** campus arrive in a separate array, and we want a single table for the whole course.
+- The exam has **three parts** (open problems, debugging, multiple choice), and sometimes we want to analyse each part on its own.
+
+In this lesson, we will learn to reorganize the same values, combine compatible arrays, and divide arrays into useful pieces. The challenge at the end puts all these tools together on the midterm.
 
 ```{python}
 import numpy as np
+
+# The Madrid marks and the value of each exercise, from the last session
+weights = np.array([20, 20, 10, 10, 10, 5, 5, 5, 5, 5, 5])
+
+marks = np.array([
+    [0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1],
+    [0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1],
+    [1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1],
+    [0.25, 0.5, 0.5, 0.5, 0.5, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0.5, 1, 1, 1, 0, 1, 1, 1, 1],
+    [0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0],
+])
 ```
 
 ## Reshape Arrays
@@ -120,6 +138,52 @@ When using reshape, you can add a single -1 to any dimension. When you do, NumPy
 - given an array with $N$ elements, calling `reshape(a, b, -1)` will return a shape `(a, b, c)` where `c = N / (a * b)`
 
 As the dimensions of `reshape` must always match exactly the number of elements in an array, using -1 will only work if the division produces an integer.
+
+### Reshape Is Not Transpose
+
+In Session 14 we saw that a form filled **exercise by exercise** must be reshaped with one row per exercise. Here are the marks of three students in four exercises, typed exercise by exercise:
+
+```{python}
+form_export = np.array([
+    1, 0.5, 0.25,    # exercise 1: student 1, student 2, student 3
+    0.5, 1, 0,       # exercise 2
+    1, 1, 0.5,       # exercise 3
+    0, 1, 1,         # exercise 4
+])
+
+by_exercise = form_export.reshape(4, 3)
+print(by_exercise)
+```
+
+We want one row per student. A tempting mistake is to reshape to `(3, 4)`:
+
+```{python}
+print(form_export.reshape(3, 4))
+```
+
+The shape is right, but the values are wrong: reshape always fills row by row, so the first row mixes exercise 1 and exercise 2. What we need is to swap rows and columns, the **transpose** we saw in Session 15:
+
+```{python}
+by_student = by_exercise.T
+print(by_student)
+```
+
+::: {.callout-note}
+## Exercise: Spot the Difference
+
+Without running any code, what is the first row of `form_export.reshape(3, 4)` and what is the first row of `by_exercise.T`? Which one contains the exam of student 1?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[1.   0.5  0.25 0.5 ]
+[1.  0.5 1.  0. ]
+```
+
+The first row of the reshape is the first four values of the form: the three marks of exercise 1 and the first mark of exercise 2. The first row of the transpose is the first **column** of `by_exercise`: exercise 1 to 4 of student 1. Only the transpose contains the exam of student 1.
+:::
 
 ---
 
@@ -425,7 +489,7 @@ a_0 & a_1 \\
 b_0 & b_1 \\
 \end{pmatrix}$
 
-This is equivalent to concatenation along the first axis after 1-D arrays of shape _(N,)_ have been reshaped to _(1,N)_.
+This is equivalent to concatenation along the first axis after 1-D arrays of shape _(N,)_ have been reshaped to _(1,N)_. In older code you will find it as `np.row_stack()`, an alias of `np.vstack()` that is deprecated since NumPy 2.0. Use `np.vstack()` instead.
 
 ```{python}
 # Create two 1-D arrays
@@ -433,8 +497,17 @@ array1 = np.array([1, 2, 3])
 array2 = np.array([4, 5, 6])
 
 # Row stack
-row_stacked = np.row_stack((array1, array2))
+row_stacked = np.vstack((array1, array2))
 print("Row stacked:\n", row_stacked)
+```
+
+Back to the midterm: a student took the exam late, and we want to add her marks as a new row.
+
+```{python}
+late_student = np.array([1, 0.75, 1, 0.5, 1, 1, 0, 1, 1, 1, 1])
+
+with_late = np.vstack((marks, late_student))
+print(with_late.shape)
 ```
 
 ---
@@ -500,41 +573,96 @@ for idx in range(len(vsplit_array)):
     print(f"Split {idx + 1}:\n{vsplit_array[idx]}")
 ```
 
+### Splitting at Given Positions
+
+Instead of a number of equal parts, all the split functions also accept a **list of positions** where to cut. The three parts of the midterm have different sizes: exercises 1 and 2, exercises 3 to 5, and exercises 6 to 11. We cut the columns before index 2 and before index 5:
+
+```{python}
+open_part, debugging_part, mc_part = np.hsplit(marks, [2, 5])
+
+print(open_part.shape, debugging_part.shape, mc_part.shape)
+```
+
+::: {.callout-note}
+## Exercise: Split the Weights
+
+Split `weights` into the same three parts, and check that the parts are worth 40, 30, and 30 points.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+open_w, debugging_w, mc_w = np.split(weights, [2, 5])
+
+print(np.sum(open_w), np.sum(debugging_w), np.sum(mc_w))
+```
+
+`weights` is one-dimensional, so we use `np.split()` (or `np.hsplit()`, which behaves the same for 1D arrays).
+:::
+
 ---
 
-## Challenge: Weekly Step Counter
+## Challenge: One Table for the Whole Course
 
-A fitness app stored four weeks of daily step counts as one long array:
+Deactivate AI assistant tools, and try this challenge on your own.
 
-```python
-steps = np.arange(4000, 11000, 250)
+The professor in Segovia graded the midterm **exercise by exercise**, and sent you the marks of their 4 students as one long array: the 4 marks of exercise 1, then the 4 marks of exercise 2, and so on.
+
+```{python}
+segovia_form = np.array([
+    0.5, 1, 0, 0.75,
+    1, 1, 0.25, 0.5,
+    0.5, 1, 0.5, 1,
+    1, 0.5, 0.5, 1,
+    1, 1, 0, 0.5,
+    1, 1, 0, 1,
+    1, 0, 1, 1,
+    1, 1, 0, 0,
+    1, 1, 1, 0,
+    0, 1, 0, 1,
+    1, 1, 0, 1,
+])
 ```
 
 Without writing any loop:
 
-1. Reshape `steps` into a matrix with one row per week and one column per day.
-2. Compute the total number of steps of each week.
-3. Split the matrix into the first two weeks and the last two weeks, and print the shape of each part.
-4. Build a two-column report where the first column is the week number (1 to 4) and the second column is the weekly total.
+1. Turn `segovia_form` into a table with one row per student and one column per exercise.
+2. Join it with the Madrid `marks` into a single table, `course`, with the Madrid students first. Print its shape.
+3. Split `course` into the three parts of the exam, and compute the points of each student in each part (use `weights`).
+4. Compute the final grade of every student, out of 10.
+5. Build a report with two columns: the student number (1 to 10) and the final grade.
 
 ::: {.callout-tip collapse="true"}
 ## Possible solution
 
 ```{python}
-steps = np.arange(4000, 11000, 250)
+# 1. One row per exercise first, then transpose
+segovia = segovia_form.reshape(11, 4).T
+print(segovia)
 
-weeks = steps.reshape(4, 7)  # or steps.reshape(-1, 7)
-print(weeks)
+# 2. Join along the rows
+course = np.concatenate((marks, segovia), axis=0)  # or np.vstack()
+print(course.shape)
 
-totals = np.sum(weeks, axis=1)
-print(f"Weekly totals: {totals}")
+# 3. Split the columns at the start of each part
+open_part, debugging_part, mc_part = np.hsplit(course, [2, 5])
+open_w, debugging_w, mc_w = np.split(weights, [2, 5])
 
-first_half, second_half = np.vsplit(weeks, 2)
-print(first_half.shape, second_half.shape)
+print(np.sum(open_part * open_w, axis=1))
+print(np.sum(debugging_part * debugging_w, axis=1))
+print(np.sum(mc_part * mc_w, axis=1))
 
-report = np.column_stack((np.arange(1, 5), totals))
+# 4. Final grades
+final_grades = course @ weights / 10
+print(final_grades)
+
+# 5. Report
+report = np.column_stack((np.arange(1, 11), final_grades))
 print(report)
 ```
+
+Note that `segovia_form.reshape(4, 11)` would also give the right shape, but with the marks mixed up.
 :::
 
 ---

@@ -158,6 +158,37 @@ d = np.ones((5, 5))
 - `np.zeros(3, 3)` is invalid because the shape must be supplied as one tuple for a 2D array: `np.zeros((3, 3))`.
 :::
 
+::: {.callout-note}
+## Battleship
+
+Represent a $10 \times 10$ Battleship board with a NumPy array, where `0` is water and `1` is part of a ship. Using only `np.zeros()`, indexing, and slicing (no loops):
+
+1. Place a horizontal ship of length 4 in row 2, starting at column 3.
+2. Place a vertical ship of length 3 in column 8, starting at row 5.
+3. Place a one-cell ship in the bottom-left corner, using negative indices.
+4. Your opponent shoots at row 2, column 5. Print the value of the board at that cell: is it a hit?
+5. Print the shape and size of the board, and the whole row 2.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+board = np.zeros((10, 10), dtype=int)
+
+board[2, 3:7] = 1     # horizontal ship: columns 3, 4, 5, 6
+board[5:8, 8] = 1     # vertical ship: rows 5, 6, 7
+board[-1, 0] = 1      # bottom-left corner
+
+print(board[2, 5])    # 1, a hit!
+print(board.shape, board.size)
+print(board[2])
+print(board)
+```
+
+Using `dtype=int` keeps the board readable when printed. Slices place the whole ship in one assignment, which with nested lists would require a loop.
+:::
+
 ---
 
 # Session 15: Array Arithmetic and Broadcasting

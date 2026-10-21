@@ -2,15 +2,81 @@
 title: "Introduction to NumPy"
 subtitle: "Module 3: NumPy"
 format: html
+execute:
+  error: true
 ---
 
 # Introduction to NumPy
 
+You have just finished the midterm. Now let's look at it from the other side of the desk: **you are the professor**, and you have a pile of exams to grade.
+
+The midterm had 11 exercises:
+
+- Exercises 1 and 2 are open problems, worth **20 points** each.
+- Exercises 3 to 5 are debugging exercises, worth **10 points** each.
+- Exercises 6 to 11 are multiple-choice questions, worth **5 points** each.
+
+To keep things simple, you mark every exercise from `0` (nothing correct) to `1` (fully correct). Later, each mark will be multiplied by the value of its exercise. You store your marks in a table: **one row per student, one column per exercise**.
+
+Throughout this session, you will manage this table. You will start with the tools you already know, see where they become uncomfortable, and then switch to the right tool for tables of numbers: **NumPy**.
+
+## The Problem: Marks Stored in Lists
+
+Six students took the exam. With what we learned in Module 2, the natural choice is a nested list: one inner list per student.
+
+```{python}
+students = ["Alice", "Bruno", "Chloe", "Diego", "Emma", "Farid"]
+
+marks_list = [
+    [0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1],         # Alice
+    [0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1],         # Bruno
+    [1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1],              # Chloe
+    [0.25, 0.5, 0, 0.5, 0.5, 0, 1, 0, 1, 0, 1],       # Diego
+    [1, 0.75, 0.5, 1, 1, 1, 0, 1, 1, 1, 1],           # Emma
+    [0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0],          # Farid
+]
+```
+
+Some questions are easy. All the marks of Alice are one row:
+
+```{python}
+print(marks_list[0])
+```
+
+Other questions are not. To check how the class did in **exercise 4**, we need to visit every row and take its fourth element:
+
+```{python}
+exercise_4 = [row[3] for row in marks_list]
+print(exercise_4)
+```
+
+And to review the **open problems (exercises 1 and 2) of Bruno, Chloe, and Diego**, we combine a slice of rows with a slice inside every row:
+
+```{python}
+block = [row[:2] for row in marks_list[1:4]]
+print(block)
+```
+
+::: {.callout-note}
+## Exercise: The Last Question
+
+Using only lists, get the marks of exercise 11 (the last one) for the last three students.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+last_question = [row[-1] for row in marks_list[-3:]]
+print(last_question)
+```
+:::
+
+This works, but every new question needs a new loop or comprehension, and the code no longer looks like the question we asked. A list does not know that it is a table: it only knows that it contains other lists. We need a tool that understands rows and columns.
+
 ## What is NumPy?
 
-Python lists can store numerical data, but calculations with many values often require loops. NumPy gives us arrays that can perform the same calculation on every value at once.
-
-NumPy (Numerical Python) is a package for numerical computing. It provides multidimensional arrays and mathematical functions designed to operate on those arrays efficiently.
+NumPy (Numerical Python) is a package for numerical computing. It provides multidimensional arrays and mathematical functions designed to operate on those arrays efficiently. By the end of this session, the two questions above will be one short expression each. By the end of the next session, computing the final grade of every student will be one line too.
 
 <p align="center">
 <img src="../../img/numpy.svg" width="300" height="auto" />
@@ -19,9 +85,9 @@ NumPy (Numerical Python) is a package for numerical computing. It provides multi
 ### Why Use NumPy?
 
 - Arrays store numerical data efficiently.
+- Arrays know their own shape: rows, columns, and beyond.
 - Array operations usually require less code than equivalent list-based loops.
 - NumPy's optimized implementation makes large calculations fast.
-
 
 ```{python}
 # First, let's import NumPy
@@ -30,60 +96,74 @@ import numpy as np
 
 ## Creating Arrays
 
-To create an array we use the function `np.array()`. We must pass a list or tuple to the function.
+To create an array we use the function `np.array()`. We must pass a list or tuple to the function. Let's start with the value of each exercise, in points.
 
 ```{python}
-# Create a simple array from a list
-ls = [1, 2, 3, 4, 5]
-arr = np.array(ls)
-print(arr)
+weights = np.array([20, 20, 10, 10, 10, 5, 5, 5, 5, 5, 5])
+print(weights)
 ```
 
+Tuples work too. Imagine that the marks of one student arrive as a tuple from another program:
+
 ```{python}
-# Single line
-# Create a simple array from a list
-arr = np.array([1, 2, 3, 4, 5])
-print(arr)
+ana = np.array((0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1))
+print(ana)
 ```
 
+::: {.callout-warning}
+## What about sets?
+
+Suppose the student IDs of the group are stored in a set: `{101, 102, 103}`. The [np.array documentation](https://numpy.org/doc/stable/reference/generated/numpy.array.html) says that the object must be an array or "any (nested) sequence". A set is not a [sequence](https://docs.python.org/3/glossary.html#term-sequence): it is unordered and does not support indexing. NumPy therefore stores the whole set as one single Python object, not as three IDs.
+
 ```{python}
-# Tuples work too!
-tup = (1, 2, 3, 4, 5)
-arr = np.array(tup)
-print(arr)
+ids = np.array({101, 102, 103})
+
+print(ids)
+print(ids.shape)
+print(ids.dtype)
 ```
 
-```{python}
-# Single line
-arr = np.array((1, 2, 3, 4, 5))
-print(arr)
+Convert the set to a list first: `np.array(sorted({101, 102, 103}))`.
+:::
+
+::: {.callout-note}
+## Exercise: Three Arguments
+
+You try to store Diego's debugging marks. Without running the code, decide what happens.
+
+```python
+diego_debugging = np.array(0, 0.5, 0.5)
+
+print(diego_debugging)
 ```
+:::
 
-What happens when we initialize a NumPy array with a set?
+::: {.callout-tip collapse="true"}
+## Solution
 
-The [np.array documentation](https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html) says that the object argument must be "an array, any object exposing the array interface, an object whose `__array__` method returns an array, **or any (nested) sequence**".
+The code raises a `TypeError`. `np.array()` expects one object (a list or tuple) as its first argument, but here it receives three separate values. The fix is `np.array([0, 0.5, 0.5])`.
+:::
 
-A set is not a [sequence](https://docs.python.org/3/glossary.html#term-sequence). It is unordered and does not support indexing. NumPy therefore treats the complete set as one Python object instead of turning its members into array elements.
+### Array Types
 
+Look again at Alice's marks: we typed `1` and `0` as integers, but NumPy printed `1.` and `0.`. Every NumPy array has **one** data type, available through its `dtype` property. When the input mixes types, NumPy chooses one type capable of representing every value.
 
 ```{python}
-# This creates a zero-dimensional object array, not five integer elements.
-arr = np.array({1, 2, 3, 4, 5})
-
-print(arr)
-print(arr.shape)
-print(arr.dtype)
+print(ana.dtype)
+print(weights.dtype)
 ```
 
 ::: {.callout-note}
-## Exercise: Mixed Numbers
+## Exercise: Mixed Marks
 
-Without running the code, write down what it prints. Which data type will the elements have?
+The multiple-choice questions are marked `0` or `1`, while the debugging exercises can get `0.5`. Without running the code, write down what each line prints.
 
 ```python
-arr = np.array((1, 2.0, 3))
+chloe_mc = np.array([1, 1, 1, 0, 1, 1])
+chloe_debugging = np.array([1, 1, 0.5])
 
-print(arr)
+print(chloe_mc, chloe_mc.dtype)
+print(chloe_debugging, chloe_debugging.dtype)
 ```
 :::
 
@@ -91,269 +171,316 @@ print(arr)
 ## Solution
 
 ```text
-[1. 2. 3.]
+[1 1 1 0 1 1] int64
+[1.  1.  0.5] float64
 ```
 
-The elements are all of type `float64`. NumPy upcasts the integers to floats so the whole array has a single data type.
+The first array only contains integers, so it keeps an integer type. In the second, a single `0.5` is enough to turn every element into a float, so the array has one data type. (On some Windows installations the integer type may show as `int32`.)
 :::
 
-::: {.callout-note}
-## Exercise: Three Arguments
+This rule has a consequence. Why don't we store the student names inside the table, as the first column?
 
-Without running the code, decide what happens.
+```{python}
+row = np.array(["Alice", 0.75, 1, 0.5])
+
+print(row)
+print(row.dtype)
+```
+
+The only type that can represent both `"Alice"` and `0.75` is a string, so **every mark became text**. That is why we keep `students` in a separate list, and only numbers in the array.
+
+::: {.callout-note}
+## Exercise: The Unreadable Answer
+
+While grading Farid's exam, you cannot read his answer to exercise 2, so you type `"?"` until you ask him. Without running the code, what is the `dtype` of `farid`? Why is it a problem?
 
 ```python
-arr = np.array(1, 2.0, 3)
+farid = np.array([0.5, "?", 0.5, 0])
 
-print(arr)
+print(farid.dtype)
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The code raises a `TypeError`. `np.array()` expects one object (typically a list or tuple) as its first argument, but here it receives three separate values. The fix is `np.array([1, 2.0, 3])`.
+The array becomes an array of strings (its `dtype` is `<U32`, a Unicode string). Every mark is now text, so we can no longer treat the row as numbers.
+
+NumPy has a special float value for missing data, `np.nan` ("not a number"), which keeps the array numeric:
+
+```{python}
+farid = np.array([0.5, np.nan, 0.5, 0])
+print(farid)
+print(farid.dtype)
+```
 :::
 
----
-
-### Array Types
-
-Every NumPy array has one data type, available through its `dtype` property. NumPy supports many types, including booleans, integers, floating-point numbers, complex numbers, and strings. When the input mixes types, NumPy chooses one type capable of representing every value.
+We can also choose the type ourselves, in the second argument of `np.array()`. If a value cannot be converted, NumPy raises an error instead of silently changing the type.
 
 ```{python}
-# Array of strings
-a = np.array(["a", "b", "c"])
-
+a = np.array([1, 0, 1], float)
 print(a)
 ```
 
 ```{python}
-# Array of floats
-a = np.array([1, 2.2, 3.3])
-
-# Notice how '1' is turned into a float '1.'
-print(a)
-```
-
-```{python}
-# Mixed array
-a = np.array([1, "two", 3])
-
-# Notice that '1' and '3' are turned into strings!
-print(a)
-```
-
-We can specify the NumPy array type in the second argument of `np.array()`.
-
-```{python}
-a = np.array([1, 2, 3], float)
-print(a)
-```
-
-```{python}
-a = np.array([1, 2, 3], str)
-print(a)
+a = np.array([1, "?", 1], float)
 ```
 
 ---
 
 ### Multi-Dimensional Arrays
 
-Nested list are used to create multi-dimensional arrays.
+One student is a one-dimensional array. The whole group is a **two-dimensional** array, created from the nested list.
 
 ```{python}
-# Create a 2D array (Matrix)
-# We will use nested lists
-row_0 = [1, 2, 3]
-row_1 = [4, 5, 6]
-row_2 = [7, 8, 9]
-ls_matrix = [row_0, row_1, row_2]
-matrix = np.array(ls_matrix)
-print(matrix)
+marks = np.array(marks_list)
+print(marks)
 ```
 
-```{python}
-#| eval: false
-# All nested list must have the same length!
-row_0 = [1, 2, 3]
-row_1 = [4, 5, 6, 0]
-row_2 = [7, 8, 9]
-ls_matrix = [row_0, row_1, row_2]
-matrix = np.array(ls_matrix)
-print(matrix)
-```
+Compare this output with `print(marks_list)`: NumPy prints the table as a table, with aligned rows and columns.
+
+In NumPy, the order of dimensions is indicated by the nesting of brackets. The outermost brackets represent the first dimension (dimension 0, the **rows**, here the students). The next level of brackets represents the second dimension (dimension 1, the **columns**, here the exercises). Each new level of nesting adds one more dimension.
+
+A table must be rectangular: every row needs the same number of values. What if you forget to type one of Diego's marks?
 
 ```{python}
-# Single line
-# Create a 2D array (Matrix)
-matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-print(matrix)
-```
-
-```{python}
-# Best format - helps clarity
-# Create a 2D array (Matrix)
-matrix = np.array([
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
+broken = np.array([
+    [0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1],
+    [0.25, 0.5, 0, 0.5, 0.5, 0, 1, 0, 1, 0],    # Diego: only 10 marks
 ])
-print(matrix)
 ```
 
-In NumPy, the order of dimensions is indicated by the nesting of brackets. The outermost bracket (purple) represents the first dimension, indexed as dimension 0. The next level of brackets inside (blue) represents the second dimension, or dimension 1. If you continue adding more nested brackets, each new level represents a higher dimension. For example, the third level of brackets would be dimension 2, and so on. This hierarchical structure helps in understanding the shape and structure of multi-dimensional arrays.
-
 ::: {.callout-note}
-## Exercise: Build a 3D Array
+## Exercise: Two Campuses
 
-Create a three-dimensional array with shape `(2, 2, 2)` and print its shape.
+The same exam was taken in two campuses, Madrid and Segovia. Create a single array called `campuses` that stores, for each campus, the marks of two students in the two open problems. Use these marks:
+
+- Madrid: student 1 got `0.75, 1` and student 2 got `0.5, 0.25`.
+- Segovia: student 1 got `1, 0.5` and student 2 got `0.25, 0.75`.
+
+How many levels of brackets do you need?
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-matrix_3d = np.array([
-    [[1, 2], [3, 4]],
-    [[5, 6], [7, 8]]
+campuses = np.array([
+    [[0.75, 1], [0.5, 0.25]],   # Madrid
+    [[1, 0.5], [0.25, 0.75]],   # Segovia
 ])
-print(matrix_3d)
-print(matrix_3d.shape)
+print(campuses)
 ```
 
-:::
-
----
-
-### Some Functions to Quickly Create Arrays
-
-```{python}
-# Create an array of zeros
-zeros = np.zeros(5)
-print(zeros)
-```
-
-```{python}
-# Create a 2x3 matrix of ones
-shape = (2, 3)
-ones = np.ones(shape)
-print(ones)
-```
-
-```{python}
-# Single line
-# Create a 2x3 matrix of ones
-ones = np.ones((2, 3))
-print(ones)
-```
-
-```{python}
-# Create an array of a range of numbers
-range_array = np.arange(0, 10, 2)  # start, stop, step
-print(range_array)
-```
-
-```{python}
-# Create an array of a range of numbers
-range_array = np.linspace(0, 10, 6)  # start, stop, length
-print(range_array)
-```
-
-::: {.callout-note}
-## Exercise: Odd Numbers
-
-Create an array containing all odd numbers between 25 and 50.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-odd_numbers = np.arange(25, 50, 2)
-print(odd_numbers)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Cut the Rope
-
-Imagine you have a rope that is 12 meters long. You want to cut it into 7 equal lengths. Using NumPy, create an array that shows the six positions where you should make the cuts.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-cut_points = np.linspace(0, 12, 8)[1:-1]
-print(cut_points)
-```
-
-Eight equally spaced endpoints divide the rope into seven equal intervals. We remove the beginning and end because they are not cuts.
+We need three levels of brackets, so the array is three-dimensional: campuses, then students, then exercises.
 :::
 
 ---
 
 ## Basic Properties of Arrays
 
-Unlike methods, properties don't require parentheses when accessed. They provide insights into the attributes of the array. Here is a list of some key properties of NumPy arrays.
+An array knows its own structure. Unlike methods, properties don't require parentheses when accessed. Here are four key properties, applied to our table of marks.
 
-`ndim`: Indicates the number of dimensions of the array.
-
-```{python}
-arr = np.zeros((5, 4))
-
-print(arr.ndim)
-```
-
-`shape`: Returns a tuple representing the dimensions of the array. For a matrix with `n` rows and `m` columns, the shape is `(n, m)`.
+`ndim`: the number of dimensions of the array.
 
 ```{python}
-# shape returns a tuple
-print(arr.shape)
+print(marks.ndim)
 ```
 
-`size`: Reports the total number of elements.
+`shape`: a tuple with the length of each dimension. For a table with `n` rows and `m` columns, the shape is `(n, m)`: here, 6 students and 11 exercises.
 
 ```{python}
-print(arr.size)
+print(marks.shape)
 ```
 
-`dtype`: Reports the data type used by the elements.
+`size`: the total number of elements, here the total number of marks you wrote.
 
 ```{python}
-print(arr.dtype)
+print(marks.size)
 ```
+
+`dtype`: the data type of the elements.
+
+```{python}
+print(marks.dtype)
+```
+
+::: {.callout-note}
+## Exercise: Shapes That Must Agree
+
+1. Print the shape of `weights`. Which number of `marks.shape` must it match, and why?
+2. A seventh student takes the exam late, and you add a bonus exercise 12 for everyone. Without running any code, predict the `ndim`, `shape`, and `size` of the new table of marks.
+3. Predict the same three properties for `campuses`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+1. `weights.shape` is `(11,)`: one value per exercise. It must match the number of **columns** of `marks`, `marks.shape[1]`, because every column is one exercise.
+2. The new table has `ndim` 2, `shape` `(7, 12)`, and `size` 84.
+3. For `campuses`:
+
+```{python}
+print(weights.shape, marks.shape[1])
+print(campuses.ndim, campuses.shape, campuses.size)
+```
+:::
 
 ---
 
-## Array Indexing
+## Creating Arrays Without Typing Them
 
-Indexing 1D-arrays is the same as indexing lists, tuples or strings.
+Typing every value is fine for six students, but the other group has 30. NumPy can build arrays of any shape for us.
+
+`np.zeros()` creates an array full of zeros. It is an **empty table of marks** for 30 students and 11 exercises, waiting to be filled. Note that the shape is passed as one tuple.
 
 ```{python}
-arr = np.array([0, 1, 2, 3, 4, 5, 6])
-
-# Accessing single element (0-indexed)
-print(arr[2])
+new_group = np.zeros((30, 11))
+print(new_group.shape)
 ```
 
-Indexing multi-dimensional arrays is "similar" to indexing nested lists.
+`np.ones()` works the same way. What does a perfect exam look like?
 
 ```{python}
-matrix = np.array([[0, 1, 2], [3, 4, 5]])
-
-# Accessing element in 2D array (Matrix)
-print(matrix[1][2])  # second row, third column
+perfect = np.ones(11)
+print(perfect)
 ```
 
-For NumPy arrays, we can include all indices within a single set of parentheses! This is called "indexing with a tuple".
+`np.arange(start, stop, step)` works like `range()`, but returns an array. The exercise numbers go from 1 to 11:
 
 ```{python}
-matrix = np.array([[0, 1, 2], [3, 4, 5]])
+exercise_numbers = np.arange(1, 12)
+print(exercise_numbers)
+```
 
-# Accessing element in 2D array (Matrix)
-print(matrix[1, 2])  # second row, third column
+`np.linspace(start, stop, num)` returns `num` values evenly spaced between `start` and `stop`, **both included**. It is perfect to build a marking rubric. The open problems are marked in quarters:
+
+```{python}
+open_rubric = np.linspace(0, 1, 5)
+print(open_rubric)
+```
+
+::: {.callout-note}
+## Exercise: Exam Versions
+
+To avoid copying, students in odd seats (1, 3, 5, ...) get version A of the exam. The room has 30 seats. Create an array with the seat numbers that get version A.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+version_a = np.arange(1, 31, 2)
+print(version_a)
+```
+:::
+
+::: {.callout-note}
+## Exercise: The Debugging Rubric
+
+The debugging exercises are marked in halves: no error found, one error found, or both errors found.
+
+1. Create this rubric with `np.linspace()`.
+2. Create the rubric of the open problems again, but now with `np.arange()`. Be careful with the stopping value!
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+debugging_rubric = np.linspace(0, 1, 3)
+print(debugging_rubric)
+
+open_rubric = np.arange(0, 1.25, 0.25)
+print(open_rubric)
+```
+
+`np.arange()` excludes its stopping value, so we must stop one step after `1`. `np.linspace()` includes both ends and asks for the number of values instead of the step, which is usually easier for rubrics.
+:::
+
+### Reshape: From a Form to a Table
+
+Imagine that you graded the exams in an online form, which exports all the marks as one long list: first the 11 marks of the first student, then the 11 marks of the second, and so on.
+
+```{python}
+form_export = np.array([
+    0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1,
+    0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1,
+    1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1,
+    0.25, 0.5, 0, 0.5, 0.5, 0, 1, 0, 1, 0, 1,
+    1, 0.75, 0.5, 1, 1, 1, 0, 1, 1, 1, 1,
+    0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0,
+])
+print(form_export.shape)
+```
+
+The `reshape()` method reorganizes the same values into a new shape, row by row. It returns a new array and does not modify the original.
+
+```{python}
+table = form_export.reshape(6, 11)
+print(table)
+```
+
+The requested shape must contain exactly the same number of elements as the original array.
+
+```{python}
+table = form_export.reshape(6, 10)
+```
+
+::: {.callout-note}
+## Exercise: Grading Exercise by Exercise
+
+Many professors grade **exercise by exercise**: first exercise 1 for every student, then exercise 2 for every student, and so on. A form filled in that order exports the 6 marks of exercise 1, then the 6 marks of exercise 2, and so on. Which `reshape()` gives a table with the right structure? What is its shape, and what does each row represent?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`.reshape(11, 6)`, which gives a table with shape `(11, 6)`: one row per **exercise** and one column per student. Reshape fills the new array row by row, so the reshape must follow the order in which the values arrive. Turning this table into one row per student is a different operation (transposing), which we will see in a later session.
+:::
+
+---
+
+## Array Indexing: One Mark
+
+Indexing a one-dimensional array is the same as indexing lists, tuples, or strings. Be careful: exercise 1 is at index `0`.
+
+```{python}
+print(weights[0])  # value of exercise 1
+print(ana[3])      # Alice's mark in exercise 4
+```
+
+Indexing a two-dimensional array with one index returns a whole row: one student.
+
+```{python}
+print(marks[2])  # Chloe
+```
+
+Indexing it "like a nested list" works too: first the row, then the element inside that row.
+
+```{python}
+print(marks[2][4])  # Chloe, exercise 5
+```
+
+For NumPy arrays, we can include all indices within a single pair of brackets, separated by commas. This is called **indexing with a tuple**, and it reads as `marks[student, exercise]`.
+
+```{python}
+print(marks[2, 4])  # Chloe, exercise 5
+```
+
+We do not need to remember the position of every student. The list method `index()` from Module 2 finds it for us:
+
+```{python}
+row = students.index("Diego")
+
+print(marks[row, 0])  # Diego, exercise 1
+```
+
+Indexing also lets us **change** a value. Diego asked for a revision of exercise 3, and you realize he found one of the two errors. His mark goes up to `0.5`:
+
+```{python}
+marks[3, 2] = 0.5
+print(marks[3])
 ```
 
 ::: {.callout-note}
@@ -362,9 +489,7 @@ print(matrix[1, 2])  # second row, third column
 Without running the code, write down what it prints.
 
 ```python
-matrix = np.array([[0, 1, 2], [3, 4, 5]])
-
-print(matrix[-1, 0])
+print(marks[-1, 0])
 ```
 :::
 
@@ -372,10 +497,10 @@ print(matrix[-1, 0])
 ## Solution
 
 ```text
-3
+0.5
 ```
 
-`-1` selects the last row, `[3, 4, 5]`, and `0` selects its first element.
+`-1` selects the last row (Farid) and `0` selects exercise 1.
 :::
 
 ::: {.callout-note}
@@ -384,30 +509,28 @@ print(matrix[-1, 0])
 What happens when this code runs? Explain why.
 
 ```python
-matrix = [[0, 1, 2], [3, 4, 5]]
-
-print(matrix[2, 1])
+print(marks_list[2, 4])
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The code raises `TypeError: list indices must be integers or slices, not tuple`. `matrix` is a nested **list**, and lists cannot be indexed with a tuple. Use `matrix[1][1]` for a list, or convert it with `np.array(matrix)` first. (Even then, `[2, 1]` would fail with an `IndexError`, because there is no third row.)
+The code raises `TypeError: list indices must be integers or slices, not tuple`. `marks_list` is a nested **list**, and lists cannot be indexed with a tuple. Use `marks_list[2][4]` for the list, or `marks[2, 4]` for the array.
 :::
 
 ::: {.callout-note}
-## Exercise: A List of Arrays
+## Exercise: Two Versions
 
-Without running the code, find the value of `x`.
+The exam had two versions, and you keep the marks of each version in its own array (three exercises shown). Without running the code, find the value of `x`.
 
 ```python
-arr_A = np.array([[0, 1, 2], [3, 4, 5]])
-arr_B = np.array([[6, 7, 8], [9, 10, 11]])
+version_A = np.array([[1, 0.5, 0], [0.25, 1, 1]])
+version_B = np.array([[0.75, 0, 1], [1, 0.5, 0.5]])
 
-ls_arrays = [arr_A, arr_B]
+versions = [version_A, version_B]
 
-x = ls_arrays[1][0, 2]
+x = versions[1][0, 2]
 
 print(x)
 ```
@@ -417,225 +540,293 @@ print(x)
 ## Solution
 
 ```text
-8
+1.0
 ```
 
-`ls_arrays[1]` is a list index that returns `arr_B`. Then `[0, 2]` is an array index: first row, third column.
+`versions[1]` is a list index that returns `version_B`. Then `[0, 2]` is an array index: first student, third exercise. The array contains floats, so the value prints as `1.0`.
 :::
 
----
-
-## Array Slicing
-
-Slicing NumPy arrays is the same as slicing lists.
-
-```{python}
-arr = np.array([0, 1, 2, 3, 4, 5, 6])
-
-# Accessing a slice of an array
-print(arr[1:4])  # Start is inclusive, end is exclusive
-```
-
-```{python}
-matrix = np.array([[0, 1, 2], [3, 4, 5]])
-
-# Accessing rows/columns of a matrix
-print(matrix[:, 1])  # All rows, second column
-```
-
-```{python}
-matrix = np.array([[0, 1, 2], [3, 4, 5]])
-
-print(matrix[1, :])  # Second row, all columns
-```
-
-```{python}
-arr = np.array([0, 1, 2, 3, 4, 5, 6])
-
-# Using steps in slicing
-print(arr[0:5:2])  # Start at 0, go to 5, step by 2
-```
-
 ::: {.callout-note}
-## Exercise: Every Other Element
+## Exercise: Grade Revision
 
-What slicing should we take to retrieve the array `[2, 4, 6]`?
-
-```{python}
-arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
-```
-
+Emma also asked for a revision. Her open problem in **exercise 2** deserves full marks. Update the table using `students.index()` and the exercise number, then print Emma's row.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-print(arr[2:7:2])
-```
-:::
+row = students.index("Emma")
+col = 2 - 1  # exercise 2 is at index 1
 
-::: {.callout-note}
-## Exercise: Slice Backwards
-
-What slicing should we take to retrieve the array `[7, 4, 1]`?
-
-```{python}
-arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-print(arr[7:0:-3])
-```
-:::
-
-::: {.callout-note}
-## Exercise: Column Slice
-
-What slicing should we take to retrieve the array `[2, 4, 6]`?
-
-```{python}
-arr = np.array([
-    [0, 1, 2],
-    [1, 2, 3],
-    [2, 3, 4],
-    [3, 4, 5],
-    [4, 5, 6]
-])
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-print(arr[::2, 2])
-```
-:::
-
-::: {.callout-note}
-## Exercise: Submatrix Slice
-
-What slicing should we take to retrieve the following matrix?
-
-$$\begin{pmatrix}
-1 & 2\\
-3 & 4\\
-5 & 6
-\end{pmatrix}$$
-
-```{python}
-arr = np.array([
-    [0, 1, 2],
-    [1, 2, 3],
-    [2, 3, 4],
-    [3, 4, 5],
-    [4, 5, 6]
-])
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-print(arr[::2, 1:])
+marks[row, col] = 1
+print(marks[row])
 ```
 :::
 
 ---
 
-## Practice
+## Array Slicing: Rows, Columns, and Blocks
 
-Deactivate AI assistant tools, and try the following exercises.
+Slicing a one-dimensional array is the same as slicing a list. The start is included and the stop is excluded. The three parts of the exam are three slices:
 
-The `reshape()` method reorganizes an array without changing its values. The requested shape must contain the same number of elements as the original array.
+```{python}
+print(weights[:2])    # open problems
+print(weights[2:5])   # debugging
+print(weights[5:])    # multiple choice
+```
+
+With a two-dimensional array, we can slice **each dimension separately**, inside the same brackets. A colon `:` alone means "everything along this dimension". This solves the first question of the session, how the class did in exercise 4, in one expression:
+
+```{python}
+print(marks[:, 3])  # all students, exercise 4
+```
+
+And the whole exam of one student:
+
+```{python}
+print(marks[1, :])  # Bruno, all exercises
+```
+
+The second question of the session, the open problems of Bruno, Chloe, and Diego, is a block of rows and columns:
+
+```{python}
+print(marks[1:4, :2])
+```
+
+Compare it with the list version, `[row[:2] for row in marks_list[1:4]]`. The NumPy version reads exactly like the question: rows 1 to 3, columns 0 to 1.
+
+Steps work as they do in lists. If students sat in alternating seats, every other row starting from the first one got version A:
+
+```{python}
+print(marks[::2])
+```
+
+A negative step reverses the order. When you collect the exams, the last one delivered ends up on top of the pile:
+
+```{python}
+print(marks[::-1])
+```
+
+Slices can also be used to **fill** an array. Suppose a machine grades the multiple-choice part automatically, and sends you the six marks of each student at once:
+
+```{python}
+small_group = np.zeros((3, 11))
+
+small_group[0] = [1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1, 1]   # first student, typed by hand
+small_group[1:, 5:] = [
+    [1, 1, 0, 1, 1, 0],    # second student, multiple choice
+    [0, 1, 1, 1, 0, 1],    # third student, multiple choice
+]
+
+print(small_group)
+```
 
 ::: {.callout-note}
-## Exercise: From 1 to 12
+## Exercise: Version B
 
-Create an array filled with integers ordered from 1 to 12.
+Students in even seats (Bruno, Diego, and Farid) got version B. Use one slice to get all their marks.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-arr = np.arange(1, 13)
-print(arr)
+print(marks[1::2])
 ```
 :::
 
 ::: {.callout-note}
-## Exercise: Reshape to a Matrix
+## Exercise: The Debugging Part
 
-Reshape it to a $3 \times 4$ matrix.
+Get the marks of the debugging part (exercises 3 to 5) for every student, and the value of those exercises.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-arr = np.arange(1, 13).reshape(3, 4)
-print(arr)
+print(marks[:, 2:5])
+print(weights[2:5])
 ```
 :::
 
 ::: {.callout-note}
-## Exercise: Pick One Value
+## Exercise: Bottom of the Pile
 
-Print its value at the first row, fourth column.
+Get the marks of exercise 1 for Farid, Emma, and Diego, in that order.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-arr = np.arange(1, 13).reshape(3, 4)
-print(arr[0, 3])
+print(marks[5:2:-1, 0])
+```
+
+Start at row 5 (Farid), stop **before** row 2, and move backwards. `marks[-1:-4:-1, 0]` works too.
+:::
+
+::: {.callout-note}
+## Exercise: Predict the Block
+
+Without running the code, write down which students and which exercises are selected, and the shape of the result.
+
+```python
+print(marks[::2, 5:])
 ```
 :::
 
-## Challenge: Monthly Calendar
+::: {.callout-tip collapse="true"}
+## Solution
 
-The months of a year can be numbered 1 to 12 and arranged as four quarters of three months each.
+Every other student, starting from the first (Alice, Chloe, Emma), and every exercise from exercise 6 onwards (the multiple-choice part). The shape is `(3, 6)`.
 
-1. Build a $4 \times 3$ array `calendar` containing the numbers 1 to 12, one quarter per row.
-2. Print its `shape`, `ndim`, and `size`.
-3. Print the months of the third quarter.
-4. Print the first month of every quarter.
-5. Print the last two quarters in reverse order (fourth quarter first).
+```{python}
+print(marks[::2, 5:])
+```
+:::
+
+---
+
+## Challenge: Madrid and Segovia
+
+Deactivate AI assistant tools, and try this challenge on your own.
+
+Four students took the exam in each campus. You store all the marks in one three-dimensional array, `exam`, with dimensions **campus** (Madrid, then Segovia), **student**, and **exercise**.
+
+```{python}
+exam = np.array([
+    [[1, 0.75, 1, 0.5, 1, 1, 1, 0, 1, 1, 1],         # Madrid
+     [0.25, 0.5, 0.5, 0, 0.5, 1, 0, 0, 1, 1, 0],
+     [0.75, 0.75, 1, 1, 0.5, 0, 1, 1, 1, 0, 1],
+     [0.5, 0, 0, 0.5, 1, 1, 1, 1, 0, 1, 1]],
+    [[0.5, 1, 0.5, 1, 1, 1, 1, 1, 1, 0, 1],          # Segovia
+     [1, 1, 1, 0.5, 1, 1, 0, 1, 1, 1, 1],
+     [0, 0.25, 0.5, 0.5, 0, 0, 1, 0, 1, 0, 0],
+     [0.75, 0.5, 1, 1, 0.5, 1, 1, 0, 0, 1, 1]],
+])
+```
+
+1. Print the `shape`, `ndim`, and `size` of `exam`. What does each number of the shape mean?
+2. Print all the marks of the second student of Segovia.
+3. Print the multiple-choice part (exercises 6 to 11) of every student in Madrid.
+4. Print the marks of exercise 1 for every student in both campuses. What is the shape of the result?
+5. The fourth student of Madrid asked for a revision: her open problem in exercise 2 deserves a `1`. Fix it.
+6. Print the open problems of the first two students of each campus.
 
 ::: {.callout-tip collapse="true"}
 ## Possible solution
 
 ```{python}
-calendar = np.arange(1, 13).reshape(4, 3)
+# 1. 2 campuses, 4 students per campus, 11 exercises
+print(exam.shape, exam.ndim, exam.size)
 
-print(calendar.shape, calendar.ndim, calendar.size)
-print(calendar[2])
-print(calendar[:, 0])
-print(calendar[3:1:-1])
+# 2. Segovia (index 1), second student (index 1), all exercises
+print(exam[1, 1])
+
+# 3. Madrid, all students, exercises 6 to 11
+print(exam[0, :, 5:])
+
+# 4. Both campuses, all students, exercise 1: shape (2, 4)
+print(exam[:, :, 0])
+print(exam[:, :, 0].shape)
+
+# 5. Madrid, fourth student, exercise 2
+exam[0, 3, 1] = 1
+print(exam[0, 3])
+
+# 6. Both campuses, first two students, exercises 1 and 2
+print(exam[:, :2, :2])
 ```
 :::
 
 ---
 
+## Extra: An Image Is Also a Table
+
+A table of marks is a table of numbers. What else could be stored as a table of numbers? A **picture**.
+
+A digital image is a grid of small squares called **pixels**. In a grayscale image, each pixel is one number: `0` is black, `1` is white, and the values in between are shades of gray. So an image is just a two-dimensional array, where the shape is `(height, width)`.
+
+The helper function below displays an array as an image. You do not need to understand how it works: we will learn more about plotting later in the course.
+
+```{python}
+import matplotlib.pyplot as plt
+
+
+def show(image):
+    """Display a 2D array as a grayscale image (0 = black, 1 = white)."""
+    plt.imshow(image, cmap="gray", vmin=0, vmax=1)
+    plt.axis("off")
+    plt.show()
+```
+
+Everything we learned today works on images. A black canvas is `np.zeros()`, and we paint with indexing and slicing:
+
+```{python}
+face = np.zeros((8, 8))
+
+face[2, 2] = 1        # left eye
+face[2, 5] = 1        # right eye
+face[5, 2:6] = 1      # mouth
+face[4, 1] = 1        # left corner of the smile
+face[4, 6] = 1        # right corner of the smile
+
+show(face)
+```
+
+::: {.callout-note}
+## Exercise: Upside Down
+
+Without changing `face`, display it upside down. Then display its mirror image (left and right swapped).
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+show(face[::-1])     # reverse the rows
+show(face[:, ::-1])  # reverse the columns
+```
+:::
+
+::: {.callout-note}
+## Exercise: A Chessboard
+
+Create an $8 \times 8$ chessboard (alternating black and white squares) using `np.zeros()` and **only two** slice assignments.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+board = np.zeros((8, 8))
+
+board[::2, 1::2] = 1   # even rows, odd columns
+board[1::2, ::2] = 1   # odd rows, even columns
+
+show(board)
+```
+
+With lists, this needs two nested loops and a condition. With slicing, each line paints a whole set of squares.
+:::
+
+Color images add a third dimension: each pixel stores three numbers (red, green, and blue), so their shape is `(height, width, 3)`. We will come back to images later in this module.
+
+---
+
 ## Summary and Reflection
 
-- A NumPy array stores elements using one data type.
+- A NumPy array is a table of values of **one** data type; mixing types changes the `dtype` of every element.
 - `ndim`, `shape`, `size`, and `dtype` describe an array.
-- Indexing selects individual values; slicing selects ranges along one or more axes.
+- `np.zeros()`, `np.ones()`, `np.arange()`, and `np.linspace()` build arrays without typing the values; `reshape()` reorganizes them.
+- `marks[row, col]` selects one value; slices such as `marks[:, 3]` or `marks[1:4, :2]` select rows, columns, and blocks.
 - Slice stopping positions are excluded, just as they are for lists.
 
-Explain in your own words why `matrix[1, 2]` works for a NumPy array but not for a nested Python list.
+Explain in your own words why `marks[2, 4]` works for a NumPy array but not for a nested Python list.
+
+We have the marks and the value of each exercise, but we still do not have the most important number: the **final grade** of each student. In the next session, we will compute it for the whole class in one line.
 
 ---
 

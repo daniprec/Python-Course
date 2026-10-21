@@ -41,35 +41,43 @@ print("Standard deviation:", np.std(measurements))
 print("Minimum and maximum:", np.min(measurements), np.max(measurements))
 ```
 
-For a two-dimensional dataset, the `axis` argument decides whether NumPy summarizes columns or rows.
+For a two-dimensional dataset, the `axis` argument decides whether NumPy summarizes columns or rows. Let's use the midterm one more time. In Session 17 we joined Madrid and Segovia and computed the points of each of the 10 students in each part of the exam: open problems (out of 40), debugging (out of 30), and multiple choice (out of 30).
 
 ```{python}
-scores = np.array([
-    [7, 8, 6],
-    [9, 7, 8],
-    [6, 8, 7],
-    [8, 9, 9]
+part_points = np.array([
+    [35, 20, 25],
+    [15, 15, 20],
+    [40, 25, 25],
+    [15, 15, 15],
+    [40, 25, 25],
+    [20, 15, 15],
+    [30, 25, 25],
+    [40, 25, 25],
+    [5, 10, 10],
+    [25, 25, 20],
 ])
 
-print("Mean of each subject:", np.mean(scores, axis=0))
-print("Mean of each student:", np.mean(scores, axis=1))
+print("Mean of each part:", np.mean(part_points, axis=0))
+print("Mean of each student:", np.mean(part_points, axis=1))
 ```
 
 ::: {.callout-note}
 ## Exercise: Shapes of the means
 
-Without running the code, predict the shapes of both mean arrays. Then compute the standard deviation of each subject.
+Without running the code, predict the shapes of both mean arrays. Then compute the standard deviation of each part. In which part are the students most different from each other?
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The mean of each subject has shape `(3,)` because reducing axis `0` collapses the four students and keeps the three subject columns. The mean of each student has shape `(4,)` because reducing axis `1` collapses the subjects and keeps the four student rows.
+The mean of each part has shape `(3,)` because reducing axis `0` collapses the ten students and keeps the three part columns. The mean of each student has shape `(10,)` because reducing axis `1` collapses the parts and keeps the ten student rows.
 
 ```{python}
-subject_std = np.std(scores, axis=0)
-print(subject_std)
+part_std = np.std(part_points, axis=0)
+print(part_std)
 ```
+
+The open problems have the largest standard deviation: they separate the students the most. (They are also worth more points, so we would compare the parts on the same scale, for instance in percentages, before drawing strong conclusions.)
 :::
 
 ### Correlation and Covariance
@@ -85,6 +93,25 @@ print("Correlation matrix:\n", np.corrcoef(study_hours, exam_scores))
 ```
 
 The matrices are symmetric. Their off-diagonal values describe the relationship between the two different variables.
+
+::: {.callout-note}
+## Exercise: Do the Parts Agree?
+
+Using `part_points`, compute the correlation between the points in the open problems and the points in the multiple-choice part. Do students who do well in one part also tend to do well in the other?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+open_points = part_points[:, 0]
+mc_points = part_points[:, 2]
+
+print(np.corrcoef(open_points, mc_points))
+```
+
+The off-diagonal value is close to `1`, so in this group the two parts are strongly and positively correlated. With only 10 students, this is an observation about our class, not a general rule.
+:::
 
 ---
 
