@@ -1,22 +1,47 @@
 ---
-title: "NumPy Array Arithmetic"
+title: "Array Arithmetic and Broadcasting"
 subtitle: "Module 3: NumPy"
 format: html
 execute:
   error: true
 ---
 
-# NumPy Array Arithmetic
+# Array Arithmetic and Broadcasting
 
-In the last session, you stored the marks of the midterm in a NumPy array: one row per student, one column per exercise, every mark between `0` and `1`. You also stored the value of each exercise, in points. But the most important number is still missing: the **final grade** of each student.
+In the last session, you stored the marks of the midterm in a NumPy array, but the most important number was still missing: the **final grade** of each student. We will start by computing it.
 
-Today we will compute it, and then use it to analyse the exam. Along the way, we will learn how NumPy does arithmetic with whole arrays at once. This array-based style is the foundation of vector programming.
+Then we will learn how NumPy does arithmetic with whole arrays at once, element by element, even when their shapes are different. This array-based style is the foundation of vector programming. Besides the grades, many of our examples come from linear algebra (vectors and shapes in the plane) and from images, which are arrays too.
+
+This session has two parts. In this one, we add and multiply arrays. In the second, [Array Functions](functions.qmd), we aggregate them, sort them, and multiply matrices.
 
 ```{python}
 import numpy as np
+import matplotlib.pyplot as plt
 ```
 
-Here is the data, after the revisions of the last session.
+We will use two helper functions to see the results. `show()` is the one from the last session: it displays a 2D array as a grayscale image. `draw()` plots one or more polygons. You do not need to understand how they work: we will learn more about plotting later in the course.
+
+```{python}
+def show(image):
+    """Display a 2D array as a grayscale image (0 = black, 1 = white)."""
+    plt.imshow(image, cmap="gray", vmin=0, vmax=1)
+    plt.axis("off")
+    plt.show()
+
+
+def draw(*shapes):
+    """Draw one or more polygons given as arrays of points with shape (n, 2)."""
+    for shape in shapes:
+        closed = np.vstack([shape, shape[:1]])   # repeat the first point to close the polygon
+        plt.plot(closed[:, 0], closed[:, 1], marker="o")
+    plt.axhline(0, color="gray", linewidth=0.5)
+    plt.axvline(0, color="gray", linewidth=0.5)
+    plt.axis("equal")
+    plt.grid(True)
+    plt.show()
+```
+
+Here is the data for today. First, the midterm from the last session:
 
 ```{python}
 students = ["Ana", "Bruno", "Chloe", "Diego", "Emma", "Farid"]
@@ -32,6 +57,38 @@ marks = np.array([
     [1, 1, 0.5, 1, 1, 1, 0, 1, 1, 1, 1],              # Emma
     [0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0],          # Farid
 ])
+```
+
+A shape in the plane is a list of points. With NumPy, it is an array with **one point per row**: column 0 holds the $x$ coordinates, and column 1 the $y$ coordinates.
+
+```{python}
+# The corners of a house, one point (x, y) per row
+house = np.array([
+    [0, 0],   # bottom-left
+    [4, 0],   # bottom-right
+    [4, 3],   # top-right
+    [2, 5],   # roof
+    [0, 3],   # top-left
+])
+corners = ["bottom-left", "bottom-right", "top-right", "roof", "top-left"]
+
+print(house.shape)
+draw(house)
+```
+
+And the two images we painted in the last session:
+
+```{python}
+face = np.zeros((8, 8))
+face[2, 2] = 1        # left eye
+face[2, 5] = 1        # right eye
+face[5, 2:6] = 1      # mouth
+face[4, 1] = 1        # left corner of the smile
+face[4, 6] = 1        # right corner of the smile
+
+board = np.zeros((8, 8))
+board[::2, 1::2] = 1   # even rows, odd columns
+board[1::2, ::2] = 1   # odd rows, even columns
 ```
 
 ## The Problem: Grading with Loops
@@ -50,107 +107,154 @@ for row in marks:
 print(final_grades)
 ```
 
-It works, but the code hides the idea behind indices and accumulators. Let's see how NumPy expresses the same calculation.
+It works, but the code hides the idea behind indices and accumulators. With NumPy, it is one line:
+
+```{python}
+final_grades = np.sum(marks * weights, axis=1) / 10
+print(final_grades)
+```
+
+These are the final grades we promised in the last session. In this session we will understand every piece of that line. In this part: the element-wise `*`, and why `marks` and `weights` can be multiplied although they have different shapes. In the next part: what `axis=1` does.
 
 ## Element-Wise Operations
 
-When two arrays have the same shape, the arithmetic operators act **element by element**: the first element with the first element, the second with the second, and so on. Let's take one student.
+When two arrays have the same shape, the arithmetic operators act **element by element**: the first element with the first element, the second with the second, and so on. Let's take one student:
 
 ```{python}
 ana = marks[0]
 
 # Multiplication element-wise: points earned in each exercise
-ana_points = ana * weights
-print(ana_points)
+print(ana * weights)
 ```
 
-The same holds for the other operators. Suppose that two professors graded Ana's open problems and debugging exercises independently.
+This is also how you add vectors and multiply them by a scalar in linear algebra:
 
 ```{python}
-grader_1 = np.array([0.75, 1, 0.5, 1, 0.5])
-grader_2 = np.array([0.5, 1, 0.5, 0.5, 0.5])
-```
+# Two vectors of R^3
+u = np.array([1, 2, 3])
+v = np.array([4, 0, -1])
 
-```{python}
-# Addition and division by a number: the average of both graders
-print((grader_1 + grader_2) / 2)
-```
-
-```{python}
-# Subtraction: where do the graders disagree?
-print(grader_1 - grader_2)
+# Vector addition and subtraction
+print(u + v)
+print(u - v)
 ```
 
 ```{python}
-# Division: back from points to marks
-print(ana_points / weights)
+# A scalar is applied to every element
+print(3 * u)
+print(u / 2)
 ```
 
 ```{python}
 # Power element-wise
-print(grader_1 ** 2)
+print(u ** 2)
 ```
 
-Notice that `/ 2` divides **every** element by 2. An operation between an array and a single number (a scalar) is applied to every element of the array.
+::: {.callout-warning}
+## `u * v` is not a dot product
 
-To add up all the elements of an array, use `np.sum()`. Ana's final grade is now one line:
+The product `u * v` also works element by element, and gives another vector:
 
 ```{python}
-ana_grade = np.sum(ana * weights) / 10
-print(ana_grade)
+print(u * v)
 ```
 
-::: {.callout-note}
-## Exercise: Points Lost
+This is **not** the dot product you know from linear algebra, which is a single number. We will meet the dot product later in this session.
+:::
 
-For each exercise, how many points did Ana **lose**? Compute it without a loop. Then check that the points lost plus the points earned add up to 100.
+::: {.callout-note}
+## Exercise: A Linear Combination
+
+Compute the linear combination $2u - v + 3w$ without a loop. Then compute the midpoint between $u$ and $v$, $\frac{u + v}{2}$.
+
+```{python}
+# Three vectors of R^3
+u = np.array([1, 2, 3])
+v = np.array([4, 0, -1])
+w = np.array([0, 1, 1])
+```
+
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-ana_lost = (1 - ana) * weights
-print(ana_lost)
-
-print(np.sum(ana_lost) + np.sum(ana * weights))
+print(2 * u - v + 3 * w)
+print((u + v) / 2)
 ```
-
-`1 - ana` subtracts every mark from 1, which gives the fraction of each exercise that was missed.
 :::
 
 ::: {.callout-note}
-## Exercise: A Perfect Exam
+## Exercise: Vectors Without Typing Them
 
-Create an array with the marks of a perfect exam, without typing them, and compute its grade out of 10.
+Create the vector $(1, 2, 3, \dots, 10)$ without typing it. From it, and without a loop, build $(1, 4, 9, \dots, 100)$ and $(1, \frac{1}{2}, \frac{1}{3}, \dots, \frac{1}{10})$.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-perfect = np.ones(11)
-print(np.sum(perfect * weights) / 10)
+n = np.arange(1, 11)
+print(n ** 2)
+print(1 / n)
 ```
+:::
+
+### Arithmetic on Images
+
+An image is an array too, so arithmetic also works on pictures. Subtracting every pixel from 1 swaps black and white:
+
+```{python}
+show(1 - face)
+```
+
+Multiplying by a number smaller than 1 makes the image darker:
+
+```{python}
+show(0.5 * face)
+```
+
+Adding two images with the same shape adds their pixels. Values above 1 are displayed as white.
+
+```{python}
+show(face + board)
+```
+
+::: {.callout-note}
+## Exercise: Blending Two Images
+
+An $8 \times 8$ image is a vector with 64 numbers, so we can make **linear combinations of images**. Show the image $0.7 \cdot \text{face} + 0.3 \cdot \text{board}$. Then try other weights that add up to 1. What happens when the weight of `face` goes from 1 to 0?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+show(0.7 * face + 0.3 * board)
+```
+
+```{python}
+#| eval: false
+for a in [1, 0.75, 0.5, 0.25, 0]:
+    show(a * face + (1 - a) * board)
+```
+
+The face slowly fades into the chessboard. Video editors use exactly this operation for a cross-fade between two scenes.
 :::
 
 ---
 
 ## Broadcasting in NumPy
 
-We have the grade of one student. What about the whole class? `marks` has shape `(6, 11)`, while `weights` has shape `(11,)`. They do not have the same shape... and yet:
+Look again at the final grades: `marks` has shape `(6, 11)`, while `weights` has shape `(11,)`. They do not have the same shape... and yet:
 
 ```{python}
 points = marks * weights
 print(points)
 ```
 
-NumPy multiplied **every row** of `marks` by `weights`. This mechanism is called **broadcasting**: it allows NumPy to work with arrays of different shapes when performing arithmetic operations. We have already used its simplest form, a scalar with an array:
-
-```{python}
-# Every mark, in percentage
-print(marks * 100)
-```
+NumPy multiplied **every row** of `marks` by `weights`. This mechanism is called **broadcasting**: it allows NumPy to work with arrays of different shapes when performing arithmetic operations. We have already used its simplest form, a scalar with an array: `3 * u`.
 
 How does broadcasting work?
 
@@ -166,57 +270,112 @@ weights       (11,)   -> treated as (1, 11), then stretched to (6, 11)
 result    (6, 11)
 ```
 
-Now consider a different situation. Chloe and Farid delivered their exams 10 minutes late, and the rules say their marks are multiplied by `0.9`. We store one factor per student:
+The same rule works with the house, with shape `(5, 2)`. A scalar scales every point, and a row of shape `(2,)` is added to every point. This makes the house twice as big and moves it 3 units right and 1 unit up:
 
 ```{python}
-late_factor = np.array([1, 1, 0.9, 1, 1, 0.9])
-print(late_factor.shape)
+moved = 2 * house + np.array([3, 1])
+print(moved)
+draw(house, moved)
+```
+
+With a row of shape `(2,)`, we can also scale each coordinate differently. This stretches the house horizontally:
+
+```{python}
+draw(house, house * np.array([2, 1]))
+```
+
+Now consider a different situation. We want to pull the roof away from the origin, multiplying that point by 1.5 and leaving the others as they are. We store one factor per point:
+
+```{python}
+pull = np.array([1, 1, 1, 1.5, 1])
+print(pull.shape)
 ```
 
 ```{python}
-penalized = marks * late_factor
+pulled = house * pull
 ```
 
-The trailing dimensions are `11` and `6`: they are different and neither is `1`, so the shapes are incompatible. We need `late_factor` to be a **column**, with shape `(6, 1)`, so that it is stretched along the exercises. A reshape is enough:
+The trailing dimensions are `2` and `5`: they are different and neither is `1`, so the shapes are incompatible. We need `pull` to be a **column**, with shape `(5, 1)`, so that it is stretched along the coordinates. A reshape is enough:
 
 ```{python}
-late_column = late_factor.reshape(6, 1)
-print(late_column)
+pull_column = pull.reshape(5, 1)
+print(pull_column)
 ```
 
 ```{python}
-penalized = marks * late_column
-print(penalized)
+pulled = house * pull_column
+draw(house, pulled)
 ```
 
 ```text
-marks        (6, 11)
-late_column  (6, 1)   -> stretched to (6, 11)
-result       (6, 11)
+house        (5, 2)
+pull_column  (5, 1)   -> stretched to (5, 2)
+result       (5, 2)
 ```
 
 ::: {.callout-note}
 ## Exercise: Which Shapes Broadcast?
 
-Without running any code, decide which of these arrays can be added to `marks` (shape `(6, 11)`). For those that work, what is the shape of the result?
+Without running any code, decide which of these arrays can be added to `house` (shape `(5, 2)`). For those that work, what is the shape of the result?
 
-1. A scalar, `0.1`
-2. An array with shape `(11,)`
-3. An array with shape `(6,)`
-4. An array with shape `(1, 11)`
-5. An array with shape `(6, 1)`
-6. An array with shape `(2, 11)`
+1. A scalar, `0.5`
+2. An array with shape `(2,)`
+3. An array with shape `(5,)`
+4. An array with shape `(1, 2)`
+5. An array with shape `(5, 1)`
+6. An array with shape `(3, 2)`
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-1. Works, `(6, 11)`: a scalar is applied to every element.
-2. Works, `(6, 11)`: one value per exercise, repeated for every student.
-3. Fails: `6` and `11` are compared and are different.
-4. Works, `(6, 11)`: the `1` is stretched to 6 rows.
-5. Works, `(6, 11)`: the `1` is stretched to 11 columns.
-6. Fails: `2` and `6` are different and neither is `1`.
+1. Works, `(5, 2)`: a scalar is applied to every element.
+2. Works, `(5, 2)`: one value per coordinate, repeated for every point.
+3. Fails: `5` and `2` are compared and are different.
+4. Works, `(5, 2)`: the `1` is stretched to 5 rows.
+5. Works, `(5, 2)`: the `1` is stretched to 2 columns.
+6. Fails: `3` and `5` are different and neither is `1`.
+:::
+
+::: {.callout-note}
+## Exercise: Painting with Broadcasting
+
+Build these $8 \times 8$ images with **no loops and no slicing**, starting only from `ramp = np.linspace(0, 1, 8)`:
+
+1. A gradient from black (left) to white (right). Hint: add `ramp` to a black canvas.
+2. A gradient from black (top) to white (bottom).
+3. A diagonal gradient: black in the top-left corner, white in the bottom-right corner.
+4. Light the face from the right, using the gradient of step 1.
+
+What are the shapes involved in each one?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+ramp = np.linspace(0, 1, 8)
+canvas = np.zeros((8, 8))
+
+horizontal = canvas + ramp                  # (8, 8) + (8,)
+show(horizontal)
+```
+
+```{python}
+vertical = canvas + ramp.reshape(8, 1)      # (8, 8) + (8, 1)
+show(vertical)
+```
+
+```{python}
+diagonal = (ramp + ramp.reshape(8, 1)) / 2  # (8,) + (8, 1) -> (8, 8)
+show(diagonal)
+```
+
+```{python}
+show(face * horizontal)
+```
+
+In step 3, **both** arrays are stretched: the row `(8,)` is repeated down, and the column `(8, 1)` is repeated across. The result has shape `(8, 8)`, even though neither input does.
 :::
 
 ### Practice
@@ -246,9 +405,9 @@ A = np.array([
   [5, 6, 7, 8],
   [9, 10, 11, 12]
 ])
-v = np.array([-2, -1, 0, 1])
+v4 = np.array([-2, -1, 0, 1])
 
-result = 5 * A * v
+result = 5 * A * v4
 print(result)
 ```
 :::
@@ -288,600 +447,22 @@ result = A * column_weights
 print(result)
 ```
 
-This is exactly what we did with `marks * weights`.
+This is exactly what we did with `house * np.array([2, 1])`.
 :::
-
----
-
-## Aggregation Functions
-
-We have the table of `points`, with shape `(6, 11)`. `np.sum()` adds all its elements, which is not what we want: that would be the total points of the whole class.
-
-```{python}
-print(np.sum(points))
-```
-
-The `axis` argument chooses the dimension that is "collapsed". To add the points of each student, we sum **along the exercises**, which is dimension 1 (the columns). One line, and we have the final grades of the class:
-
-```{python}
-final_grades = np.sum(points, axis=1) / 10
-print(final_grades)
-```
-
-Summing along dimension 0 (the rows) adds the points of every student in each exercise:
-
-```{python}
-points_per_exercise = np.sum(points, axis=0)
-print(points_per_exercise)
-```
-
-A good way to remember it: the `axis` you pass is the one that **disappears** from the shape. `points` has shape `(6, 11)`; `axis=1` leaves `(6,)`, one value per student, and `axis=0` leaves `(11,)`, one value per exercise.
-
-The cumulative sum keeps every partial total. How did Ana's score grow as she went through the exam?
-
-```{python}
-print(np.cumsum(points[0]))
-```
-
-Other aggregations work the same way. For instance, `np.prod()` multiplies all the elements:
-
-```{python}
-print(np.prod(np.array([[1, 2], [3, 4]])))
-```
-
-::: {.callout-note}
-## Exercise: The Three Parts
-
-Compute, for every student, the points obtained in each part of the exam: open problems (exercises 1 and 2), debugging (3 to 5), and multiple choice (6 to 11). Each result should be an array with one value per student.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-open_points = np.sum(points[:, :2], axis=1)
-debugging_points = np.sum(points[:, 2:5], axis=1)
-mc_points = np.sum(points[:, 5:], axis=1)
-
-print(open_points)
-print(debugging_points)
-print(mc_points)
-```
-
-We slice the columns of each part first, and then collapse the exercises with `axis=1`.
-:::
-
-::: {.callout-note}
-## Exercise: Passing Point
-
-Using the cumulative sum, find after which exercise Ana had already reached 50 points (a pass). You can read it from the output.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-print(np.cumsum(points[0]))
-```
-
-The fourth value is `50`, so Ana had reached a pass after exercise 4. In a later session, we will learn how to let NumPy find that position for us.
-:::
-
----
-
-## Sorting and Searching
-
-Which student got the highest grade? `np.argmax()` returns the **index** of the largest value, which we can use with our list of names.
-
-```{python}
-best = np.argmax(final_grades)
-print(best, students[best])
-```
-
-Chloe and Emma both got a 9. When there is a tie, `np.argmax()` returns the first one. `np.argmin()` works the same way for the smallest value.
-
-```{python}
-worst = np.argmin(final_grades)
-print(worst, students[worst])
-```
-
-`np.argsort()` returns the indices that would sort the array, from the lowest to the highest value:
-
-```{python}
-order = np.argsort(final_grades)
-print(order)
-```
-
-::: {.callout-note}
-## Exercise: The Hardest Exercise
-
-Which exercise was the hardest for the class? Compute the average mark of each exercise, then find the **exercise number** (not the index) with the lowest average.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-average_per_exercise = np.mean(marks, axis=0)
-print(average_per_exercise)
-
-hardest = np.argmin(average_per_exercise) + 1
-print(f"The hardest exercise was exercise {hardest}")
-```
-
-We add `1` because exercise 1 is at index 0.
-:::
-
-::: {.callout-note}
-## Exercise: Ranking
-
-Print the names of the students from the highest to the lowest grade.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-ranking = np.argsort(final_grades)[::-1]
-
-for i in ranking:
-    print(students[i], final_grades[i])
-```
-
-`np.argsort()` sorts from low to high, so we reverse it with the slice `[::-1]`.
-:::
-
----
-
-## Statistical Functions
-
-How did the class do as a whole? NumPy computes the usual descriptive statistics.
-
-The **mean** is the average of a data set.
-
-```{python}
-print("Mean:", np.mean(final_grades))
-```
-
-The **median** is the middle value when the data set is ordered.
-
-```{python}
-print("Median:", np.median(final_grades))
-```
-
-The **standard deviation** measures the dispersion of data from its mean.
-
-```{python}
-print("Standard Deviation:", np.std(final_grades))
-```
-
-**Variance** is the square of the standard deviation.
-
-```{python}
-print("Variance:", np.var(final_grades))
-```
-
-They accept the `axis` argument too. This is the average mark of each exercise we used before:
-
-```{python}
-print(np.mean(marks, axis=0))
-```
-
-::: {.callout-note}
-## Exercise: Grade Report
-
-Compute the mean, median, mode, standard deviation, and variance of the final grades. NumPy has no `mode` function: look at `np.unique()` with the argument `return_counts=True`.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-print("Mean:", np.mean(final_grades))
-print("Median:", np.median(final_grades))
-# Count each unique value and pick the most frequent
-values, counts = np.unique(final_grades, return_counts=True)
-print("Mode:", values[np.argmax(counts)])
-print("Standard Deviation:", np.std(final_grades))
-print("Variance:", np.var(final_grades))
-```
-
-Two values appear twice (5 and 9). `np.argmax()` returns the first of them, so the mode reported is `5.0`.
-:::
-
----
-
-## Mathematical Functions
-
-NumPy also provides the usual mathematical functions, applied element by element. Some professors **curve** the grades with a square root, which raises low grades more than high ones:
-
-$$\text{curved} = 10 \cdot \sqrt{\frac{\text{grade}}{10}}$$
-
-```{python}
-curved = 10 * np.sqrt(final_grades / 10)
-print(curved)
-```
-
-```{python}
-# For higher roots, we can just operate as we do with arrays
-print(final_grades ** (1 / 3))
-```
-
-So why use `np.sqrt` if we can do `**(1/2)`?
-
-`np.sqrt()` clearly communicates the intended operation and uses NumPy's optimized array implementation. The expression `arr ** (1 / 2)` is also valid. The following optional timing experiment should be run manually rather than whenever the notes are rendered.
-
-```{python}
-#| eval: false
-arr = np.arange(1, 10000)  # We use a very big array
-
-for _ in range(10000):
-  np.sqrt(arr)
-
-# We are not printing anything, because we do not want to fill the output
-# We only want to see how much time this takes!
-```
-
-```{python}
-#| eval: false
-for _ in range(10000):
-  arr**(1/2)
-
-# We are not printing anything, because we do not want to fill the output
-# We only want to see how much time this takes!
-```
-
-The same logic applies to exponentiation!
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5])
-
-# Exponentiation
-print(np.exp(arr))
-```
-
----
-
-## Geometry Functions
-
-NumPy can do more than just element-wise operations. It also supports matrix multiplication, transposition, and other matrix math.
-
-**Dot products:** For one-dimensional vectors, `np.dot()` computes the usual dot product.
-
-$$\mathbf{u} \cdot \mathbf{v} = \sum_i u_i v_i$$
-
-Look closely at the formula: multiply element by element, then add. That is exactly how we computed Ana's score!
-
-```{python}
-print(np.dot(ana, weights))
-print(np.sum(ana * weights))
-```
-
-```{python}
-# Vector dot product
-u = np.array([1, 2, 3])
-v = np.array([4, 5, 6])
-print(np.dot(u, v))
-```
-
-**Matrix multiplication:**
-
-$$A\ B =
-\begin{pmatrix}
-a_{11} & a_{12} \\
-a_{21} & a_{22}
-\end{pmatrix}
-\begin{pmatrix}
-b_{11} & b_{12} \\
-b_{21} & b_{22}
-\end{pmatrix}
-=
-\begin{pmatrix}
-a_{11}b_{11} + a_{12}b_{21} &
-a_{11}b_{12} + a_{12}b_{22} \\
-a_{21}b_{11} + a_{22}b_{21} &
-a_{21}b_{12} + a_{22}b_{22}
-\end{pmatrix}$$
-
-```{python}
-# Matrix multiplication (option A)
-A = np.array([[1, 2], [3, 4]])
-B = np.array([[4, 3], [2, 1]])
-
-C = np.matmul(A, B)
-print(C)
-```
-
-```{python}
-# Matrix multiplication (option B)
-C = A @ B
-print(C)
-```
-
-Every element of a matrix product is the dot product of a row of the first matrix with a column of the second. So the product of the table of marks, `(6, 11)`, with the vector of weights, `(11,)`, gives one dot product per student: the scores of the whole class.
-
-```{python}
-print(marks @ weights / 10)
-```
-
-For two-dimensional arrays, `np.dot(A, B)` performs matrix multiplication. Prefer the `@` operator when that is what you mean because it makes the operation explicit.
-
-If you want the sum of element-wise products of two matrices—the Frobenius inner product—write it directly:
-
-```{python}
-# Sum of element-wise products
-frobenius_product = np.sum(A * B)
-print(frobenius_product)
-```
-
-Both `dot` and `matmul` are used for matrix multiplication in NumPy, but they behave differently, especially when dealing with higher-dimensional arrays (i.e., tensors). The primary difference emerges in multi-dimensional array multiplication.
-
-The [official documentation](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html) says: `matmul` differs from `dot` in two important ways.
-
-- Multiplication by scalars is not allowed.
-- Stacks of matrices are broadcast together as if the matrices were elements.
-
-**Cross product:** A cross product is defined for vectors with two or three components. With a stack of vectors, NumPy applies the operation to corresponding rows.
-
-For two-dimensional vectors, the result is the scalar $u_1v_2-u_2v_1$. For three-dimensional vectors, the result is another three-dimensional vector perpendicular to both inputs.
-
-```{python}
-# Create two stacks of 2D vectors
-u = np.array([[1, 2], [3, 4]])
-v = np.array([[4, 3], [2, 1]])
-
-# One scalar cross product per row
-cross_products = np.cross(u, v)
-print(cross_products)
-```
-
-**Transposition:**
-
-$$A^T =
-\begin{pmatrix}
-a_{11} & a_{12} \\
-a_{21} & a_{22}
-\end{pmatrix}^T
-=
-\begin{pmatrix}
-a_{11} & a_{21} \\
-a_{12} & a_{22}
-\end{pmatrix}$$
-
-```{python}
-a = np.array([[1, 2, 3], [4, 5, 6]])
-print(a)
-
-# Matrix transposition
-b = a.T
-print(b)
-```
-
-Determinants provide information about the matrix's invertibility, while the inverse of a matrix is crucial for solving systems of linear equations.
-
-::: {.callout-note}
-## Exercise: Matrix Product with a Transpose
-
-Let $A$ be the $3 \times 4$ matrix containing the integers from 1 to 12, ordered by rows. Compute the following matrix operation:
-
-$$A B^T / 6$$
-
-Where
-
-$$B=\begin{pmatrix}
--1 & 0 & 0 & -1\\
-0 & 1 & 1 & 0\\
-1 & -1 & 1 & -1
-\end{pmatrix}$$
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-A = np.arange(1, 13).reshape(3, 4)
-B = np.array([
-    [-1, 0, 0, -1],
-    [0, 1, 1, 0],
-    [1, -1, 1, -1]
-])
-
-result = (A @ B.T) / 6
-print(result)
-```
-:::
-
----
-
-## Linear Algebra Functions
-
-```{python}
-a = np.array([[1, 2], [3, 4]])
-
-det_a = np.linalg.det(a)
-
-print(det_a)
-```
-
-```{python}
-a = np.array([[1, 2], [3, 4]])
-
-inverse_a = np.linalg.inv(a)
-
-print(inverse_a)
-```
-
----
-
-## Trigonometric Functions
-
-NumPy operates in radians. If you are using degrees, make sure to convert them first!
-
-```{python}
-angles = np.array([0, 30, 45, 60, 90])  # in degrees
-
-# NumPy operates in radians!
-angles_rad = np.radians(angles)
-
-print(angles_rad)
-```
-
-```{python}
-sines = np.sin(angles_rad)
-
-print(sines)
-```
-
-```{python}
-cosines = np.cos(angles_rad)
-
-print(cosines)
-```
-
-```{python}
-tangents = np.tan(angles_rad)
-
-print(tangents)
-```
-
----
-
-## Practice
-
-Deactivate AI assistant tools, and try the following exercises.
-
-::: {.callout-note}
-## Exercise: Normalize a Matrix
-
-Given a "magic square" matrix $A$:
-
-$$A = \begin{pmatrix}
-23 & 28 & 21\\
-22 & 24 & 26\\
-27 & 20 & 25
-\end{pmatrix}$$
-
-Normalize its values (subtract mean and divide by standard deviation). We call the new matrix $B$.
-
-$$B[i,j] = \frac{A[i,j] - \text{mean}(A)}{\text{std}(A)}$$
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
-b = (arr - np.mean(arr)) / np.std(arr)
-print(b)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Transpose the Result
-
-Compute $B^T$, using the matrix $B$ from the previous exercise.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
-b = (arr - np.mean(arr)) / np.std(arr)
-print(b.T)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Matrix Product
-
-Compute the matrix product $A B^T$.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
-b = (arr - np.mean(arr)) / np.std(arr)
-print(arr @ b.T)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Magic Square Properties
-
-What makes $A$ a "magic square"? Compute the sum of each row, the sum of each column, and the sum of the main diagonal.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-Every row, every column, and the diagonal add up to the same number: 72.
-
-```{python}
-arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
-
-print(np.sum(arr, axis=0))
-print(np.sum(arr, axis=1))
-print(np.trace(arr))
-```
-:::
-
----
-
-## Challenge: The Ambiguous Question
-
-After publishing the grades, several students complain that **exercise 8**, the hardest one, had an ambiguous statement. You agree, and decide that everyone gets full marks in that exercise. Starting from `marks` and `weights`, and without writing any loop:
-
-1. Create a copy of the marks with `fixed = marks.copy()` and give everyone a `1` in exercise 8.
-2. Compute the new final grades with a matrix product.
-3. Compute how much each student's grade went up, and the name of the student who gained the most.
-4. Compare the class mean before and after the correction.
-5. Apply the square-root curve to the new grades and print each student's name with their curved grade, rounded to two decimals with `np.round()`.
-
-::: {.callout-tip collapse="true"}
-## Possible solution
-
-```{python}
-fixed = marks.copy()
-fixed[:, 7] = 1  # exercise 8 is at index 7
-
-new_grades = fixed @ weights / 10
-print(new_grades)
-
-gain = new_grades - final_grades
-print(gain)
-print(students[np.argmax(gain)])
-
-print(np.mean(final_grades), np.mean(new_grades))
-
-curved = np.round(10 * np.sqrt(new_grades / 10), 2)
-for i in range(len(students)):
-    print(students[i], curved[i])
-```
-
-Several students gain 0.5 points; `np.argmax()` reports the first one. The class mean goes up by the average gain.
-:::
-
----
-
-# Further Practice
-
-[You will find more exercises here!](https://drive.google.com/file/d/1280Tk_Nw6JXPJ_bD4qQhCtyFKKnjpsAK/view?usp=drive_link)
 
 ---
 
 ## Summary and Reflection
 
-- Arithmetic operators act element by element on compatible arrays; an operation with a scalar applies to every element.
+- Arithmetic operators act element by element on compatible arrays: this is vector addition and multiplication by a scalar. An operation with a scalar applies to every element.
 - Broadcasting compares shapes from right to left and allows dimensions that match or equal `1`.
-- The `axis` argument controls the direction of an aggregation: the axis you pass disappears from the shape.
-- `*` is element-wise multiplication; `@` is matrix multiplication. A weighted sum is a dot product.
+- A row of shape `(n,)` is repeated down every row; a column of shape `(m, 1)` is repeated across every column.
 
 Given arrays with shapes `(4, 3)` and `(3,)`, explain why addition works. Would addition still work if the second shape were `(4,)`?
 
-We now know the grade of each student, but not yet **who passed**. In a later session, we will learn to select the elements of an array that satisfy a condition.
+We have multiplied the marks by the weights, but we still have to add the points of each student. That is the job of the aggregation functions, in the second part of this session.
+
+[Next: Array Functions](functions.qmd){.btn .btn-primary}
 
 ---
 

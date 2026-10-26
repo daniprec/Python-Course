@@ -1,0 +1,826 @@
+---
+title: "Array Functions"
+subtitle: "Module 3: NumPy"
+format: html
+execute:
+  error: true
+---
+
+# Array Functions
+
+In [Array Arithmetic and Broadcasting](arithmetics.qmd), we multiplied whole arrays at once. Now we will use NumPy's built-in functions to go further: aggregate arrays along an axis, sort and search them, describe them with statistics, apply mathematical functions, and do linear algebra with matrices.
+
+We continue with the same data and helper functions as in the first part.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def show(image):
+    """Display a 2D array as a grayscale image (0 = black, 1 = white)."""
+    plt.imshow(image, cmap="gray", vmin=0, vmax=1)
+    plt.axis("off")
+    plt.show()
+
+
+def draw(*shapes):
+    """Draw one or more polygons given as arrays of points with shape (n, 2)."""
+    for shape in shapes:
+        closed = np.vstack([shape, shape[:1]])   # repeat the first point to close the polygon
+        plt.plot(closed[:, 0], closed[:, 1], marker="o")
+    plt.axhline(0, color="gray", linewidth=0.5)
+    plt.axvline(0, color="gray", linewidth=0.5)
+    plt.axis("equal")
+    plt.grid(True)
+    plt.show()
+```
+
+```{python}
+students = ["Ana", "Bruno", "Chloe", "Diego", "Emma", "Farid"]
+
+# Points of each exercise: 2 open problems, 3 debugging, 6 multiple choice
+weights = np.array([20, 20, 10, 10, 10, 5, 5, 5, 5, 5, 5])
+
+marks = np.array([
+    [0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1],         # Ana
+    [0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1],         # Bruno
+    [1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1],              # Chloe
+    [0.25, 0.5, 0.5, 0.5, 0.5, 0, 1, 0, 1, 0, 1],     # Diego
+    [1, 1, 0.5, 1, 1, 1, 0, 1, 1, 1, 1],              # Emma
+    [0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0],          # Farid
+])
+
+# Points earned in each exercise, from the first part
+points = marks * weights
+
+# The corners of a house, one point (x, y) per row
+house = np.array([
+    [0, 0],   # bottom-left
+    [4, 0],   # bottom-right
+    [4, 3],   # top-right
+    [2, 5],   # roof
+    [0, 3],   # top-left
+])
+corners = ["bottom-left", "bottom-right", "top-right", "roof", "top-left"]
+
+# The face from Session 14
+face = np.zeros((8, 8))
+face[2, 2] = 1
+face[2, 5] = 1
+face[5, 2:6] = 1
+face[4, 1] = 1
+face[4, 6] = 1
+```
+
+## Aggregation Functions
+
+`np.sum()` adds all the elements of an array. For `points`, that would be the total points of the whole class, which is not what we want:
+
+```{python}
+print(np.sum(points))
+```
+
+The `axis` argument chooses the dimension that is "collapsed". To add the points of each student, we sum **along the exercises**, which is dimension 1 (the columns). That was the last piece of our one-line grading:
+
+```{python}
+final_grades = np.sum(points, axis=1) / 10
+print(final_grades)
+```
+
+The same works with the house. Summing along dimension 0 (the rows) adds the coordinates of all the points: one value for $x$, and one for $y$.
+
+```{python}
+print(np.sum(house, axis=0))
+```
+
+Summing along dimension 1 (the columns) gives one value per point, $x + y$:
+
+```{python}
+print(np.sum(house, axis=1))
+```
+
+A good way to remember it: the `axis` you pass is the one that **disappears** from the shape. `house` has shape `(5, 2)`; `axis=0` leaves `(2,)`, one value per coordinate, and `axis=1` leaves `(5,)`, one value per point.
+
+Other aggregations work the same way. `np.min()` and `np.max()` give the bounding box of the house, the smallest rectangle that contains it:
+
+```{python}
+print(np.min(house, axis=0))
+print(np.max(house, axis=0))
+print(np.max(house, axis=0) - np.min(house, axis=0))   # width and height
+```
+
+`np.prod()` multiplies all the elements, and `np.cumsum()` keeps every partial sum:
+
+```{python}
+print(np.prod(np.array([1, 2, 3, 4])))
+print(np.cumsum(np.array([1, 2, 3, 4])))
+```
+
+::: {.callout-note}
+## Exercise: Centering the Shape
+
+1. Compute the center of the house: the mean of its corners, one value for $x$ and one for $y$.
+2. Move the house so that its center is at the origin $(0, 0)$.
+3. Check that the center of the new house is $(0, 0)$, and draw both.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+center = np.mean(house, axis=0)
+print(center)
+
+centered = house - center        # (5, 2) - (2,): broadcasting
+print(np.mean(centered, axis=0))
+draw(house, centered)
+```
+
+You may see a tiny number such as `-1.8e-16` instead of `0`. Computers store decimals with limited precision, so very small rounding errors appear.
+:::
+
+::: {.callout-note}
+## Exercise: The Robot
+
+A robot starts at the origin and makes these moves, one vector per row:
+
+```python
+steps = np.array([[1, 0], [1, 0], [0, 1], [-1, 1], [0, 1]])
+```
+
+1. Using the cumulative sum, compute the position of the robot after every step.
+2. After which step is the robot at $(1, 2)$? You can read it from the output.
+3. Where does it finish? Get it with one function, without the cumulative sum.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+steps = np.array([[1, 0], [1, 0], [0, 1], [-1, 1], [0, 1]])
+
+positions = np.cumsum(steps, axis=0)
+print(positions)
+
+print(np.sum(steps, axis=0))
+```
+
+The robot is at $(1, 2)$ after step 4, and it finishes at $(1, 3)$: the sum of all the moves, just as you add vectors tip to tail.
+:::
+
+---
+
+## Sorting and Searching
+
+Which student got the highest grade? `np.argmax()` returns the **index** of the largest value, which we can use with our list of names.
+
+```{python}
+best = np.argmax(final_grades)
+print(best, students[best])
+```
+
+The same question for the house: which corner is the highest?
+
+```{python}
+y = house[:, 1]
+
+highest = np.argmax(y)
+print(highest, corners[highest])
+```
+
+`np.argmin()` works the same way for the smallest value. When there is a tie, both return the first one:
+
+```{python}
+lowest = np.argmin(y)
+print(lowest, corners[lowest])
+```
+
+`np.argsort()` returns the indices that would sort the array, from the lowest to the highest value:
+
+```{python}
+order = np.argsort(y)
+print(order)
+```
+
+::: {.callout-note}
+## Exercise: The Farthest Corner
+
+The length (norm) of a vector $(x, y)$ is $\sqrt{x^2 + y^2}$. Compute the distance from every corner of the house to the origin, without a loop, and print the name of the farthest corner.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+distances = np.sqrt(np.sum(house ** 2, axis=1))
+print(distances)
+print(corners[np.argmax(distances)])
+```
+
+Square every coordinate, add along each row with `axis=1`, and take the square root. NumPy already has this function, `np.linalg.norm()`:
+
+```{python}
+print(np.linalg.norm(house, axis=1))
+```
+:::
+
+::: {.callout-note}
+## Exercise: Closest to Farthest
+
+Print the names of the corners from the closest to the farthest from the origin.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+for i in np.argsort(distances):
+    print(corners[i], round(distances[i], 2))
+```
+
+To go from the farthest to the closest, reverse the order with the slice `[::-1]`.
+:::
+
+---
+
+## Statistical Functions
+
+How did the class do as a whole? NumPy computes the usual descriptive statistics.
+
+The **mean** is the average of a data set.
+
+```{python}
+print("Mean:", np.mean(final_grades))
+```
+
+The **median** is the middle value when the data set is ordered.
+
+```{python}
+print("Median:", np.median(final_grades))
+```
+
+The **standard deviation** measures the dispersion of data from its mean.
+
+```{python}
+print("Standard Deviation:", np.std(final_grades))
+```
+
+**Variance** is the square of the standard deviation.
+
+```{python}
+print("Variance:", np.var(final_grades))
+```
+
+They accept the `axis` argument too. This is the average mark of each exercise:
+
+```{python}
+print(np.mean(marks, axis=0))
+```
+
+::: {.callout-note}
+## Exercise: Ten Dice
+
+You roll a die ten times:
+
+```python
+rolls = np.array([3, 6, 2, 6, 1, 5, 6, 4, 2, 6])
+```
+
+Compute the mean, median, mode, standard deviation, and variance of the rolls. NumPy has no `mode` function: look at `np.unique()` with the argument `return_counts=True`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+rolls = np.array([3, 6, 2, 6, 1, 5, 6, 4, 2, 6])
+
+print("Mean:", np.mean(rolls))
+print("Median:", np.median(rolls))
+# Count each unique value and pick the most frequent
+values, counts = np.unique(rolls, return_counts=True)
+print("Mode:", values[np.argmax(counts)])
+print("Standard Deviation:", np.std(rolls))
+print("Variance:", np.var(rolls))
+```
+:::
+
+---
+
+## Mathematical Functions
+
+NumPy also provides the usual mathematical functions, applied element by element.
+
+```{python}
+u = np.array([1, 2, 3])
+
+print(np.sqrt(u))
+```
+
+```{python}
+# For higher roots, we can just operate as we do with arrays
+print(u ** (1 / 3))
+```
+
+So why use `np.sqrt` if we can do `**(1/2)`?
+
+`np.sqrt()` clearly communicates the intended operation and uses NumPy's optimized array implementation. The expression `arr ** (1 / 2)` is also valid. The following optional timing experiment should be run manually rather than whenever the notes are rendered.
+
+```{python}
+#| eval: false
+arr = np.arange(1, 10000)  # We use a very big array
+
+for _ in range(10000):
+  np.sqrt(arr)
+
+# We are not printing anything, because we do not want to fill the output
+# We only want to see how much time this takes!
+```
+
+```{python}
+#| eval: false
+for _ in range(10000):
+  arr**(1/2)
+
+# We are not printing anything, because we do not want to fill the output
+# We only want to see how much time this takes!
+```
+
+The same logic applies to exponentiation!
+
+```{python}
+# Exponentiation
+print(np.exp(u))
+```
+
+---
+
+## Geometry Functions
+
+NumPy can do more than just element-wise operations. It also supports matrix multiplication, transposition, and other matrix math.
+
+**Dot products:** For one-dimensional vectors, `np.dot()` computes the usual dot product.
+
+$$\mathbf{u} \cdot \mathbf{v} = \sum_i u_i v_i$$
+
+Look closely at the formula: multiply element by element, then add.
+
+```{python}
+v = np.array([4, 0, -1])
+
+print(np.dot(u, v))
+print(np.sum(u * v))
+print(u @ v)
+```
+
+Two vectors are perpendicular when their dot product is zero:
+
+```{python}
+print(np.array([1, 2]) @ np.array([-2, 1]))
+```
+
+**Matrix multiplication:**
+
+$$A\ B =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{11}b_{11} + a_{12}b_{21} &
+a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} &
+a_{21}b_{12} + a_{22}b_{22}
+\end{pmatrix}$$
+
+```{python}
+# Matrix multiplication (option A)
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[4, 3], [2, 1]])
+
+C = np.matmul(A, B)
+print(C)
+```
+
+```{python}
+# Matrix multiplication (option B)
+C = A @ B
+print(C)
+```
+
+Every element of a matrix product is the dot product of a row of the first matrix with a column of the second. So the product of the table of marks, `(6, 11)`, with the vector of weights, `(11,)`, gives one dot product per student: our final grades, as a single matrix product.
+
+```{python}
+print(marks @ weights / 10)
+```
+
+For two-dimensional arrays, `np.dot(A, B)` performs matrix multiplication too. Prefer the `@` operator when that is what you mean because it makes the operation explicit.
+
+If you want the sum of element-wise products of two matrices—the Frobenius inner product—write it directly:
+
+```{python}
+# Sum of element-wise products
+frobenius_product = np.sum(A * B)
+print(frobenius_product)
+```
+
+Both `dot` and `matmul` are used for matrix multiplication in NumPy, but they behave differently, especially when dealing with higher-dimensional arrays (i.e., tensors). The primary difference emerges in multi-dimensional array multiplication.
+
+The [official documentation](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html) says: `matmul` differs from `dot` in two important ways.
+
+- Multiplication by scalars is not allowed.
+- Stacks of matrices are broadcast together as if the matrices were elements.
+
+**Cross product:** A cross product is defined for vectors with two or three components. For three-dimensional vectors, the result is another three-dimensional vector perpendicular to both inputs:
+
+```{python}
+c = np.cross(u, v)
+print(c)
+print(c @ u, c @ v)   # both 0: perpendicular
+```
+
+For two-dimensional vectors, the result is the scalar $u_1v_2-u_2v_1$. With a stack of vectors, NumPy applies the operation to corresponding rows.
+
+```{python}
+# Two stacks of 2D vectors
+p = np.array([[1, 2], [3, 4]])
+q = np.array([[4, 3], [2, 1]])
+
+# One scalar cross product per row
+print(np.cross(p, q))
+```
+
+**Transposition:**
+
+$$A^T =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}^T
+=
+\begin{pmatrix}
+a_{11} & a_{21} \\
+a_{12} & a_{22}
+\end{pmatrix}$$
+
+```{python}
+a = np.array([[1, 2, 3], [4, 5, 6]])
+print(a)
+
+# Matrix transposition
+print(a.T)
+```
+
+### Linear Transformations
+
+In your linear algebra class, a $2 \times 2$ matrix $M$ transforms a point $p$, written as a column, into $M p$. With NumPy, we can transform **all the points of a shape at once**. Our points are rows, not columns, so we transpose the house, multiply, and transpose back:
+
+```{python}
+S = np.array([[2, 0],
+              [0, 1]])    # stretch horizontally
+
+print((S @ house.T).T)
+```
+
+Since $(M P^T)^T = P M^T$, the same result is shorter to write as `house @ S.T`:
+
+```{python}
+print(house @ S.T)
+```
+
+Compare it with `house * np.array([2, 1])` from the broadcasting section: it is the same stretch. But some transformations cannot be done with broadcasting. A **shear** moves every point to the right in proportion to its height:
+
+```{python}
+H = np.array([[1, 1],
+              [0, 1]])    # shear
+
+draw(house, house @ H.T)
+```
+
+Matrices also transform images. Let `P` be the identity matrix with its rows in reverse order:
+
+```{python}
+P = np.eye(8)[::-1]
+show(P)
+```
+
+The face is symmetric, so let's make it wink first, to see the effect of each flip:
+
+```{python}
+wink = face.copy()
+wink[2, 5] = 0        # close the right eye...
+wink[2, 4:7] = 1      # ...as a horizontal line
+show(wink)
+```
+
+::: {.callout-note}
+## Exercise: Flipping with a Matrix
+
+Show `P @ wink`, `wink @ P`, and `wink.T`. What does multiplying by `P` on the **left** do? And on the **right**? Which line does the transpose use as a mirror? Compare with the slices `[::-1]` from the last session.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+show(P @ wink)        # upside down
+show(wink @ P)        # mirror, left and right swapped
+show(wink.T)          # mirror along the main diagonal
+```
+
+Multiplying by `P` on the left reverses the **rows**, the same as `wink[::-1]`. On the right, it reverses the **columns**, the same as `wink[:, ::-1]`. The transpose swaps rows and columns, so it mirrors the image along the main diagonal.
+
+```{python}
+print(np.array_equal(P @ wink, wink[::-1]))
+print(np.array_equal(wink @ P, wink[:, ::-1]))
+```
+:::
+
+::: {.callout-note}
+## Exercise: Matrix Product with a Transpose
+
+Let $A$ be the $3 \times 4$ matrix containing the integers from 1 to 12, ordered by rows. Compute the following matrix operation:
+
+$$A B^T / 6$$
+
+Where
+
+$$B=\begin{pmatrix}
+-1 & 0 & 0 & -1\\
+0 & 1 & 1 & 0\\
+1 & -1 & 1 & -1
+\end{pmatrix}$$
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+A = np.arange(1, 13).reshape(3, 4)
+B = np.array([
+    [-1, 0, 0, -1],
+    [0, 1, 1, 0],
+    [1, -1, 1, -1]
+])
+
+result = (A @ B.T) / 6
+print(result)
+```
+:::
+
+---
+
+## Linear Algebra Functions
+
+The determinant of a $2 \times 2$ matrix tells us **how much the transformation multiplies areas**. The stretch doubles the area of the house; the shear changes its shape, but not its area.
+
+```{python}
+print(np.linalg.det(S))
+print(np.linalg.det(H))
+```
+
+What happens with a matrix whose determinant is 0?
+
+```{python}
+F = np.array([[1, 0],
+              [0, 0]])
+
+print(np.linalg.det(F))
+draw(house, house @ F.T)
+```
+
+The whole house collapses onto the $x$ axis: its area becomes 0.
+
+The **inverse** of a matrix is the transformation that undoes it. If we shear the house and then apply the inverse of the shear, we get the house back:
+
+```{python}
+print(np.linalg.inv(H))
+
+sheared = house @ H.T
+back = sheared @ np.linalg.inv(H).T
+print(back)
+```
+
+`np.allclose()` checks that two arrays are equal, up to tiny rounding errors:
+
+```{python}
+print(np.allclose(back, house))
+```
+
+The flattening `F` has no inverse: once the house is on a line, there is no way to know how tall it was.
+
+```{python}
+np.linalg.inv(F)
+```
+
+---
+
+## Trigonometric Functions
+
+NumPy operates in radians. If you are using degrees, make sure to convert them first!
+
+```{python}
+angles = np.array([0, 30, 45, 60, 90])  # in degrees
+
+# NumPy operates in radians!
+angles_rad = np.radians(angles)
+
+print(angles_rad)
+```
+
+```{python}
+print(np.sin(angles_rad))
+print(np.cos(angles_rad))
+print(np.tan(angles_rad))
+```
+
+Trigonometry and matrices meet in the **rotation matrix**, which rotates the plane by an angle $\theta$:
+
+$$R(\theta)=\begin{pmatrix}
+\cos\theta & -\sin\theta\\
+\sin\theta & \cos\theta
+\end{pmatrix}$$
+
+```{python}
+t = np.radians(90)
+R = np.array([[np.cos(t), -np.sin(t)],
+              [np.sin(t),  np.cos(t)]])
+print(R)
+```
+
+The tiny `6.1e-17` should be a `0`: it is the rounding error of computing $\cos 90^\circ$. `np.round()` hides it:
+
+```{python}
+print(np.round(R, 10))
+```
+
+A rotation does not change areas, so its determinant is 1:
+
+```{python}
+print(np.linalg.det(R))
+draw(house, house @ R.T)
+```
+
+---
+
+## Practice
+
+Deactivate AI assistant tools, and try the following exercises.
+
+::: {.callout-note}
+## Exercise: Normalize a Matrix
+
+Given a "magic square" matrix $A$:
+
+$$A = \begin{pmatrix}
+23 & 28 & 21\\
+22 & 24 & 26\\
+27 & 20 & 25
+\end{pmatrix}$$
+
+Normalize its values (subtract mean and divide by standard deviation). We call the new matrix $B$.
+
+$$B[i,j] = \frac{A[i,j] - \text{mean}(A)}{\text{std}(A)}$$
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
+b = (arr - np.mean(arr)) / np.std(arr)
+print(b)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Transpose the Result
+
+Compute $B^T$, using the matrix $B$ from the previous exercise.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
+b = (arr - np.mean(arr)) / np.std(arr)
+print(b.T)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Matrix Product
+
+Compute the matrix product $A B^T$.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
+b = (arr - np.mean(arr)) / np.std(arr)
+print(arr @ b.T)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Magic Square Properties
+
+What makes $A$ a "magic square"? Compute the sum of each row, the sum of each column, and the sum of the main diagonal.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Every row, every column, and the diagonal add up to the same number: 72.
+
+```{python}
+arr = np.array([[23, 28, 21], [22, 24, 26], [27, 20, 25]])
+
+print(np.sum(arr, axis=0))
+print(np.sum(arr, axis=1))
+print(np.trace(arr))
+```
+:::
+
+---
+
+## Challenge: The Designer's Transformation
+
+A designer takes the house, **rotates it 90°**, and then **stretches it horizontally by 2**. Starting from `house`, `R`, and `S`, and without writing any loop:
+
+1. Build the matrix $M = S R$ that does both steps, and compute the transformed house. Draw both.
+2. Is $S R$ the same matrix as $R S$? Draw the house transformed by each one. What does this tell you about the order of transformations?
+3. Using the determinant, by how much did the area of the house change?
+4. The designer lost the original file. Recover the original house from the transformed one, and check it with `np.allclose()`.
+5. Linearity: check that the center of the transformed house is $M$ times the center of the original house.
+
+::: {.callout-tip collapse="true"}
+## Possible solution
+
+```{python}
+M = S @ R
+new_house = house @ M.T
+draw(house, new_house)
+```
+
+```{python}
+print(np.allclose(S @ R, R @ S))
+draw(house @ (S @ R).T, house @ (R @ S).T)
+```
+
+The matrices are different, and so are the houses: matrix multiplication is not commutative. Rotating and then stretching is not the same as stretching and then rotating.
+
+```{python}
+print(np.linalg.det(M))
+```
+
+The determinant is $\det(S)\det(R) = 2 \cdot 1 = 2$: the area doubles.
+
+```{python}
+recovered = new_house @ np.linalg.inv(M).T
+print(np.allclose(recovered, house))
+```
+
+```{python}
+print(np.mean(new_house, axis=0))
+print(M @ np.mean(house, axis=0))
+```
+
+The center is an average of points, and a linear transformation respects sums and products by scalars. So transforming the center gives the center of the transformed shape.
+:::
+
+---
+
+# Further Practice
+
+[You will find more exercises here!](https://drive.google.com/file/d/1280Tk_Nw6JXPJ_bD4qQhCtyFKKnjpsAK/view?usp=drive_link)
+
+---
+
+## Summary and Reflection
+
+- The `axis` argument controls the direction of an aggregation: the axis you pass disappears from the shape.
+- `np.argmax()`, `np.argmin()`, and `np.argsort()` return **positions**, which we can use to look up names.
+- `*` is element-wise multiplication; `@` is matrix multiplication. A dot product is a sum of element-wise products.
+- A linear transformation of many points is one matrix product: `points @ M.T`. The determinant tells how areas change, and the inverse undoes the transformation.
+
+A stretch can be done with broadcasting (`house * np.array([2, 1])`), but a rotation cannot. Why?
+
+We now know the grade of each student, but not yet **who passed**. In a later session, we will learn to select the elements of an array that satisfy a condition.
+
+---
+
+# Homework and Review
+
+Work through the homework exercises available here.
+
+[Homework](homework_numpy.qmd#array-arithmetic-and-broadcasting){.btn .btn-primary}
