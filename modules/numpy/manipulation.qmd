@@ -6,36 +6,36 @@ format: html
 
 # NumPy: Array Manipulation
 
-Numerical data does not always arrive in the shape a calculation needs. Imagine you run a **fantasy football league** with your friends. You want one row per player.
+Numerical data does not always arrive in the shape a calculation needs. Imagine you play **Fantasy Premier League** (FPL) in a mini-league with your friends. These are the season statistics of the five midfielders in your squad, and you want them with one row per player:
 
-| Player | Goals | Assists | Shots on Target | Tackles | Key Passes | Saves | Yellow Cards | Red Cards |
-|--------|-------|---------|-----------------|---------|---------|-------|--------------|-----------|
-| Striker | 8     | 3       | 20              | 10      | 15      | 0     | 2            | 0         |
-| Midfielder | 2     | 9       | 10              | 25      | 30      | 0     | 4            | 0         |
-| Defender | 0     | 1       | 2               | 40      | 12      | 0     | 6            | 1         |
-| Defender | 1     | 2       | 5               | 35      | 18      | 0     | 3            | 0         |
-| Goalkeeper | 0     | 0       | 0               | 3       | 2       | 45    | 1            | 0         |
-| Winger | 5     | 5       | 15              | 12      | 22      | 0     | 1            | 0         |
+| Player | Goals | Assists | Clean Sheets | Defensive Contributions | Yellow Cards | Red Cards | Own Goals | Penalties Missed |
+|--------|-------|---------|--------------|-------------------------|--------------|-----------|-----------|------------------|
+| Midfielder 1 | 15 | 10 | 12 | 2  | 3 | 0 | 0 | 1 |
+| Midfielder 2 | 6  | 7  | 10 | 14 | 6 | 0 | 0 | 0 |
+| Midfielder 3 | 2  | 3  | 11 | 22 | 9 | 1 | 1 | 0 |
+| Midfielder 4 | 9  | 11 | 8  | 1  | 2 | 0 | 0 | 0 |
+| Midfielder 5 | 4  | 12 | 9  | 5  | 4 | 0 | 0 | 1 |
 
-However, the league website exports the statistics **stat by stat** (all the goals, then all the assists...):
+However, the website you download them from exports the statistics **stat by stat** (all the goals, then all the assists...):
 
-| Statistic | Striker | Midfielder | Defender | Defender | Goalkeeper | Winger |
-| Goals | 8 | 2 | 0 | 1 | 0 | 5 |
-| Assists | 3 | 9 | 1 | 2 | 0 | 5 |
-| Shots on Target | 20 | 10 | 2 | 5 | 0 | 15 |
-| Tackles | 10 | 25 | 40 | 35 | 3 | 12 |
-| Key Passes | 15 | 30 | 12 | 18 | 2 | 22 |
-| Saves | 0 | 0 | 0 | 0 | 45 | 0 |
-| Yellow Cards | 2 | 4 | 6 | 3 | 1 | 1 |
-| Red Cards | 0 | 0 | 1 | 0 | 0 | 0 |
+| Statistic | Midfielder 1 | Midfielder 2 | Midfielder 3 | Midfielder 4 | Midfielder 5 |
+|-----------|--------------|--------------|--------------|--------------|--------------|
+| Goals | 15 | 6 | 2 | 9 | 4 |
+| Assists | 10 | 7 | 3 | 11 | 12 |
+| Clean Sheets | 12 | 10 | 11 | 8 | 9 |
+| Defensive Contributions | 2 | 14 | 22 | 1 | 5 |
+| Yellow Cards | 3 | 6 | 9 | 2 | 4 |
+| Red Cards | 0 | 0 | 1 | 0 | 0 |
+| Own Goals | 0 | 0 | 1 | 0 | 0 |
+| Penalties Missed | 1 | 0 | 0 | 0 | 1 |
 
 How do you turn the second table into the first? You need to **reshape** the array and **transpose** it.
 
-And what happens in a new player joins the league mid-season? You need to **add a new row** to the array.
+And what happens if you sign a new player in the January transfer window? You need to **add a new row** to the array.
 
-And if a whole new team joins the league? You need to **join two arrays**.
+And if you want to compare your midfielders with those of a friend in your mini-league? You need to **join two arrays**.
 
-The statistics can be grouped into attacking (goals, assists, shots on target, and key passes), defensive (tackles and saves), and disciplinary (yellow and red cards). You may want to **split** the array into three arrays, one for each group.
+The statistics can be grouped into attacking (goals and assists), defensive (clean sheets and defensive contributions), and disciplinary (yellow cards, red cards, own goals, and penalties missed). You may want to **split** the array into three arrays, one for each group.
 
 In this lesson, we will learn how to manipulate arrays in NumPy, including reshaping, flattening, joining, and splitting arrays.
 
@@ -150,14 +150,14 @@ As the dimensions of `reshape` must always match exactly the number of elements 
 
 ### Reshape Is Not Transpose
 
-The league website exports the statistics **stat by stat**. Here are four statistics (goals, assists, shots on target, and tackles) of three players:
+The website exports the statistics **stat by stat**. Here are four statistics (goals, assists, clean sheets, and defensive contributions) of three players:
 
 ```{python}
 site_export = np.array([
-    8, 2, 0,        # goals: player 1, player 2, player 3
-    3, 9, 1,        # assists
-    20, 10, 2,      # shots on target
-    10, 25, 40,     # tackles
+    15, 6, 2,       # goals: player 1, player 2, player 3
+    10, 7, 3,       # assists
+    12, 10, 11,     # clean sheets
+    2, 14, 22,      # defensive contributions
 ])
 
 by_stat = site_export.reshape(4, 3)
@@ -187,8 +187,8 @@ Without running any code, what is the first row of `site_export.reshape(3, 4)` a
 ## Solution
 
 ```text
-[8 2 0 3]
-[ 8  3 20 10]
+[15  6  2 10]
+[15 10 12  2]
 ```
 
 The first row of the reshape is the first four values of the export: the goals of the three players and the assists of player 1. The first row of the transpose is the first **column** of `by_stat`: the four statistics of player 1. Only the transpose contains the statistics of player 1.
@@ -510,30 +510,42 @@ row_stacked = np.vstack((array1, array2))
 print("Row stacked:\n", row_stacked)
 ```
 
-Back to the league: a new player joins the team in the January transfer window, and we add his statistics as a new row.
+Back to the league. This is the first table of the introduction as a NumPy array: one row per player, and one column for each of the eight statistics.
 
 ```{python}
-# Season statistics of our team: one row per player, one column per statistic
-# goals, assists, shots on target, key passes, tackles, saves, yellow cards, red cards
+# Season statistics of our midfielders: one row per player, one column per statistic
+# goals, assists, clean sheets, defensive contributions,
+# yellow cards, red cards, own goals, penalties missed
 stats = np.array([
-    [8, 3, 20, 15, 10,  0, 2, 0],   # striker
-    [2, 9, 10, 30, 25,  0, 4, 0],   # midfielder
-    [0, 1,  2, 12, 40,  0, 6, 1],   # defender
-    [1, 2,  5, 18, 35,  0, 3, 0],   # defender
-    [0, 0,  0,  2,  3, 45, 1, 0],   # goalkeeper
-    [5, 5, 15, 22, 12,  0, 1, 0],   # winger
+    [15, 10, 12,  2, 3, 0, 0, 1],
+    [ 6,  7, 10, 14, 6, 0, 0, 0],
+    [ 2,  3, 11, 22, 9, 1, 1, 0],
+    [ 9, 11,  8,  1, 2, 0, 0, 0],
+    [ 4, 12,  9,  5, 4, 0, 0, 1],
 ])
-
-new_player = np.array([4, 6, 12, 25, 18, 0, 2, 0])
 ```
 
+::: {.callout-note}
+## Exercise: The January Transfer
+
+You sign a new midfielder in the January transfer window. Add his statistics to `stats` as a new row, and print the shape of the result.
+
+```python
+new_player = np.array([5, 4, 6, 3, 2, 0, 0, 0])
+```
+:::
+
 ::: {.callout-tip collapse="true"}
-## How to add a new player to the statistics array?
+## Solution
 
 ```{python}
+new_player = np.array([5, 4, 6, 3, 2, 0, 0, 0])
+
 with_new = np.vstack((stats, new_player))
 print(with_new.shape)
 ```
+
+`new_player` has shape `(8,)`, so `np.vstack()` treats it as a row of shape `(1, 8)` and places it below the 5 rows of `stats`: the result has shape `(6, 8)`.
 :::
 
 ---
@@ -601,32 +613,32 @@ for idx in range(len(vsplit_array)):
 
 ### Splitting at Given Positions
 
-Instead of a number of equal parts, all the split functions also accept a **list of positions** where to cut. The three groups of statistics have different sizes: attack (goals, assists, shots, and key passes), defence (tackles and saves), and discipline (yellow and red cards). We cut the columns before index 4 and before index 6:
+Instead of a number of equal parts, all the split functions also accept a **list of positions** where to cut. The three groups of statistics have different sizes: attack (goals and assists), defence (clean sheets and defensive contributions), and discipline (yellow cards, red cards, own goals, and penalties missed). We cut the columns before index 2 and before index 4:
 
 ```{python}
-attack, defence, discipline = np.hsplit(stats, [4, 6])
+attack, defence, discipline = np.hsplit(stats, [2, 4])
 
 print(attack.shape, defence.shape, discipline.shape)
+```
+
+In FPL, a midfielder gets 5 points for each goal, 3 for each assist, 1 for each clean sheet, and 2 for each match with defensive contributions. He loses 1 point for each yellow card, 3 for each red card, 2 for each own goal, and 2 for each penalty missed. We store the points in a one-dimensional array, in the same order as the columns of `stats`:
+
+```{python}
+# FPL points of a midfielder for each statistic
+points = np.array([5, 3, 1, 2, -1, -3, -2, -2])
 ```
 
 ::: {.callout-note}
 ## Exercise: Split the Points
 
-In Fantasy League, a player gets 6 points for each goal, 3 points for each assist, 1 point for: each shot on target, each key pass, each tackle and each save. A player loses 1 point for each yellow card and 3 points for each red card. The points are stored in a one-dimensional array:
-
-```{python}
-# Fantasy points earned by each statistic
-points = np.array([6, 3, 1, 1, 1, 1, -1, -3])
-```
-
-The array of points is already sorted by group: the first four values are for attack (goals, assists, shots, and key passes), the next two for defence (tackles and saves), and the last two for discipline (yellow and red cards). Split `points` into three arrays, one for each group of statistics, and print the sum of each group.
+Split `points` into three arrays, one for each group of statistics: attack (the first two values), defence (the next two), and discipline (the last four). Then check your split by computing the sum of each group: one goal and one assist are worth 8 points, one clean sheet and one defensive contribution are worth 3 points, and one of each disciplinary event costs 8 points.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-attack_p, defence_p, discipline_p = np.split(points, [4, 6])
+attack_p, defence_p, discipline_p = np.split(points, [2, 4])
 
 print(np.sum(attack_p), np.sum(defence_p), np.sum(discipline_p))
 ```
@@ -638,18 +650,18 @@ print(np.sum(attack_p), np.sum(defence_p), np.sum(discipline_p))
 
 ## Challenge: One Array for the Whole League
 
-The manager of the rival team sent you the statistics of their 4 players **stat by stat**, as one long array: the 4 goals, then the 4 assists, and so on. They follow the same order of statistics as your team.
+A friend in your mini-league sent you the statistics of the 5 midfielders in their squad **stat by stat**, as one long array: the 5 goals, then the 5 assists, and so on. They follow the same order of statistics as our team.
 
 ```{python}
 rival_export = np.array([
-    3, 0, 1, 6,       # goals
-    4, 1, 0, 2,       # assists
-    9, 1, 3, 14,      # shots on target
-    20, 5, 8, 11,     # key passes
-    15, 30, 2, 8,     # tackles
-    0, 0, 38, 0,      # saves
-    2, 5, 0, 1,       # yellow cards
-    0, 1, 0, 0,       # red cards
+    11, 3, 7, 1, 5,       # goals
+    6, 5, 9, 2, 8,        # assists
+    10, 12, 7, 13, 9,     # clean sheets
+    3, 16, 2, 25, 6,      # defensive contributions
+    2, 5, 1, 8, 3,        # yellow cards
+    0, 0, 0, 1, 0,        # red cards
+    0, 1, 0, 0, 0,        # own goals
+    1, 0, 0, 0, 1,        # penalties missed
 ])
 ```
 
@@ -666,7 +678,7 @@ Without writing any loop:
 
 ```{python}
 # 1. One row per statistic first, then transpose
-rival = rival_export.reshape(8, 4).T
+rival = rival_export.reshape(8, 5).T
 print(rival)
 
 # 2. Join along the rows
@@ -674,8 +686,8 @@ league = np.concatenate((stats, rival), axis=0)  # or np.vstack()
 print(league.shape)
 
 # 3. Split the columns at the start of each group
-attack, defence, discipline = np.hsplit(league, [4, 6])
-attack_p, defence_p, discipline_p = np.split(points, [4, 6])
+attack, defence, discipline = np.hsplit(league, [2, 4])
+attack_p, defence_p, discipline_p = np.split(points, [2, 4])
 
 print(np.sum(attack * attack_p, axis=1))
 print(np.sum(defence * defence_p, axis=1))
@@ -690,7 +702,7 @@ report = np.column_stack((np.arange(1, 11), total))
 print(report)
 ```
 
-Note that `rival_export.reshape(4, 8)` would also give the right shape, but with the statistics mixed up.
+Note that `rival_export.reshape(5, 8)` would also give the right shape, but with the statistics mixed up.
 :::
 
 ---
