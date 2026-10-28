@@ -8,24 +8,36 @@ format: html
 
 Numerical data does not always arrive in the shape a calculation needs. Imagine you run a **fantasy football league** with your friends. You want one row per player.
 
-| Player | Goals | Assists | Shots on Target | Tackles |
-|--------|-------|---------|-----------------|---------|
-| Player 1 | 8     | 3       | 20              | 10      |
-| Player 2 | 2     | 9       | 10              | 25      |
-| Player 3 | 0     | 1       | 2               | 40      |
+| Player | Goals | Assists | Shots on Target | Tackles | Key Passes | Saves | Yellow Cards | Red Cards |
+|--------|-------|---------|-----------------|---------|---------|-------|--------------|-----------|
+| Striker | 8     | 3       | 20              | 10      | 15      | 0     | 2            | 0         |
+| Midfielder | 2     | 9       | 10              | 25      | 30      | 0     | 4            | 0         |
+| Defender | 0     | 1       | 2               | 40      | 12      | 0     | 6            | 1         |
+| Defender | 1     | 2       | 5               | 35      | 18      | 0     | 3            | 0         |
+| Goalkeeper | 0     | 0       | 0               | 3       | 2       | 45    | 1            | 0         |
+| Winger | 5     | 5       | 15              | 12      | 22      | 0     | 1            | 0         |
 
 However, the league website exports the statistics **stat by stat** (all the goals, then all the assists...):
 
-| Statistic | Player 1 | Player 2 | Player 3 |
-|-----------|----------|----------|----------|
-| Goals     | 8        | 2        | 0        |
-| Assists   | 3        | 9        | 1        |
-| Shots on Target | 20       | 10       | 2        |
-| Tackles   | 10       | 25       | 40       |
+| Statistic | Striker | Midfielder | Defender | Defender | Goalkeeper | Winger |
+| Goals | 8 | 2 | 0 | 1 | 0 | 5 |
+| Assists | 3 | 9 | 1 | 2 | 0 | 5 |
+| Shots on Target | 20 | 10 | 2 | 5 | 0 | 15 |
+| Tackles | 10 | 25 | 40 | 35 | 3 | 12 |
+| Key Passes | 15 | 30 | 12 | 18 | 2 | 22 |
+| Saves | 0 | 0 | 0 | 0 | 45 | 0 |
+| Yellow Cards | 2 | 4 | 6 | 3 | 1 | 1 |
+| Red Cards | 0 | 0 | 1 | 0 | 0 | 0 |
 
-How do you turn the second table into the first? And what happens in a new player joins the league mid-season? Or a whole new team joins the league? You need to **reshape**, **join**, and **split** arrays.
+How do you turn the second table into the first? You need to **reshape** the array and **transpose** it.
 
-In this lesson, we will learn to reorganize the same values, combine compatible arrays, and divide arrays into useful pieces. The challenge at the end puts all these tools together on the league.
+And what happens in a new player joins the league mid-season? You need to **add a new row** to the array.
+
+And if a whole new team joins the league? You need to **join two arrays**.
+
+The statistics can be grouped into attacking (goals, assists, shots on target, and key passes), defensive (tackles and saves), and disciplinary (yellow and red cards). You may want to **split** the array into three arrays, one for each group.
+
+In this lesson, we will learn how to manipulate arrays in NumPy, including reshaping, flattening, joining, and splitting arrays.
 
 But first, as always, we need to import NumPy.
 
