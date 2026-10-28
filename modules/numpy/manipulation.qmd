@@ -6,28 +6,31 @@ format: html
 
 # NumPy: Array Manipulation
 
-Numerical data does not always arrive in the shape a calculation needs. Think back to the midterm we graded in the last sessions:
+Numerical data does not always arrive in the shape a calculation needs. Imagine you run a **fantasy football league** with your friends. You want one row per player.
 
-- Some professors grade **exercise by exercise**, so their marks arrive with one row per exercise instead of one row per student.
-- The marks of the **Segovia** campus arrive in a separate array, and we want a single table for the whole course.
-- The exam has **three parts** (open problems, debugging, multiple choice), and sometimes we want to analyse each part on its own.
+| Player | Goals | Assists | Shots on Target | Tackles |
+|--------|-------|---------|-----------------|---------|
+| Player 1 | 8     | 3       | 20              | 10      |
+| Player 2 | 2     | 9       | 10              | 25      |
+| Player 3 | 0     | 1       | 2               | 40      |
 
-In this lesson, we will learn to reorganize the same values, combine compatible arrays, and divide arrays into useful pieces. The challenge at the end puts all these tools together on the midterm.
+However, the league website exports the statistics **stat by stat** (all the goals, then all the assists...):
+
+| Statistic | Player 1 | Player 2 | Player 3 |
+|-----------|----------|----------|----------|
+| Goals     | 8        | 2        | 0        |
+| Assists   | 3        | 9        | 1        |
+| Shots on Target | 20       | 10       | 2        |
+| Tackles   | 10       | 25       | 40       |
+
+How do you turn the second table into the first? And what happens in a new player joins the league mid-season? Or a whole new team joins the league? You need to **reshape**, **join**, and **split** arrays.
+
+In this lesson, we will learn to reorganize the same values, combine compatible arrays, and divide arrays into useful pieces. The challenge at the end puts all these tools together on the league.
+
+But first, as always, we need to import NumPy.
 
 ```{python}
 import numpy as np
-
-# The Madrid marks and the value of each exercise, from the last session
-weights = np.array([20, 20, 10, 10, 10, 5, 5, 5, 5, 5, 5])
-
-marks = np.array([
-    [0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1],
-    [0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1],
-    [1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1],
-    [0.25, 0.5, 0.5, 0.5, 0.5, 0, 1, 0, 1, 0, 1],
-    [1, 1, 0.5, 1, 1, 1, 0, 1, 1, 1, 1],
-    [0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0],
-])
 ```
 
 ## Reshape Arrays
@@ -55,9 +58,9 @@ print(f"Reshaped:\n{reshaped}")
 ```
 
 ::: {.callout-note}
-## Exercise: Reshape a Range
+## Exercise: Contact Sheet
 
-Create the following matrix without using the function `np.array`.
+A photographer prints a contact sheet of photos numbered 1 to 6, in 3 rows of 2. Create the following matrix of photo numbers without using the function `np.array`.
 
 $\begin{pmatrix}
 1 & 2\\
@@ -80,7 +83,7 @@ print(arr)
 ::: {.callout-note}
 ## Exercise: Fill by Columns
 
-Create the following matrix without using the function `np.array`.
+The printer fills the sheet **column by column** instead. Create the following matrix without using the function `np.array`.
 
 $\begin{pmatrix}
 1 & 4\\
@@ -101,22 +104,16 @@ print(arr)
 :::
 
 ::: {.callout-note}
-## Exercise: Reshape and Slice
+## Exercise: The Sudoku Box
 
-Create the following matrix without using the function `np.array`.
+A Sudoku grid has 81 cells. Number them from 0 to 80, row by row, in a $9 \times 9$ grid, without using the function `np.array`.
 
-$\begin{pmatrix}
-0 & 1 & 2 & 3\\
-4 & 5 & 6 & 7\\
-8 & 9 & 10 & 11\\
-12 & 13 & 14 & 15\\
-\end{pmatrix}$
-
-And then, using that matrix, extract:
+Then extract the **central** $3 \times 3$ box:
 
 $\begin{pmatrix}
-6 & 7\\
-10 & 11\\
+30 & 31 & 32\\
+39 & 40 & 41\\
+48 & 49 & 50\\
 \end{pmatrix}$
 
 :::
@@ -125,9 +122,9 @@ $\begin{pmatrix}
 ## Solution
 
 ```{python}
-arr = np.arange(0, 16).reshape(4, 4)
-print(arr)
-print(arr[1:3, 2:4])
+grid = np.arange(81).reshape(9, 9)
+print(grid)
+print(grid[3:6, 3:6])
 ```
 
 :::
@@ -141,48 +138,48 @@ As the dimensions of `reshape` must always match exactly the number of elements 
 
 ### Reshape Is Not Transpose
 
-In Session 14 we saw that a form filled **exercise by exercise** must be reshaped with one row per exercise. Here are the marks of three students in four exercises, typed exercise by exercise:
+The league website exports the statistics **stat by stat**. Here are four statistics (goals, assists, shots on target, and tackles) of three players:
 
 ```{python}
-form_export = np.array([
-    1, 0.5, 0.25,    # exercise 1: student 1, student 2, student 3
-    0.5, 1, 0,       # exercise 2
-    1, 1, 0.5,       # exercise 3
-    0, 1, 1,         # exercise 4
+site_export = np.array([
+    8, 2, 0,        # goals: player 1, player 2, player 3
+    3, 9, 1,        # assists
+    20, 10, 2,      # shots on target
+    10, 25, 40,     # tackles
 ])
 
-by_exercise = form_export.reshape(4, 3)
-print(by_exercise)
+by_stat = site_export.reshape(4, 3)
+print(by_stat)
 ```
 
-We want one row per student. A tempting mistake is to reshape to `(3, 4)`:
+We want one row per player. A tempting mistake is to reshape to `(3, 4)`:
 
 ```{python}
-print(form_export.reshape(3, 4))
+print(site_export.reshape(3, 4))
 ```
 
-The shape is right, but the values are wrong: reshape always fills row by row, so the first row mixes exercise 1 and exercise 2. What we need is to swap rows and columns, the **transpose** we saw in Session 15:
+The shape is right, but the values are wrong: reshape always fills row by row, so the first row mixes the goals and the assists. What we need is to swap rows and columns, the **transpose** `.T`:
 
 ```{python}
-by_student = by_exercise.T
-print(by_student)
+by_player = by_stat.T
+print(by_player)
 ```
 
 ::: {.callout-note}
 ## Exercise: Spot the Difference
 
-Without running any code, what is the first row of `form_export.reshape(3, 4)` and what is the first row of `by_exercise.T`? Which one contains the exam of student 1?
+Without running any code, what is the first row of `site_export.reshape(3, 4)` and what is the first row of `by_stat.T`? Which one contains the statistics of player 1?
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```text
-[1.   0.5  0.25 0.5 ]
-[1.  0.5 1.  0. ]
+[8 2 0 3]
+[ 8  3 20 10]
 ```
 
-The first row of the reshape is the first four values of the form: the three marks of exercise 1 and the first mark of exercise 2. The first row of the transpose is the first **column** of `by_exercise`: exercise 1 to 4 of student 1. Only the transpose contains the exam of student 1.
+The first row of the reshape is the first four values of the export: the goals of the three players and the assists of player 1. The first row of the transpose is the first **column** of `by_stat`: the four statistics of player 1. Only the transpose contains the statistics of player 1.
 :::
 
 ---
@@ -501,14 +498,31 @@ row_stacked = np.vstack((array1, array2))
 print("Row stacked:\n", row_stacked)
 ```
 
-Back to the midterm: a student took the exam late, and we want to add her marks as a new row.
+Back to the league: a new player joins the team in the January transfer window, and we add his statistics as a new row.
 
 ```{python}
-late_student = np.array([1, 0.75, 1, 0.5, 1, 1, 0, 1, 1, 1, 1])
+# Season statistics of our team: one row per player, one column per statistic
+# goals, assists, shots on target, key passes, tackles, saves, yellow cards, red cards
+stats = np.array([
+    [8, 3, 20, 15, 10,  0, 2, 0],   # striker
+    [2, 9, 10, 30, 25,  0, 4, 0],   # midfielder
+    [0, 1,  2, 12, 40,  0, 6, 1],   # defender
+    [1, 2,  5, 18, 35,  0, 3, 0],   # defender
+    [0, 0,  0,  2,  3, 45, 1, 0],   # goalkeeper
+    [5, 5, 15, 22, 12,  0, 1, 0],   # winger
+])
 
-with_late = np.vstack((marks, late_student))
-print(with_late.shape)
+new_player = np.array([4, 6, 12, 25, 18, 0, 2, 0])
 ```
+
+::: {.callout-tip collapse="true"}
+## How to add a new player to the statistics array?
+
+```{python}
+with_new = np.vstack((stats, new_player))
+print(with_new.shape)
+```
+:::
 
 ---
 
@@ -575,94 +589,96 @@ for idx in range(len(vsplit_array)):
 
 ### Splitting at Given Positions
 
-Instead of a number of equal parts, all the split functions also accept a **list of positions** where to cut. The three parts of the midterm have different sizes: exercises 1 and 2, exercises 3 to 5, and exercises 6 to 11. We cut the columns before index 2 and before index 5:
+Instead of a number of equal parts, all the split functions also accept a **list of positions** where to cut. The three groups of statistics have different sizes: attack (goals, assists, shots, and key passes), defence (tackles and saves), and discipline (yellow and red cards). We cut the columns before index 4 and before index 6:
 
 ```{python}
-open_part, debugging_part, mc_part = np.hsplit(marks, [2, 5])
+attack, defence, discipline = np.hsplit(stats, [4, 6])
 
-print(open_part.shape, debugging_part.shape, mc_part.shape)
+print(attack.shape, defence.shape, discipline.shape)
 ```
 
 ::: {.callout-note}
-## Exercise: Split the Weights
+## Exercise: Split the Points
 
-Split `weights` into the same three parts, and check that the parts are worth 40, 30, and 30 points.
+In Fantasy League, a player gets 6 points for each goal, 3 points for each assist, 1 point for: each shot on target, each key pass, each tackle and each save. A player loses 1 point for each yellow card and 3 points for each red card. The points are stored in a one-dimensional array:
+
+```{python}
+# Fantasy points earned by each statistic
+points = np.array([6, 3, 1, 1, 1, 1, -1, -3])
+```
+
+The array of points is already sorted by group: the first four values are for attack (goals, assists, shots, and key passes), the next two for defence (tackles and saves), and the last two for discipline (yellow and red cards). Split `points` into three arrays, one for each group of statistics, and print the sum of each group.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-open_w, debugging_w, mc_w = np.split(weights, [2, 5])
+attack_p, defence_p, discipline_p = np.split(points, [4, 6])
 
-print(np.sum(open_w), np.sum(debugging_w), np.sum(mc_w))
+print(np.sum(attack_p), np.sum(defence_p), np.sum(discipline_p))
 ```
 
-`weights` is one-dimensional, so we use `np.split()` (or `np.hsplit()`, which behaves the same for 1D arrays).
+`points` is one-dimensional, so we use `np.split()` (or `np.hsplit()`, which behaves the same for 1D arrays).
 :::
 
 ---
 
-## Challenge: One Table for the Whole Course
+## Challenge: One Array for the Whole League
 
-Deactivate AI assistant tools, and try this challenge on your own.
-
-The professor in Segovia graded the midterm **exercise by exercise**, and sent you the marks of their 4 students as one long array: the 4 marks of exercise 1, then the 4 marks of exercise 2, and so on.
+The manager of the rival team sent you the statistics of their 4 players **stat by stat**, as one long array: the 4 goals, then the 4 assists, and so on. They follow the same order of statistics as your team.
 
 ```{python}
-segovia_form = np.array([
-    0.5, 1, 0, 0.75,
-    1, 1, 0.25, 0.5,
-    0.5, 1, 0.5, 1,
-    1, 0.5, 0.5, 1,
-    1, 1, 0, 0.5,
-    1, 1, 0, 1,
-    1, 0, 1, 1,
-    1, 1, 0, 0,
-    1, 1, 1, 0,
-    0, 1, 0, 1,
-    1, 1, 0, 1,
+rival_export = np.array([
+    3, 0, 1, 6,       # goals
+    4, 1, 0, 2,       # assists
+    9, 1, 3, 14,      # shots on target
+    20, 5, 8, 11,     # key passes
+    15, 30, 2, 8,     # tackles
+    0, 0, 38, 0,      # saves
+    2, 5, 0, 1,       # yellow cards
+    0, 1, 0, 0,       # red cards
 ])
 ```
 
 Without writing any loop:
 
-1. Turn `segovia_form` into a table with one row per student and one column per exercise.
-2. Join it with the Madrid `marks` into a single table, `course`, with the Madrid students first. Print its shape.
-3. Split `course` into the three parts of the exam, and compute the points of each student in each part (use `weights`).
-4. Compute the final grade of every student, out of 10.
-5. Build a report with two columns: the student number (1 to 10) and the final grade.
+1. Turn `rival_export` into an array with one row per player and one column per statistic.
+2. Join it with our `stats` into a single array, `league`, with our players first. Print its shape.
+3. Split `league` into the three groups of statistics, and compute the fantasy points of each player in each group (use `points`).
+4. Compute the total fantasy points of every player.
+5. Build a report with two columns: the player number (1 to 10) and the total points.
 
 ::: {.callout-tip collapse="true"}
 ## Possible solution
 
 ```{python}
-# 1. One row per exercise first, then transpose
-segovia = segovia_form.reshape(11, 4).T
-print(segovia)
+# 1. One row per statistic first, then transpose
+rival = rival_export.reshape(8, 4).T
+print(rival)
 
 # 2. Join along the rows
-course = np.concatenate((marks, segovia), axis=0)  # or np.vstack()
-print(course.shape)
+league = np.concatenate((stats, rival), axis=0)  # or np.vstack()
+print(league.shape)
 
-# 3. Split the columns at the start of each part
-open_part, debugging_part, mc_part = np.hsplit(course, [2, 5])
-open_w, debugging_w, mc_w = np.split(weights, [2, 5])
+# 3. Split the columns at the start of each group
+attack, defence, discipline = np.hsplit(league, [4, 6])
+attack_p, defence_p, discipline_p = np.split(points, [4, 6])
 
-print(np.sum(open_part * open_w, axis=1))
-print(np.sum(debugging_part * debugging_w, axis=1))
-print(np.sum(mc_part * mc_w, axis=1))
+print(np.sum(attack * attack_p, axis=1))
+print(np.sum(defence * defence_p, axis=1))
+print(np.sum(discipline * discipline_p, axis=1))
 
-# 4. Final grades
-final_grades = course @ weights / 10
-print(final_grades)
+# 4. Total fantasy points
+total = league @ points
+print(total)
 
 # 5. Report
-report = np.column_stack((np.arange(1, 11), final_grades))
+report = np.column_stack((np.arange(1, 11), total))
 print(report)
 ```
 
-Note that `segovia_form.reshape(4, 11)` would also give the right shape, but with the marks mixed up.
+Note that `rival_export.reshape(4, 8)` would also give the right shape, but with the statistics mixed up.
 :::
 
 ---
