@@ -28,13 +28,13 @@ Luckily, the camera keeps a log. This is what it recorded:
 01:45  BEEP! Ghost nearby ............. photo_4 saved
        ERROR: lens cursed. Rows scrambled. 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
-       ERROR: colour channels separated. Very low light.
+       ERROR: colour channels separated and shuffled. Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.
 ```
 
 Who did we catch? We do not know yet: the photos will tell us.
 
-Our mission: load the broken files, use the log to understand what happened to each photo, and **recover all five pictures**.
+Our mission: load the broken files, use the log to understand what happened to each photo, **recover all five pictures**, and find the **case number** to close the investigation.
 
 ::: {.callout-note}
 ## Colab Activity
@@ -69,7 +69,7 @@ Working on your own computer instead? Download the photos here and extract the Z
 Two helper functions:
 
 - `show(image)` displays an array as an image: grayscale if it is 2D, colour if it is 3D.
-- `check(photo, key)` tells you whether you found the key of a photo, for instance `check(1, ...)`. Every photo hides a key.
+- `check(photo, key)` tells you whether you found the key of a photo, for instance `check(1, ...)`, or the case number, `check("case", ...)`.
 
 ```{python}
 import hashlib
@@ -89,7 +89,7 @@ def show(image):
     plt.show()
 
 
-_KEYS = {1: '2ff7f21ca76127ff', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '24a866f4940f1b00', 'case': 'e3aa235a10ec0805'}
+_KEYS = {1: '2ff7f21ca76127ff', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'b3c1efbb2f4344a4'}
 
 
 def check(photo, key):
@@ -98,7 +98,7 @@ def check(photo, key):
     if digest != _KEYS[photo]:
         print(f"Wrong key for photo {photo}. Keep investigating...")
     elif photo == "case":
-        print("Correct case number! Now you can open photo 5.")
+        print("Correct case number! The ghost hunt is solved.")
     else:
         print(f"Correct key! Photo {photo} is recovered.")
 ```
@@ -138,8 +138,8 @@ Every photo is a $300 \times 300$ array, with values between 0 (black) and 1 (wh
 
 Two things are true for **every** photo of our camera:
 
-- It has a **white frame**: the pixels on the border are `1`.
-- It has a **stamp** in the bottom-right corner: a black box with a white digit.
+- It has a **white frame**: the 4 pixels on the border are `1`.
+- Just inside the white frame, it has a thin **black line**: those pixels are `0`.
 
 ---
 
@@ -166,9 +166,9 @@ For each photo, the camera log tells us what happened. This is what we have, and
 **How to fix it:**
 
 1. Give each fragment back its square shape, and join the fragments.
-2. Stretch the values back to the range $[0, 1]$. Remember that every photo has pure black (the stamp) and pure white (the frame):
+2. Stretch the values back to the range $[0, 1]$. Remember that every photo has pure black (the line) and pure white (the frame):
 $$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$
-3. Undo the negative, and undo the mirror. Check the stamp: when the digit reads correctly, you are done.
+3. Undo the negative, and undo the mirror.
 
 **Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.
 
@@ -195,27 +195,29 @@ We found three lenses in the camera bag, but only one of them was used.
 
 **Key:** the number of the lens.
 
-### The Case Number
-
-Each recovered photo shows a digit in its stamp. To file the case, write the four digits **from the darkest photo to the brightest one** (the mean of all its pixels).
-
-**Key:** the four digits, for instance `check("case", "1234")`.
-
 ### Photo 5: The Colour Photo
 
-**Files:** `ghost_photos/photo_5/channel_<digit>.npy`. Four NumPy binary files, $300 \times 300$ each.
+**Files:** `ghost_photos/photo_5/channel_1.npy` to `channel_4.npy`. Four NumPy binary files, $300 \times 300$ each.
 
-**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels and saved each one in its own file, named with a digit of our **case number**: the first three digits are the red, green, and blue channels, in that order. The fourth file is a decoy. On top of that, it was night: every value was squared, so the photo is very dark.
+**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and **shuffled the file numbers**. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
-**How to fix it:** load the three channels, join them along a **new** axis to get a `(300, 300, 3)` array, and undo the square.
+**How to fix it:** find the decoy (look at the four files). Join the other three along a **new** axis to get a `(300, 300, 3)` array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders: in the right one, the colours look natural... and **fire is red**.
 
-**Key:** which colour dominates the photo: `"red"`, `"green"`, or `"blue"`? Compare the mean of each channel.
+**Key:** the numbers of the red, green, and blue files, in that order, for instance `check(5, "123")`.
+
+### The Case Number
+
+Each recovered photo hides one digit of the case number: the **first decimal of the mean brightness of its top-right quarter** (the first 150 rows and the last 150 columns). For example, a mean of `0.4371` gives the digit `4`. For the colour photo, use only its red channel.
+
+Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.
+
+**Key:** the five digits, from photo 1 to photo 5, for instance `check("case", "12345")`.
 
 ---
 
 ## Your Mission
 
-Work in **groups of three or four**. Recover as many photos as you can, in any order... except photo 5, which needs the case number. Use `check()` to confirm each key.
+Work in **groups of three or four**. Recover the five photos, in any order, and use `check()` to confirm each key. The first group to find the case number closes the investigation!
 
 When a photo is recovered, **save the evidence**: store it with `np.save()`, so that you never have to fix it again. Can you also store it with `np.savetxt()`? Try it with photo 5.
 
@@ -229,7 +231,7 @@ When a photo is recovered, **save the evidence**: store it with `np.save()`, so 
 - `np.concatenate()`, `np.hstack()`, and `np.vstack()` join arrays along an existing axis; `np.stack()` creates a new one.
 - Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.
 
-Who did we catch? Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?
+Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?
 
 ---
 
