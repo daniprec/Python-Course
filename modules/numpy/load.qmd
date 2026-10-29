@@ -76,7 +76,7 @@ def show(image):
     plt.show()
 
 
-_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '865736a1c30a82dc', 'case': 'a81745a221f746f4'}
+_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '865736a1c30a82dc', 'case': '2eb2158e4711ef9f'}
 
 
 def check(photo, key):
@@ -181,7 +181,7 @@ G H I
 
 `np.vstack([arr1, arr2, arr3])` joins arrays one on top of the other (vertically).
 
-`arr.T` is the **transpose** of a 2D array: it swaps rows and columns.
+`np.rot90(arr)` rotates a 2D array 90 degrees **counterclockwise**. `np.rot90(arr, k=2)` rotates it twice (180 degrees), and `np.rot90(arr, k=-1)` rotates it clockwise.
 :::
 
 
@@ -318,7 +318,7 @@ The ghost separated the three channels and placed them side by side, in a **shuf
 
 ### The Case Number
 
-Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[150:, 150:250]`** (the bottom half of the photo, columns 150 to 249). For example, a mean of `0.4371` gives the digit `3`. For the colour photo, use only its red channel.
+Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[100:250, 100:]`** (rows 100 to 249, columns 100 to the end). For example, a mean of `0.4371` gives the digit `3`. For the colour photo, use only its red channel.
 
 Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.
 

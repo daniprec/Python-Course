@@ -18,9 +18,8 @@ Students always (1) split the file and join the pieces in the right order, then
 
 - photo_1/shattered.txt  300x300. 3x3 grid of fragments, shuffled, no numbers: students
                          order them by eye. SECRET, not on the page: the bottom-right
-                         fragment is mirrored along the anti-diagonal (it looks like a second
-                         top-left corner); students must spot it and fix it, e.g. with
-                         fragment[::-1, ::-1].T.
+                         fragment is rotated 90 degrees clockwise (it looks like a second
+                         bottom-left corner); students fix it with np.rot90(fragment).
 - photo_2/frozen.txt     90,000 values, one per line (reshape to 300x300). Its two
                          vertical halves are swapped. The photo was transposed and
                          squeezed into a narrow range.
@@ -34,7 +33,7 @@ Students always (1) split the file and join the pieces in the right order, then
                          order (found with the orange flames). Every value was squared.
 
 Each photo hides one digit of the case number: the SECOND decimal of the mean of
-photo[150:, 150:250]; for the colour photo, the red channel.
+photo[100:250, 100:]; for the colour photo, the red channel.
 """
 import json
 import os
@@ -90,17 +89,12 @@ def number_tiles(tiles: list) -> None:
         tile[0, 0] = pos + 1
 
 
-def anti_transpose(tile: np.ndarray) -> np.ndarray:
-    """Mirror along the anti-diagonal (bottom-left to top-right). It is its own inverse."""
-    return tile[::-1, ::-1].T
-
-
 def quarter_value(photo: np.ndarray) -> float:
-    # The region cuts through the bottom-right fragment of photo 1, so its secret mirror
+    # The region cuts through the bottom-right fragment of photo 1, so its secret rotation
     # changes the digit (a region that holds a whole fragment would not notice it).
     # Region and second decimal were chosen by search: every half-fixed photo below gives
-    # a wrong digit, and every correct value is at least 0.002 away from a digit change.
-    region = photo[150:, 150:250] if photo.ndim == 2 else photo[150:, 150:250, 0]
+    # a wrong digit, and every correct value is at least 0.0015 away from a digit change.
+    region = photo[100:250, 100:] if photo.ndim == 2 else photo[100:250, 100:, 0]
     return float(np.mean(region) * 100)
 
 
@@ -127,10 +121,12 @@ rng.shuffle(list("ABCDEFGHI"))                 # keeps the random stream (lens, 
 # gives a different digit than the recovered photo.
 SLOT_1 = [4, 7, 0, 5, 8, 2, 1, 6, 3]
 tiles_1 = grid_tiles(photos[1])
-tiles_1[8] = anti_transpose(tiles_1[8])        # SECRET: bottom-right fragment mirrored (not on the page)
+tiles_1[8] = np.rot90(tiles_1[8], k=-1)        # SECRET: bottom-right fragment rotated 90 degrees clockwise
 shattered = join_grid([tiles_1[pos] for pos in SLOT_1])
-unmirrored_1 = join_grid(tiles_1)              # ordered and joined, corner not fixed yet
-tiles_1[8] = anti_transpose(tiles_1[8])        # fixed
+unrotated_1 = join_grid(tiles_1)               # ordered and joined, corner not fixed yet
+rotated_wrong_1 = join_grid(tiles_1[:8] + [np.rot90(tiles_1[8], k=-1)])   # turned the wrong way
+transposed_1 = join_grid(tiles_1[:8] + [tiles_1[8].T])                   # fixed with .T instead
+tiles_1[8] = np.rot90(tiles_1[8])              # fixed: np.rot90() turns 90 degrees counterclockwise
 save("photo_1/shattered.txt", shattered)
 letters = [None] * 9
 for k, pos in enumerate(SLOT_1):
@@ -203,8 +199,9 @@ banded_l = np.loadtxt(os.path.join(out, "photo_3", "banded.csv"), delimiter=";")
 cursed_l = np.loadtxt(os.path.join(out, "photo_4", "cursed.csv"), delimiter=",")
 half_fixed = {
     "1: not unshuffled": np.loadtxt(os.path.join(out, "photo_1", "shattered.txt")),
-    "1: corner not mirrored back": unmirrored_1,
-    "1: corner fixed with .T": join_grid(tiles_1[:8] + [tiles_1[8][::-1, ::-1]]),
+    "1: corner not rotated back": unrotated_1,
+    "1: corner rotated the wrong way": rotated_wrong_1,
+    "1: corner fixed with .T": transposed_1,
     "2: halves not swapped": stretched_frozen.T,
     "2: not stretched": stored_2.T,
     "2: not transposed": stretched_2,
