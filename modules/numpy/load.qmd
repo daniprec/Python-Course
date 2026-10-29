@@ -31,14 +31,16 @@ Luckily, the camera keeps a log. This is what it recorded:
 22:13  BEEP! Ghost nearby ............. photo_1 saved
        ERROR: memory shattered. 9 fragments shuffled inside the photo.
 23:02  BEEP! Ghost nearby ............. photo_2 saved
-       ERROR: sensor frozen. Fragments flattened, contrast lost, image inverted.
+       ERROR: sensor frozen. Flattened, halves swapped, contrast lost, inverted.
 00:31  BEEP! Ghost nearby ............. photo_3 saved
-       ERROR: interference on the sensor rows.
+       ERROR: interference on the sensor rows. Photo cut into 4 strips.
 01:45  BEEP! Ghost nearby ............. photo_4 saved
-       ERROR: lens cursed. Rows scrambled. 3 lenses found in the camera bag.
+       ERROR: lens cursed. Rows scrambled. Photo cut into 5 strips.
+       NOTE: 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
        NOTE: ghost surrounded by small ORANGE flames.
-       ERROR: colour channels separated and shuffled. Very low light.
+       ERROR: memory shattered again. Colour channels separated and shuffled.
+       Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.
 ```
 
@@ -75,7 +77,7 @@ def show(image):
     plt.show()
 
 
-_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'cc4a9135117f2dbf'}
+_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'a81745a221f746f4'}
 
 
 def check(photo, key):
@@ -91,24 +93,24 @@ def check(photo, key):
 
 ## Where Are the Photos?
 
-Each photo is a folder of files. To get the address (URL) of a file, add the folder and the file name to `BASE`:
+Each photo is in its own folder. To get the address (URL) of a file, add the folder and the file name to `BASE`:
 
 ```python
-url = f"{BASE}/photo_2/fragment_0_0.txt"
+url = f"{BASE}/photo_1/shattered.txt"
 ```
 
 | Photo | Files |
 |-------|-------|
 | 1 | `photo_1/shattered.txt` |
-| 2 | `photo_2/fragment_0_0.txt`, `photo_2/fragment_0_1.txt`, ..., `photo_2/fragment_2_2.txt` |
-| 3 | `photo_3/fragment_0_0.csv`, `photo_3/fragment_0_1.csv`, ..., `photo_3/fragment_2_2.csv` |
-| 4 | `photo_4/fragment_0_0.csv`, ..., `photo_4/fragment_2_2.csv`, and `photo_4/lens_1.csv`, `lens_2.csv`, `lens_3.csv` |
-| 5 | `photo_5/channel_1.txt`, `photo_5/channel_2.txt`, `photo_5/channel_3.txt`, `photo_5/channel_4.txt` |
+| 2 | `photo_2/frozen.txt` |
+| 3 | `photo_3/banded.csv` |
+| 4 | `photo_4/cursed.csv`, and the lenses `photo_4/lens_1.csv`, `lens_2.csv`, `lens_3.csv` |
+| 5 | `photo_5/colour.txt` |
 
 `np.loadtxt()` reads a text file straight from its URL:
 
 ```python
-fragment = np.loadtxt(f"{BASE}/photo_2/fragment_0_0.txt")
+shattered = np.loadtxt(f"{BASE}/photo_1/shattered.txt")
 ```
 
 The first time, NumPy downloads the file and keeps a copy next to your notebook, in a folder called `raw.githubusercontent.com`. Do not be surprised if it appears!
@@ -141,7 +143,12 @@ Two things are true for **every** photo of our camera:
 
 ## The Five Broken Photos
 
-For each photo, the camera log tells us what happened. This is what we have, and how to fix it.
+Every photo was saved in **a single file**, but the camera cut it into pieces and put them back in the wrong order. So recovering a photo always takes two steps:
+
+1. **Rebuild it:** split the file into its pieces, and join them again in the right order. Each photo was cut in a different way!
+2. **Undo the damage:** each photo also suffered its own transformation, and the camera log tells us which one.
+
+This is what we have for each photo, and how to fix it.
 
 ### Photo 1: The Shattered Photo
 
@@ -167,55 +174,72 @@ G H I
 
 ### Photo 2: The Frozen Photo
 
-**Files:** `photo_2/fragment_<row>_<col>.txt`. Nine text files named by position... but each one has **one value per line**.
+**Files:** `photo_2/frozen.txt`. One text file... with **one value per line**.
 
-**What happened:** the ghost's chill froze the sensor. Each fragment was flattened into a single line of values, and the photo lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a **negative** (black and white swapped) and **mirrored along the diagonal** (rows and columns swapped).
+**What happened:** the ghost's chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were **swapped**. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a **negative** (black and white swapped) and **mirrored along the diagonal** (rows and columns swapped).
 
 **How to fix it:**
 
-1. Give each fragment back its square shape, and join the fragments.
+1. Rebuild it: give the photo back its square shape, cut it into its left and right halves, and swap them.
 2. Stretch the values back to the range $[0, 1]$. Remember that every photo has pure black (the line) and pure white (the frame):
 $$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$
 3. Undo the negative, and undo the mirror.
+
+Tip: the photo is so faint that `show()` displays a plain gray square. To see what you are doing in step 1, look at the stretched version: stretching does not care about the position of the pixels, so the two steps can go in any order.
 
 **Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.
 
 ### Photo 3: The Banded Photo
 
-**Files:** `photo_3/fragment_<row>_<col>.csv`. Nine CSV files named by position. The camera wrote them European-style: the values are separated by **semicolons** (`;`) instead of commas.
+**Files:** `photo_3/banded.csv`. One CSV file, $300 \times 300$. The camera wrote it European-style: the values are separated by **semicolons** (`;`) instead of commas.
 
-**What happened:** the ghost interfered with the sensor: every **row** of pixels was multiplied by a different number between 0 and 1, a *gain*. The photo is complete, but it is covered with dark horizontal bands.
+**What happened:** the ghost interfered with the sensor: every **row** of pixels was multiplied by a different number between 0 and 1, a *gain*. The photo is covered with dark horizontal bands.
 $$\text{stored} = \text{photo} \times \text{gain}$$
+Then the camera cut it into **four vertical strips**, and shuffled them. This time there are no numbers: you will need your eyes.
 
-**How to fix it:** the white frame tells us the gains. The first column of the original photo is all `1`, so the first column of the stored photo is exactly the gain of each row. Divide each row by its gain. Careful: broadcasting must divide the **rows**, not the columns. Check the shape of the gains!
+**How to fix it:**
+
+1. Rebuild it: cut the photo into its four strips and put them in order. The frame helps: look for the strip with the black line on its left edge, and the one with the black line on its right edge. For the two strips in the middle, try both orders and look at the picture.
+2. The white frame tells us the gains. The first column of the original photo is all `1`, so the first column of the stored photo is exactly the gain of each row. Divide each row by its gain. Careful: broadcasting must divide the **rows**, not the columns. Check the shape of the gains!
 
 **Key:** the first row with the strongest interference (the smallest gain).
 
 ### Photo 4: The Cursed Lens
 
-**Files:** `photo_4/fragment_<row>_<col>.csv`, nine fragments in CSV format (values separated by commas), and `lens_1.csv`, `lens_2.csv`, `lens_3.csv`, three $300 \times 300$ matrices.
+**Files:** `photo_4/cursed.csv`, a $300 \times 300$ photo in CSV format (values separated by commas), and `lens_1.csv`, `lens_2.csv`, `lens_3.csv`, three $300 \times 300$ matrices.
 
 **What happened:** the ghost cursed the lens of the camera. The photo went through a lens matrix $L$, which scrambled its rows:
 $$\text{stored} = L \cdot \text{photo}$$
 We found three lenses in the camera bag, but only one of them was used.
 
-**How to fix it:** undo the matrix product with the inverse of the lens, $\text{photo} = L^{-1} \cdot \text{stored}$. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.
+Then the camera cut the stored photo into **five horizontal strips**, and shuffled them. With the rows scrambled, the strips are impossible to order by eye... but the camera left a trace: the **top-left pixel** of every strip stores its number, from 1 to 5, counted from top to bottom.
+
+**How to fix it:**
+
+1. Rebuild it: cut the photo into its five strips, sort them by their number, and join them again.
+2. Undo the matrix product with the inverse of the lens, $\text{photo} = L^{-1} \cdot \text{stored}$. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.
 
 **Key:** the number of the lens.
 
 ### Photo 5: The Colour Photo
 
-**Files:** `photo_5/channel_1.txt` to `channel_4.txt`. Four text files, $300 \times 300$ each.
+**Files:** `photo_5/colour.txt`. One text file, $300 \times 1200$: four $300 \times 300$ images side by side, numbered 1 to 4 from left to right.
 
-**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and **shuffled the file numbers**. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
+**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue.
 
-**How to fix it:** find the decoy (look at the four files). Join the other three along a **new** axis to get a `(300, 300, 3)` array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
+First, the memory shattered again, just like in photo 1: nine fragments, shuffled, with the fragment number (1 to 9) in the top-left pixel of every fragment, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a **shuffled order**, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
-**Key:** the numbers of the red, green, and blue files, in that order, for instance `check(5, "123")`.
+**How to fix it:**
+
+1. Cut the file into its four images and find the decoy (look at them). Join the other three along a **new** axis to get a `(300, 300, 3)` array.
+2. Rebuild it as you did with photo 1. Good news: `np.vsplit()`, `np.hsplit()`, and `np.concatenate()` work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.
+3. Undo the square. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
+
+**Key:** the numbers of the red, green, and blue images, in that order, for instance `check(5, "123")`.
 
 ### The Case Number
 
-Each recovered photo hides one digit of the case number: the **first decimal of the mean brightness of its top-right quarter** (the first 150 rows and the last 150 columns). For example, a mean of `0.4371` gives the digit `4`. For the colour photo, use only its red channel.
+Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[150:, 150:250]`** (the bottom half of the photo, columns 150 to 249). For example, a mean of `0.4371` gives the digit `3`. For the colour photo, use only its red channel.
 
 Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.
 
@@ -230,8 +254,8 @@ Work in **groups of three**. Each member of the group is in charge of different 
 | Member | Photos | What you will practise |
 |--------|--------|------------------------|
 | A | 1 and 2 | Loading, splitting, sorting, joining, `reshape()`, element-wise arithmetic |
-| B | 3 and 4 | Delimiters, broadcasting, matrix products, determinants, inverses |
-| C | 5 and the case number | A new axis with `np.stack()`, colour images, aggregations |
+| B | 3 and 4 | Delimiters, splitting, sorting, broadcasting, matrix products, determinants, inverses |
+| C | 5 and the case number | Splitting 3D arrays, a new axis with `np.stack()`, colour images, aggregations |
 
 Use `check()` to confirm each key. When you finish your part, help the rest of your group: the **case number** needs all five photos, so it can only be found as a team. The first group to find it closes the investigation!
 
