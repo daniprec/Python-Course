@@ -22,17 +22,16 @@ Students always (1) split the file and join the pieces in the right order, then
                          top-left corner); students must spot it and fix it, e.g. with
                          fragment[::-1, ::-1].T.
 - photo_2/frozen.txt     90,000 values, one per line (reshape to 300x300). Its two
-                         vertical halves are swapped. The photo was transposed, inverted,
-                         and squeezed into a narrow range.
+                         vertical halves are swapped. The photo was transposed and
+                         squeezed into a narrow range.
 - photo_3/banded.csv     300x300, separated by semicolons. 4 vertical strips, shuffled
                          (order found by eye). Every row was multiplied by a gain.
 - photo_4/cursed.csv     300x300, separated by commas. 5 horizontal strips, shuffled; the
                          top-left pixel of each strip holds its number (1-5). Rows mixed by
                          a lens matrix (stored = L @ photo). lens_1..3.csv: only one is
                          invertible.
-- photo_5/colour.txt     300x1200: four 300x300 channels side by side (red, green, blue in
-                         shuffled places, plus a decoy). The colour photo inside was
-                         shuffled in a 3x3 grid, numbered like photo 1, and squared.
+- photo_5/colour.txt     300x900: the three 300x300 channels side by side, in a shuffled
+                         order (found with the orange flames). Every value was squared.
 
 Each photo hides one digit of the case number: the SECOND decimal of the mean of
 photo[150:, 150:250]; for the colour photo, the red channel.
@@ -139,15 +138,15 @@ for k, pos in enumerate(SLOT_1):
 answers["photo_1"] = "".join(letters)          # place letters in the order of the original photo
 recovered_1 = join_grid(tiles_1)               # identical to the original photo
 
-# --- Photo 2: two halves swapped; frozen negative, transposed, flattened -------------
+# --- Photo 2: two halves swapped; frozen (low contrast), transposed, flattened -------
 CONTRAST, LOW = 20, 0.31
-stored_2 = np.round((1 - photos[2].T) / CONTRAST + LOW, 4)
+stored_2 = np.round(photos[2].T / CONTRAST + LOW, 4)
 left, right = np.hsplit(stored_2, 2)
 frozen = np.hstack((right, left))
 save("photo_2/frozen.txt", frozen.flatten())
 answers["photo_2"] = CONTRAST
 stretched_2 = (stored_2 - stored_2.min()) / (stored_2.max() - stored_2.min())
-recovered_2 = (1 - stretched_2).T
+recovered_2 = stretched_2.T
 
 # --- Photo 3: four vertical strips, shuffled; row gains ------------------------------
 band_gains = np.array([0.95, 0.6, 0.85, 0.45, 0.75, 0.2, 0.9, 0.5, 0.7, 0.35])
@@ -181,21 +180,15 @@ for k, L in lenses.items():
 answers["photo_4"] = 2
 recovered_4 = np.linalg.inv(lens_ok) @ stored_4   # the numbers end up in the white frame column
 
-# --- Photo 5: colour, 3x3 shuffled and numbered, squared, channels side by side ------
-SLOT_5 = [7, 3, 8, 1, 6, 0, 5, 2, 4]
+# --- Photo 5: colour, squared, three channels side by side in a shuffled order -------
 dark = np.round(photos[5] ** 2, 4)
-tiles_5 = grid_tiles(dark)
-number_tiles(tiles_5)                          # same number in the 3 channels
-dark_numbered = join_grid(tiles_5)
-dark_shuffled = join_grid([tiles_5[pos] for pos in SLOT_5])
-files = rng.permutation([1, 2, 3, 4])          # places of red, green, blue, decoy (1-4)
-blocks = [None] * 4
+FILES_5 = [3, 1, 2]                            # places (1-3) of red, green, blue
+blocks = [None] * 3
 for channel in range(3):
-    blocks[files[channel] - 1] = dark_shuffled[:, :, channel]
-blocks[files[3] - 1] = dark.mean(axis=2)[rng.permutation(SIZE)]   # decoy: static
+    blocks[FILES_5[channel] - 1] = dark[:, :, channel]
 save("photo_5/colour.txt", np.hstack(blocks))
-answers["photo_5"] = "".join(str(f) for f in files[:3])
-recovered_5 = np.sqrt(dark_numbered)
+answers["photo_5"] = "".join(str(f) for f in FILES_5)
+recovered_5 = np.sqrt(dark)
 
 # --- Case number: one digit per photo -----------------------------------------------
 recovered = {1: recovered_1, 2: recovered_2, 3: recovered_3, 4: recovered_4, 5: recovered_5}
@@ -212,20 +205,20 @@ half_fixed = {
     "1: not unshuffled": np.loadtxt(os.path.join(out, "photo_1", "shattered.txt")),
     "1: corner not mirrored back": unmirrored_1,
     "1: corner fixed with .T": join_grid(tiles_1[:8] + [tiles_1[8][::-1, ::-1]]),
-    "2: halves not swapped": (1 - stretched_frozen).T,
-    "2: only stretched": stretched_2,
-    "2: not transposed": 1 - stretched_2,
-    "2: not inverted": stretched_2.T,
+    "2: halves not swapped": stretched_frozen.T,
+    "2: not stretched": stored_2.T,
+    "2: not transposed": stretched_2,
     "3: strips not unshuffled": banded_l / banded_l[:, 0].reshape(-1, 1),
     "3: middle strips swapped": np.hstack([strips_3[k] for k in (0, 2, 1, 3)]) / gain.reshape(-1, 1),
     "3: not divided": stored_3,
     "3: divided by columns": stored_3 / stored_3[:, 0],
     "4: strips not unshuffled": np.linalg.inv(lens_ok) @ cursed_l,
     "4: not undone": stored_4,
-    "5: not unshuffled": np.sqrt(dark_shuffled),
-    "5: not brightened": dark_numbered,
-    "5: channels reversed": recovered_5[:, :, ::-1],
-    "5: blue, red, green": recovered_5[:, :, [2, 0, 1]],
+    "5: not brightened": dark,
+    # red-channel digit: only the orders with a wrong red channel can change it
+    # (green and blue swapped is caught by the key of photo 5)
+    "5: green as red": recovered_5[:, :, [1, 0, 2]],
+    "5: blue as red": recovered_5[:, :, [2, 1, 0]],
 }
 answers["half_fixed_digits"] = {k: digit_of(v) for k, v in half_fixed.items()}
 

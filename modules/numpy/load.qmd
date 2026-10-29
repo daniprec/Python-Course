@@ -31,7 +31,7 @@ Luckily, the camera keeps a log. This is what it recorded:
 22:13  BEEP! Ghost nearby ............. photo_1 saved
        ERROR: memory shattered. 9 fragments shuffled inside the photo.
 23:02  BEEP! Ghost nearby ............. photo_2 saved
-       ERROR: sensor frozen. Flattened, halves swapped, contrast lost, inverted.
+       ERROR: sensor frozen. Flattened, halves swapped, contrast lost.
 00:31  BEEP! Ghost nearby ............. photo_3 saved
        ERROR: interference on the sensor rows. Photo cut into 4 strips.
 01:45  BEEP! Ghost nearby ............. photo_4 saved
@@ -39,8 +39,7 @@ Luckily, the camera keeps a log. This is what it recorded:
        NOTE: 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
        NOTE: ghost surrounded by small ORANGE flames.
-       ERROR: memory shattered again. Colour channels separated and shuffled.
-       Very low light.
+       ERROR: colour channels separated and shuffled. Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.
 ```
 
@@ -77,7 +76,7 @@ def show(image):
     plt.show()
 
 
-_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'a81745a221f746f4'}
+_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '865736a1c30a82dc', 'case': 'a81745a221f746f4'}
 
 
 def check(photo, key):
@@ -166,13 +165,13 @@ G H I
 
 **How to fix it:**
 
-1. Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (`np.vsplit()` and `np.hsplit()`). Keep them in a list, in the order A, B, ..., I.
-2. Find the right order. There are no numbers this time: look at the fragments. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.
+1. Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (`np.vsplit()` and `np.hsplit()`). Keep them in a list, in the order A (top left fragment), B (top middle fragment), ..., I (bottom right fragment).
+2. Find the right order. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.
 3. Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.
 
 **Key:** the letters of the places, in the order of the original photo (row by row), for instance `check(1, "ABCDEFGHI")`.
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## NumPy Cheatsheet
 `np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
 
@@ -190,20 +189,20 @@ G H I
 
 **Files:** `photo_2/frozen.txt`. One text file... with **one value per line**.
 
-**What happened:** the ghost's chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were **swapped**. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a **negative** (black and white swapped) and **mirrored along the diagonal** (rows and columns swapped).
+**What happened:** the ghost's chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were **swapped**. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was **mirrored along the diagonal** (rows and columns swapped).
 
 **How to fix it:**
 
 1. Rebuild it: give the photo back its square shape, cut it into its left and right halves, and swap them.
 2. Stretch the values back to the range $[0, 1]$. Remember that every photo has pure black (the line) and pure white (the frame):
 $$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$
-3. Undo the negative, and undo the mirror.
+3. Undo the mirror.
 
 Tip: the photo is so faint that `show()` displays a plain gray square. To see what you are doing in step 1, look at the stretched version: stretching does not care about the position of the pixels, so the two steps can go in any order.
 
 **Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## NumPy Cheatsheet
 `arr.reshape(rows, cols)` gives an array a new shape, with the same values.
 
@@ -213,8 +212,6 @@ Tip: the photo is so faint that `show()` displays a plain gray square. To see wh
 
 `arr.min()` and `arr.max()` return the smallest and the largest value of an array.
 
-`1 - arr` subtracts every value from 1: black becomes white, and white becomes black.
-
 `arr.T` is the **transpose** of a 2D array: it swaps rows and columns.
 :::
 
@@ -222,18 +219,26 @@ Tip: the photo is so faint that `show()` displays a plain gray square. To see wh
 
 **Files:** `photo_3/banded.csv`. One CSV file, $300 \times 300$. The camera wrote it European-style: the values are separated by **semicolons** (`;`) instead of commas.
 
-**What happened:** the ghost interfered with the sensor: every **row** of pixels was multiplied by a different number between 0 and 1, a *gain*. The photo is covered with dark horizontal bands.
-$$\text{stored} = \text{photo} \times \text{gain}$$
-Then the camera cut it into **four vertical strips**, and shuffled them. This time there are no numbers: you will need your eyes.
+**What happened:** the ghost interfered with the sensor, **row by row**. Each row of pixels got darker, but not all by the same amount. All the pixels of a row were multiplied by the same number between 0 and 1, the **gain** of that row:
+
+- a row with gain `1` stayed as it was;
+- a row with gain `0.5` became half as bright;
+- a row with gain `0.2` became very dark.
+
+That is why the photo is covered with dark horizontal bands. Pixel by pixel:
+$$\text{stored}[i, j] = \text{photo}[i, j] \times \text{gain}[i]$$
+
+Then the camera cut the photo into **four vertical strips**, and shuffled them. This time there are no numbers: you will need your eyes.
 
 **How to fix it:**
 
 1. Rebuild it: cut the photo into its four strips and put them in order. The frame helps: look for the strip with the black line on its left edge, and the one with the black line on its right edge. For the two strips in the middle, try both orders and look at the picture.
-2. The white frame tells us the gains. The first column of the original photo is all `1`, so the first column of the stored photo is exactly the gain of each row. Divide each row by its gain. Careful: broadcasting must divide the **rows**, not the columns. Check the shape of the gains!
+2. Find the gains. In the original photo, the first column is part of the white frame: all its values are `1`. In row $i$, that pixel became $1 \times \text{gain}[i] = \text{gain}[i]$. So the first column of the rebuilt photo **is** the list of gains, one per row.
+3. Undo the interference: divide every row by its own gain. Careful with broadcasting! The gains are a 1D array with shape `(300,)`, and NumPy lines up a 1D array with the **columns**. Turn the gains into a column, with shape `(300, 1)`, so that each row is divided by its gain.
 
-**Key:** the first row with the strongest interference (the smallest gain).
+**Key:** the number (index) of the first row with the strongest interference, that is, the smallest gain.
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## NumPy Cheatsheet
 `np.loadtxt(url, delimiter=";")` loads a file whose values are separated by semicolons.
 
@@ -256,7 +261,7 @@ Then the camera cut it into **four vertical strips**, and shuffled them. This ti
 $$\text{stored} = L \cdot \text{photo}$$
 We found three lenses in the camera bag, but only one of them was used.
 
-Then the camera cut the stored photo into **five horizontal strips**, and shuffled them. With the rows scrambled, the strips are impossible to order by eye... but the camera left a trace: the **top-left pixel** of every strip stores its number, from 1 to 5, counted from top to bottom.
+Then the camera cut the stored photo into **five horizontal strips** of the same size, and shuffled them. With the rows scrambled, the strips are impossible to order by eye... but the camera left a trace: the **top-left pixel** of every strip stores its number, from 1 to 5, counted from top to bottom.
 
 **How to fix it:**
 
@@ -265,7 +270,7 @@ Then the camera cut the stored photo into **five horizontal strips**, and shuffl
 
 **Key:** the number of the lens.
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## NumPy Cheatsheet
 `np.loadtxt(url, delimiter=",")` loads a file whose values are separated by commas.
 
@@ -286,35 +291,27 @@ Then the camera cut the stored photo into **five horizontal strips**, and shuffl
 
 ### Photo 5: The Colour Photo
 
-**Files:** `photo_5/colour.txt`. One text file, $300 \times 1200$: four $300 \times 300$ images side by side, numbered 1 to 4 from left to right.
+**Files:** `photo_5/colour.txt`. One text file, $300 \times 900$: three $300 \times 300$ images side by side, numbered 1 to 3 from left to right.
 
 **What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue.
 
-First, the memory shattered again, just like in photo 1: nine fragments, shuffled. Luckily, this time the camera left a trace: the **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a **shuffled order**, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
+The ghost separated the three channels and placed them side by side, in a **shuffled order**. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
 **How to fix it:**
 
-1. Cut the file into its four images and find the decoy (look at them). Join the other three along a **new** axis to get a `(300, 300, 3)` array.
-2. Rebuild it: cut it into its nine fragments as in photo 1, sort them by their number, and join them. Good news: `np.vsplit()`, `np.hsplit()`, and `np.concatenate()` work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.
-3. Undo the square. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
+1. Rebuild it: cut the file into its three images, and join them along a **new** axis to get a `(300, 300, 3)` array.
+2. Undo the square.
+3. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
 
 **Key:** the numbers of the red, green, and blue images, in that order, for instance `check(5, "123")`.
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## NumPy Cheatsheet
 `np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
 
 `np.stack([red, green, blue], axis=2)` joins three 2D arrays along a **new** last axis: three `(300, 300)` arrays give one `(300, 300, 3)` array.
 
 `arr[:, :, 0]` is the first channel (red) of a colour image.
-
-`np.vsplit()` and `np.hsplit()` also cut 3D arrays by rows and by columns: every piece keeps its three channels.
-
-`arr[0, 0, 0]` is the top-left value of the first channel.
-
-`np.argsort(arr)` returns the **positions** that would sort the array: the position of the smallest value first.
-
-`np.vstack()` and `np.hstack()` also join 3D arrays.
 
 `np.sqrt(arr)` returns the square root of every value.
 :::
@@ -337,7 +334,7 @@ Work in **groups of three**. Each member of the group is in charge of different 
 |--------|--------|------------------------|
 | A | 1 and 2 | Loading, splitting, sorting, joining, `reshape()`, element-wise arithmetic |
 | B | 3 and 4 | Delimiters, splitting, sorting, broadcasting, matrix products, determinants, inverses |
-| C | 5 and the case number | Splitting 3D arrays, a new axis with `np.stack()`, colour images, aggregations |
+| C | 5 and the case number | Splitting, a new axis with `np.stack()`, colour images, aggregations |
 
 Use `check()` to confirm each key. When you finish your part, help the rest of your group: the **case number** needs all five photos, so it can only be found as a team. The first group to find it closes the investigation!
 
@@ -352,9 +349,9 @@ For the curious: the mathematics behind each fix. Click to open.
 ::: {.callout-tip collapse="true"}
 ## Photo 2: why can we undo the freeze exactly?
 
-Besides swapping rows and columns (which only moves pixels around), the ghost applied an **affine** map to every pixel: $\text{stored} = a\,(1 - \text{photo}) + b$, with $a > 0$. An affine map with $a \neq 0$ is invertible, but we need to know $a$ and $b$.
+Besides swapping rows and columns (which only moves pixels around), the ghost applied an **affine** map to every pixel: $\text{stored} = a \cdot \text{photo} + b$, with $a > 0$. An affine map with $a \neq 0$ is invertible, but we need to know $a$ and $b$.
 
-That is where the frame helps. Every photo contains pure white (`1`) and pure black (`0`), so after the negative, the smallest stored value is $b$ and the largest is $a + b$. The stretch $\frac{\text{stored} - \min}{\max - \min}$ recovers $1 - \text{photo}$ exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.
+That is where the frame helps. Every photo contains pure black (`0`) and pure white (`1`), so the smallest stored value is $b$ and the largest is $a + b$. The stretch $\frac{\text{stored} - \min}{\max - \min}$ recovers the photo exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.
 :::
 
 ::: {.callout-tip collapse="true"}
