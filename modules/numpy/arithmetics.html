@@ -563,12 +563,12 @@ window.Quarto = {
 <p>In <a href="../../modules/numpy/introduction.html">the last session</a>, you stored the marks of the midterm in a NumPy array, but the most important number was still missing: the <strong>final grade</strong> of each student. We will start by computing it.</p>
 <p>Then we will learn how NumPy does arithmetic with whole arrays at once, element by element, even when their shapes are different. This array-based style is the foundation of vector programming. Besides the grades, many of our examples come from linear algebra (vectors and shapes in the plane) and from images, which are arrays too.</p>
 <p>First, we import the libraries we will use in this session. NumPy is the library for arrays, and Matplotlib is a plotting library that we will use to display images and shapes.</p>
-<div id="cecd7376" class="cell" data-execution_count="1">
+<div id="c4d63910" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We will use two helper functions to see the results. <code>show()</code> is the one from the last session: it displays a 2D array as a grayscale image. <code>draw()</code> plots one or more polygons. You do not need to understand how they work: we will learn more about plotting later in the course.</p>
-<div id="1097f1dd" class="cell" data-execution_count="2">
+<div id="e3f38462" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(image):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display a 2D array as a grayscale image (0 = black, 1 = white)."""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    plt.imshow(image, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
@@ -588,7 +588,7 @@ window.Quarto = {
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is the data for today. First, the midterm from the last session:</p>
-<div id="6f74c26e" class="cell" data-execution_count="3">
+<div id="565abb5d" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> [<span class="st">"Ana"</span>, <span class="st">"Bruno"</span>, <span class="st">"Chloe"</span>, <span class="st">"Diego"</span>, <span class="st">"Emma"</span>, <span class="st">"Farid"</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Points of each exercise: 2 open problems, 3 debugging, 6 multiple choice</span></span>
@@ -604,7 +604,7 @@ window.Quarto = {
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A shape in the plane is a list of points. With NumPy, it is an array with <strong>one point per row</strong>: column 0 holds the <span class="math inline">\(x\)</span> coordinates, and column 1 the <span class="math inline">\(y\)</span> coordinates.</p>
-<div id="917a103b" class="cell" data-execution_count="4">
+<div id="826e6302" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The corners of a house, one point (x, y) per row</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>house <span class="op">=</span> np.array([</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">0</span>, <span class="dv">0</span>],   <span class="co"># bottom-left</span></span>
@@ -629,7 +629,7 @@ window.Quarto = {
 </div>
 </div>
 <p>And the two images we painted in the last session:</p>
-<div id="2fc76a76" class="cell" data-execution_count="5">
+<div id="7e138d52" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>face <span class="op">=</span> np.zeros((<span class="dv">8</span>, <span class="dv">8</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>face[<span class="dv">2</span>, <span class="dv">2</span>] <span class="op">=</span> <span class="dv">1</span>        <span class="co"># left eye</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>face[<span class="dv">2</span>, <span class="dv">5</span>] <span class="op">=</span> <span class="dv">1</span>        <span class="co"># right eye</span></span>
@@ -646,7 +646,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="7addb263" class="cell" data-execution_count="6">
+<div id="022c3e31" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>board <span class="op">=</span> np.zeros((<span class="dv">8</span>, <span class="dv">8</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>board[::<span class="dv">2</span>, <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> <span class="dv">1</span>   <span class="co"># even rows, odd columns</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>board[<span class="dv">1</span>::<span class="dv">2</span>, ::<span class="dv">2</span>] <span class="op">=</span> <span class="dv">1</span>   <span class="co"># odd rows, even columns</span></span>
@@ -663,7 +663,7 @@ window.Quarto = {
 <section id="the-problem-grading-with-loops" class="level2">
 <h2 class="anchored" data-anchor-id="the-problem-grading-with-loops">The Problem: Grading with Loops</h2>
 <p>The points of a student in one exercise are her mark times the value of the exercise. Her final score is the sum over all exercises, and dividing by 10 gives a grade out of 10. With what we know from Modules 1 and 2, that means two nested loops:</p>
-<div id="1ac21e5b" class="cell" data-execution_count="7">
+<div id="23fb8983" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>final_grades <span class="op">=</span> []</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> marks:</span>
@@ -678,7 +678,7 @@ window.Quarto = {
 </div>
 </div>
 <p>It works, but the code hides the idea behind indices and accumulators. With NumPy, it is one line:</p>
-<div id="47274b08" class="cell" data-execution_count="8">
+<div id="15cfda9c" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>final_grades <span class="op">=</span> np.<span class="bu">sum</span>(marks <span class="op">*</span> weights, axis<span class="op">=</span><span class="dv">1</span>) <span class="op">/</span> <span class="dv">10</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(final_grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -690,7 +690,7 @@ window.Quarto = {
 <section id="element-wise-operations" class="level2">
 <h2 class="anchored" data-anchor-id="element-wise-operations">Element-Wise Operations</h2>
 <p>When two arrays have the same shape, the arithmetic operators act <strong>element by element</strong>: the first element with the first element, the second with the second, and so on. Let’s take one student:</p>
-<div id="5c5c0e0c" class="cell" data-execution_count="9">
+<div id="b5b37347" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ana <span class="op">=</span> marks[<span class="dv">0</span>]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiplication element-wise: points earned in each exercise</span></span>
@@ -700,7 +700,7 @@ window.Quarto = {
 </div>
 </div>
 <p>This is also how you add vectors and multiply them by a scalar in linear algebra:</p>
-<div id="1b8c94ed" class="cell" data-execution_count="10">
+<div id="5297060d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two vectors of R^3</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="dv">4</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>])</span>
@@ -713,7 +713,7 @@ window.Quarto = {
 [-3  2  4]</code></pre>
 </div>
 </div>
-<div id="2f1a1c76" class="cell" data-execution_count="11">
+<div id="f4a2e0af" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A scalar is applied to every element</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">3</span> <span class="op">*</span> u)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(u <span class="op">/</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -722,7 +722,7 @@ window.Quarto = {
 [0.5 1.  1.5]</code></pre>
 </div>
 </div>
-<div id="af07d469" class="cell" data-execution_count="12">
+<div id="4400acd8" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Power element-wise</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(u <span class="op">**</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -740,7 +740,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>The product <code>u * v</code> also works element by element, and gives another vector:</p>
-<div id="5b3403f7" class="cell" data-execution_count="13">
+<div id="fe21e655" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(u <span class="op">*</span> v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[ 4  0 -3]</code></pre>
@@ -760,7 +760,7 @@ Exercise: A Linear Combination
 </div>
 <div class="callout-body-container callout-body">
 <p>Compute the linear combination <span class="math inline">\(2u - v + 3w\)</span> without a loop. Then compute the midpoint between <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>, <span class="math inline">\(\frac{u + v}{2}\)</span>.</p>
-<div id="4b3f0261" class="cell" data-execution_count="14">
+<div id="6de06b73" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Three vectors of R^3</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="dv">4</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>])</span>
@@ -780,7 +780,7 @@ Solution
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="be18dfe7" class="cell" data-execution_count="15">
+<div id="74ca67df" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">*</span> u <span class="op">-</span> v <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> w)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((u <span class="op">+</span> v) <span class="op">/</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -816,7 +816,7 @@ Solution
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="42a4c80f" class="cell" data-execution_count="16">
+<div id="52044478" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">11</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(n <span class="op">**</span> <span class="dv">2</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">1</span> <span class="op">/</span> n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -832,7 +832,7 @@ Solution
 <section id="arithmetic-on-images" class="level3">
 <h3 class="anchored" data-anchor-id="arithmetic-on-images">Arithmetic on Images</h3>
 <p>An image is an array too, so arithmetic also works on pictures. Subtracting every pixel from 1 swaps black and white:</p>
-<div id="15cd8dce" class="cell" data-execution_count="17">
+<div id="1b8d6127" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>show(<span class="dv">1</span> <span class="op">-</span> face)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -843,7 +843,7 @@ Solution
 </div>
 </div>
 <p>Multiplying by a number smaller than 1 makes the image darker:</p>
-<div id="714a8365" class="cell" data-execution_count="18">
+<div id="7366cc59" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>show(<span class="fl">0.5</span> <span class="op">*</span> face)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -854,7 +854,7 @@ Solution
 </div>
 </div>
 <p>Adding two images with the same shape adds their pixels. Values above 1 are displayed as white.</p>
-<div id="7461f4e9" class="cell" data-execution_count="19">
+<div id="0863138d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>show(face <span class="op">+</span> board)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -889,7 +889,7 @@ Solution
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="37c9389d" class="cell" data-execution_count="20">
+<div id="f1406e5a" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>show(<span class="fl">0.7</span> <span class="op">*</span> face <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> board)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -899,7 +899,7 @@ Solution
 </div>
 </div>
 </div>
-<div id="6da5f75a" class="cell" data-execution_count="21">
+<div id="5996a5e6" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> [<span class="dv">1</span>, <span class="fl">0.75</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>, <span class="dv">0</span>]:</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    show(a <span class="op">*</span> face <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> a) <span class="op">*</span> board)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -913,7 +913,7 @@ Solution
 <section id="broadcasting-in-numpy" class="level2">
 <h2 class="anchored" data-anchor-id="broadcasting-in-numpy">Broadcasting in NumPy</h2>
 <p>Look again at the final grades: <code>marks</code> has shape <code>(6, 11)</code>, while <code>weights</code> has shape <code>(11,)</code>. They do not have the same shape… and yet:</p>
-<div id="c8d3ddf4" class="cell" data-execution_count="22">
+<div id="b98e339f" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> marks <span class="op">*</span> weights</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -937,7 +937,7 @@ Solution
 weights       (11,)   -&gt; treated as (1, 11), then stretched to (6, 11)
 result    (6, 11)</code></pre>
 <p>The same rule works with the house, with shape <code>(5, 2)</code>. A scalar scales every point, and a row of shape <code>(2,)</code> is added to every point. This makes the house twice as big and moves it 3 units right and 1 unit up:</p>
-<div id="0e03b2d3" class="cell" data-execution_count="23">
+<div id="46fcaa0f" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>moved <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> house <span class="op">+</span> np.array([<span class="dv">3</span>, <span class="dv">1</span>])</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(moved)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>draw(house, moved)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -957,7 +957,7 @@ result    (6, 11)</code></pre>
 </div>
 </div>
 <p>With a row of shape <code>(2,)</code>, we can also scale each coordinate differently. This stretches the house horizontally:</p>
-<div id="1cd371c5" class="cell" data-execution_count="24">
+<div id="82523ab9" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>draw(house, house <span class="op">*</span> np.array([<span class="dv">2</span>, <span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -968,21 +968,21 @@ result    (6, 11)</code></pre>
 </div>
 </div>
 <p>Now consider a different situation. We want to pull the roof away from the origin, multiplying that point by 1.5 and leaving the others as they are. We store one factor per point:</p>
-<div id="8ba4f4ce" class="cell" data-execution_count="25">
+<div id="89c8f5b3" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pull <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">1</span>])</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pull.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(5,)</code></pre>
 </div>
 </div>
-<div id="b521f2fa" class="cell" data-execution_count="26">
+<div id="b87ea512" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pulled <span class="op">=</span> house <span class="op">*</span> pull</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>ValueError: operands could not be broadcast together with shapes (5,2) (5,) </code></pre>
 </div>
 </div>
 <p>The trailing dimensions are <code>2</code> and <code>5</code>: they are different and neither is <code>1</code>, so the shapes are incompatible. We need <code>pull</code> to be a <strong>column</strong>, with shape <code>(5, 1)</code>, so that it is stretched along the coordinates. A reshape is enough:</p>
-<div id="3af6d0d8" class="cell" data-execution_count="27">
+<div id="afe0df93" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pull_column <span class="op">=</span> pull.reshape(<span class="dv">5</span>, <span class="dv">1</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pull_column)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -993,7 +993,7 @@ result    (6, 11)</code></pre>
  [1. ]]</code></pre>
 </div>
 </div>
-<div id="23933766" class="cell" data-execution_count="28">
+<div id="08a8fd8d" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>pulled <span class="op">=</span> house <span class="op">*</span> pull_column</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>draw(house, pulled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1083,7 +1083,7 @@ Solution
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="19d1b2f3" class="cell" data-execution_count="29">
+<div id="6e14fb6d" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>ramp <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">8</span>)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>canvas <span class="op">=</span> np.zeros((<span class="dv">8</span>, <span class="dv">8</span>))</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1097,7 +1097,7 @@ Solution
 </div>
 </div>
 </div>
-<div id="a1be9a4b" class="cell" data-execution_count="30">
+<div id="bcec7b6c" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>vertical <span class="op">=</span> canvas <span class="op">+</span> ramp.reshape(<span class="dv">8</span>, <span class="dv">1</span>)      <span class="co"># (8, 8) + (8, 1)</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>show(vertical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1108,7 +1108,7 @@ Solution
 </div>
 </div>
 </div>
-<div id="af289e54" class="cell" data-execution_count="31">
+<div id="67dd2c21" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>diagonal <span class="op">=</span> (ramp <span class="op">+</span> ramp.reshape(<span class="dv">8</span>, <span class="dv">1</span>)) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># (8,) + (8, 1) -&gt; (8, 8)</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>show(diagonal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1119,7 +1119,7 @@ Solution
 </div>
 </div>
 </div>
-<div id="9f7e971e" class="cell" data-execution_count="32">
+<div id="ec6f1e93" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>show(face <span class="op">*</span> horizontal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1167,7 +1167,7 @@ Solution
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="cac3e75d" class="cell" data-execution_count="33">
+<div id="67015711" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>],</span>
@@ -1221,7 +1221,7 @@ Solution
 </div>
 <div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="20f674e5" class="cell" data-execution_count="34">
+<div id="a6867506" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
