@@ -8,8 +8,8 @@ execute:
 # - Source images and generator: scripts/ghost_hunt/ in this repo
 #   (ghost_1.png ... ghost_5.png and generate_ghost_photos.py).
 # - To regenerate: python scripts/ghost_hunt/generate_ghost_photos.py (needs numpy and Pillow).
-#   It writes data/ghost_photos.zip and data/ghost_photos/photo_1/fragment_A.txt (used in
-#   the tip below), plus scripts/ghost_hunt/answers.json with the keys.
+#   It writes the files of data/ghost_photos/ (read by the students from their GitHub URLs),
+#   plus scripts/ghost_hunt/answers.json with the keys.
 # - answers.json is in .gitignore: never commit it. The fixed seed always gives the same
 #   photos and keys.
 ---
@@ -46,46 +46,28 @@ Who did we catch? We do not know yet: the photos will tell us.
 Our mission: load the broken files, use the log to understand what happened to each photo, **recover all five pictures**, and find the **case number** to close the investigation.
 
 ::: {.callout-note}
-## Colab Activity
+## Online Activity
 
-This lesson downloads the photos and is intended to run in Google Colab. The page displays the code without executing it during website rendering.
+The photos are read directly from the internet, so you need a connection. The page displays the code without executing it during website rendering.
 :::
-
----
-
-## Downloading the Photos
-
-Execute the cell below to download the photos into your Colab session. You will get a folder, `ghost_photos`, with one subfolder per photo: `photo_1` to `photo_5`.
-
-Working on your own computer instead? Download the photos here and extract the ZIP file next to your notebook:
-
-[Download the photos](https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos.zip){.btn .btn-primary}
-
-> 🛑 **Troubleshooting Tip:**
-> If you encounter any issues while executing the cell, go to **"Runtime"**, select **"Disconnect and delete runtime"**, and execute the cell again.
-
-```{python}
-# Download the photos from the course repository and extract them
-!wget -q https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos.zip -O ghost_photos.zip
-!unzip -o -q ghost_photos.zip
-!ls ghost_photos
-```
 
 ---
 
 ## Setting Up Our Toolkit
 
-Two helper functions:
+The photos are stored online, in the course repository. `BASE` is the address of the folder that contains them. Two helper functions:
 
 - `show(image)` displays an array as an image: grayscale if it is 2D, colour if it is 3D.
 - `check(photo, key)` tells you whether you found the key of a photo, for instance `check(1, ...)`, or the case number, `check("case", ...)`.
 
 ```{python}
 import hashlib
-import os
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# The photos are stored in the course repository
+BASE = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos"
 
 
 def show(image):
@@ -112,30 +94,39 @@ def check(photo, key):
         print(f"Correct key! Photo {photo} is recovered.")
 ```
 
+## Where Are the Photos?
+
+Each photo is a folder of files. To get the address (URL) of a file, add the folder and the file name to `BASE`:
+
+```python
+url = f"{BASE}/photo_1/fragment_A.txt"
+```
+
+| Photo | Files |
+|-------|-------|
+| 1 | `photo_1/fragment_A.txt`, `photo_1/fragment_B.txt`, ..., `photo_1/fragment_I.txt` |
+| 2 | `photo_2/fragment_0_0.txt`, `photo_2/fragment_0_1.txt`, ..., `photo_2/fragment_2_2.txt` |
+| 3 | `photo_3/fragment_0_0.csv`, `photo_3/fragment_0_1.csv`, ..., `photo_3/fragment_2_2.csv` |
+| 4 | `photo_4/fragment_0_0.csv`, ..., `photo_4/fragment_2_2.csv`, and `photo_4/lens_1.csv`, `lens_2.csv`, `lens_3.csv` |
+| 5 | `photo_5/channel_1.txt`, `photo_5/channel_2.txt`, `photo_5/channel_3.txt`, `photo_5/channel_4.txt` |
+
+`np.loadtxt()` reads a text file straight from its URL:
+
+```python
+fragment = np.loadtxt(f"{BASE}/photo_1/fragment_A.txt")
+```
+
+The first time, NumPy downloads the file and keeps a copy next to your notebook, in a folder called `raw.githubusercontent.com`. Do not be surprised if it appears!
+
 These are the tools you will need. You already know most of them!
 
 | Tool | What it does |
 |------|--------------|
-| `os.listdir(folder)` | Lists the files of a folder |
-| `os.path.join(folder, name)` | Builds the path of a file |
-| `np.loadtxt(path)` | Loads a text file (`.txt`); add `delimiter=","` for `.csv` files |
-| `np.load(path)` | Loads a NumPy binary file (`.npy`) |
-| `np.save(path, arr)` / `np.savetxt(path, arr)` | Saves an array as `.npy` / as text |
+| `np.loadtxt(url)` | Loads a text file (`.txt`); for `.csv` files, add the separator: `delimiter=","` or `delimiter=";"` |
+| `np.save(path, arr)` / `np.load(path)` | Saves / loads an array in NumPy's binary format (`.npy`), on your computer |
+| `np.savetxt(path, arr)` | Saves an array as a text file |
 | `np.concatenate(arrays, axis=...)` | Joins arrays along an existing axis (also `np.hstack()`, `np.vstack()`) |
 | `np.stack(arrays, axis=...)` | Joins arrays along a **new** axis |
-
-::: {.callout-tip}
-## Loading directly from the internet
-
-`np.loadtxt()` can also read a text file straight from a URL, without downloading it first:
-
-```python
-url = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos/photo_1/fragment_A.txt"
-fragment = np.loadtxt(url)
-```
-
-`np.load()` and `os.listdir()` only work with files on your computer (or in your Colab session). That is why we download the whole folder.
-:::
 
 Every photo is a $300 \times 300$ array, with values between 0 (black) and 1 (white). When a photo is split into 9 fragments, each fragment is $100 \times 100$, and they are placed like this:
 
@@ -158,7 +149,7 @@ For each photo, the camera log tells us what happened. This is what we have, and
 
 ### Photo 1: The Shattered Photo
 
-**Files:** `ghost_photos/photo_1/fragment_A.txt` to `fragment_I.txt`. Nine text files, one $100 \times 100$ fragment each.
+**Files:** `photo_1/fragment_A.txt` to `fragment_I.txt`. Nine text files, one $100 \times 100$ fragment each.
 
 **What happened:** the memory shattered, and the fragments were saved with random letters. The letters say nothing about the position.
 
@@ -168,7 +159,7 @@ For each photo, the camera log tells us what happened. This is what we have, and
 
 ### Photo 2: The Frozen Photo
 
-**Files:** `ghost_photos/photo_2/fragment_<row>_<col>.txt`. Nine text files named by position... but each one has **one value per line**.
+**Files:** `photo_2/fragment_<row>_<col>.txt`. Nine text files named by position... but each one has **one value per line**.
 
 **What happened:** the ghost's chill froze the sensor. Each fragment was flattened into a single line of values, and the photo lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a **negative** (black and white swapped) and **mirrored along the diagonal** (rows and columns swapped).
 
@@ -183,7 +174,7 @@ $$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$
 
 ### Photo 3: The Banded Photo
 
-**Files:** `ghost_photos/photo_3/fragment_<row>_<col>.npy`. Nine NumPy binary files, named by position.
+**Files:** `photo_3/fragment_<row>_<col>.csv`. Nine CSV files named by position. The camera wrote them European-style: the values are separated by **semicolons** (`;`) instead of commas.
 
 **What happened:** the ghost interfered with the sensor: every **row** of pixels was multiplied by a different number between 0 and 1, a *gain*. The photo is complete, but it is covered with dark horizontal bands.
 $$\text{stored} = \text{photo} \times \text{gain}$$
@@ -194,7 +185,7 @@ $$\text{stored} = \text{photo} \times \text{gain}$$
 
 ### Photo 4: The Cursed Lens
 
-**Files:** `ghost_photos/photo_4/fragment_<row>_<col>.csv`, nine fragments in CSV format (values separated by commas), and `lens_1.csv`, `lens_2.csv`, `lens_3.csv`, three $300 \times 300$ matrices.
+**Files:** `photo_4/fragment_<row>_<col>.csv`, nine fragments in CSV format (values separated by commas), and `lens_1.csv`, `lens_2.csv`, `lens_3.csv`, three $300 \times 300$ matrices.
 
 **What happened:** the ghost cursed the lens of the camera. The photo went through a lens matrix $L$, which scrambled its rows:
 $$\text{stored} = L \cdot \text{photo}$$
@@ -206,7 +197,7 @@ We found three lenses in the camera bag, but only one of them was used.
 
 ### Photo 5: The Colour Photo
 
-**Files:** `ghost_photos/photo_5/channel_1.npy` to `channel_4.npy`. Four NumPy binary files, $300 \times 300$ each.
+**Files:** `photo_5/channel_1.txt` to `channel_4.txt`. Four text files, $300 \times 300$ each.
 
 **What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and **shuffled the file numbers**. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
@@ -228,14 +219,14 @@ Careful: a photo that is only half fixed gives the wrong digit. You need all fiv
 
 Work in **groups of three or four**. Recover the five photos, in any order, and use `check()` to confirm each key. The first group to find the case number closes the investigation!
 
-When a photo is recovered, **save the evidence**: store it with `np.save()`, so that you never have to fix it again. Can you also store it with `np.savetxt()`? Try it with photo 5.
+When a photo is recovered, **save the evidence** on your computer: store it with `np.save()` and load it back with `np.load()`, so that you never have to fix it again. Can you also store it with `np.savetxt()`? Try it with photo 5.
 
 ---
 
 ## Summary and Reflection
 
-- `os.listdir()` lists the files of a folder, and `os.path.join()` builds their paths.
-- `np.loadtxt()` loads text files (`delimiter=","` for CSV), and `np.load()` loads `.npy` files.
+- `np.loadtxt()` loads text files, even straight from a URL; `delimiter` sets the separator of CSV files.
+- `np.load()` loads `.npy` files from your computer.
 - `np.save()` keeps an array exactly, with its shape and data type; `np.savetxt()` writes readable text, but only for 1D and 2D arrays.
 - `np.concatenate()`, `np.hstack()`, and `np.vstack()` join arrays along an existing axis; `np.stack()` creates a new one.
 - Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.

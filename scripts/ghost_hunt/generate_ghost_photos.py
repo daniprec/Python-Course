@@ -4,9 +4,10 @@ Generate the broken ghost-camera photos for the Halloween session.
 Run from anywhere:  python scripts/ghost_hunt/generate_ghost_photos.py   (needs numpy and Pillow)
 
 Input : ghost_1.png ... ghost_5.png, in the same folder as this script (square images)
-Output: data/ghost_photos.zip and data/ghost_photos/photo_1/fragment_A.txt (used by the
-        lesson modules/numpy/load.qmd), and answers.json with the keys next to this script.
-        answers.json is in .gitignore: never commit it.
+Output: data/ghost_photos/photo_1 ... photo_5 (text files that students read with
+        np.loadtxt() straight from their GitHub URLs, see modules/numpy/load.qmd), and
+        answers.json with the keys next to this script. answers.json is in .gitignore:
+        never commit it.
 
 Every grayscale photo is 300x300 with values in [0, 1], a white frame (4 px) and a
 black line just inside it (2 px), so it always contains pure white and pure black.
@@ -15,10 +16,11 @@ black line just inside it (2 px), so it always contains pure white and pure blac
                   fragment number (1-9, row by row).
 - photo_2 (.txt)  9 fragments named by position, flattened to one value per line.
                   The photo was transposed, inverted, and squeezed into a narrow range.
-- photo_3 (.npy)  9 fragments named by position; every row was multiplied by a gain.
+- photo_3 (.csv)  9 fragments named by position, separated by semicolons; every row
+                  was multiplied by a gain.
 - photo_4 (.csv)  9 fragments named by position; rows mixed by a lens matrix
                   (stored = L @ photo). Three lenses, only one invertible.
-- photo_5 (.npy)  colour photo, squared (darker). Its 3 channels are saved in
+- photo_5 (.txt)  colour photo, squared (darker). Its 3 channels are saved in
                   shuffled files channel_1..4, one of them a decoy.
 
 Each photo hides one digit of the case number: the first decimal of the mean of its
@@ -27,7 +29,6 @@ top-right quarter (rows 0-149, columns 150-299); for the colour photo, the red c
 import json
 import os
 import shutil
-import tempfile
 
 import numpy as np
 from PIL import Image, ImageOps
@@ -40,9 +41,8 @@ LOW_CONTRAST = (2, 4)       # source images that get a contrast stretch
 rng = np.random.default_rng(SEED)
 here = os.path.dirname(os.path.abspath(__file__))
 src = here                                     # ghost_1.png ... ghost_5.png live next to this script
-data = os.path.join(here, "..", "..", "data")  # repo data/ folder
-work = tempfile.mkdtemp()                      # the photos are built here, then zipped
-out = os.path.join(work, "ghost_photos")
+out = os.path.join(here, "..", "..", "data", "ghost_photos")   # repo data/ghost_photos
+shutil.rmtree(out, ignore_errors=True)
 for k in range(1, 6):
     os.makedirs(os.path.join(out, f"photo_{k}"))
 
@@ -115,7 +115,7 @@ band_gains = np.array([0.95, 0.6, 0.85, 0.45, 0.75, 0.2, 0.9, 0.5, 0.7, 0.35])
 gain = np.repeat(band_gains, SIZE // len(band_gains))
 stored_3 = np.round(photos[3] * gain.reshape(-1, 1), 4)
 for (r, c), frag in fragments_of(stored_3).items():
-    np.save(os.path.join(out, "photo_3", f"fragment_{r}_{c}.npy"), frag)
+    np.savetxt(os.path.join(out, "photo_3", f"fragment_{r}_{c}.csv"), frag, fmt="%.4f", delimiter=";")
 answers["photo_3"] = int(np.argmin(gain))
 recovered_3 = stored_3 / stored_3[:, 0].reshape(-1, 1)
 
@@ -140,8 +140,8 @@ recovered_4 = np.linalg.inv(lens_ok) @ stored_4
 dark = np.round(photos[5] ** 2, 4)
 files = rng.permutation([1, 2, 3, 4])          # red, green, blue, decoy
 for channel in range(3):
-    np.save(os.path.join(out, "photo_5", f"channel_{files[channel]}.npy"), dark[:, :, channel])
-np.save(os.path.join(out, "photo_5", f"channel_{files[3]}.npy"), dark.mean(axis=2)[rng.permutation(SIZE)])
+    np.savetxt(os.path.join(out, "photo_5", f"channel_{files[channel]}.txt"), dark[:, :, channel], fmt="%.4f")
+np.savetxt(os.path.join(out, "photo_5", f"channel_{files[3]}.txt"), dark.mean(axis=2)[rng.permutation(SIZE)], fmt="%.4f")
 answers["photo_5"] = "".join(str(f) for f in files[:3])
 recovered_5 = np.sqrt(dark)
 
@@ -170,9 +170,4 @@ answers["half_fixed_digits"] = {k: digit_of(v) for k, v in half_fixed.items()}
 with open(os.path.join(here, "answers.json"), "w") as f:
     json.dump(answers, f, indent=2)
 
-os.makedirs(os.path.join(data, "ghost_photos", "photo_1"), exist_ok=True)
-shutil.make_archive(os.path.join(data, "ghost_photos"), "zip", work, "ghost_photos")
-shutil.copy(os.path.join(out, "photo_1", "fragment_A.txt"),
-            os.path.join(data, "ghost_photos", "photo_1", "fragment_A.txt"))
-shutil.rmtree(work)
 print(json.dumps(answers, indent=1))
