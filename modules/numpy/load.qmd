@@ -8,6 +8,7 @@ execute:
 # - Source images and generator: scripts/ghost_hunt/ in this repo
 #   (ghost_1.png ... ghost_5.png and generate_ghost_photos.py).
 # - To regenerate: python scripts/ghost_hunt/generate_ghost_photos.py (needs numpy and Pillow).
+#   It also writes data/ghost_photos.zip, the offline backup linked in the page.
 #   It writes the files of data/ghost_photos/ (read by the students from their GitHub URLs),
 #   plus scripts/ghost_hunt/answers.json with the keys.
 # - answers.json is in .gitignore: never commit it. The fixed seed always gives the same
@@ -217,9 +218,105 @@ Careful: a photo that is only half fixed gives the wrong digit. You need all fiv
 
 ## Your Mission
 
-Work in **groups of three or four**. Recover the five photos, in any order, and use `check()` to confirm each key. The first group to find the case number closes the investigation!
+Work in **groups of three**. Each member of the group is in charge of different photos (this table is a suggestion, you can split the task in the way you prefer):
+
+| Member | Photos | What you will practise |
+|--------|--------|------------------------|
+| A | 1 and 2 | Loading, sorting, joining, `reshape()`, element-wise arithmetic |
+| B | 3 and 4 | Delimiters, broadcasting, matrix products, determinants, inverses |
+| C | 5 and the case number | A new axis with `np.stack()`, colour images, aggregations |
+
+Use `check()` to confirm each key. When you finish your part, help the rest of your group: the **case number** needs all five photos, so it can only be found as a team. The first group to find it closes the investigation!
 
 When a photo is recovered, **save the evidence** on your computer: store it with `np.save()` and load it back with `np.load()`, so that you never have to fix it again. Can you also store it with `np.savetxt()`? Try it with photo 5.
+
+---
+
+## Why Does This Work?
+
+For the curious: the mathematics behind each fix. Click to open.
+
+::: {.callout-tip collapse="true"}
+## Photo 2: why can we undo the freeze exactly?
+
+Besides swapping rows and columns (which only moves pixels around), the ghost applied an **affine** map to every pixel: $\text{stored} = a\,(1 - \text{photo}) + b$, with $a > 0$. An affine map with $a \neq 0$ is invertible, but we need to know $a$ and $b$.
+
+That is where the frame helps. Every photo contains pure white (`1`) and pure black (`0`), so after the negative, the smallest stored value is $b$ and the largest is $a + b$. The stretch $\frac{\text{stored} - \min}{\max - \min}$ recovers $1 - \text{photo}$ exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.
+:::
+
+::: {.callout-tip collapse="true"}
+## Photo 3: broadcasting is a matrix product in disguise
+
+Multiplying every row $i$ by its gain $g_i$ is the same as multiplying on the left by a **diagonal matrix**:
+
+$$\text{stored} = G \cdot \text{photo}, \qquad G = \begin{pmatrix} g_1 & & \\ & \ddots & \\ & & g_{300} \end{pmatrix}$$
+
+The inverse of a diagonal matrix is diagonal, with entries $1/g_i$. So `stored / gain.reshape(-1, 1)` computes exactly $G^{-1} \cdot \text{stored}$, without building a $300 \times 300$ matrix. And `stored / gain`, the wrong version, computes $\text{stored} \cdot G^{-1}$: it divides the columns. Try it: `np.linalg.inv(np.diag(gain)) @ stored`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Photo 4: why is the inverse of the lens its transpose?
+
+The correct lens is a **permutation matrix**: the identity matrix with its rows shuffled. Each row and each column has a single `1`, so the rows are orthonormal vectors. That makes $L$ an **orthogonal** matrix: $L L^T = I$, and therefore $L^{-1} = L^T$.
+
+Its determinant is $\pm 1$. Each swap of two rows of the identity changes the sign of the determinant, and $|\det L| = 1$ means that the lens does not stretch or squash space: it only moves the rows around.
+:::
+
+::: {.callout-tip collapse="true"}
+## Photo 4: what does a determinant of 0 mean here?
+
+A matrix with determinant 0 loses information, so no matrix can undo it.
+
+- Lens 1 has **two equal rows**: two rows of the stored photo would be copies of the same row of the original, and one row of the original would be lost forever.
+- Lens 3 has a **row of zeros**: one row of the stored photo would be black, whatever the original was.
+
+In both cases, different photos would give the same stored photo, so it is impossible to know which one we started from.
+:::
+
+::: {.callout-tip collapse="true"}
+## Photo 5: why the square root, and why six orders?
+
+On $[0, 1]$, the function $x \mapsto x^2$ is increasing, so it is invertible, and its inverse is $\sqrt{x}$. Since $x^2 \le x$ there, squaring darkens every pixel, except pure black and pure white.
+
+The three channels can be placed in $3! = 3 \times 2 \times 1 = 6$ orders: a permutation of the last axis. The mean brightness of the photo does not depend on the order, but the mean of the red channel does: that is why the digit of photo 5 uses the red channel only.
+:::
+
+---
+
+## What Else Can We Load and Save?
+
+Today we only needed `np.loadtxt()`, because the photos were tidy text files on the internet. When you work with files **on your own computer**, NumPy and Python offer much more:
+
+- **Skip headers and pick columns.** Real files often start with a line of column names. `skiprows` skips lines, and `usecols` keeps only some columns:
+
+  ```python
+  data = np.loadtxt("readings.csv", delimiter=",", skiprows=1, usecols=(0, 2))
+  ```
+
+- **Missing values.** `np.loadtxt()` fails if a value is missing. `np.genfromtxt()` reads it anyway and writes `nan` (not a number) in the empty places:
+
+  ```python
+  data = np.genfromtxt("readings.csv", delimiter=",", skip_header=1)
+  print(np.isnan(data).sum())   # how many values are missing
+  ```
+
+- **Readable files for other programs.** `np.savetxt()` can choose the separator, the number format, and a header, so that Excel can open the file:
+
+  ```python
+  np.savetxt("photo_1.csv", photo_1, delimiter=",", fmt="%.3f", header="my recovered photo")
+  ```
+
+- **Several arrays in one file.** `np.savez()` stores many arrays together, each with a name; `np.savez_compressed()` does the same and takes less space:
+
+  ```python
+  np.savez("evidence.npz", photo_1=photo_1, photo_5=photo_5)
+  evidence = np.load("evidence.npz")
+  print(evidence["photo_5"].shape)
+  ```
+
+- **Images.** Matplotlib reads and writes image files as NumPy arrays: `plt.imread("ghost.png")` and `plt.imsave("ghost.png", photo_5)`. PNG images often have a fourth channel for transparency, so their shape is `(height, width, 4)`.
+
+- **Many files.** On your computer, Python can list the files of a folder for you: `os.listdir("ghost_photos/photo_1")` or `glob.glob("ghost_photos/photo_1/*.txt")`. Today we did not need it, because we knew the names of the files.
 
 ---
 
