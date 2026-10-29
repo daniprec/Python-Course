@@ -166,11 +166,25 @@ G H I
 
 **How to fix it:**
 
-1. Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (`np.vsplit()` and `np.hsplit()`). Keep them in the order A, B, ..., I.
-2. The camera left a trace: the **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo. Read that pixel in every fragment and sort the fragments by it (`np.argsort()` is your friend).
+1. Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (`np.vsplit()` and `np.hsplit()`). Keep them in a list, in the order A, B, ..., I.
+2. Find the right order. There are no numbers this time: look at the fragments. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.
 3. Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.
 
-**Key:** the letters of the places, sorted by fragment number, for instance `check(1, "ABCDEFGHI")`.
+**Key:** the letters of the places, in the order of the original photo (row by row), for instance `check(1, "ABCDEFGHI")`.
+
+::: {.callout-tip}
+## NumPy Cheatsheet
+`np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
+
+`np.vsplit(arr, n)` cuts an array into `n` equal pieces along **rows** (vertically).
+
+`np.hstack([arr1, arr2, arr3])` joins arrays side by side (horizontally).
+
+`np.vstack([arr1, arr2, arr3])` joins arrays one on top of the other (vertically).
+
+`arr.T` is the **transpose** of a 2D array: it swaps rows and columns.
+:::
+
 
 ### Photo 2: The Frozen Photo
 
@@ -189,6 +203,21 @@ Tip: the photo is so faint that `show()` displays a plain gray square. To see wh
 
 **Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.
 
+::: {.callout-tip}
+## NumPy Cheatsheet
+`arr.reshape(rows, cols)` gives an array a new shape, with the same values.
+
+`np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
+
+`np.hstack([arr1, arr2])` joins arrays side by side (horizontally).
+
+`arr.min()` and `arr.max()` return the smallest and the largest value of an array.
+
+`1 - arr` subtracts every value from 1: black becomes white, and white becomes black.
+
+`arr.T` is the **transpose** of a 2D array: it swaps rows and columns.
+:::
+
 ### Photo 3: The Banded Photo
 
 **Files:** `photo_3/banded.csv`. One CSV file, $300 \times 300$. The camera wrote it European-style: the values are separated by **semicolons** (`;`) instead of commas.
@@ -204,6 +233,21 @@ Then the camera cut it into **four vertical strips**, and shuffled them. This ti
 
 **Key:** the first row with the strongest interference (the smallest gain).
 
+::: {.callout-tip}
+## NumPy Cheatsheet
+`np.loadtxt(url, delimiter=";")` loads a file whose values are separated by semicolons.
+
+`np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
+
+`np.hstack([arr1, arr2, arr3])` joins arrays side by side (horizontally).
+
+`arr[:, 0]` is the first column of a 2D array, with shape `(rows,)`.
+
+`arr.reshape(-1, 1)` turns a 1D array into a **column**, with shape `(rows, 1)`.
+
+`np.argmin(arr)` returns the **position** of the smallest value (the first one, if there is a tie).
+:::
+
 ### Photo 4: The Cursed Lens
 
 **Files:** `photo_4/cursed.csv`, a $300 \times 300$ photo in CSV format (values separated by commas), and `lens_1.csv`, `lens_2.csv`, `lens_3.csv`, three $300 \times 300$ matrices.
@@ -216,10 +260,29 @@ Then the camera cut the stored photo into **five horizontal strips**, and shuffl
 
 **How to fix it:**
 
-1. Rebuild it: cut the photo into its five strips, sort them by their number, and join them again.
+1. Rebuild it: cut the photo into its five strips, sort them by their number (`np.argsort()` is your friend), and join them again.
 2. Undo the matrix product with the inverse of the lens, $\text{photo} = L^{-1} \cdot \text{stored}$. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.
 
 **Key:** the number of the lens.
+
+::: {.callout-tip}
+## NumPy Cheatsheet
+`np.loadtxt(url, delimiter=",")` loads a file whose values are separated by commas.
+
+`np.vsplit(arr, n)` cuts an array into `n` equal pieces along **rows** (vertically).
+
+`arr[0, 0]` is the top-left value of a 2D array.
+
+`np.argsort(arr)` returns the **positions** that would sort the array: the position of the smallest value first.
+
+`np.vstack([arr1, arr2, arr3])` joins arrays one on top of the other (vertically).
+
+`np.linalg.det(A)` returns the determinant of a square matrix.
+
+`np.linalg.inv(A)` returns the inverse of a square matrix (it fails if the determinant is 0).
+
+`A @ B` is the matrix product of `A` and `B`.
+:::
 
 ### Photo 5: The Colour Photo
 
@@ -227,15 +290,34 @@ Then the camera cut the stored photo into **five horizontal strips**, and shuffl
 
 **What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue.
 
-First, the memory shattered again, just like in photo 1: nine fragments, shuffled, with the fragment number (1 to 9) in the top-left pixel of every fragment, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a **shuffled order**, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
+First, the memory shattered again, just like in photo 1: nine fragments, shuffled. Luckily, this time the camera left a trace: the **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a **shuffled order**, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
 **How to fix it:**
 
 1. Cut the file into its four images and find the decoy (look at them). Join the other three along a **new** axis to get a `(300, 300, 3)` array.
-2. Rebuild it as you did with photo 1. Good news: `np.vsplit()`, `np.hsplit()`, and `np.concatenate()` work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.
+2. Rebuild it: cut it into its nine fragments as in photo 1, sort them by their number, and join them. Good news: `np.vsplit()`, `np.hsplit()`, and `np.concatenate()` work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.
 3. Undo the square. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
 
 **Key:** the numbers of the red, green, and blue images, in that order, for instance `check(5, "123")`.
+
+::: {.callout-tip}
+## NumPy Cheatsheet
+`np.hsplit(arr, n)` cuts an array into `n` equal pieces along **columns** (horizontally).
+
+`np.stack([red, green, blue], axis=2)` joins three 2D arrays along a **new** last axis: three `(300, 300)` arrays give one `(300, 300, 3)` array.
+
+`arr[:, :, 0]` is the first channel (red) of a colour image.
+
+`np.vsplit()` and `np.hsplit()` also cut 3D arrays by rows and by columns: every piece keeps its three channels.
+
+`arr[0, 0, 0]` is the top-left value of the first channel.
+
+`np.argsort(arr)` returns the **positions** that would sort the array: the position of the smallest value first.
+
+`np.vstack()` and `np.hstack()` also join 3D arrays.
+
+`np.sqrt(arr)` returns the square root of every value.
+:::
 
 ### The Case Number
 

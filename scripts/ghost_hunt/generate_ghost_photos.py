@@ -16,10 +16,11 @@ Every photo is stored in ONE file, cut into pieces that were put back in the wro
 Students always (1) split the file and join the pieces in the right order, then
 (2) undo the specific transformation of that photo.
 
-- photo_1/shattered.txt  300x300. 3x3 grid of fragments, shuffled. The top-left pixel of
-                         each fragment holds its number (1-9, row by row). SECRET, not on the
-                         page: fragment 9 (bottom-right) is mirrored along the anti-diagonal;
-                         students must spot it and fix it, e.g. with fragment[::-1, ::-1].T.
+- photo_1/shattered.txt  300x300. 3x3 grid of fragments, shuffled, no numbers: students
+                         order them by eye. SECRET, not on the page: the bottom-right
+                         fragment is mirrored along the anti-diagonal (it looks like a second
+                         top-left corner); students must spot it and fix it, e.g. with
+                         fragment[::-1, ::-1].T.
 - photo_2/frozen.txt     90,000 values, one per line (reshape to 300x300). Its two
                          vertical halves are swapped. The photo was transposed, inverted,
                          and squeezed into a narrow range.
@@ -120,7 +121,7 @@ gray = np.array([0.299, 0.587, 0.114])
 photos = {k: np.round(add_frame(rgb_of(k) @ gray), 4) for k in (1, 2, 3, 4)}
 photos[5] = np.round(add_frame(rgb_of(5)), 4)
 
-# --- Photo 1: 3x3 grid, shuffled, numbered ------------------------------------------
+# --- Photo 1: 3x3 grid, shuffled, no numbers (ordered by eye) ------------------------
 rng.shuffle(list("ABCDEFGHI"))                 # keeps the random stream (lens, channels) unchanged
 # The 9 places of the stored photo are named A ... I, row by row. SLOT_1[k] is the
 # fragment (0-8) placed in place k. Chosen so that the stored photo, not unshuffled,
@@ -128,16 +129,15 @@ rng.shuffle(list("ABCDEFGHI"))                 # keeps the random stream (lens, 
 SLOT_1 = [4, 7, 0, 5, 8, 2, 1, 6, 3]
 tiles_1 = grid_tiles(photos[1])
 tiles_1[8] = anti_transpose(tiles_1[8])        # SECRET: bottom-right fragment mirrored (not on the page)
-number_tiles(tiles_1)                          # numbered after the mirror, so sorting still works
 shattered = join_grid([tiles_1[pos] for pos in SLOT_1])
-unmirrored_1 = join_grid(tiles_1)              # sorted and joined, corner not fixed yet
-tiles_1[8] = anti_transpose(tiles_1[8])        # fixed: number 9 ends in the bottom-right pixel
+unmirrored_1 = join_grid(tiles_1)              # ordered and joined, corner not fixed yet
+tiles_1[8] = anti_transpose(tiles_1[8])        # fixed
 save("photo_1/shattered.txt", shattered)
 letters = [None] * 9
 for k, pos in enumerate(SLOT_1):
     letters[pos] = "ABCDEFGHI"[k]
-answers["photo_1"] = "".join(letters)          # place letters sorted by fragment number
-recovered_1 = join_grid(tiles_1)               # the recovered photo keeps the fragment numbers
+answers["photo_1"] = "".join(letters)          # place letters in the order of the original photo
+recovered_1 = join_grid(tiles_1)               # identical to the original photo
 
 # --- Photo 2: two halves swapped; frozen negative, transposed, flattened -------------
 CONTRAST, LOW = 20, 0.31
