@@ -575,7 +575,7 @@ window.Quarto = {
 <pre class="text"><code>22:13  BEEP! Ghost nearby ............. photo_1 saved
        ERROR: memory shattered. 9 fragments shuffled inside the photo.
 23:02  BEEP! Ghost nearby ............. photo_2 saved
-       ERROR: sensor frozen. Flattened, halves swapped, contrast lost, inverted.
+       ERROR: sensor frozen. Flattened, halves swapped, contrast lost.
 00:31  BEEP! Ghost nearby ............. photo_3 saved
        ERROR: interference on the sensor rows. Photo cut into 4 strips.
 01:45  BEEP! Ghost nearby ............. photo_4 saved
@@ -583,8 +583,7 @@ window.Quarto = {
        NOTE: 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
        NOTE: ghost surrounded by small ORANGE flames.
-       ERROR: memory shattered again. Colour channels separated and shuffled.
-       Very low light.
+       ERROR: colour channels separated and shuffled. Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.</code></pre>
 <p>Who did we catch? We do not know yet: the photos will tell us.</p>
 <p>Our mission: load the broken files, use the log to understand what happened to each photo, <strong>recover all five pictures</strong>, and find the <strong>case number</strong> to close the investigation.</p>
@@ -597,7 +596,7 @@ window.Quarto = {
 <li><code>show(image)</code> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</li>
 <li><code>check(photo, key)</code> tells you whether you found the key of a photo, for instance <code>check(1, ...)</code>, or the case number, <code>check("case", ...)</code>.</li>
 </ul>
-<div id="5221fb46" class="cell">
+<div id="0cf1a780" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -617,7 +616,7 @@ window.Quarto = {
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'72440a20f54075ac'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
@@ -740,20 +739,22 @@ D E F
 G H I</code></pre>
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
-<li>Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (<code>np.vsplit()</code> and <code>np.hsplit()</code>). Keep them in a list, in the order A, B, …, I.</li>
-<li>Find the right order. There are no numbers this time: look at the fragments. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.</li>
+<li>Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (<code>np.vsplit()</code> and <code>np.hsplit()</code>). Keep them in a list, in the order A (top left fragment), B (top middle fragment), …, I (bottom right fragment).</li>
+<li>Find the right order. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.</li>
 <li>Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.</li>
 </ol>
 <p><strong>Key:</strong> the letters of the places, in the order of the original photo (row by row), for instance <code>check(1, "ABCDEFGHI")</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 NumPy Cheatsheet
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>np.hsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>columns</strong> (horizontally).</p>
 <p><code>np.vsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>rows</strong> (vertically).</p>
@@ -762,57 +763,70 @@ NumPy Cheatsheet
 <p><code>arr.T</code> is the <strong>transpose</strong> of a 2D array: it swaps rows and columns.</p>
 </div>
 </div>
+</div>
 </section>
 <section id="photo-2-the-frozen-photo" class="level3">
 <h3 class="anchored" data-anchor-id="photo-2-the-frozen-photo">Photo 2: The Frozen Photo</h3>
 <p><strong>Files:</strong> <code>photo_2/frozen.txt</code>. One text file… with <strong>one value per line</strong>.</p>
-<p><strong>What happened:</strong> the ghost’s chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were <strong>swapped</strong>. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a <strong>negative</strong> (black and white swapped) and <strong>mirrored along the diagonal</strong> (rows and columns swapped).</p>
+<p><strong>What happened:</strong> the ghost’s chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were <strong>swapped</strong>. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was <strong>mirrored along the diagonal</strong> (rows and columns swapped).</p>
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
 <li>Rebuild it: give the photo back its square shape, cut it into its left and right halves, and swap them.</li>
 <li>Stretch the values back to the range <span class="math inline">\([0, 1]\)</span>. Remember that every photo has pure black (the line) and pure white (the frame): <span class="math display">\[\text{stretched} = \frac{\text{stored} - \min}{\max - \min}\]</span></li>
-<li>Undo the negative, and undo the mirror.</li>
+<li>Undo the mirror.</li>
 </ol>
 <p>Tip: the photo is so faint that <code>show()</code> displays a plain gray square. To see what you are doing in step 1, look at the stretched version: stretching does not care about the position of the pixels, so the two steps can go in any order.</p>
 <p><strong>Key:</strong> how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 NumPy Cheatsheet
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>arr.reshape(rows, cols)</code> gives an array a new shape, with the same values.</p>
 <p><code>np.hsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>columns</strong> (horizontally).</p>
 <p><code>np.hstack([arr1, arr2])</code> joins arrays side by side (horizontally).</p>
 <p><code>arr.min()</code> and <code>arr.max()</code> return the smallest and the largest value of an array.</p>
-<p><code>1 - arr</code> subtracts every value from 1: black becomes white, and white becomes black.</p>
 <p><code>arr.T</code> is the <strong>transpose</strong> of a 2D array: it swaps rows and columns.</p>
+</div>
 </div>
 </div>
 </section>
 <section id="photo-3-the-banded-photo" class="level3">
 <h3 class="anchored" data-anchor-id="photo-3-the-banded-photo">Photo 3: The Banded Photo</h3>
 <p><strong>Files:</strong> <code>photo_3/banded.csv</code>. One CSV file, <span class="math inline">\(300 \times 300\)</span>. The camera wrote it European-style: the values are separated by <strong>semicolons</strong> (<code>;</code>) instead of commas.</p>
-<p><strong>What happened:</strong> the ghost interfered with the sensor: every <strong>row</strong> of pixels was multiplied by a different number between 0 and 1, a <em>gain</em>. The photo is covered with dark horizontal bands. <span class="math display">\[\text{stored} = \text{photo} \times \text{gain}\]</span> Then the camera cut it into <strong>four vertical strips</strong>, and shuffled them. This time there are no numbers: you will need your eyes.</p>
+<p><strong>What happened:</strong> the ghost interfered with the sensor, <strong>row by row</strong>. Each row of pixels got darker, but not all by the same amount. All the pixels of a row were multiplied by the same number between 0 and 1, the <strong>gain</strong> of that row:</p>
+<ul>
+<li>a row with gain <code>1</code> stayed as it was;</li>
+<li>a row with gain <code>0.5</code> became half as bright;</li>
+<li>a row with gain <code>0.2</code> became very dark.</li>
+</ul>
+<p>That is why the photo is covered with dark horizontal bands. Pixel by pixel: <span class="math display">\[\text{stored}[i, j] = \text{photo}[i, j] \times \text{gain}[i]\]</span></p>
+<p>Then the camera cut the photo into <strong>four vertical strips</strong>, and shuffled them. This time there are no numbers: you will need your eyes.</p>
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
 <li>Rebuild it: cut the photo into its four strips and put them in order. The frame helps: look for the strip with the black line on its left edge, and the one with the black line on its right edge. For the two strips in the middle, try both orders and look at the picture.</li>
-<li>The white frame tells us the gains. The first column of the original photo is all <code>1</code>, so the first column of the stored photo is exactly the gain of each row. Divide each row by its gain. Careful: broadcasting must divide the <strong>rows</strong>, not the columns. Check the shape of the gains!</li>
+<li>Find the gains. In the original photo, the first column is part of the white frame: all its values are <code>1</code>. In row <span class="math inline">\(i\)</span>, that pixel became <span class="math inline">\(1 \times \text{gain}[i] = \text{gain}[i]\)</span>. So the first column of the rebuilt photo <strong>is</strong> the list of gains, one per row.</li>
+<li>Undo the interference: divide every row by its own gain. Careful with broadcasting! The gains are a 1D array with shape <code>(300,)</code>, and NumPy lines up a 1D array with the <strong>columns</strong>. Turn the gains into a column, with shape <code>(300, 1)</code>, so that each row is divided by its gain.</li>
 </ol>
-<p><strong>Key:</strong> the first row with the strongest interference (the smallest gain).</p>
+<p><strong>Key:</strong> the number (index) of the first row with the strongest interference, that is, the smallest gain.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 NumPy Cheatsheet
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>np.loadtxt(url, delimiter=";")</code> loads a file whose values are separated by semicolons.</p>
 <p><code>np.hsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>columns</strong> (horizontally).</p>
@@ -822,12 +836,13 @@ NumPy Cheatsheet
 <p><code>np.argmin(arr)</code> returns the <strong>position</strong> of the smallest value (the first one, if there is a tie).</p>
 </div>
 </div>
+</div>
 </section>
 <section id="photo-4-the-cursed-lens" class="level3">
 <h3 class="anchored" data-anchor-id="photo-4-the-cursed-lens">Photo 4: The Cursed Lens</h3>
 <p><strong>Files:</strong> <code>photo_4/cursed.csv</code>, a <span class="math inline">\(300 \times 300\)</span> photo in CSV format (values separated by commas), and <code>lens_1.csv</code>, <code>lens_2.csv</code>, <code>lens_3.csv</code>, three <span class="math inline">\(300 \times 300\)</span> matrices.</p>
 <p><strong>What happened:</strong> the ghost cursed the lens of the camera. The photo went through a lens matrix <span class="math inline">\(L\)</span>, which scrambled its rows: <span class="math display">\[\text{stored} = L \cdot \text{photo}\]</span> We found three lenses in the camera bag, but only one of them was used.</p>
-<p>Then the camera cut the stored photo into <strong>five horizontal strips</strong>, and shuffled them. With the rows scrambled, the strips are impossible to order by eye… but the camera left a trace: the <strong>top-left pixel</strong> of every strip stores its number, from 1 to 5, counted from top to bottom.</p>
+<p>Then the camera cut the stored photo into <strong>five horizontal strips</strong> of the same size, and shuffled them. With the rows scrambled, the strips are impossible to order by eye… but the camera left a trace: the <strong>top-left pixel</strong> of every strip stores its number, from 1 to 5, counted from top to bottom.</p>
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
 <li>Rebuild it: cut the photo into its five strips, sort them by their number (<code>np.argsort()</code> is your friend), and join them again.</li>
@@ -835,14 +850,16 @@ NumPy Cheatsheet
 </ol>
 <p><strong>Key:</strong> the number of the lens.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 NumPy Cheatsheet
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>np.loadtxt(url, delimiter=",")</code> loads a file whose values are separated by commas.</p>
 <p><code>np.vsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>rows</strong> (vertically).</p>
@@ -854,37 +871,37 @@ NumPy Cheatsheet
 <p><code>A @ B</code> is the matrix product of <code>A</code> and <code>B</code>.</p>
 </div>
 </div>
+</div>
 </section>
 <section id="photo-5-the-colour-photo" class="level3">
 <h3 class="anchored" data-anchor-id="photo-5-the-colour-photo">Photo 5: The Colour Photo</h3>
-<p><strong>Files:</strong> <code>photo_5/colour.txt</code>. One text file, <span class="math inline">\(300 \times 1200\)</span>: four <span class="math inline">\(300 \times 300\)</span> images side by side, numbered 1 to 4 from left to right.</p>
+<p><strong>Files:</strong> <code>photo_5/colour.txt</code>. One text file, <span class="math inline">\(300 \times 900\)</span>: three <span class="math inline">\(300 \times 300\)</span> images side by side, numbered 1 to 3 from left to right.</p>
 <p><strong>What happened:</strong> the strongest ghost of the night, and our only <strong>colour</strong> photo. A colour image is a 3D array with shape <code>(height, width, 3)</code>: one layer, or <em>channel</em>, for red, green, and blue.</p>
-<p>First, the memory shattered again, just like in photo 1: nine fragments, shuffled. Luckily, this time the camera left a trace: the <strong>top-left pixel</strong> of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a <strong>shuffled order</strong>, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.</p>
+<p>The ghost separated the three channels and placed them side by side, in a <strong>shuffled order</strong>. On top of that, it was night: every value was squared, so the photo is darker than it should be.</p>
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
-<li>Cut the file into its four images and find the decoy (look at them). Join the other three along a <strong>new</strong> axis to get a <code>(300, 300, 3)</code> array.</li>
-<li>Rebuild it: cut it into its nine fragments as in photo 1, sort them by their number, and join them. Good news: <code>np.vsplit()</code>, <code>np.hsplit()</code>, and <code>np.concatenate()</code> work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.</li>
-<li>Undo the square. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small <strong>orange flames</strong>. Careful with blue or green flames: those belong to other spirits (will-o’-the-wisps!), not to our ghost.</li>
+<li>Rebuild it: cut the file into its three images, and join them along a <strong>new</strong> axis to get a <code>(300, 300, 3)</code> array.</li>
+<li>Undo the square.</li>
+<li>Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small <strong>orange flames</strong>. Careful with blue or green flames: those belong to other spirits (will-o’-the-wisps!), not to our ghost.</li>
 </ol>
 <p><strong>Key:</strong> the numbers of the red, green, and blue images, in that order, for instance <code>check(5, "123")</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 NumPy Cheatsheet
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>np.hsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>columns</strong> (horizontally).</p>
 <p><code>np.stack([red, green, blue], axis=2)</code> joins three 2D arrays along a <strong>new</strong> last axis: three <code>(300, 300)</code> arrays give one <code>(300, 300, 3)</code> array.</p>
 <p><code>arr[:, :, 0]</code> is the first channel (red) of a colour image.</p>
-<p><code>np.vsplit()</code> and <code>np.hsplit()</code> also cut 3D arrays by rows and by columns: every piece keeps its three channels.</p>
-<p><code>arr[0, 0, 0]</code> is the top-left value of the first channel.</p>
-<p><code>np.argsort(arr)</code> returns the <strong>positions</strong> that would sort the array: the position of the smallest value first.</p>
-<p><code>np.vstack()</code> and <code>np.hstack()</code> also join 3D arrays.</p>
 <p><code>np.sqrt(arr)</code> returns the square root of every value.</p>
+</div>
 </div>
 </div>
 </section>
@@ -926,7 +943,7 @@ NumPy Cheatsheet
 <tr class="odd">
 <td>C</td>
 <td>5 and the case number</td>
-<td>Splitting 3D arrays, a new axis with <code>np.stack()</code>, colour images, aggregations</td>
+<td>Splitting, a new axis with <code>np.stack()</code>, colour images, aggregations</td>
 </tr>
 </tbody>
 </table>
@@ -949,8 +966,8 @@ Photo 2: why can we undo the freeze exactly?
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Besides swapping rows and columns (which only moves pixels around), the ghost applied an <strong>affine</strong> map to every pixel: <span class="math inline">\(\text{stored} = a\,(1 - \text{photo}) + b\)</span>, with <span class="math inline">\(a &gt; 0\)</span>. An affine map with <span class="math inline">\(a \neq 0\)</span> is invertible, but we need to know <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
-<p>That is where the frame helps. Every photo contains pure white (<code>1</code>) and pure black (<code>0</code>), so after the negative, the smallest stored value is <span class="math inline">\(b\)</span> and the largest is <span class="math inline">\(a + b\)</span>. The stretch <span class="math inline">\(\frac{\text{stored} - \min}{\max - \min}\)</span> recovers <span class="math inline">\(1 - \text{photo}\)</span> exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.</p>
+<p>Besides swapping rows and columns (which only moves pixels around), the ghost applied an <strong>affine</strong> map to every pixel: <span class="math inline">\(\text{stored} = a \cdot \text{photo} + b\)</span>, with <span class="math inline">\(a &gt; 0\)</span>. An affine map with <span class="math inline">\(a \neq 0\)</span> is invertible, but we need to know <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
+<p>That is where the frame helps. Every photo contains pure black (<code>0</code>) and pure white (<code>1</code>), so the smallest stored value is <span class="math inline">\(b\)</span> and the largest is <span class="math inline">\(a + b\)</span>. The stretch <span class="math inline">\(\frac{\text{stored} - \min}{\max - \min}\)</span> recovers the photo exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.</p>
 </div>
 </div>
 </div>
@@ -1556,7 +1573,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="in">22:13  BEEP! Ghost nearby ............. photo_1 saved</span></span>
 <span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: memory shattered. 9 fragments shuffled inside the photo.</span></span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="in">23:02  BEEP! Ghost nearby ............. photo_2 saved</span></span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: sensor frozen. Flattened, halves swapped, contrast lost, inverted.</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: sensor frozen. Flattened, halves swapped, contrast lost.</span></span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="in">00:31  BEEP! Ghost nearby ............. photo_3 saved</span></span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: interference on the sensor rows. Photo cut into 4 strips.</span></span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="in">01:45  BEEP! Ghost nearby ............. photo_4 saved</span></span>
@@ -1564,417 +1581,414 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="in">       NOTE: 3 lenses found in the camera bag.</span></span>
 <span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="in">03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)</span></span>
 <span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="in">       NOTE: ghost surrounded by small ORANGE flames.</span></span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: memory shattered again. Colour channels separated and shuffled.</span></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="in">       Very low light.</span></span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="in">03:34  CAMERA FAILURE. Too many ghosts.</span></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>Who did we catch? We do not know yet: the photos will tell us.</span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>Our mission: load the broken files, use the log to understand what happened to each photo, **recover all five pictures**, and find the **case number** to close the investigation.</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting Up Our Toolkit</span></span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>The photos are stored online, in the course repository. <span class="in">`BASE`</span> is the address of the folder that contains them. Two helper functions:</span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show(image)`</span> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`check(photo, key)`</span> tells you whether you found the key of a photo, for instance <span class="in">`check(1, ...)`</span>, or the case number, <span class="in">`check("case", ...)`</span>.</span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
-<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="co"># The photos are stored in the course repository</span></span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>BASE <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos"</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: colour channels separated and shuffled. Very low light.</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="in">03:34  CAMERA FAILURE. Too many ghosts.</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>Who did we catch? We do not know yet: the photos will tell us.</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>Our mission: load the broken files, use the log to understand what happened to each photo, **recover all five pictures**, and find the **case number** to close the investigation.</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting Up Our Toolkit</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>The photos are stored online, in the course repository. <span class="in">`BASE`</span> is the address of the folder that contains them. Two helper functions:</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show(image)`</span> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`check(photo, key)`</span> tells you whether you found the key of a photo, for instance <span class="in">`check(1, ...)`</span>, or the case number, <span class="in">`check("case", ...)`</span>.</span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="co"># The photos are stored in the course repository</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>BASE <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos"</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(image):</span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display an image: a 2D array (grayscale, 0 = black, 1 = white) or a 3D array (colour)."""</span></span>
-<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> image.ndim <span class="op">==</span> <span class="dv">2</span>:</span>
-<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>        plt.imshow(image, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>        plt.imshow(np.clip(image, <span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
-<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(image):</span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display an image: a 2D array (grayscale, 0 = black, 1 = white) or a 3D array (colour)."""</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> image.ndim <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>        plt.imshow(image, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>        plt.imshow(np.clip(image, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'72440a20f54075ac'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
-<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Check the key of a photo (1 to 5) or of the case ("case")."""</span></span>
-<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>    digest <span class="op">=</span> hashlib.sha256(<span class="bu">str</span>(key).strip().upper().encode()).hexdigest()[:<span class="dv">16</span>]</span>
-<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
-<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
-<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
-<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
-<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span>
-<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where Are the Photos?</span></span>
-<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>Each photo is in its own folder. To get the address (URL) of a file, add the folder and the file name to <span class="in">`BASE`</span>:</span>
-<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span></span>
-<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>| Photo | Files |</span>
-<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>|-------|-------|</span>
-<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>| 1 | <span class="in">`photo_1/shattered.txt`</span> |</span>
-<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>| 2 | <span class="in">`photo_2/frozen.txt`</span> |</span>
-<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>| 3 | <span class="in">`photo_3/banded.csv`</span> |</span>
-<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a>| 4 | <span class="in">`photo_4/cursed.csv`</span>, and the lenses <span class="in">`photo_4/lens_1.csv`</span>, <span class="in">`lens_2.csv`</span>, <span class="in">`lens_3.csv`</span> |</span>
-<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a>| 5 | <span class="in">`photo_5/colour.txt`</span> |</span>
-<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt()`</span> reads a text file straight from its URL:</span>
-<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a>shattered <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span>)</span>
-<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a>The first time, NumPy downloads the file and keeps a copy next to your notebook, in a folder called <span class="in">`raw.githubusercontent.com`</span>. Do not be surprised if it appears!</span>
-<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a>These are the tools you will need. You already know most of them!</span>
-<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a>| Tool | What it does |</span>
-<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>|------|--------------|</span>
-<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.loadtxt(url)`</span> | Loads a text file (<span class="in">`.txt`</span>); for <span class="in">`.csv`</span> files, add the separator: <span class="in">`delimiter=","`</span> or <span class="in">`delimiter=";"`</span> |</span>
-<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.save(path, arr)`</span> / <span class="in">`np.load(path)`</span> | Saves / loads an array in NumPy's binary format (<span class="in">`.npy`</span>), on your computer |</span>
-<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.savetxt(path, arr)`</span> | Saves an array as a text file |</span>
-<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.concatenate(arrays, axis=...)`</span> | Joins arrays along an existing axis (also <span class="in">`np.hstack()`</span>, <span class="in">`np.vstack()`</span>) |</span>
-<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.split(arr, n, axis=...)`</span> | Cuts an array into <span class="in">`n`</span> equal pieces (also <span class="in">`np.hsplit()`</span>, <span class="in">`np.vsplit()`</span>) |</span>
-<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.stack(arrays, axis=...)`</span> | Joins arrays along a **new** axis |</span>
-<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a>Every photo is a $300 \times 300$ array, with values between 0 (black) and 1 (white). When a photo is split into 9 fragments, each fragment is $100 \times 100$, and they are placed like this:</span>
-<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a><span class="in">(0, 0) (0, 1) (0, 2)</span></span>
-<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a><span class="in">(1, 0) (1, 1) (1, 2)</span></span>
-<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a><span class="in">(2, 0) (2, 1) (2, 2)</span></span>
-<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a>Two things are true for **every** photo of our camera:</span>
-<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It has a **white frame**: the 4 pixels on the border are <span class="in">`1`</span>.</span>
-<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Just inside the white frame, it has a thin **black line**: those pixels are <span class="in">`0`</span>.</span>
-<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Five Broken Photos</span></span>
-<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a>Every photo was saved in **a single file**, but the camera cut it into pieces and put them back in the wrong order. So recovering a photo always takes two steps:</span>
-<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Rebuild it:** split the file into its pieces, and join them again in the right order. Each photo was cut in a different way!</span>
-<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Undo the damage:** each photo also suffered its own transformation, and the camera log tells us which one.</span>
-<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a>This is what we have for each photo, and how to fix it.</span>
-<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 1: The Shattered Photo</span></span>
-<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_1/shattered.txt`</span>. One text file, $300 \times 300$.</span>
-<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>**What happened:** the memory shattered. The photo was cut into its nine $100 \times 100$ fragments, and they were put back together **in a random order**. The photo has the right size, but it looks like a scrambled puzzle.</span>
-<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a>We name the nine places of the shattered photo with letters, row by row:</span>
-<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a><span class="in">A B C</span></span>
-<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a><span class="in">D E F</span></span>
-<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="in">G H I</span></span>
-<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
-<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (<span class="in">`np.vsplit()`</span> and <span class="in">`np.hsplit()`</span>). Keep them in a list, in the order A, B, ..., I.</span>
-<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Find the right order. There are no numbers this time: look at the fragments. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.</span>
-<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.</span>
-<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a>**Key:** the letters of the places, in the order of the original photo (row by row), for instance <span class="in">`check(1, "ABCDEFGHI")`</span>.</span>
-<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
-<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
-<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **rows** (vertically).</span>
-<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2, arr3])`</span> joins arrays side by side (horizontally).</span>
-<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack([arr1, arr2, arr3])`</span> joins arrays one on top of the other (vertically).</span>
-<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.T`</span> is the **transpose** of a 2D array: it swaps rows and columns.</span>
-<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Check the key of a photo (1 to 5) or of the case ("case")."""</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>    digest <span class="op">=</span> hashlib.sha256(<span class="bu">str</span>(key).strip().upper().encode()).hexdigest()[:<span class="dv">16</span>]</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where Are the Photos?</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a>Each photo is in its own folder. To get the address (URL) of a file, add the folder and the file name to <span class="in">`BASE`</span>:</span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>| Photo | Files |</span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>|-------|-------|</span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>| 1 | <span class="in">`photo_1/shattered.txt`</span> |</span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>| 2 | <span class="in">`photo_2/frozen.txt`</span> |</span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>| 3 | <span class="in">`photo_3/banded.csv`</span> |</span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>| 4 | <span class="in">`photo_4/cursed.csv`</span>, and the lenses <span class="in">`photo_4/lens_1.csv`</span>, <span class="in">`lens_2.csv`</span>, <span class="in">`lens_3.csv`</span> |</span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a>| 5 | <span class="in">`photo_5/colour.txt`</span> |</span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt()`</span> reads a text file straight from its URL:</span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a>shattered <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span>)</span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a>The first time, NumPy downloads the file and keeps a copy next to your notebook, in a folder called <span class="in">`raw.githubusercontent.com`</span>. Do not be surprised if it appears!</span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a>These are the tools you will need. You already know most of them!</span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a>| Tool | What it does |</span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a>|------|--------------|</span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.loadtxt(url)`</span> | Loads a text file (<span class="in">`.txt`</span>); for <span class="in">`.csv`</span> files, add the separator: <span class="in">`delimiter=","`</span> or <span class="in">`delimiter=";"`</span> |</span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.save(path, arr)`</span> / <span class="in">`np.load(path)`</span> | Saves / loads an array in NumPy's binary format (<span class="in">`.npy`</span>), on your computer |</span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.savetxt(path, arr)`</span> | Saves an array as a text file |</span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.concatenate(arrays, axis=...)`</span> | Joins arrays along an existing axis (also <span class="in">`np.hstack()`</span>, <span class="in">`np.vstack()`</span>) |</span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.split(arr, n, axis=...)`</span> | Cuts an array into <span class="in">`n`</span> equal pieces (also <span class="in">`np.hsplit()`</span>, <span class="in">`np.vsplit()`</span>) |</span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>| <span class="in">`np.stack(arrays, axis=...)`</span> | Joins arrays along a **new** axis |</span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a>Every photo is a $300 \times 300$ array, with values between 0 (black) and 1 (white). When a photo is split into 9 fragments, each fragment is $100 \times 100$, and they are placed like this:</span>
+<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a><span class="in">(0, 0) (0, 1) (0, 2)</span></span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a><span class="in">(1, 0) (1, 1) (1, 2)</span></span>
+<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a><span class="in">(2, 0) (2, 1) (2, 2)</span></span>
+<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a>Two things are true for **every** photo of our camera:</span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It has a **white frame**: the 4 pixels on the border are <span class="in">`1`</span>.</span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Just inside the white frame, it has a thin **black line**: those pixels are <span class="in">`0`</span>.</span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Five Broken Photos</span></span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>Every photo was saved in **a single file**, but the camera cut it into pieces and put them back in the wrong order. So recovering a photo always takes two steps:</span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Rebuild it:** split the file into its pieces, and join them again in the right order. Each photo was cut in a different way!</span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Undo the damage:** each photo also suffered its own transformation, and the camera log tells us which one.</span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a>This is what we have for each photo, and how to fix it.</span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 1: The Shattered Photo</span></span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_1/shattered.txt`</span>. One text file, $300 \times 300$.</span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a>**What happened:** the memory shattered. The photo was cut into its nine $100 \times 100$ fragments, and they were put back together **in a random order**. The photo has the right size, but it looks like a scrambled puzzle.</span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a>We name the nine places of the shattered photo with letters, row by row:</span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a><span class="in">A B C</span></span>
+<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a><span class="in">D E F</span></span>
+<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a><span class="in">G H I</span></span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (<span class="in">`np.vsplit()`</span> and <span class="in">`np.hsplit()`</span>). Keep them in a list, in the order A (top left fragment), B (top middle fragment), ..., I (bottom right fragment).</span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Find the right order. The white frame tells you which ones go at the corners and at the edges, and the picture does the rest.</span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.</span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a>**Key:** the letters of the places, in the order of the original photo (row by row), for instance <span class="in">`check(1, "ABCDEFGHI")`</span>.</span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **rows** (vertically).</span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2, arr3])`</span> joins arrays side by side (horizontally).</span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack([arr1, arr2, arr3])`</span> joins arrays one on top of the other (vertically).</span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.T`</span> is the **transpose** of a 2D array: it swaps rows and columns.</span>
+<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 2: The Frozen Photo</span></span>
-<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a>**Files:** `photo_2/frozen.txt`. One text file... with **one value per line**.</span>
-<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost's chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were **swapped**. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was saved as a **negative** (black and white swapped) and **mirrored along the diagonal** (rows and columns swapped).</span>
-<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
-<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: give the photo back its square shape, cut it into its left and right halves, and swap them.</span>
-<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Stretch the values back to the range $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. Remember that every photo has pure black (the line) and pure white (the frame):</span>
-<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a>$$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$</span>
-<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the negative, and undo the mirror.</span>
-<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a>Tip: the photo is so faint that <span class="in">`show()`</span> displays a plain gray square. To see what you are doing in step 1, look at the stretched version: stretching does not care about the position of the pixels, so the two steps can go in any order.</span>
-<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a>**Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.</span>
-<span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
-<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.reshape(rows, cols)`</span> gives an array a new shape, with the same values.</span>
-<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
-<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2])`</span> joins arrays side by side (horizontally).</span>
-<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.min()`</span> and <span class="in">`arr.max()`</span> return the smallest and the largest value of an array.</span>
-<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a><span class="in">`1 - arr`</span> subtracts every value from 1: black becomes white, and white becomes black.</span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 2: The Frozen Photo</span></span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a>**Files:** `photo_2/frozen.txt`. One text file... with **one value per line**.</span>
+<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost's chill froze the sensor. The photo was flattened into a single line of values, and its two halves, left and right, were **swapped**. The photo also lost almost all its contrast: every value was squeezed into a tiny range. On top of that, it was **mirrored along the diagonal** (rows and columns swapped).</span>
+<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
+<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: give the photo back its square shape, cut it into its left and right halves, and swap them.</span>
+<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Stretch the values back to the range $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. Remember that every photo has pure black (the line) and pure white (the frame):</span>
+<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a>$$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$</span>
+<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the mirror.</span>
+<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a>Tip: the photo is so faint that <span class="in">`show()`</span> displays a plain gray square. To see what you are doing in step 1, look at the stretched version: stretching does not care about the position of the pixels, so the two steps can go in any order.</span>
+<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a>**Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.</span>
+<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
+<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.reshape(rows, cols)`</span> gives an array a new shape, with the same values.</span>
+<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
+<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2])`</span> joins arrays side by side (horizontally).</span>
+<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.min()`</span> and <span class="in">`arr.max()`</span> return the smallest and the largest value of an array.</span>
+<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.T`</span> is the **transpose** of a 2D array: it swaps rows and columns.</span>
+<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-220"><a href="#cb11-220" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.T`</span> is the **transpose** of a 2D array: it swaps rows and columns.</span>
-<span id="cb11-221"><a href="#cb11-221" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 3: The Banded Photo</span></span>
-<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a>**Files:** `photo_3/banded.csv`. One CSV file, $300 \times 300$. The camera wrote it European-style: the values are separated by **semicolons** (<span class="in">`;`</span>) instead of commas.</span>
-<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost interfered with the sensor: every **row** of pixels was multiplied by a different number between 0 and 1, a *gain*. The photo is covered with dark horizontal bands.</span>
-<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a>$$\text{stored} = \text{photo} \times \text{gain}$$</span>
-<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a>Then the camera cut it into **four vertical strips**, and shuffled them. This time there are no numbers: you will need your eyes.</span>
-<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
+<span id="cb11-220"><a href="#cb11-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 3: The Banded Photo</span></span>
+<span id="cb11-221"><a href="#cb11-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a>**Files:** `photo_3/banded.csv`. One CSV file, $300 \times 300$. The camera wrote it European-style: the values are separated by **semicolons** (<span class="in">`;`</span>) instead of commas.</span>
+<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost interfered with the sensor, **row by row**. Each row of pixels got darker, but not all by the same amount. All the pixels of a row were multiplied by the same number between 0 and 1, the **gain** of that row:</span>
+<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a row with gain <span class="in">`1`</span> stayed as it was;</span>
+<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a row with gain <span class="in">`0.5`</span> became half as bright;</span>
+<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a row with gain <span class="in">`0.2`</span> became very dark.</span>
+<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a>That is why the photo is covered with dark horizontal bands. Pixel by pixel:</span>
+<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a>$$\text{stored}<span class="co">[</span><span class="ot">i, j</span><span class="co">]</span> = \text{photo}<span class="co">[</span><span class="ot">i, j</span><span class="co">]</span> \times \text{gain}<span class="co">[</span><span class="ot">i</span><span class="co">]</span>$$</span>
 <span id="cb11-232"><a href="#cb11-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: cut the photo into its four strips and put them in order. The frame helps: look for the strip with the black line on its left edge, and the one with the black line on its right edge. For the two strips in the middle, try both orders and look at the picture.</span>
-<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The white frame tells us the gains. The first column of the original photo is all <span class="in">`1`</span>, so the first column of the stored photo is exactly the gain of each row. Divide each row by its gain. Careful: broadcasting must divide the **rows**, not the columns. Check the shape of the gains!</span>
-<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a>**Key:** the first row with the strongest interference (the smallest gain).</span>
-<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-238"><a href="#cb11-238" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb11-239"><a href="#cb11-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
-<span id="cb11-240"><a href="#cb11-240" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt(url, delimiter=";")`</span> loads a file whose values are separated by semicolons.</span>
-<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
-<span id="cb11-243"><a href="#cb11-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-244"><a href="#cb11-244" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2, arr3])`</span> joins arrays side by side (horizontally).</span>
-<span id="cb11-245"><a href="#cb11-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-246"><a href="#cb11-246" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[:, 0]`</span> is the first column of a 2D array, with shape <span class="in">`(rows,)`</span>.</span>
-<span id="cb11-247"><a href="#cb11-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-248"><a href="#cb11-248" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.reshape(-1, 1)`</span> turns a 1D array into a **column**, with shape <span class="in">`(rows, 1)`</span>.</span>
-<span id="cb11-249"><a href="#cb11-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-250"><a href="#cb11-250" aria-hidden="true" tabindex="-1"></a><span class="in">`np.argmin(arr)`</span> returns the **position** of the smallest value (the first one, if there is a tie).</span>
-<span id="cb11-251"><a href="#cb11-251" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a>Then the camera cut the photo into **four vertical strips**, and shuffled them. This time there are no numbers: you will need your eyes.</span>
+<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
+<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: cut the photo into its four strips and put them in order. The frame helps: look for the strip with the black line on its left edge, and the one with the black line on its right edge. For the two strips in the middle, try both orders and look at the picture.</span>
+<span id="cb11-238"><a href="#cb11-238" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Find the gains. In the original photo, the first column is part of the white frame: all its values are <span class="in">`1`</span>. In row $i$, that pixel became $1 \times \text{gain}<span class="co">[</span><span class="ot">i</span><span class="co">]</span> = \text{gain}<span class="co">[</span><span class="ot">i</span><span class="co">]</span>$. So the first column of the rebuilt photo **is** the list of gains, one per row.</span>
+<span id="cb11-239"><a href="#cb11-239" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the interference: divide every row by its own gain. Careful with broadcasting! The gains are a 1D array with shape <span class="in">`(300,)`</span>, and NumPy lines up a 1D array with the **columns**. Turn the gains into a column, with shape <span class="in">`(300, 1)`</span>, so that each row is divided by its gain.</span>
+<span id="cb11-240"><a href="#cb11-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a>**Key:** the number (index) of the first row with the strongest interference, that is, the smallest gain.</span>
+<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-243"><a href="#cb11-243" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-244"><a href="#cb11-244" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
+<span id="cb11-245"><a href="#cb11-245" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt(url, delimiter=";")`</span> loads a file whose values are separated by semicolons.</span>
+<span id="cb11-246"><a href="#cb11-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-247"><a href="#cb11-247" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
+<span id="cb11-248"><a href="#cb11-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-249"><a href="#cb11-249" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hstack([arr1, arr2, arr3])`</span> joins arrays side by side (horizontally).</span>
+<span id="cb11-250"><a href="#cb11-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-251"><a href="#cb11-251" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[:, 0]`</span> is the first column of a 2D array, with shape <span class="in">`(rows,)`</span>.</span>
 <span id="cb11-252"><a href="#cb11-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-253"><a href="#cb11-253" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 4: The Cursed Lens</span></span>
+<span id="cb11-253"><a href="#cb11-253" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.reshape(-1, 1)`</span> turns a 1D array into a **column**, with shape <span class="in">`(rows, 1)`</span>.</span>
 <span id="cb11-254"><a href="#cb11-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-255"><a href="#cb11-255" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_4/cursed.csv`</span>, a $300 \times 300$ photo in CSV format (values separated by commas), and <span class="in">`lens_1.csv`</span>, <span class="in">`lens_2.csv`</span>, <span class="in">`lens_3.csv`</span>, three $300 \times 300$ matrices.</span>
-<span id="cb11-256"><a href="#cb11-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-257"><a href="#cb11-257" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost cursed the lens of the camera. The photo went through a lens matrix $L$, which scrambled its rows:</span>
-<span id="cb11-258"><a href="#cb11-258" aria-hidden="true" tabindex="-1"></a>$$\text{stored} = L \cdot \text{photo}$$</span>
-<span id="cb11-259"><a href="#cb11-259" aria-hidden="true" tabindex="-1"></a>We found three lenses in the camera bag, but only one of them was used.</span>
-<span id="cb11-260"><a href="#cb11-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-261"><a href="#cb11-261" aria-hidden="true" tabindex="-1"></a>Then the camera cut the stored photo into **five horizontal strips**, and shuffled them. With the rows scrambled, the strips are impossible to order by eye... but the camera left a trace: the **top-left pixel** of every strip stores its number, from 1 to 5, counted from top to bottom.</span>
-<span id="cb11-262"><a href="#cb11-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-263"><a href="#cb11-263" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
-<span id="cb11-264"><a href="#cb11-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-265"><a href="#cb11-265" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: cut the photo into its five strips, sort them by their number (<span class="in">`np.argsort()`</span> is your friend), and join them again.</span>
-<span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Undo the matrix product with the inverse of the lens, $\text{photo} = L^{-1} \cdot \text{stored}$. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.</span>
+<span id="cb11-255"><a href="#cb11-255" aria-hidden="true" tabindex="-1"></a><span class="in">`np.argmin(arr)`</span> returns the **position** of the smallest value (the first one, if there is a tie).</span>
+<span id="cb11-256"><a href="#cb11-256" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-257"><a href="#cb11-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-258"><a href="#cb11-258" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 4: The Cursed Lens</span></span>
+<span id="cb11-259"><a href="#cb11-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-260"><a href="#cb11-260" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_4/cursed.csv`</span>, a $300 \times 300$ photo in CSV format (values separated by commas), and <span class="in">`lens_1.csv`</span>, <span class="in">`lens_2.csv`</span>, <span class="in">`lens_3.csv`</span>, three $300 \times 300$ matrices.</span>
+<span id="cb11-261"><a href="#cb11-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-262"><a href="#cb11-262" aria-hidden="true" tabindex="-1"></a>**What happened:** the ghost cursed the lens of the camera. The photo went through a lens matrix $L$, which scrambled its rows:</span>
+<span id="cb11-263"><a href="#cb11-263" aria-hidden="true" tabindex="-1"></a>$$\text{stored} = L \cdot \text{photo}$$</span>
+<span id="cb11-264"><a href="#cb11-264" aria-hidden="true" tabindex="-1"></a>We found three lenses in the camera bag, but only one of them was used.</span>
+<span id="cb11-265"><a href="#cb11-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a>Then the camera cut the stored photo into **five horizontal strips** of the same size, and shuffled them. With the rows scrambled, the strips are impossible to order by eye... but the camera left a trace: the **top-left pixel** of every strip stores its number, from 1 to 5, counted from top to bottom.</span>
 <span id="cb11-267"><a href="#cb11-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-268"><a href="#cb11-268" aria-hidden="true" tabindex="-1"></a>**Key:** the number of the lens.</span>
+<span id="cb11-268"><a href="#cb11-268" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
 <span id="cb11-269"><a href="#cb11-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-270"><a href="#cb11-270" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb11-271"><a href="#cb11-271" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
-<span id="cb11-272"><a href="#cb11-272" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt(url, delimiter=",")`</span> loads a file whose values are separated by commas.</span>
-<span id="cb11-273"><a href="#cb11-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-274"><a href="#cb11-274" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **rows** (vertically).</span>
-<span id="cb11-275"><a href="#cb11-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-276"><a href="#cb11-276" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[0, 0]`</span> is the top-left value of a 2D array.</span>
-<span id="cb11-277"><a href="#cb11-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-278"><a href="#cb11-278" aria-hidden="true" tabindex="-1"></a><span class="in">`np.argsort(arr)`</span> returns the **positions** that would sort the array: the position of the smallest value first.</span>
-<span id="cb11-279"><a href="#cb11-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-280"><a href="#cb11-280" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack([arr1, arr2, arr3])`</span> joins arrays one on top of the other (vertically).</span>
-<span id="cb11-281"><a href="#cb11-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-282"><a href="#cb11-282" aria-hidden="true" tabindex="-1"></a><span class="in">`np.linalg.det(A)`</span> returns the determinant of a square matrix.</span>
-<span id="cb11-283"><a href="#cb11-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-284"><a href="#cb11-284" aria-hidden="true" tabindex="-1"></a><span class="in">`np.linalg.inv(A)`</span> returns the inverse of a square matrix (it fails if the determinant is 0).</span>
-<span id="cb11-285"><a href="#cb11-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-286"><a href="#cb11-286" aria-hidden="true" tabindex="-1"></a><span class="in">`A @ B`</span> is the matrix product of <span class="in">`A`</span> and <span class="in">`B`</span>.</span>
-<span id="cb11-287"><a href="#cb11-287" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-270"><a href="#cb11-270" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: cut the photo into its five strips, sort them by their number (<span class="in">`np.argsort()`</span> is your friend), and join them again.</span>
+<span id="cb11-271"><a href="#cb11-271" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Undo the matrix product with the inverse of the lens, $\text{photo} = L^{-1} \cdot \text{stored}$. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.</span>
+<span id="cb11-272"><a href="#cb11-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-273"><a href="#cb11-273" aria-hidden="true" tabindex="-1"></a>**Key:** the number of the lens.</span>
+<span id="cb11-274"><a href="#cb11-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-275"><a href="#cb11-275" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-276"><a href="#cb11-276" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
+<span id="cb11-277"><a href="#cb11-277" aria-hidden="true" tabindex="-1"></a><span class="in">`np.loadtxt(url, delimiter=",")`</span> loads a file whose values are separated by commas.</span>
+<span id="cb11-278"><a href="#cb11-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-279"><a href="#cb11-279" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **rows** (vertically).</span>
+<span id="cb11-280"><a href="#cb11-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-281"><a href="#cb11-281" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[0, 0]`</span> is the top-left value of a 2D array.</span>
+<span id="cb11-282"><a href="#cb11-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-283"><a href="#cb11-283" aria-hidden="true" tabindex="-1"></a><span class="in">`np.argsort(arr)`</span> returns the **positions** that would sort the array: the position of the smallest value first.</span>
+<span id="cb11-284"><a href="#cb11-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-285"><a href="#cb11-285" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack([arr1, arr2, arr3])`</span> joins arrays one on top of the other (vertically).</span>
+<span id="cb11-286"><a href="#cb11-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-287"><a href="#cb11-287" aria-hidden="true" tabindex="-1"></a><span class="in">`np.linalg.det(A)`</span> returns the determinant of a square matrix.</span>
 <span id="cb11-288"><a href="#cb11-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-289"><a href="#cb11-289" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 5: The Colour Photo</span></span>
+<span id="cb11-289"><a href="#cb11-289" aria-hidden="true" tabindex="-1"></a><span class="in">`np.linalg.inv(A)`</span> returns the inverse of a square matrix (it fails if the determinant is 0).</span>
 <span id="cb11-290"><a href="#cb11-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-291"><a href="#cb11-291" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_5/colour.txt`</span>. One text file, $300 \times 1200$: four $300 \times 300$ images side by side, numbered 1 to 4 from left to right.</span>
-<span id="cb11-292"><a href="#cb11-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-293"><a href="#cb11-293" aria-hidden="true" tabindex="-1"></a>**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape <span class="in">`(height, width, 3)`</span>: one layer, or *channel*, for red, green, and blue.</span>
-<span id="cb11-294"><a href="#cb11-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-295"><a href="#cb11-295" aria-hidden="true" tabindex="-1"></a>First, the memory shattered again, just like in photo 1: nine fragments, shuffled. Luckily, this time the camera left a trace: the **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo, the same in the three channels. Then the ghost separated the three channels and placed them side by side, in a **shuffled order**, next to a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.</span>
-<span id="cb11-296"><a href="#cb11-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-297"><a href="#cb11-297" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
-<span id="cb11-298"><a href="#cb11-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-299"><a href="#cb11-299" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Cut the file into its four images and find the decoy (look at them). Join the other three along a **new** axis to get a <span class="in">`(300, 300, 3)`</span> array.</span>
-<span id="cb11-300"><a href="#cb11-300" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Rebuild it: cut it into its nine fragments as in photo 1, sort them by their number, and join them. Good news: <span class="in">`np.vsplit()`</span>, <span class="in">`np.hsplit()`</span>, and <span class="in">`np.concatenate()`</span> work on 3D arrays too. They cut and join rows and columns, and every piece keeps its three channels.</span>
-<span id="cb11-301"><a href="#cb11-301" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the square. Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.</span>
-<span id="cb11-302"><a href="#cb11-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-303"><a href="#cb11-303" aria-hidden="true" tabindex="-1"></a>**Key:** the numbers of the red, green, and blue images, in that order, for instance <span class="in">`check(5, "123")`</span>.</span>
-<span id="cb11-304"><a href="#cb11-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-305"><a href="#cb11-305" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb11-306"><a href="#cb11-306" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
-<span id="cb11-307"><a href="#cb11-307" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
-<span id="cb11-308"><a href="#cb11-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-309"><a href="#cb11-309" aria-hidden="true" tabindex="-1"></a><span class="in">`np.stack([red, green, blue], axis=2)`</span> joins three 2D arrays along a **new** last axis: three <span class="in">`(300, 300)`</span> arrays give one <span class="in">`(300, 300, 3)`</span> array.</span>
-<span id="cb11-310"><a href="#cb11-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-311"><a href="#cb11-311" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[:, :, 0]`</span> is the first channel (red) of a colour image.</span>
-<span id="cb11-312"><a href="#cb11-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-313"><a href="#cb11-313" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vsplit()`</span> and <span class="in">`np.hsplit()`</span> also cut 3D arrays by rows and by columns: every piece keeps its three channels.</span>
-<span id="cb11-314"><a href="#cb11-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-315"><a href="#cb11-315" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[0, 0, 0]`</span> is the top-left value of the first channel.</span>
-<span id="cb11-316"><a href="#cb11-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-317"><a href="#cb11-317" aria-hidden="true" tabindex="-1"></a><span class="in">`np.argsort(arr)`</span> returns the **positions** that would sort the array: the position of the smallest value first.</span>
-<span id="cb11-318"><a href="#cb11-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-319"><a href="#cb11-319" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack()`</span> and <span class="in">`np.hstack()`</span> also join 3D arrays.</span>
+<span id="cb11-291"><a href="#cb11-291" aria-hidden="true" tabindex="-1"></a><span class="in">`A @ B`</span> is the matrix product of <span class="in">`A`</span> and <span class="in">`B`</span>.</span>
+<span id="cb11-292"><a href="#cb11-292" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-293"><a href="#cb11-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-294"><a href="#cb11-294" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 5: The Colour Photo</span></span>
+<span id="cb11-295"><a href="#cb11-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-296"><a href="#cb11-296" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`photo_5/colour.txt`</span>. One text file, $300 \times 900$: three $300 \times 300$ images side by side, numbered 1 to 3 from left to right.</span>
+<span id="cb11-297"><a href="#cb11-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-298"><a href="#cb11-298" aria-hidden="true" tabindex="-1"></a>**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape <span class="in">`(height, width, 3)`</span>: one layer, or *channel*, for red, green, and blue.</span>
+<span id="cb11-299"><a href="#cb11-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-300"><a href="#cb11-300" aria-hidden="true" tabindex="-1"></a>The ghost separated the three channels and placed them side by side, in a **shuffled order**. On top of that, it was night: every value was squared, so the photo is darker than it should be.</span>
+<span id="cb11-301"><a href="#cb11-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-302"><a href="#cb11-302" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
+<span id="cb11-303"><a href="#cb11-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-304"><a href="#cb11-304" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Rebuild it: cut the file into its three images, and join them along a **new** axis to get a <span class="in">`(300, 300, 3)`</span> array.</span>
+<span id="cb11-305"><a href="#cb11-305" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Undo the square.</span>
+<span id="cb11-306"><a href="#cb11-306" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Which image is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.</span>
+<span id="cb11-307"><a href="#cb11-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-308"><a href="#cb11-308" aria-hidden="true" tabindex="-1"></a>**Key:** the numbers of the red, green, and blue images, in that order, for instance <span class="in">`check(5, "123")`</span>.</span>
+<span id="cb11-309"><a href="#cb11-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-310"><a href="#cb11-310" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-311"><a href="#cb11-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## NumPy Cheatsheet</span></span>
+<span id="cb11-312"><a href="#cb11-312" aria-hidden="true" tabindex="-1"></a><span class="in">`np.hsplit(arr, n)`</span> cuts an array into <span class="in">`n`</span> equal pieces along **columns** (horizontally).</span>
+<span id="cb11-313"><a href="#cb11-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-314"><a href="#cb11-314" aria-hidden="true" tabindex="-1"></a><span class="in">`np.stack([red, green, blue], axis=2)`</span> joins three 2D arrays along a **new** last axis: three <span class="in">`(300, 300)`</span> arrays give one <span class="in">`(300, 300, 3)`</span> array.</span>
+<span id="cb11-315"><a href="#cb11-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-316"><a href="#cb11-316" aria-hidden="true" tabindex="-1"></a><span class="in">`arr[:, :, 0]`</span> is the first channel (red) of a colour image.</span>
+<span id="cb11-317"><a href="#cb11-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-318"><a href="#cb11-318" aria-hidden="true" tabindex="-1"></a><span class="in">`np.sqrt(arr)`</span> returns the square root of every value.</span>
+<span id="cb11-319"><a href="#cb11-319" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-320"><a href="#cb11-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-321"><a href="#cb11-321" aria-hidden="true" tabindex="-1"></a><span class="in">`np.sqrt(arr)`</span> returns the square root of every value.</span>
-<span id="cb11-322"><a href="#cb11-322" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb11-323"><a href="#cb11-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-324"><a href="#cb11-324" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Case Number</span></span>
-<span id="cb11-325"><a href="#cb11-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-326"><a href="#cb11-326" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[150:, 150:250]`** (the bottom half of the photo, columns 150 to 249). For example, a mean of <span class="in">`0.4371`</span> gives the digit <span class="in">`3`</span>. For the colour photo, use only its red channel.</span>
-<span id="cb11-327"><a href="#cb11-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-328"><a href="#cb11-328" aria-hidden="true" tabindex="-1"></a>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</span>
-<span id="cb11-329"><a href="#cb11-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-330"><a href="#cb11-330" aria-hidden="true" tabindex="-1"></a>**Key:** the five digits, from photo 1 to photo 5, for instance <span class="in">`check("case", "12345")`</span>.</span>
-<span id="cb11-331"><a href="#cb11-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-332"><a href="#cb11-332" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-333"><a href="#cb11-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-334"><a href="#cb11-334" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Mission</span></span>
-<span id="cb11-335"><a href="#cb11-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-336"><a href="#cb11-336" aria-hidden="true" tabindex="-1"></a>Work in **groups of three**. Each member of the group is in charge of different photos (this table is a suggestion, you can split the task in the way you prefer):</span>
-<span id="cb11-337"><a href="#cb11-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-338"><a href="#cb11-338" aria-hidden="true" tabindex="-1"></a>| Member | Photos | What you will practise |</span>
-<span id="cb11-339"><a href="#cb11-339" aria-hidden="true" tabindex="-1"></a>|--------|--------|------------------------|</span>
-<span id="cb11-340"><a href="#cb11-340" aria-hidden="true" tabindex="-1"></a>| A | 1 and 2 | Loading, splitting, sorting, joining, <span class="in">`reshape()`</span>, element-wise arithmetic |</span>
-<span id="cb11-341"><a href="#cb11-341" aria-hidden="true" tabindex="-1"></a>| B | 3 and 4 | Delimiters, splitting, sorting, broadcasting, matrix products, determinants, inverses |</span>
-<span id="cb11-342"><a href="#cb11-342" aria-hidden="true" tabindex="-1"></a>| C | 5 and the case number | Splitting 3D arrays, a new axis with <span class="in">`np.stack()`</span>, colour images, aggregations |</span>
-<span id="cb11-343"><a href="#cb11-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-344"><a href="#cb11-344" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`check()`</span> to confirm each key. When you finish your part, help the rest of your group: the **case number** needs all five photos, so it can only be found as a team. The first group to find it closes the investigation!</span>
-<span id="cb11-345"><a href="#cb11-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-346"><a href="#cb11-346" aria-hidden="true" tabindex="-1"></a>When a photo is recovered, **save the evidence** on your computer: store it with <span class="in">`np.save()`</span> and load it back with <span class="in">`np.load()`</span>, so that you never have to fix it again. Can you also store it with <span class="in">`np.savetxt()`</span>? Try it with photo 5.</span>
-<span id="cb11-347"><a href="#cb11-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-348"><a href="#cb11-348" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-349"><a href="#cb11-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-350"><a href="#cb11-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why Does This Work?</span></span>
-<span id="cb11-351"><a href="#cb11-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-352"><a href="#cb11-352" aria-hidden="true" tabindex="-1"></a>For the curious: the mathematics behind each fix. Click to open.</span>
+<span id="cb11-321"><a href="#cb11-321" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Case Number</span></span>
+<span id="cb11-322"><a href="#cb11-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-323"><a href="#cb11-323" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[150:, 150:250]`** (the bottom half of the photo, columns 150 to 249). For example, a mean of <span class="in">`0.4371`</span> gives the digit <span class="in">`3`</span>. For the colour photo, use only its red channel.</span>
+<span id="cb11-324"><a href="#cb11-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-325"><a href="#cb11-325" aria-hidden="true" tabindex="-1"></a>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</span>
+<span id="cb11-326"><a href="#cb11-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-327"><a href="#cb11-327" aria-hidden="true" tabindex="-1"></a>**Key:** the five digits, from photo 1 to photo 5, for instance <span class="in">`check("case", "12345")`</span>.</span>
+<span id="cb11-328"><a href="#cb11-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-329"><a href="#cb11-329" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-330"><a href="#cb11-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-331"><a href="#cb11-331" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Mission</span></span>
+<span id="cb11-332"><a href="#cb11-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-333"><a href="#cb11-333" aria-hidden="true" tabindex="-1"></a>Work in **groups of three**. Each member of the group is in charge of different photos (this table is a suggestion, you can split the task in the way you prefer):</span>
+<span id="cb11-334"><a href="#cb11-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-335"><a href="#cb11-335" aria-hidden="true" tabindex="-1"></a>| Member | Photos | What you will practise |</span>
+<span id="cb11-336"><a href="#cb11-336" aria-hidden="true" tabindex="-1"></a>|--------|--------|------------------------|</span>
+<span id="cb11-337"><a href="#cb11-337" aria-hidden="true" tabindex="-1"></a>| A | 1 and 2 | Loading, splitting, sorting, joining, <span class="in">`reshape()`</span>, element-wise arithmetic |</span>
+<span id="cb11-338"><a href="#cb11-338" aria-hidden="true" tabindex="-1"></a>| B | 3 and 4 | Delimiters, splitting, sorting, broadcasting, matrix products, determinants, inverses |</span>
+<span id="cb11-339"><a href="#cb11-339" aria-hidden="true" tabindex="-1"></a>| C | 5 and the case number | Splitting, a new axis with <span class="in">`np.stack()`</span>, colour images, aggregations |</span>
+<span id="cb11-340"><a href="#cb11-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-341"><a href="#cb11-341" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`check()`</span> to confirm each key. When you finish your part, help the rest of your group: the **case number** needs all five photos, so it can only be found as a team. The first group to find it closes the investigation!</span>
+<span id="cb11-342"><a href="#cb11-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-343"><a href="#cb11-343" aria-hidden="true" tabindex="-1"></a>When a photo is recovered, **save the evidence** on your computer: store it with <span class="in">`np.save()`</span> and load it back with <span class="in">`np.load()`</span>, so that you never have to fix it again. Can you also store it with <span class="in">`np.savetxt()`</span>? Try it with photo 5.</span>
+<span id="cb11-344"><a href="#cb11-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-345"><a href="#cb11-345" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-346"><a href="#cb11-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-347"><a href="#cb11-347" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why Does This Work?</span></span>
+<span id="cb11-348"><a href="#cb11-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-349"><a href="#cb11-349" aria-hidden="true" tabindex="-1"></a>For the curious: the mathematics behind each fix. Click to open.</span>
+<span id="cb11-350"><a href="#cb11-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-351"><a href="#cb11-351" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-352"><a href="#cb11-352" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 2: why can we undo the freeze exactly?</span></span>
 <span id="cb11-353"><a href="#cb11-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-354"><a href="#cb11-354" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb11-355"><a href="#cb11-355" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 2: why can we undo the freeze exactly?</span></span>
-<span id="cb11-356"><a href="#cb11-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-357"><a href="#cb11-357" aria-hidden="true" tabindex="-1"></a>Besides swapping rows and columns (which only moves pixels around), the ghost applied an **affine** map to every pixel: $\text{stored} = a\,(1 - \text{photo}) + b$, with $a &gt; 0$. An affine map with $a \neq 0$ is invertible, but we need to know $a$ and $b$.</span>
+<span id="cb11-354"><a href="#cb11-354" aria-hidden="true" tabindex="-1"></a>Besides swapping rows and columns (which only moves pixels around), the ghost applied an **affine** map to every pixel: $\text{stored} = a \cdot \text{photo} + b$, with $a &gt; 0$. An affine map with $a \neq 0$ is invertible, but we need to know $a$ and $b$.</span>
+<span id="cb11-355"><a href="#cb11-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-356"><a href="#cb11-356" aria-hidden="true" tabindex="-1"></a>That is where the frame helps. Every photo contains pure black (<span class="in">`0`</span>) and pure white (<span class="in">`1`</span>), so the smallest stored value is $b$ and the largest is $a + b$. The stretch $\frac{\text{stored} - \min}{\max - \min}$ recovers the photo exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.</span>
+<span id="cb11-357"><a href="#cb11-357" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-358"><a href="#cb11-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-359"><a href="#cb11-359" aria-hidden="true" tabindex="-1"></a>That is where the frame helps. Every photo contains pure white (<span class="in">`1`</span>) and pure black (<span class="in">`0`</span>), so after the negative, the smallest stored value is $b$ and the largest is $a + b$. The stretch $\frac{\text{stored} - \min}{\max - \min}$ recovers $1 - \text{photo}$ exactly. Without pure black and pure white in the photo, the stretch would make it too contrasted, and the digit would be wrong.</span>
-<span id="cb11-360"><a href="#cb11-360" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-359"><a href="#cb11-359" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-360"><a href="#cb11-360" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 3: broadcasting is a matrix product in disguise</span></span>
 <span id="cb11-361"><a href="#cb11-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-362"><a href="#cb11-362" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb11-363"><a href="#cb11-363" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 3: broadcasting is a matrix product in disguise</span></span>
-<span id="cb11-364"><a href="#cb11-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-365"><a href="#cb11-365" aria-hidden="true" tabindex="-1"></a>Multiplying every row $i$ by its gain $g_i$ is the same as multiplying on the left by a **diagonal matrix**:</span>
-<span id="cb11-366"><a href="#cb11-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-367"><a href="#cb11-367" aria-hidden="true" tabindex="-1"></a>$$\text{stored} = G \cdot \text{photo}, \qquad G = \begin{pmatrix} g_1 &amp; &amp; <span class="sc">\\</span> &amp; \ddots &amp; <span class="sc">\\</span> &amp; &amp; g_{300} \end{pmatrix}$$</span>
+<span id="cb11-362"><a href="#cb11-362" aria-hidden="true" tabindex="-1"></a>Multiplying every row $i$ by its gain $g_i$ is the same as multiplying on the left by a **diagonal matrix**:</span>
+<span id="cb11-363"><a href="#cb11-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-364"><a href="#cb11-364" aria-hidden="true" tabindex="-1"></a>$$\text{stored} = G \cdot \text{photo}, \qquad G = \begin{pmatrix} g_1 &amp; &amp; <span class="sc">\\</span> &amp; \ddots &amp; <span class="sc">\\</span> &amp; &amp; g_{300} \end{pmatrix}$$</span>
+<span id="cb11-365"><a href="#cb11-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-366"><a href="#cb11-366" aria-hidden="true" tabindex="-1"></a>The inverse of a diagonal matrix is diagonal, with entries $1/g_i$. So <span class="in">`stored / gain.reshape(-1, 1)`</span> computes exactly $G^{-1} \cdot \text{stored}$, without building a $300 \times 300$ matrix. And <span class="in">`stored / gain`</span>, the wrong version, computes $\text{stored} \cdot G^{-1}$: it divides the columns. Try it: <span class="in">`np.linalg.inv(np.diag(gain)) @ stored`</span>.</span>
+<span id="cb11-367"><a href="#cb11-367" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-368"><a href="#cb11-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-369"><a href="#cb11-369" aria-hidden="true" tabindex="-1"></a>The inverse of a diagonal matrix is diagonal, with entries $1/g_i$. So <span class="in">`stored / gain.reshape(-1, 1)`</span> computes exactly $G^{-1} \cdot \text{stored}$, without building a $300 \times 300$ matrix. And <span class="in">`stored / gain`</span>, the wrong version, computes $\text{stored} \cdot G^{-1}$: it divides the columns. Try it: <span class="in">`np.linalg.inv(np.diag(gain)) @ stored`</span>.</span>
-<span id="cb11-370"><a href="#cb11-370" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-369"><a href="#cb11-369" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-370"><a href="#cb11-370" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 4: why is the inverse of the lens its transpose?</span></span>
 <span id="cb11-371"><a href="#cb11-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-372"><a href="#cb11-372" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb11-373"><a href="#cb11-373" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 4: why is the inverse of the lens its transpose?</span></span>
-<span id="cb11-374"><a href="#cb11-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-375"><a href="#cb11-375" aria-hidden="true" tabindex="-1"></a>The correct lens is a **permutation matrix**: the identity matrix with its rows shuffled. Each row and each column has a single `1`, so the rows are orthonormal vectors. That makes $L$ an **orthogonal** matrix: $L L^T = I$, and therefore $L^{-1} = L^T$.</span>
+<span id="cb11-372"><a href="#cb11-372" aria-hidden="true" tabindex="-1"></a>The correct lens is a **permutation matrix**: the identity matrix with its rows shuffled. Each row and each column has a single `1`, so the rows are orthonormal vectors. That makes $L$ an **orthogonal** matrix: $L L^T = I$, and therefore $L^{-1} = L^T$.</span>
+<span id="cb11-373"><a href="#cb11-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-374"><a href="#cb11-374" aria-hidden="true" tabindex="-1"></a>Its determinant is $\pm 1$. Each swap of two rows of the identity changes the sign of the determinant, and $|\det L| = 1$ means that the lens does not stretch or squash space: it only moves the rows around.</span>
+<span id="cb11-375"><a href="#cb11-375" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-376"><a href="#cb11-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-377"><a href="#cb11-377" aria-hidden="true" tabindex="-1"></a>Its determinant is $\pm 1$. Each swap of two rows of the identity changes the sign of the determinant, and $|\det L| = 1$ means that the lens does not stretch or squash space: it only moves the rows around.</span>
-<span id="cb11-378"><a href="#cb11-378" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-377"><a href="#cb11-377" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-378"><a href="#cb11-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 4: what does a determinant of 0 mean here?</span></span>
 <span id="cb11-379"><a href="#cb11-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-380"><a href="#cb11-380" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb11-381"><a href="#cb11-381" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 4: what does a determinant of 0 mean here?</span></span>
-<span id="cb11-382"><a href="#cb11-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-383"><a href="#cb11-383" aria-hidden="true" tabindex="-1"></a>A matrix with determinant 0 loses information, so no matrix can undo it.</span>
+<span id="cb11-380"><a href="#cb11-380" aria-hidden="true" tabindex="-1"></a>A matrix with determinant 0 loses information, so no matrix can undo it.</span>
+<span id="cb11-381"><a href="#cb11-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-382"><a href="#cb11-382" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lens 1 has **two equal rows**: two rows of the stored photo would be copies of the same row of the original, and one row of the original would be lost forever.</span>
+<span id="cb11-383"><a href="#cb11-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lens 3 has a **row of zeros**: one row of the stored photo would be black, whatever the original was.</span>
 <span id="cb11-384"><a href="#cb11-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-385"><a href="#cb11-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lens 1 has **two equal rows**: two rows of the stored photo would be copies of the same row of the original, and one row of the original would be lost forever.</span>
-<span id="cb11-386"><a href="#cb11-386" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lens 3 has a **row of zeros**: one row of the stored photo would be black, whatever the original was.</span>
+<span id="cb11-385"><a href="#cb11-385" aria-hidden="true" tabindex="-1"></a>In both cases, different photos would give the same stored photo, so it is impossible to know which one we started from.</span>
+<span id="cb11-386"><a href="#cb11-386" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-387"><a href="#cb11-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-388"><a href="#cb11-388" aria-hidden="true" tabindex="-1"></a>In both cases, different photos would give the same stored photo, so it is impossible to know which one we started from.</span>
-<span id="cb11-389"><a href="#cb11-389" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-388"><a href="#cb11-388" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb11-389"><a href="#cb11-389" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 5: why the square root, and why six orders?</span></span>
 <span id="cb11-390"><a href="#cb11-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-391"><a href="#cb11-391" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb11-392"><a href="#cb11-392" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 5: why the square root, and why six orders?</span></span>
-<span id="cb11-393"><a href="#cb11-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-394"><a href="#cb11-394" aria-hidden="true" tabindex="-1"></a>On $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$, the function $x \mapsto x^2$ is increasing, so it is invertible, and its inverse is $\sqrt{x}$. Since $x^2 \le x$ there, squaring darkens every pixel, except pure black and pure white.</span>
+<span id="cb11-391"><a href="#cb11-391" aria-hidden="true" tabindex="-1"></a>On $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$, the function $x \mapsto x^2$ is increasing, so it is invertible, and its inverse is $\sqrt{x}$. Since $x^2 \le x$ there, squaring darkens every pixel, except pure black and pure white.</span>
+<span id="cb11-392"><a href="#cb11-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-393"><a href="#cb11-393" aria-hidden="true" tabindex="-1"></a>The three channels can be placed in $3! = 3 \times 2 \times 1 = 6$ orders: a permutation of the last axis. The mean brightness of the photo does not depend on the order, but the mean of the red channel does: that is why the digit of photo 5 uses the red channel only.</span>
+<span id="cb11-394"><a href="#cb11-394" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-395"><a href="#cb11-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-396"><a href="#cb11-396" aria-hidden="true" tabindex="-1"></a>The three channels can be placed in $3! = 3 \times 2 \times 1 = 6$ orders: a permutation of the last axis. The mean brightness of the photo does not depend on the order, but the mean of the red channel does: that is why the digit of photo 5 uses the red channel only.</span>
-<span id="cb11-397"><a href="#cb11-397" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb11-398"><a href="#cb11-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-399"><a href="#cb11-399" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-400"><a href="#cb11-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-401"><a href="#cb11-401" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Else Can We Load and Save?</span></span>
-<span id="cb11-402"><a href="#cb11-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-403"><a href="#cb11-403" aria-hidden="true" tabindex="-1"></a>Today we only needed <span class="in">`np.loadtxt()`</span>, because the photos were tidy text files on the internet. When you work with files **on your own computer**, NumPy and Python offer much more:</span>
-<span id="cb11-404"><a href="#cb11-404" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-405"><a href="#cb11-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Skip headers and pick columns.** Real files often start with a line of column names. <span class="in">`skiprows`</span> skips lines, and <span class="in">`usecols`</span> keeps only some columns:</span>
-<span id="cb11-406"><a href="#cb11-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-407"><a href="#cb11-407" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
-<span id="cb11-408"><a href="#cb11-408" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> np.loadtxt(<span class="st">"readings.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>, skiprows<span class="op">=</span><span class="dv">1</span>, usecols<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">2</span>))</span>
-<span id="cb11-409"><a href="#cb11-409" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
-<span id="cb11-410"><a href="#cb11-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-411"><a href="#cb11-411" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Missing values.** <span class="in">`np.loadtxt()`</span> fails if a value is missing. <span class="in">`np.genfromtxt()`</span> reads it anyway and writes <span class="in">`nan`</span> (not a number) in the empty places:</span>
-<span id="cb11-412"><a href="#cb11-412" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-413"><a href="#cb11-413" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
-<span id="cb11-414"><a href="#cb11-414" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> np.genfromtxt(<span class="st">"readings.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>, skip_header<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-415"><a href="#cb11-415" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(np.isnan(data).<span class="bu">sum</span>())   <span class="co"># how many values are missing</span></span>
-<span id="cb11-416"><a href="#cb11-416" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
-<span id="cb11-417"><a href="#cb11-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-418"><a href="#cb11-418" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Readable files for other programs.** <span class="in">`np.savetxt()`</span> can choose the separator, the number format, and a header, so that Excel can open the file:</span>
-<span id="cb11-419"><a href="#cb11-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-420"><a href="#cb11-420" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
-<span id="cb11-421"><a href="#cb11-421" aria-hidden="true" tabindex="-1"></a>  np.savetxt(<span class="st">"photo_1.csv"</span>, photo_1, delimiter<span class="op">=</span><span class="st">","</span>, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%.3f</span><span class="st">"</span>, header<span class="op">=</span><span class="st">"my recovered photo"</span>)</span>
-<span id="cb11-422"><a href="#cb11-422" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
-<span id="cb11-423"><a href="#cb11-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-424"><a href="#cb11-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Several arrays in one file.** <span class="in">`np.savez()`</span> stores many arrays together, each with a name; <span class="in">`np.savez_compressed()`</span> does the same and takes less space:</span>
-<span id="cb11-425"><a href="#cb11-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-426"><a href="#cb11-426" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
-<span id="cb11-427"><a href="#cb11-427" aria-hidden="true" tabindex="-1"></a>  np.savez(<span class="st">"evidence.npz"</span>, photo_1<span class="op">=</span>photo_1, photo_5<span class="op">=</span>photo_5)</span>
-<span id="cb11-428"><a href="#cb11-428" aria-hidden="true" tabindex="-1"></a>  evidence <span class="op">=</span> np.load(<span class="st">"evidence.npz"</span>)</span>
-<span id="cb11-429"><a href="#cb11-429" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(evidence[<span class="st">"photo_5"</span>].shape)</span>
-<span id="cb11-430"><a href="#cb11-430" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
-<span id="cb11-431"><a href="#cb11-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-432"><a href="#cb11-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Images.** Matplotlib reads and writes image files as NumPy arrays: <span class="in">`plt.imread("ghost.png")`</span> and <span class="in">`plt.imsave("ghost.png", photo_5)`</span>. PNG images often have a fourth channel for transparency, so their shape is <span class="in">`(height, width, 4)`</span>.</span>
-<span id="cb11-433"><a href="#cb11-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-434"><a href="#cb11-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Many files.** On your computer, Python can list the files of a folder for you: <span class="in">`os.listdir("ghost_photos/photo_2")`</span> or <span class="in">`glob.glob("ghost_photos/photo_2/*.txt")`</span>. Today we did not need it, because we knew the names of the files.</span>
-<span id="cb11-435"><a href="#cb11-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-436"><a href="#cb11-436" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-437"><a href="#cb11-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-438"><a href="#cb11-438" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
-<span id="cb11-439"><a href="#cb11-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-440"><a href="#cb11-440" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.loadtxt()`</span> loads text files, even straight from a URL; <span class="in">`delimiter`</span> sets the separator of CSV files.</span>
-<span id="cb11-441"><a href="#cb11-441" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.load()`</span> loads <span class="in">`.npy`</span> files from your computer.</span>
-<span id="cb11-442"><a href="#cb11-442" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.save()`</span> keeps an array exactly, with its shape and data type; <span class="in">`np.savetxt()`</span> writes readable text, but only for 1D and 2D arrays.</span>
-<span id="cb11-443"><a href="#cb11-443" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.concatenate()`</span>, <span class="in">`np.hstack()`</span>, and <span class="in">`np.vstack()`</span> join arrays along an existing axis; <span class="in">`np.stack()`</span> creates a new one. <span class="in">`np.split()`</span>, <span class="in">`np.hsplit()`</span>, and <span class="in">`np.vsplit()`</span> undo the joining.</span>
-<span id="cb11-444"><a href="#cb11-444" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.</span>
-<span id="cb11-445"><a href="#cb11-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-446"><a href="#cb11-446" aria-hidden="true" tabindex="-1"></a>Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</span>
-<span id="cb11-447"><a href="#cb11-447" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-448"><a href="#cb11-448" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-449"><a href="#cb11-449" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-450"><a href="#cb11-450" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
-<span id="cb11-451"><a href="#cb11-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-452"><a href="#cb11-452" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
-<span id="cb11-453"><a href="#cb11-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-454"><a href="#cb11-454" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#loading-and-saving-data)</span>{.btn .btn-primary}</span>
+<span id="cb11-396"><a href="#cb11-396" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-397"><a href="#cb11-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-398"><a href="#cb11-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Else Can We Load and Save?</span></span>
+<span id="cb11-399"><a href="#cb11-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-400"><a href="#cb11-400" aria-hidden="true" tabindex="-1"></a>Today we only needed <span class="in">`np.loadtxt()`</span>, because the photos were tidy text files on the internet. When you work with files **on your own computer**, NumPy and Python offer much more:</span>
+<span id="cb11-401"><a href="#cb11-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-402"><a href="#cb11-402" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Skip headers and pick columns.** Real files often start with a line of column names. <span class="in">`skiprows`</span> skips lines, and <span class="in">`usecols`</span> keeps only some columns:</span>
+<span id="cb11-403"><a href="#cb11-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-404"><a href="#cb11-404" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
+<span id="cb11-405"><a href="#cb11-405" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> np.loadtxt(<span class="st">"readings.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>, skiprows<span class="op">=</span><span class="dv">1</span>, usecols<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb11-406"><a href="#cb11-406" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
+<span id="cb11-407"><a href="#cb11-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-408"><a href="#cb11-408" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Missing values.** <span class="in">`np.loadtxt()`</span> fails if a value is missing. <span class="in">`np.genfromtxt()`</span> reads it anyway and writes <span class="in">`nan`</span> (not a number) in the empty places:</span>
+<span id="cb11-409"><a href="#cb11-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-410"><a href="#cb11-410" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
+<span id="cb11-411"><a href="#cb11-411" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> np.genfromtxt(<span class="st">"readings.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>, skip_header<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-412"><a href="#cb11-412" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(np.isnan(data).<span class="bu">sum</span>())   <span class="co"># how many values are missing</span></span>
+<span id="cb11-413"><a href="#cb11-413" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
+<span id="cb11-414"><a href="#cb11-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-415"><a href="#cb11-415" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Readable files for other programs.** <span class="in">`np.savetxt()`</span> can choose the separator, the number format, and a header, so that Excel can open the file:</span>
+<span id="cb11-416"><a href="#cb11-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-417"><a href="#cb11-417" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
+<span id="cb11-418"><a href="#cb11-418" aria-hidden="true" tabindex="-1"></a>  np.savetxt(<span class="st">"photo_1.csv"</span>, photo_1, delimiter<span class="op">=</span><span class="st">","</span>, fmt<span class="op">=</span><span class="st">"</span><span class="sc">%.3f</span><span class="st">"</span>, header<span class="op">=</span><span class="st">"my recovered photo"</span>)</span>
+<span id="cb11-419"><a href="#cb11-419" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
+<span id="cb11-420"><a href="#cb11-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-421"><a href="#cb11-421" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Several arrays in one file.** <span class="in">`np.savez()`</span> stores many arrays together, each with a name; <span class="in">`np.savez_compressed()`</span> does the same and takes less space:</span>
+<span id="cb11-422"><a href="#cb11-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-423"><a href="#cb11-423" aria-hidden="true" tabindex="-1"></a>  <span class="in">```python</span></span>
+<span id="cb11-424"><a href="#cb11-424" aria-hidden="true" tabindex="-1"></a>  np.savez(<span class="st">"evidence.npz"</span>, photo_1<span class="op">=</span>photo_1, photo_5<span class="op">=</span>photo_5)</span>
+<span id="cb11-425"><a href="#cb11-425" aria-hidden="true" tabindex="-1"></a>  evidence <span class="op">=</span> np.load(<span class="st">"evidence.npz"</span>)</span>
+<span id="cb11-426"><a href="#cb11-426" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(evidence[<span class="st">"photo_5"</span>].shape)</span>
+<span id="cb11-427"><a href="#cb11-427" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
+<span id="cb11-428"><a href="#cb11-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-429"><a href="#cb11-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Images.** Matplotlib reads and writes image files as NumPy arrays: <span class="in">`plt.imread("ghost.png")`</span> and <span class="in">`plt.imsave("ghost.png", photo_5)`</span>. PNG images often have a fourth channel for transparency, so their shape is <span class="in">`(height, width, 4)`</span>.</span>
+<span id="cb11-430"><a href="#cb11-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-431"><a href="#cb11-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Many files.** On your computer, Python can list the files of a folder for you: <span class="in">`os.listdir("ghost_photos/photo_2")`</span> or <span class="in">`glob.glob("ghost_photos/photo_2/*.txt")`</span>. Today we did not need it, because we knew the names of the files.</span>
+<span id="cb11-432"><a href="#cb11-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-433"><a href="#cb11-433" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-434"><a href="#cb11-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-435"><a href="#cb11-435" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
+<span id="cb11-436"><a href="#cb11-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-437"><a href="#cb11-437" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.loadtxt()`</span> loads text files, even straight from a URL; <span class="in">`delimiter`</span> sets the separator of CSV files.</span>
+<span id="cb11-438"><a href="#cb11-438" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.load()`</span> loads <span class="in">`.npy`</span> files from your computer.</span>
+<span id="cb11-439"><a href="#cb11-439" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.save()`</span> keeps an array exactly, with its shape and data type; <span class="in">`np.savetxt()`</span> writes readable text, but only for 1D and 2D arrays.</span>
+<span id="cb11-440"><a href="#cb11-440" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.concatenate()`</span>, <span class="in">`np.hstack()`</span>, and <span class="in">`np.vstack()`</span> join arrays along an existing axis; <span class="in">`np.stack()`</span> creates a new one. <span class="in">`np.split()`</span>, <span class="in">`np.hsplit()`</span>, and <span class="in">`np.vsplit()`</span> undo the joining.</span>
+<span id="cb11-441"><a href="#cb11-441" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.</span>
+<span id="cb11-442"><a href="#cb11-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-443"><a href="#cb11-443" aria-hidden="true" tabindex="-1"></a>Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</span>
+<span id="cb11-444"><a href="#cb11-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-445"><a href="#cb11-445" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb11-446"><a href="#cb11-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-447"><a href="#cb11-447" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
+<span id="cb11-448"><a href="#cb11-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-449"><a href="#cb11-449" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
+<span id="cb11-450"><a href="#cb11-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-451"><a href="#cb11-451" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#loading-and-saving-data)</span>{.btn .btn-primary}</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
