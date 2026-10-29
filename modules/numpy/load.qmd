@@ -29,7 +29,7 @@ Luckily, the camera keeps a log. This is what it recorded:
 
 ```text
 22:13  BEEP! Ghost nearby ............. photo_1 saved
-       ERROR: memory shattered. Photo saved in 9 fragments, names scrambled.
+       ERROR: memory shattered. 9 fragments shuffled inside the photo.
 23:02  BEEP! Ghost nearby ............. photo_2 saved
        ERROR: sensor frozen. Fragments flattened, contrast lost, image inverted.
 00:31  BEEP! Ghost nearby ............. photo_3 saved
@@ -94,12 +94,12 @@ def check(photo, key):
 Each photo is a folder of files. To get the address (URL) of a file, add the folder and the file name to `BASE`:
 
 ```python
-url = f"{BASE}/photo_1/fragment_A.txt"
+url = f"{BASE}/photo_2/fragment_0_0.txt"
 ```
 
 | Photo | Files |
 |-------|-------|
-| 1 | `photo_1/fragment_A.txt`, `photo_1/fragment_B.txt`, ..., `photo_1/fragment_I.txt` |
+| 1 | `photo_1/shattered.txt` |
 | 2 | `photo_2/fragment_0_0.txt`, `photo_2/fragment_0_1.txt`, ..., `photo_2/fragment_2_2.txt` |
 | 3 | `photo_3/fragment_0_0.csv`, `photo_3/fragment_0_1.csv`, ..., `photo_3/fragment_2_2.csv` |
 | 4 | `photo_4/fragment_0_0.csv`, ..., `photo_4/fragment_2_2.csv`, and `photo_4/lens_1.csv`, `lens_2.csv`, `lens_3.csv` |
@@ -108,7 +108,7 @@ url = f"{BASE}/photo_1/fragment_A.txt"
 `np.loadtxt()` reads a text file straight from its URL:
 
 ```python
-fragment = np.loadtxt(f"{BASE}/photo_1/fragment_A.txt")
+fragment = np.loadtxt(f"{BASE}/photo_2/fragment_0_0.txt")
 ```
 
 The first time, NumPy downloads the file and keeps a copy next to your notebook, in a folder called `raw.githubusercontent.com`. Do not be surprised if it appears!
@@ -121,6 +121,7 @@ These are the tools you will need. You already know most of them!
 | `np.save(path, arr)` / `np.load(path)` | Saves / loads an array in NumPy's binary format (`.npy`), on your computer |
 | `np.savetxt(path, arr)` | Saves an array as a text file |
 | `np.concatenate(arrays, axis=...)` | Joins arrays along an existing axis (also `np.hstack()`, `np.vstack()`) |
+| `np.split(arr, n, axis=...)` | Cuts an array into `n` equal pieces (also `np.hsplit()`, `np.vsplit()`) |
 | `np.stack(arrays, axis=...)` | Joins arrays along a **new** axis |
 
 Every photo is a $300 \times 300$ array, with values between 0 (black) and 1 (white). When a photo is split into 9 fragments, each fragment is $100 \times 100$, and they are placed like this:
@@ -144,13 +145,25 @@ For each photo, the camera log tells us what happened. This is what we have, and
 
 ### Photo 1: The Shattered Photo
 
-**Files:** `photo_1/fragment_A.txt` to `fragment_I.txt`. Nine text files, one $100 \times 100$ fragment each.
+**Files:** `photo_1/shattered.txt`. One text file, $300 \times 300$.
 
-**What happened:** the memory shattered, and the fragments were saved with random letters. The letters say nothing about the position.
+**What happened:** the memory shattered. The photo was cut into its nine $100 \times 100$ fragments, and they were put back together **in a random order**. The photo has the right size, but it looks like a scrambled puzzle.
 
-**How to fix it:** the camera left a trace. The **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row. Load every fragment, read that pixel, sort the fragments by it (`np.argsort()` is your friend), and join them: first each row of three fragments side by side, then the three rows one on top of the other.
+We name the nine places of the shattered photo with letters, row by row:
 
-**Key:** the letters of the files sorted by fragment number, for instance `check(1, "ABCDEFGHI")`.
+```text
+A B C
+D E F
+G H I
+```
+
+**How to fix it:**
+
+1. Cut the shattered photo back into its nine fragments: first into three rows of fragments, then each row into three fragments (`np.vsplit()` and `np.hsplit()`). Keep them in the order A, B, ..., I.
+2. The camera left a trace: the **top-left pixel** of every fragment stores its fragment number, from 1 to 9, counted row by row in the original photo. Read that pixel in every fragment and sort the fragments by it (`np.argsort()` is your friend).
+3. Join them again in the right order: first each row of three fragments side by side, then the three rows one on top of the other.
+
+**Key:** the letters of the places, sorted by fragment number, for instance `check(1, "ABCDEFGHI")`.
 
 ### Photo 2: The Frozen Photo
 
@@ -216,7 +229,7 @@ Work in **groups of three**. Each member of the group is in charge of different 
 
 | Member | Photos | What you will practise |
 |--------|--------|------------------------|
-| A | 1 and 2 | Loading, sorting, joining, `reshape()`, element-wise arithmetic |
+| A | 1 and 2 | Loading, splitting, sorting, joining, `reshape()`, element-wise arithmetic |
 | B | 3 and 4 | Delimiters, broadcasting, matrix products, determinants, inverses |
 | C | 5 and the case number | A new axis with `np.stack()`, colour images, aggregations |
 
@@ -310,7 +323,7 @@ Today we only needed `np.loadtxt()`, because the photos were tidy text files on 
 
 - **Images.** Matplotlib reads and writes image files as NumPy arrays: `plt.imread("ghost.png")` and `plt.imsave("ghost.png", photo_5)`. PNG images often have a fourth channel for transparency, so their shape is `(height, width, 4)`.
 
-- **Many files.** On your computer, Python can list the files of a folder for you: `os.listdir("ghost_photos/photo_1")` or `glob.glob("ghost_photos/photo_1/*.txt")`. Today we did not need it, because we knew the names of the files.
+- **Many files.** On your computer, Python can list the files of a folder for you: `os.listdir("ghost_photos/photo_2")` or `glob.glob("ghost_photos/photo_2/*.txt")`. Today we did not need it, because we knew the names of the files.
 
 ---
 
@@ -319,7 +332,7 @@ Today we only needed `np.loadtxt()`, because the photos were tidy text files on 
 - `np.loadtxt()` loads text files, even straight from a URL; `delimiter` sets the separator of CSV files.
 - `np.load()` loads `.npy` files from your computer.
 - `np.save()` keeps an array exactly, with its shape and data type; `np.savetxt()` writes readable text, but only for 1D and 2D arrays.
-- `np.concatenate()`, `np.hstack()`, and `np.vstack()` join arrays along an existing axis; `np.stack()` creates a new one.
+- `np.concatenate()`, `np.hstack()`, and `np.vstack()` join arrays along an existing axis; `np.stack()` creates a new one. `np.split()`, `np.hsplit()`, and `np.vsplit()` undo the joining.
 - Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.
 
 Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?

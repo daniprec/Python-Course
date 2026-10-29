@@ -12,8 +12,9 @@ Output: data/ghost_photos/photo_1 ... photo_5 (text files that students read wit
 Every grayscale photo is 300x300 with values in [0, 1], a white frame (4 px) and a
 black line just inside it (2 px), so it always contains pure white and pure black.
 
-- photo_1 (.txt)  9 fragments with shuffled letter names; fragment[0, 0] holds the
-                  fragment number (1-9, row by row).
+- photo_1 (.txt)  one 300x300 file, shattered.txt: its 9 fragments are shuffled inside
+                  it (slots A-I, row by row). The top-left pixel of each fragment holds
+                  its fragment number (1-9, row by row in the original photo).
 - photo_2 (.txt)  9 fragments named by position, flattened to one value per line.
                   The photo was transposed, inverted, and squeezed into a narrow range.
 - photo_3 (.csv)  9 fragments named by position, separated by semicolons; every row
@@ -83,20 +84,22 @@ gray = np.array([0.299, 0.587, 0.114])
 photos = {k: np.round(add_frame(rgb_of(k) @ gray), 4) for k in (1, 2, 3, 4)}
 photos[5] = np.round(add_frame(rgb_of(5)), 4)
 
-# --- Photo 1: shuffled fragments in .txt -----------------------------------------
+# --- Photo 1: one file, fragments shuffled inside it -------------------------------
 rng.shuffle(list("ABCDEFGHI"))                 # keeps the random stream (lens, channels) unchanged
-# Fragment position stored in fragment_A ... fragment_I. Chosen so that the fragments
-# joined in file order give a different digit than the recovered photo.
-FILE_POSITION = [4, 7, 0, 5, 8, 2, 1, 6, 3]
+# The 9 slots of the stored photo are named A ... I, row by row. SLOT_CONTENT[k] is the
+# position (0-8) of the fragment placed in slot k. Chosen so that the stored photo, not
+# unshuffled, gives a different digit than the recovered photo.
+SLOT_CONTENT = [4, 7, 0, 5, 8, 2, 1, 6, 3]
+frags = list(fragments_of(photos[1]).values())
+for pos, frag in enumerate(frags):
+    frag[0, 0] = pos + 1                       # the fragment number, the only clue
+slots = [frags[pos] for pos in SLOT_CONTENT]
+shattered = np.vstack([np.hstack(slots[r * 3:(r + 1) * 3]) for r in range(3)])
+np.savetxt(os.path.join(out, "photo_1", "shattered.txt"), shattered, fmt="%.4f")
 letters = [None] * 9
-for k, pos in enumerate(FILE_POSITION):
+for k, pos in enumerate(SLOT_CONTENT):
     letters[pos] = "ABCDEFGHI"[k]
-order = []
-for pos, (_, frag) in enumerate(fragments_of(photos[1]).items()):
-    frag[0, 0] = pos + 1
-    np.savetxt(os.path.join(out, "photo_1", f"fragment_{letters[pos]}.txt"), frag, fmt="%.4f")
-    order.append(letters[pos])
-answers["photo_1"] = "".join(order)
+answers["photo_1"] = "".join(letters)          # slot letters sorted by fragment number
 recovered_1 = photos[1].copy()                 # the recovered photo keeps the fragment numbers
 for pos in range(9):
     recovered_1[(pos // 3) * TILE, (pos % 3) * TILE] = pos + 1
@@ -152,9 +155,8 @@ answers["values"] = {k: round(quarter_value(p), 4) for k, p in recovered.items()
 answers["case"] = "".join(str(answers["digits"][k]) for k in range(1, 6))
 
 # Half-fixed photos should give a different digit
-frags_1 = [np.loadtxt(os.path.join(out, "photo_1", f"fragment_{x}.txt")) for x in "ABCDEFGHI"]
 half_fixed = {
-    "1: fragments in file order": np.vstack([np.hstack(frags_1[r * 3:(r + 1) * 3]) for r in range(3)]),
+    "1: not unshuffled": np.loadtxt(os.path.join(out, "photo_1", "shattered.txt")),
     "2: only stretched": stretched_2,
     "2: not transposed": 1 - stretched_2,
     "2: not inverted": stretched_2.T,
