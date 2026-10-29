@@ -28,6 +28,7 @@ Luckily, the camera keeps a log. This is what it recorded:
 01:45  BEEP! Ghost nearby ............. photo_4 saved
        ERROR: lens cursed. Rows scrambled. 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
+       NOTE: ghost surrounded by small ORANGE flames.
        ERROR: colour channels separated and shuffled. Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.
 ```
@@ -89,7 +90,7 @@ def show(image):
     plt.show()
 
 
-_KEYS = {1: '2ff7f21ca76127ff', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'b3c1efbb2f4344a4'}
+_KEYS = {1: 'acba8dd74b724348', 2: 'f5ca38f748a1d6ea', 3: '9ae2bdd7beedc2e7', 4: 'd4735e3a265e16ee', 5: '72440a20f54075ac', 'case': 'cc4a9135117f2dbf'}
 
 
 def check(photo, key):
@@ -201,7 +202,7 @@ We found three lenses in the camera bag, but only one of them was used.
 
 **What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and **shuffled the file numbers**. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.
 
-**How to fix it:** find the decoy (look at the four files). Join the other three along a **new** axis to get a `(300, 300, 3)` array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders: in the right one, the colours look natural... and **fire is red**.
+**How to fix it:** find the decoy (look at the four files). Join the other three along a **new** axis to get a `(300, 300, 3)` array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders and use the clue from the camera log: this ghost was surrounded by small **orange flames**. Careful with blue or green flames: those belong to other spirits (will-o'-the-wisps!), not to our ghost.
 
 **Key:** the numbers of the red, green, and blue files, in that order, for instance `check(5, "123")`.
 
