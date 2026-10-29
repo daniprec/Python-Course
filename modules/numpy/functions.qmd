@@ -102,6 +102,14 @@ print(np.sum(house, axis=1))
 
 A good way to remember it: the `axis` you pass is the one that **disappears** from the shape. `house` has shape `(5, 2)`; `axis=0` leaves `(2,)`, one value per coordinate, and `axis=1` leaves `(5,)`, one value per point.
 
+Mathematically, the `axis` you pass is the one **you are summing over**. The other axis is the one that remains. If you have a 3D tensor with shape `(M, N, P)`, an element in the tensor is $a_{i,j,k}$. When choosing `axis=0`, you sum over $i$, producing a new tensor with elements $b_{j,k} = \sum_i a_{i,j,k}$ and shape `(N, P)`. Choosing `axis=1` sums over $j$, producing a new tensor with elements $c_{i,k} = \sum_j a_{i,j,k}$ and shape `(M, P)`. Choosing `axis=2` sums over $k$, producing a new tensor with elements $d_{i,j} = \sum_k a_{i,j,k}$ and shape `(M, N)`.
+
+:::{.callout-warning}
+## Axis matters!
+
+Knowing how to operate along the right axis is crucial. Please read the explanation above carefully, and make sure you understand it. If you are unsure, try a few examples with small arrays to see how it works.
+:::
+
 Other aggregations work the same way. `np.min()` and `np.max()` give the bounding box of the house, the smallest rectangle that contains it:
 
 ```{python}
