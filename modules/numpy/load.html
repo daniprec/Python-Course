@@ -529,8 +529,8 @@ window.Quarto = {
   <li><a href="#photo-2-the-frozen-photo" id="toc-photo-2-the-frozen-photo" class="nav-link" data-scroll-target="#photo-2-the-frozen-photo">Photo 2: The Frozen Photo</a></li>
   <li><a href="#photo-3-the-banded-photo" id="toc-photo-3-the-banded-photo" class="nav-link" data-scroll-target="#photo-3-the-banded-photo">Photo 3: The Banded Photo</a></li>
   <li><a href="#photo-4-the-cursed-lens" id="toc-photo-4-the-cursed-lens" class="nav-link" data-scroll-target="#photo-4-the-cursed-lens">Photo 4: The Cursed Lens</a></li>
-  <li><a href="#the-case-number" id="toc-the-case-number" class="nav-link" data-scroll-target="#the-case-number">The Case Number</a></li>
   <li><a href="#photo-5-the-colour-photo" id="toc-photo-5-the-colour-photo" class="nav-link" data-scroll-target="#photo-5-the-colour-photo">Photo 5: The Colour Photo</a></li>
+  <li><a href="#the-case-number" id="toc-the-case-number" class="nav-link" data-scroll-target="#the-case-number">The Case Number</a></li>
   </ul></li>
   <li><a href="#your-mission" id="toc-your-mission" class="nav-link" data-scroll-target="#your-mission">Your Mission</a></li>
   <li><a href="#summary-and-reflection" id="toc-summary-and-reflection" class="nav-link" data-scroll-target="#summary-and-reflection">Summary and Reflection</a></li>
@@ -579,10 +579,10 @@ window.Quarto = {
 01:45  BEEP! Ghost nearby ............. photo_4 saved
        ERROR: lens cursed. Rows scrambled. 3 lenses found in the camera bag.
 03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)
-       ERROR: colour channels separated. Very low light.
+       ERROR: colour channels separated and shuffled. Very low light.
 03:34  CAMERA FAILURE. Too many ghosts.</code></pre>
 <p>Who did we catch? We do not know yet: the photos will tell us.</p>
-<p>Our mission: load the broken files, use the log to understand what happened to each photo, and <strong>recover all five pictures</strong>.</p>
+<p>Our mission: load the broken files, use the log to understand what happened to each photo, <strong>recover all five pictures</strong>, and find the <strong>case number</strong> to close the investigation.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -606,7 +606,7 @@ Colab Activity
 <blockquote class="blockquote">
 <p>🛑 <strong>Troubleshooting Tip:</strong> If you encounter any issues while executing the cell, go to <strong>“Runtime”</strong>, select <strong>“Disconnect and delete runtime”</strong>, and execute the cell again.</p>
 </blockquote>
-<div id="cd9f382d" class="cell">
+<div id="5260929d" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the photos from the course repository and extract them</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>daniprec<span class="op">/</span>Python<span class="op">-</span>Course<span class="op">/</span>main<span class="op">/</span>data<span class="op">/</span>ghost_photos.<span class="bu">zip</span> <span class="op">-</span>O ghost_photos.<span class="bu">zip</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip <span class="op">-</span>o <span class="op">-</span>q ghost_photos.<span class="bu">zip</span></span>
@@ -619,9 +619,9 @@ Colab Activity
 <p>Two helper functions:</p>
 <ul>
 <li><code>show(image)</code> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</li>
-<li><code>check(photo, key)</code> tells you whether you found the key of a photo, for instance <code>check(1, ...)</code>. Every photo hides a key.</li>
+<li><code>check(photo, key)</code> tells you whether you found the key of a photo, for instance <code>check(1, ...)</code>, or the case number, <code>check("case", ...)</code>.</li>
 </ul>
-<div id="16745408" class="cell">
+<div id="984895a9" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -639,7 +639,7 @@ Colab Activity
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'2ff7f21ca76127ff'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'24a866f4940f1b00'</span>, <span class="st">'case'</span>: <span class="st">'e3aa235a10ec0805'</span>}</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'2ff7f21ca76127ff'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'72440a20f54075ac'</span>, <span class="st">'case'</span>: <span class="st">'b3c1efbb2f4344a4'</span>}</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
@@ -648,7 +648,7 @@ Colab Activity
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! Now you can open photo 5."</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -717,8 +717,8 @@ Loading directly from the internet
 (2, 0) (2, 1) (2, 2)</code></pre>
 <p>Two things are true for <strong>every</strong> photo of our camera:</p>
 <ul>
-<li>It has a <strong>white frame</strong>: the pixels on the border are <code>1</code>.</li>
-<li>It has a <strong>stamp</strong> in the bottom-right corner: a black box with a white digit.</li>
+<li>It has a <strong>white frame</strong>: the 4 pixels on the border are <code>1</code>.</li>
+<li>Just inside the white frame, it has a thin <strong>black line</strong>: those pixels are <code>0</code>.</li>
 </ul>
 <hr>
 </section>
@@ -739,8 +739,8 @@ Loading directly from the internet
 <p><strong>How to fix it:</strong></p>
 <ol type="1">
 <li>Give each fragment back its square shape, and join the fragments.</li>
-<li>Stretch the values back to the range <span class="math inline">\([0, 1]\)</span>. Remember that every photo has pure black (the stamp) and pure white (the frame): <span class="math display">\[\text{stretched} = \frac{\text{stored} - \min}{\max - \min}\]</span></li>
-<li>Undo the negative, and undo the mirror. Check the stamp: when the digit reads correctly, you are done.</li>
+<li>Stretch the values back to the range <span class="math inline">\([0, 1]\)</span>. Remember that every photo has pure black (the line) and pure white (the frame): <span class="math display">\[\text{stretched} = \frac{\text{stored} - \min}{\max - \min}\]</span></li>
+<li>Undo the negative, and undo the mirror.</li>
 </ol>
 <p><strong>Key:</strong> how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.</p>
 </section>
@@ -758,23 +758,24 @@ Loading directly from the internet
 <p><strong>How to fix it:</strong> undo the matrix product with the inverse of the lens, <span class="math inline">\(\text{photo} = L^{-1} \cdot \text{stored}\)</span>. A matrix has an inverse only if its determinant is not 0: that is how you find the lens that was used.</p>
 <p><strong>Key:</strong> the number of the lens.</p>
 </section>
-<section id="the-case-number" class="level3">
-<h3 class="anchored" data-anchor-id="the-case-number">The Case Number</h3>
-<p>Each recovered photo shows a digit in its stamp. To file the case, write the four digits <strong>from the darkest photo to the brightest one</strong> (the mean of all its pixels).</p>
-<p><strong>Key:</strong> the four digits, for instance <code>check("case", "1234")</code>.</p>
-</section>
 <section id="photo-5-the-colour-photo" class="level3">
 <h3 class="anchored" data-anchor-id="photo-5-the-colour-photo">Photo 5: The Colour Photo</h3>
-<p><strong>Files:</strong> <code>ghost_photos/photo_5/channel_&lt;digit&gt;.npy</code>. Four NumPy binary files, <span class="math inline">\(300 \times 300\)</span> each.</p>
-<p><strong>What happened:</strong> the strongest ghost of the night, and our only <strong>colour</strong> photo. A colour image is a 3D array with shape <code>(height, width, 3)</code>: one layer, or <em>channel</em>, for red, green, and blue. The ghost separated the three channels and saved each one in its own file, named with a digit of our <strong>case number</strong>: the first three digits are the red, green, and blue channels, in that order. The fourth file is a decoy. On top of that, it was night: every value was squared, so the photo is very dark.</p>
-<p><strong>How to fix it:</strong> load the three channels, join them along a <strong>new</strong> axis to get a <code>(300, 300, 3)</code> array, and undo the square.</p>
-<p><strong>Key:</strong> which colour dominates the photo: <code>"red"</code>, <code>"green"</code>, or <code>"blue"</code>? Compare the mean of each channel.</p>
+<p><strong>Files:</strong> <code>ghost_photos/photo_5/channel_1.npy</code> to <code>channel_4.npy</code>. Four NumPy binary files, <span class="math inline">\(300 \times 300\)</span> each.</p>
+<p><strong>What happened:</strong> the strongest ghost of the night, and our only <strong>colour</strong> photo. A colour image is a 3D array with shape <code>(height, width, 3)</code>: one layer, or <em>channel</em>, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and <strong>shuffled the file numbers</strong>. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.</p>
+<p><strong>How to fix it:</strong> find the decoy (look at the four files). Join the other three along a <strong>new</strong> axis to get a <code>(300, 300, 3)</code> array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders: in the right one, the colours look natural… and <strong>fire is red</strong>.</p>
+<p><strong>Key:</strong> the numbers of the red, green, and blue files, in that order, for instance <code>check(5, "123")</code>.</p>
+</section>
+<section id="the-case-number" class="level3">
+<h3 class="anchored" data-anchor-id="the-case-number">The Case Number</h3>
+<p>Each recovered photo hides one digit of the case number: the <strong>first decimal of the mean brightness of its top-right quarter</strong> (the first 150 rows and the last 150 columns). For example, a mean of <code>0.4371</code> gives the digit <code>4</code>. For the colour photo, use only its red channel.</p>
+<p>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</p>
+<p><strong>Key:</strong> the five digits, from photo 1 to photo 5, for instance <code>check("case", "12345")</code>.</p>
 <hr>
 </section>
 </section>
 <section id="your-mission" class="level2">
 <h2 class="anchored" data-anchor-id="your-mission">Your Mission</h2>
-<p>Work in <strong>groups of three or four</strong>. Recover as many photos as you can, in any order… except photo 5, which needs the case number. Use <code>check()</code> to confirm each key.</p>
+<p>Work in <strong>groups of three or four</strong>. Recover the five photos, in any order, and use <code>check()</code> to confirm each key. The first group to find the case number closes the investigation!</p>
 <p>When a photo is recovered, <strong>save the evidence</strong>: store it with <code>np.save()</code>, so that you never have to fix it again. Can you also store it with <code>np.savetxt()</code>? Try it with photo 5.</p>
 <hr>
 </section>
@@ -787,7 +788,7 @@ Loading directly from the internet
 <li><code>np.concatenate()</code>, <code>np.hstack()</code>, and <code>np.vstack()</code> join arrays along an existing axis; <code>np.stack()</code> creates a new one.</li>
 <li>Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.</li>
 </ul>
-<p>Who did we catch? Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</p>
+<p>Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</p>
 <hr>
 </section>
 </section>
@@ -1282,13 +1283,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="in">01:45  BEEP! Ghost nearby ............. photo_4 saved</span></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: lens cursed. Rows scrambled. 3 lenses found in the camera bag.</span></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="in">03:33  BEEP! BEEP! BEEP! STRONG GHOST . photo_5 saved (colour)</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: colour channels separated. Very low light.</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">       ERROR: colour channels separated and shuffled. Very low light.</span></span>
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">03:34  CAMERA FAILURE. Too many ghosts.</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>Who did we catch? We do not know yet: the photos will tell us.</span>
 <span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>Our mission: load the broken files, use the log to understand what happened to each photo, and **recover all five pictures**.</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>Our mission: load the broken files, use the log to understand what happened to each photo, **recover all five pictures**, and find the **case number** to close the investigation.</span>
 <span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Colab Activity</span></span>
@@ -1323,7 +1324,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>Two helper functions:</span>
 <span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show(image)`</span> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`check(photo, key)`</span> tells you whether you found the key of a photo, for instance <span class="in">`check(1, ...)`</span>. Every photo hides a key.</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`check(photo, key)`</span> tells you whether you found the key of a photo, for instance <span class="in">`check(1, ...)`</span>, or the case number, <span class="in">`check("case", ...)`</span>.</span>
 <span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
@@ -1343,7 +1344,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'2ff7f21ca76127ff'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'24a866f4940f1b00'</span>, <span class="st">'case'</span>: <span class="st">'e3aa235a10ec0805'</span>}</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'2ff7f21ca76127ff'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'72440a20f54075ac'</span>, <span class="st">'case'</span>: <span class="st">'b3c1efbb2f4344a4'</span>}</span>
 <span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
@@ -1352,7 +1353,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
 <span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
 <span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! Now you can open photo 5."</span>)</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
 <span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span>
 <span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1392,8 +1393,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>Two things are true for **every** photo of our camera:</span>
 <span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It has a **white frame**: the pixels on the border are <span class="in">`1`</span>.</span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It has a **stamp** in the bottom-right corner: a black box with a white digit.</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It has a **white frame**: the 4 pixels on the border are <span class="in">`1`</span>.</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Just inside the white frame, it has a thin **black line**: those pixels are <span class="in">`0`</span>.</span>
 <span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a></span>
@@ -1420,9 +1421,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a>**How to fix it:**</span>
 <span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Give each fragment back its square shape, and join the fragments.</span>
-<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Stretch the values back to the range $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. Remember that every photo has pure black (the stamp) and pure white (the frame):</span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Stretch the values back to the range $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. Remember that every photo has pure black (the line) and pure white (the frame):</span>
 <span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a>$$\text{stretched} = \frac{\text{stored} - \min}{\max - \min}$$</span>
-<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the negative, and undo the mirror. Check the stamp: when the digit reads correctly, you are done.</span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Undo the negative, and undo the mirror.</span>
 <span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a>**Key:** how many times did the ghost reduce the contrast? The original photo had a range of 1 (from 0 to 1); compare it with the range of the stored values.</span>
 <span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a></span>
@@ -1449,49 +1450,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>**Key:** the number of the lens.</span>
 <span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Case Number</span></span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 5: The Colour Photo</span></span>
 <span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a>Each recovered photo shows a digit in its stamp. To file the case, write the four digits **from the darkest photo to the brightest one** (the mean of all its pixels).</span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`ghost_photos/photo_5/channel_1.npy`</span> to <span class="in">`channel_4.npy`</span>. Four NumPy binary files, $300 \times 300$ each.</span>
 <span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>**Key:** the four digits, for instance <span class="in">`check("case", "1234")`</span>.</span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels, saved each one in its own file, and **shuffled the file numbers**. One of the four files is a decoy. On top of that, it was night: every value was squared, so the photo is darker than it should be.</span>
 <span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a><span class="fu">### Photo 5: The Colour Photo</span></span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a>**How to fix it:** find the decoy (look at the four files). Join the other three along a **new** axis to get a `(300, 300, 3)` array, and undo the square. Which file is red, which is green, and which is blue? Try the possible orders: in the right one, the colours look natural... and **fire is red**.</span>
 <span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>**Files:** <span class="in">`ghost_photos/photo_5/channel_&lt;digit&gt;.npy`</span>. Four NumPy binary files, $300 \times 300$ each.</span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>**Key:** the numbers of the red, green, and blue files, in that order, for instance <span class="in">`check(5, "123")`</span>.</span>
 <span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a>**What happened:** the strongest ghost of the night, and our only **colour** photo. A colour image is a 3D array with shape `(height, width, 3)`: one layer, or *channel*, for red, green, and blue. The ghost separated the three channels and saved each one in its own file, named with a digit of our **case number**: the first three digits are the red, green, and blue channels, in that order. The fourth file is a decoy. On top of that, it was night: every value was squared, so the photo is very dark.</span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Case Number</span></span>
 <span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a>**How to fix it:** load the three channels, join them along a **new** axis to get a <span class="in">`(300, 300, 3)`</span> array, and undo the square.</span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit of the case number: the **first decimal of the mean brightness of its top-right quarter** (the first 150 rows and the last 150 columns). For example, a mean of <span class="in">`0.4371`</span> gives the digit <span class="in">`4`</span>. For the colour photo, use only its red channel.</span>
 <span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>**Key:** which colour dominates the photo: <span class="in">`"red"`</span>, <span class="in">`"green"`</span>, or <span class="in">`"blue"`</span>? Compare the mean of each channel.</span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</span>
 <span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>**Key:** the five digits, from photo 1 to photo 5, for instance <span class="in">`check("case", "12345")`</span>.</span>
 <span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Mission</span></span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a>Work in **groups of three or four**. Recover as many photos as you can, in any order... except photo 5, which needs the case number. Use <span class="in">`check()`</span> to confirm each key.</span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Mission</span></span>
 <span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a>When a photo is recovered, **save the evidence**: store it with <span class="in">`np.save()`</span>, so that you never have to fix it again. Can you also store it with <span class="in">`np.savetxt()`</span>? Try it with photo 5.</span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a>Work in **groups of three or four**. Recover the five photos, in any order, and use <span class="in">`check()`</span> to confirm each key. The first group to find the case number closes the investigation!</span>
 <span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>When a photo is recovered, **save the evidence**: store it with <span class="in">`np.save()`</span>, so that you never have to fix it again. Can you also store it with <span class="in">`np.savetxt()`</span>? Try it with photo 5.</span>
 <span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
+<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`os.listdir()`</span> lists the files of a folder, and <span class="in">`os.path.join()`</span> builds their paths.</span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.loadtxt()`</span> loads text files (<span class="in">`delimiter=","`</span> for CSV), and <span class="in">`np.load()`</span> loads <span class="in">`.npy`</span> files.</span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.save()`</span> keeps an array exactly, with its shape and data type; <span class="in">`np.savetxt()`</span> writes readable text, but only for 1D and 2D arrays.</span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.concatenate()`</span>, <span class="in">`np.hstack()`</span>, and <span class="in">`np.vstack()`</span> join arrays along an existing axis; <span class="in">`np.stack()`</span> creates a new one.</span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.</span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>Who did we catch? Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`os.listdir()`</span> lists the files of a folder, and <span class="in">`os.path.join()`</span> builds their paths.</span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.loadtxt()`</span> loads text files (<span class="in">`delimiter=","`</span> for CSV), and <span class="in">`np.load()`</span> loads <span class="in">`.npy`</span> files.</span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.save()`</span> keeps an array exactly, with its shape and data type; <span class="in">`np.savetxt()`</span> writes readable text, but only for 1D and 2D arrays.</span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.concatenate()`</span>, <span class="in">`np.hstack()`</span>, and <span class="in">`np.vstack()`</span> join arrays along an existing axis; <span class="in">`np.stack()`</span> creates a new one.</span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Array arithmetic, broadcasting, aggregations, and matrix operations can undo many transformations, as long as we know what happened.</span>
 <span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>Which photo was the hardest to recover, and why? For each photo, how did you know that your result was correct?</span>
 <span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
 <span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#loading-and-saving-data)</span>{.btn .btn-primary}</span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#loading-and-saving-data)</span>{.btn .btn-primary}</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
