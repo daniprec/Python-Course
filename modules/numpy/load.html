@@ -596,7 +596,7 @@ window.Quarto = {
 <li><code>show(image)</code> displays an array as an image: grayscale if it is 2D, colour if it is 3D.</li>
 <li><code>check(photo, key)</code> tells you whether you found the key of a photo, for instance <code>check(1, ...)</code>, or the case number, <code>check("case", ...)</code>.</li>
 </ul>
-<div id="dd76be4c" class="cell">
+<div id="acc443d6" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -616,7 +616,7 @@ window.Quarto = {
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'2eb2158e4711ef9f'</span>}</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
@@ -760,7 +760,7 @@ NumPy Cheatsheet
 <p><code>np.vsplit(arr, n)</code> cuts an array into <code>n</code> equal pieces along <strong>rows</strong> (vertically).</p>
 <p><code>np.hstack([arr1, arr2, arr3])</code> joins arrays side by side (horizontally).</p>
 <p><code>np.vstack([arr1, arr2, arr3])</code> joins arrays one on top of the other (vertically).</p>
-<p><code>arr.T</code> is the <strong>transpose</strong> of a 2D array: it swaps rows and columns.</p>
+<p><code>np.rot90(arr)</code> rotates a 2D array 90 degrees <strong>counterclockwise</strong>. <code>np.rot90(arr, k=2)</code> rotates it twice (180 degrees), and <code>np.rot90(arr, k=-1)</code> rotates it clockwise.</p>
 </div>
 </div>
 </div>
@@ -907,7 +907,7 @@ NumPy Cheatsheet
 </section>
 <section id="the-case-number" class="level3">
 <h3 class="anchored" data-anchor-id="the-case-number">The Case Number</h3>
-<p>Each recovered photo hides one digit of the case number: the <strong>second decimal of the mean brightness of <code>photo[150:, 150:250]</code></strong> (the bottom half of the photo, columns 150 to 249). For example, a mean of <code>0.4371</code> gives the digit <code>3</code>. For the colour photo, use only its red channel.</p>
+<p>Each recovered photo hides one digit of the case number: the <strong>second decimal of the mean brightness of <code>photo[100:250, 100:]</code></strong> (rows 100 to 249, columns 100 to the end). For example, a mean of <code>0.4371</code> gives the digit <code>3</code>. For the colour photo, use only its red channel.</p>
 <p>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</p>
 <p><strong>Key:</strong> the five digits, from photo 1 to photo 5, for instance <code>check("case", "12345")</code>.</p>
 <hr>
@@ -1618,7 +1618,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'a81745a221f746f4'</span>}</span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'acba8dd74b724348'</span>, <span class="dv">2</span>: <span class="st">'f5ca38f748a1d6ea'</span>, <span class="dv">3</span>: <span class="st">'9ae2bdd7beedc2e7'</span>, <span class="dv">4</span>: <span class="st">'d4735e3a265e16ee'</span>, <span class="dv">5</span>: <span class="st">'865736a1c30a82dc'</span>, <span class="st">'case'</span>: <span class="st">'2eb2158e4711ef9f'</span>}</span>
 <span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
@@ -1723,7 +1723,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a><span class="in">`np.vstack([arr1, arr2, arr3])`</span> joins arrays one on top of the other (vertically).</span>
 <span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a><span class="in">`arr.T`</span> is the **transpose** of a 2D array: it swaps rows and columns.</span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a><span class="in">`np.rot90(arr)`</span> rotates a 2D array 90 degrees **counterclockwise**. <span class="in">`np.rot90(arr, k=2)`</span> rotates it twice (180 degrees), and <span class="in">`np.rot90(arr, k=-1)`</span> rotates it clockwise.</span>
 <span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a></span>
@@ -1860,7 +1860,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-320"><a href="#cb11-320" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-321"><a href="#cb11-321" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Case Number</span></span>
 <span id="cb11-322"><a href="#cb11-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-323"><a href="#cb11-323" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[150:, 150:250]`** (the bottom half of the photo, columns 150 to 249). For example, a mean of <span class="in">`0.4371`</span> gives the digit <span class="in">`3`</span>. For the colour photo, use only its red channel.</span>
+<span id="cb11-323"><a href="#cb11-323" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit of the case number: the **second decimal of the mean brightness of `photo[100:250, 100:]`** (rows 100 to 249, columns 100 to the end). For example, a mean of <span class="in">`0.4371`</span> gives the digit <span class="in">`3`</span>. For the colour photo, use only its red channel.</span>
 <span id="cb11-324"><a href="#cb11-324" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-325"><a href="#cb11-325" aria-hidden="true" tabindex="-1"></a>Careful: a photo that is only half fixed gives the wrong digit. You need all five photos fully recovered.</span>
 <span id="cb11-326"><a href="#cb11-326" aria-hidden="true" tabindex="-1"></a></span>
