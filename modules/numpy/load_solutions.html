@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computer Programming I (Python) - Loading and Saving NumPy Data — Guided Solutions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Computer Programming I (Python)
+      </li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Computer Programming I (Python)</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/python-fundamentals/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 1: Python Fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/arithmetic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Strings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/indexing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Indexing and Slicing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/functions_builtin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions: Built-in</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/functions_userdefined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions: User-Defined</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/scope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python Scope</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/recursion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/docstrings_typehints.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Docstrings and Type Hints</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/homework_fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/structures/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 2: Data Structures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lists</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/tuples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tuples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/dictionaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dictionaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/mutability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mutability</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/homework_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/structures/side_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Side Projects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_recommendation_system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recommendation System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_traveling_salesman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Traveling Salesman Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_parrondos_paradox.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parrondo’s Paradox</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_sudoku.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sudoku Solver</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_ticket_booking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ticket Booking System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Battleship</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/numpy/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 3: NumPy</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to NumPy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/arithmetics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Arithmetic and Broadcasting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Manipulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/load.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loading and Saving Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/masking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Masking</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/random_fancy_indexing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random Numbers &amp; Fancy Indexing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/statistics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistics and Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/linalg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vectorization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/homework_numpy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/numpy/side_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Side Projects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_numerical_linear_algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Numerical Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_mnist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">MNIST Digit Recognition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_snell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Snell’s Law</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/ides/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 4: IDEs &amp; Tools</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/review_general.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">General Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/rsa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: RSA Encryption</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../exams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exam Repository</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#photo-1-shattered-into-9-fragments" id="toc-photo-1-shattered-into-9-fragments" class="nav-link" data-scroll-target="#photo-1-shattered-into-9-fragments">Photo 1 — shattered into 9 fragments</a></li>
+  <li><a href="#photo-2-flattened-swapped-dimmed-mirrored" id="toc-photo-2-flattened-swapped-dimmed-mirrored" class="nav-link" data-scroll-target="#photo-2-flattened-swapped-dimmed-mirrored">Photo 2 — flattened, swapped, dimmed, mirrored</a></li>
+  <li><a href="#photo-3-dark-horizontal-bands" id="toc-photo-3-dark-horizontal-bands" class="nav-link" data-scroll-target="#photo-3-dark-horizontal-bands">Photo 3 — dark horizontal bands</a></li>
+  <li><a href="#photo-4-a-cursed-lens-and-shuffled-strips" id="toc-photo-4-a-cursed-lens-and-shuffled-strips" class="nav-link" data-scroll-target="#photo-4-a-cursed-lens-and-shuffled-strips">Photo 4 — a cursed lens and shuffled strips</a></li>
+  <li><a href="#photo-5-colour-channels-shuffled" id="toc-photo-5-colour-channels-shuffled" class="nav-link" data-scroll-target="#photo-5-colour-channels-shuffled">Photo 5 — colour channels, shuffled</a></li>
+  <li><a href="#the-case-number" id="toc-the-case-number" class="nav-link" data-scroll-target="#the-case-number">The case number</a></li>
+  <li><a href="#save-the-evidence" id="toc-save-the-evidence" class="nav-link" data-scroll-target="#save-the-evidence">Save the evidence</a></li>
+  <li><a href="#back-to-the-lesson" id="toc-back-to-the-lesson" class="nav-link" data-scroll-target="#back-to-the-lesson">Back to the lesson</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/load_solutions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Loading and Saving NumPy Data — Guided Solutions</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Module 3: NumPy</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div id="cf1378f0" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> permutations</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>BASE <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(image):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display grayscale or colour arrays."""</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> image.ndim <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        plt.imshow(image, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        plt.imshow(np.clip(image, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">"acba8dd74b724348"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>: <span class="st">"f5ca38f748a1d6ea"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"9ae2bdd7beedc2e7"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"d4735e3a265e16ee"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"865736a1c30a82dc"</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"case"</span>: <span class="st">"2eb2158e4711ef9f"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    digest <span class="op">=</span> hashlib.sha256(<span class="bu">str</span>(key).strip().upper().encode()).hexdigest()[:<span class="dv">16</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="photo-1-shattered-into-9-fragments" class="level2">
+<h2 class="anchored" data-anchor-id="photo-1-shattered-into-9-fragments">Photo 1 — shattered into 9 fragments</h2>
+<p>First, load the broken photo and look at the full image.</p>
+<div id="26a456f7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>shattered <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, shattered.shape)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>show(shattered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (300, 300)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now split it in two stages. First into 3 big rows. The <code>vsplit()</code> function takes a 2D array and splits it vertically into equal pieces. The return value is a list of arrays, one for each piece.</p>
+<div id="a1e4d15c" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> np.vsplit(shattered, <span class="dv">3</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"type returned by vsplit:"</span>, <span class="bu">type</span>(rows))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(rows))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape of first piece:"</span>, rows[<span class="dv">0</span>].shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>type returned by vsplit: &lt;class 'list'&gt;
+length: 3
+shape of first piece: (100, 300)</code></pre>
+</div>
+</div>
+<p>Then, we split each row into 3 fragments. We use <code>hsplit()</code> to split horizontally. For each row, we get a list of 3 pieces, so the total number of fragments is 9.</p>
+<div id="0573e5c2" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fragments <span class="op">=</span> []</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> <span class="bu">enumerate</span>(rows):</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    pieces <span class="op">=</span> np.hsplit(row, <span class="dv">3</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"row </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> -&gt; </span><span class="sc">{</span><span class="bu">len</span>(pieces)<span class="sc">}</span><span class="ss"> pieces"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    fragments.extend(pieces)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"total fragments:"</span>, <span class="bu">len</span>(fragments))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"each fragment shape:"</span>, fragments[<span class="dv">0</span>].shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>row 0 -&gt; 3 pieces
+row 1 -&gt; 3 pieces
+row 2 -&gt; 3 pieces
+total fragments: 9
+each fragment shape: (100, 100)</code></pre>
+</div>
+</div>
+<p>Label the fragments <code>A</code> to <code>I</code> in the order we found them and inspect them one by one.</p>
+<div id="8fe2430d" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>letters <span class="op">=</span> <span class="st">"ABCDEFGHI"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> letter, fragment <span class="kw">in</span> <span class="bu">zip</span>(letters, fragments):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(letter)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    show(fragment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A
+B
+C
+D
+E
+F
+G
+H
+I</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-7.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-9.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-6-output-10.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The border tells us the order of the fragments in the original picture:</p>
+<div id="b2b72254" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>key_1 <span class="op">=</span> <span class="st">"CGFIADHBE"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">1</span>, key_1)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> [letters.index(letter) <span class="cf">for</span> letter <span class="kw">in</span> key_1]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>photo_1 <span class="op">=</span> np.vstack([</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    np.hstack([fragments[i] <span class="cf">for</span> i <span class="kw">in</span> order[r <span class="op">*</span> <span class="dv">3</span>:(r <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">3</span>]])</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>show(photo_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correct key! Photo 1 is recovered.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A nice thing to notice: <code>vsplit()</code> and <code>hsplit()</code> give lists of arrays, and <code>vstack()</code> / <code>hstack()</code> rebuild the full image from those lists.</p>
+<hr>
+</section>
+<section id="photo-2-flattened-swapped-dimmed-mirrored" class="level2">
+<h2 class="anchored" data-anchor-id="photo-2-flattened-swapped-dimmed-mirrored">Photo 2 — flattened, swapped, dimmed, mirrored</h2>
+<p>The file is one long column of numbers. Start by loading it and checking how many values we have.</p>
+<div id="58d2354e" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>frozen <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_2/frozen.txt"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, frozen.shape)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"min / max:"</span>, frozen.<span class="bu">min</span>(), frozen.<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (90000,)
+min / max: 0.31 0.36</code></pre>
+</div>
+</div>
+<p>A photo has <span class="math inline">\(300 \times 300 = 90000\)</span> values, so reshape it back to a square.</p>
+<div id="cc16f673" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> frozen.reshape(<span class="dv">300</span>, <span class="dv">300</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reshaped shape:"</span>, stored.shape)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>show(stored)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>reshaped shape: (300, 300)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The image is very faint, so it looks almost flat. First swap the two halves.</p>
+<div id="36482c98" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>left, right <span class="op">=</span> np.hsplit(stored, <span class="dv">2</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"left shape:"</span>, left.shape, <span class="st">"right shape:"</span>, right.shape)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> np.hstack((right, left))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>show(stored)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>left shape: (300, 150) right shape: (300, 150)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now stretch the values back to the interval <span class="math inline">\([0, 1]\)</span>. We apply a normalization formula to each pixel value: subtract the minimum and divide by the range.</p>
+<p>:::{ .callout-tip, collapse=“true”} ## Why normalize? We have an array <span class="math inline">\(x\)</span> with values in the range <span class="math inline">\([a, b]\)</span>. Our goal is to map that range to <span class="math inline">\([0, 1]\)</span>, in a new array <span class="math inline">\(x''\)</span>.</p>
+<p>First lets make sure the minimum value is 0. We can do that by subtracting the minimum from every value: <span class="math inline">\(x' = x - a\)</span>. Our new range is <span class="math inline">\([0, b - a]\)</span>.</p>
+<p>Now, if we want the maximum value to be 1, we can divide every value by the new maximum: <span class="math inline">\(x'' = x' / (b - a)\)</span>. Our final range is <span class="math inline">\([0, 1]\)</span>.</p>
+<p>In short, the normalization formula is:</p>
+<p><span class="math display">\[
+x'' = \frac{x - a}{b - a}
+\]</span> :::</p>
+<div id="3ec94543" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mn <span class="op">=</span> stored.<span class="bu">min</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mx <span class="op">=</span> stored.<span class="bu">max</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"stored min / max:"</span>, mn, mx)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"range:"</span>, mx <span class="op">-</span> mn)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>stretched <span class="op">=</span> (stored <span class="op">-</span> mn) <span class="op">/</span> (mx <span class="op">-</span> mn)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>show(stretched)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>stored min / max: 0.31 0.36
+range: 0.04999999999999999</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-11-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The image is mirrored across the diagonal, so transpose it.</p>
+<div id="fc7a905d" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>photo_2 <span class="op">=</span> stretched.T</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>show(photo_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The key is the contrast reduction factor. The original range was 1.</p>
+<div id="fff34f20" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>key_2 <span class="op">=</span> <span class="bu">round</span>(<span class="dv">1</span> <span class="op">/</span> (mx <span class="op">-</span> mn))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"photo 2 key:"</span>, key_2)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">2</span>, key_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>photo 2 key: 20
+Correct key! Photo 2 is recovered.</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="photo-3-dark-horizontal-bands" class="level2">
+<h2 class="anchored" data-anchor-id="photo-3-dark-horizontal-bands">Photo 3 — dark horizontal bands</h2>
+<p>Load the CSV file with semicolon separators.</p>
+<div id="cb77cdae" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>banded <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_3/banded.csv"</span>, delimiter<span class="op">=</span><span class="st">";"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, banded.shape)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>show(banded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (300, 300)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-14-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cut it into 4 vertical strips.</p>
+<div id="37e8d604" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>strips <span class="op">=</span> np.hsplit(banded, <span class="dv">4</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"type:"</span>, <span class="bu">type</span>(strips))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(strips))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"each strip shape:"</span>, strips[<span class="dv">0</span>].shape)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, strip <span class="kw">in</span> <span class="bu">enumerate</span>(strips):</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"strip"</span>, i)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    show(strip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>type: &lt;class 'list'&gt;
+length: 4
+each strip shape: (300, 75)
+strip 0
+strip 1
+strip 2
+strip 3</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-15-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-15-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-15-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The black line on the border tells us the order. Try the candidate layouts.</p>
+<div id="1880198c" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>candidate_1 <span class="op">=</span> np.hstack((strips[<span class="dv">1</span>], strips[<span class="dv">0</span>], strips[<span class="dv">3</span>], strips[<span class="dv">2</span>]))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>candidate_2 <span class="op">=</span> np.hstack((strips[<span class="dv">1</span>], strips[<span class="dv">3</span>], strips[<span class="dv">0</span>], strips[<span class="dv">2</span>]))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"candidate 1"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>show(candidate_1)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"candidate 2"</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>show(candidate_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>candidate 1
+candidate 2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-16-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The second one is correct.</p>
+<div id="65e6efdf" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> candidate_2</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>show(stored)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first column is the row-by-row gain, because the white frame should have been all ones.</p>
+<div id="3d24cda9" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>gain <span class="op">=</span> stored[:, <span class="dv">0</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"gain shape:"</span>, gain.shape)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"first 20 gains:"</span>, gain[:<span class="dv">20</span>])</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"smallest gain at row:"</span>, np.argmin(gain))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>gain shape: (300,)
+first 20 gains: [0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95
+ 0.95 0.95 0.95 0.95 0.95 0.95]
+smallest gain at row: 150</code></pre>
+</div>
+</div>
+<p>Broadcasting matters here. A 1D array divides columns, not rows.</p>
+<div id="0a86c39f" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"wrong shape result: divides columns"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>show(stored <span class="op">/</span> gain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>wrong shape result: divides columns</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Turn the gains into a column so each row gets divided by its own gain.</p>
+<div id="fbbaa0f5" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>gain_col <span class="op">=</span> gain.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"gain_col shape:"</span>, gain_col.shape)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>photo_3 <span class="op">=</span> stored <span class="op">/</span> gain_col</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>show(photo_3)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>key_3 <span class="op">=</span> <span class="bu">int</span>(np.argmin(gain))</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">3</span>, key_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>gain_col shape: (300, 1)
+Correct key! Photo 3 is recovered.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="photo-4-a-cursed-lens-and-shuffled-strips" class="level2">
+<h2 class="anchored" data-anchor-id="photo-4-a-cursed-lens-and-shuffled-strips">Photo 4 — a cursed lens and shuffled strips</h2>
+<p>Load the photo and split it into 5 horizontal strips.</p>
+<div id="e7822748" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>cursed <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_4/cursed.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, cursed.shape)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>show(cursed)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>strips <span class="op">=</span> np.vsplit(cursed, <span class="dv">5</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(strips))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"strip shape:"</span>, strips[<span class="dv">0</span>].shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (300, 300)
+length: 5
+strip shape: (60, 300)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-21-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Each strip hides its number in the top-left pixel.</p>
+<div id="e5843715" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.array([strip[<span class="dv">0</span>, <span class="dv">0</span>] <span class="cf">for</span> strip <span class="kw">in</span> strips])</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"hidden numbers:"</span>, numbers)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> np.argsort(numbers)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sorted strip order:"</span>, order)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> np.vstack([strips[i] <span class="cf">for</span> i <span class="kw">in</span> order])</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>show(stored)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>hidden numbers: [4. 1. 5. 3. 2.]
+sorted strip order: [1 4 3 0 2]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-22-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now inspect the three candidate lenses.</p>
+<div id="a0e68965" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>lenses <span class="op">=</span> {}</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">4</span>):</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_4/lens_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    lenses[k] <span class="op">=</span> L</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"lens </span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">: det = </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>det(L)<span class="sc">:.1f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lens 1: det = 0.0
+lens 2: det = -1.0
+lens 3: det = 0.0</code></pre>
+</div>
+</div>
+<p>Only lens 2 has a nonzero determinant, so it is the only one we can invert.</p>
+<div id="9a8c33b8" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>key_4 <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">4</span>, key_4)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> lenses[key_4]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correct key! Photo 4 is recovered.</code></pre>
+</div>
+</div>
+<p>Here is the inverse via matrix multiplication.</p>
+<div id="ed071ee6" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>photo_4 <span class="op">=</span> np.linalg.inv(L) <span class="op">@</span> stored</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>show(photo_4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now compare that with doing the same thing row by row in a for loop. This is the same linear algebra, just expanded manually.</p>
+<div id="b5d55291" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>invL <span class="op">=</span> np.linalg.inv(L)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>manual <span class="op">=</span> np.zeros_like(stored)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(invL.shape[<span class="dv">0</span>]):</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> np.zeros(stored.shape[<span class="dv">1</span>])</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(invL.shape[<span class="dv">1</span>]):</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>        row <span class="op">+=</span> invL[i, j] <span class="op">*</span> stored[j]</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    manual[i] <span class="op">=</span> row</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"manual and matrix product match:"</span>, np.allclose(manual, photo_4))</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>show(manual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>manual and matrix product match: True</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-26-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That loop is useful for understanding, but the matrix product is the clean NumPy version.</p>
+<hr>
+</section>
+<section id="photo-5-colour-channels-shuffled" class="level2">
+<h2 class="anchored" data-anchor-id="photo-5-colour-channels-shuffled">Photo 5 — colour channels, shuffled</h2>
+<p>Load the colour strip image and split it into 3 equal parts.</p>
+<div id="342b5931" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>colour <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_5/colour.txt"</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, colour.shape)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>show(colour)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>images <span class="op">=</span> np.hsplit(colour, <span class="dv">3</span>)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(images))</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, image <span class="kw">in</span> <span class="bu">enumerate</span>(images, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"image </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> shape:"</span>, image.shape)</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    show(image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (300, 900)
+length: 3
+image 1 shape: (300, 300)
+image 2 shape: (300, 300)
+image 3 shape: (300, 300)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-27-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-27-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-27-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-27-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Take one ordering, stack the channels along a new axis, and undo the night-time squaring with a square root.</p>
+<div id="ff5e530b" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>attempt <span class="op">=</span> np.sqrt(np.stack((images[<span class="dv">0</span>], images[<span class="dv">1</span>], images[<span class="dv">2</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"attempt shape:"</span>, attempt.shape)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>show(attempt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>attempt shape: (300, 300, 3)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-28-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Try all 6 possible channel orders.</p>
+<div id="871e8cda" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> order <span class="kw">in</span> permutations([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]):</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"order:"</span>, order)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    trial <span class="op">=</span> np.sqrt(np.stack((images[order[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>], images[order[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>], images[order[<span class="dv">2</span>] <span class="op">-</span> <span class="dv">1</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    show(trial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>order: (1, 2, 3)
+order: (1, 3, 2)
+order: (2, 1, 3)
+order: (2, 3, 1)
+order: (3, 1, 2)
+order: (3, 2, 1)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-29-output-7.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The orange flames identify the right order.</p>
+<div id="72b3eee0" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>photo_5 <span class="op">=</span> np.sqrt(np.stack((images[<span class="dv">2</span>], images[<span class="dv">0</span>], images[<span class="dv">1</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>show(photo_5)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">5</span>, <span class="st">"312"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="load_solutions_files/figure-html/cell-30-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correct key! Photo 5 is recovered.</code></pre>
+</div>
+</div>
+<p><code>np.savetxt()</code> is great for 1D and 2D arrays, but not for a 3D colour image:</p>
+<div id="daf9cf18" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    np.savetxt(<span class="st">"photo_5.txt"</span>, photo_5)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">type</span>(e).<span class="va">__name__</span> <span class="op">+</span> <span class="st">":"</span>, e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ValueError: Expected 1D or 2D array, got 3D array instead</code></pre>
+</div>
+</div>
+<p><code>np.save()</code> works perfectly:</p>
+<div id="626f5e11" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_5.npy"</span>, photo_5)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.load(<span class="st">"photo_5.npy"</span>).shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(300, 300, 3)</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="the-case-number" class="level2">
+<h2 class="anchored" data-anchor-id="the-case-number">The case number</h2>
+<p>Each recovered photo hides one digit. The digit is the second decimal of the mean brightness of the region <code>photo[100:250, 100:]</code>.</p>
+<div id="4e665f7c" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>regions <span class="op">=</span> [</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    photo_1[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    photo_2[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    photo_3[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    photo_4[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>    photo_5[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:, <span class="dv">0</span>],  <span class="co"># red channel only</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>case <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, region <span class="kw">in</span> <span class="bu">enumerate</span>(regions, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    mean <span class="op">=</span> region.mean()</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>    digit <span class="op">=</span> <span class="bu">int</span>(mean <span class="op">*</span> <span class="dv">100</span>) <span class="op">%</span> <span class="dv">10</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"photo </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: mean = </span><span class="sc">{</span>mean<span class="sc">:.4f}</span><span class="ss"> -&gt; digit = </span><span class="sc">{</span>digit<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>    case <span class="op">+=</span> <span class="bu">str</span>(digit)</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"case number:"</span>, case)</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>check(<span class="st">"case"</span>, case)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>photo 1: mean = 0.3360 -&gt; digit = 3
+photo 2: mean = 0.3884 -&gt; digit = 8
+photo 3: mean = 0.6453 -&gt; digit = 4
+photo 4: mean = 0.2375 -&gt; digit = 3
+photo 5: mean = 0.7179 -&gt; digit = 1
+case number: 38431
+Wrong key for photo case. Keep investigating...</code></pre>
+</div>
+</div>
+<p>A half-fixed photo gives the wrong digit, so the full recovery really matters.</p>
+<hr>
+</section>
+<section id="save-the-evidence" class="level2">
+<h2 class="anchored" data-anchor-id="save-the-evidence">Save the evidence</h2>
+<p>When you recover an image, save it so you do not have to solve it again.</p>
+<div id="a5d90bf3" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_1.npy"</span>, photo_1)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_2.npy"</span>, photo_2)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_3.npy"</span>, photo_3)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_4.npy"</span>, photo_4)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_5.npy"</span>, photo_5)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.allclose(np.load(<span class="st">"photo_1.npy"</span>), photo_1))</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.allclose(np.load(<span class="st">"photo_5.npy"</span>), photo_5))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+True</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="back-to-the-lesson" class="level2">
+<h2 class="anchored" data-anchor-id="back-to-the-lesson">Back to the lesson</h2>
+<p><a href="loading_and_saving_numpy_data.qmd" class="btn btn-primary">Return to the original session</a></p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb63" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Loading and Saving NumPy Data — Guided Solutions"</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="co">  enabled: true</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> permutations</span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a>BASE <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/daniprec/Python-Course/main/data/ghost_photos"</span></span>
+<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(image):</span>
+<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Display grayscale or colour arrays."""</span></span>
+<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> image.ndim <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>        plt.imshow(image, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>        plt.imshow(np.clip(image, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a>_KEYS <span class="op">=</span> {</span>
+<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">"acba8dd74b724348"</span>,</span>
+<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>: <span class="st">"f5ca38f748a1d6ea"</span>,</span>
+<span id="cb63-36"><a href="#cb63-36" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>: <span class="st">"9ae2bdd7beedc2e7"</span>,</span>
+<span id="cb63-37"><a href="#cb63-37" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: <span class="st">"d4735e3a265e16ee"</span>,</span>
+<span id="cb63-38"><a href="#cb63-38" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span>: <span class="st">"865736a1c30a82dc"</span>,</span>
+<span id="cb63-39"><a href="#cb63-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"case"</span>: <span class="st">"2eb2158e4711ef9f"</span>,</span>
+<span id="cb63-40"><a href="#cb63-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb63-41"><a href="#cb63-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-42"><a href="#cb63-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-43"><a href="#cb63-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(photo, key):</span>
+<span id="cb63-44"><a href="#cb63-44" aria-hidden="true" tabindex="-1"></a>    digest <span class="op">=</span> hashlib.sha256(<span class="bu">str</span>(key).strip().upper().encode()).hexdigest()[:<span class="dv">16</span>]</span>
+<span id="cb63-45"><a href="#cb63-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> digest <span class="op">!=</span> _KEYS[photo]:</span>
+<span id="cb63-46"><a href="#cb63-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Wrong key for photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss">. Keep investigating..."</span>)</span>
+<span id="cb63-47"><a href="#cb63-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> photo <span class="op">==</span> <span class="st">"case"</span>:</span>
+<span id="cb63-48"><a href="#cb63-48" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Correct case number! The ghost hunt is solved."</span>)</span>
+<span id="cb63-49"><a href="#cb63-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb63-50"><a href="#cb63-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Correct key! Photo </span><span class="sc">{</span>photo<span class="sc">}</span><span class="ss"> is recovered."</span>)</span>
+<span id="cb63-51"><a href="#cb63-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-52"><a href="#cb63-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-53"><a href="#cb63-53" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-54"><a href="#cb63-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-55"><a href="#cb63-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 1 — shattered into 9 fragments</span></span>
+<span id="cb63-56"><a href="#cb63-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-57"><a href="#cb63-57" aria-hidden="true" tabindex="-1"></a>First, load the broken photo and look at the full image.</span>
+<span id="cb63-58"><a href="#cb63-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-61"><a href="#cb63-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-62"><a href="#cb63-62" aria-hidden="true" tabindex="-1"></a>shattered <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_1/shattered.txt"</span>)</span>
+<span id="cb63-63"><a href="#cb63-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, shattered.shape)</span>
+<span id="cb63-64"><a href="#cb63-64" aria-hidden="true" tabindex="-1"></a>show(shattered)</span>
+<span id="cb63-65"><a href="#cb63-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-66"><a href="#cb63-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-67"><a href="#cb63-67" aria-hidden="true" tabindex="-1"></a>Now split it in two stages. First into 3 big rows. The <span class="in">`vsplit()`</span> function takes a 2D array and splits it vertically into equal pieces. The return value is a list of arrays, one for each piece.</span>
+<span id="cb63-68"><a href="#cb63-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-71"><a href="#cb63-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-72"><a href="#cb63-72" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> np.vsplit(shattered, <span class="dv">3</span>)</span>
+<span id="cb63-73"><a href="#cb63-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"type returned by vsplit:"</span>, <span class="bu">type</span>(rows))</span>
+<span id="cb63-74"><a href="#cb63-74" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(rows))</span>
+<span id="cb63-75"><a href="#cb63-75" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape of first piece:"</span>, rows[<span class="dv">0</span>].shape)</span>
+<span id="cb63-76"><a href="#cb63-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-77"><a href="#cb63-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-78"><a href="#cb63-78" aria-hidden="true" tabindex="-1"></a>Then, we split each row into 3 fragments. We use <span class="in">`hsplit()`</span> to split horizontally. For each row, we get a list of 3 pieces, so the total number of fragments is 9.</span>
+<span id="cb63-79"><a href="#cb63-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-82"><a href="#cb63-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-83"><a href="#cb63-83" aria-hidden="true" tabindex="-1"></a>fragments <span class="op">=</span> []</span>
+<span id="cb63-84"><a href="#cb63-84" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> <span class="bu">enumerate</span>(rows):</span>
+<span id="cb63-85"><a href="#cb63-85" aria-hidden="true" tabindex="-1"></a>    pieces <span class="op">=</span> np.hsplit(row, <span class="dv">3</span>)</span>
+<span id="cb63-86"><a href="#cb63-86" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"row </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> -&gt; </span><span class="sc">{</span><span class="bu">len</span>(pieces)<span class="sc">}</span><span class="ss"> pieces"</span>)</span>
+<span id="cb63-87"><a href="#cb63-87" aria-hidden="true" tabindex="-1"></a>    fragments.extend(pieces)</span>
+<span id="cb63-88"><a href="#cb63-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-89"><a href="#cb63-89" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"total fragments:"</span>, <span class="bu">len</span>(fragments))</span>
+<span id="cb63-90"><a href="#cb63-90" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"each fragment shape:"</span>, fragments[<span class="dv">0</span>].shape)</span>
+<span id="cb63-91"><a href="#cb63-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-92"><a href="#cb63-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-93"><a href="#cb63-93" aria-hidden="true" tabindex="-1"></a>Label the fragments <span class="in">`A`</span> to <span class="in">`I`</span> in the order we found them and inspect them one by one.</span>
+<span id="cb63-94"><a href="#cb63-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-97"><a href="#cb63-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-98"><a href="#cb63-98" aria-hidden="true" tabindex="-1"></a>letters <span class="op">=</span> <span class="st">"ABCDEFGHI"</span></span>
+<span id="cb63-99"><a href="#cb63-99" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> letter, fragment <span class="kw">in</span> <span class="bu">zip</span>(letters, fragments):</span>
+<span id="cb63-100"><a href="#cb63-100" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(letter)</span>
+<span id="cb63-101"><a href="#cb63-101" aria-hidden="true" tabindex="-1"></a>    show(fragment)</span>
+<span id="cb63-102"><a href="#cb63-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-103"><a href="#cb63-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-104"><a href="#cb63-104" aria-hidden="true" tabindex="-1"></a>The border tells us the order of the fragments in the original picture:</span>
+<span id="cb63-105"><a href="#cb63-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-108"><a href="#cb63-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-109"><a href="#cb63-109" aria-hidden="true" tabindex="-1"></a>key_1 <span class="op">=</span> <span class="st">"CGFIADHBE"</span></span>
+<span id="cb63-110"><a href="#cb63-110" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">1</span>, key_1)</span>
+<span id="cb63-111"><a href="#cb63-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-112"><a href="#cb63-112" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> [letters.index(letter) <span class="cf">for</span> letter <span class="kw">in</span> key_1]</span>
+<span id="cb63-113"><a href="#cb63-113" aria-hidden="true" tabindex="-1"></a>photo_1 <span class="op">=</span> np.vstack([</span>
+<span id="cb63-114"><a href="#cb63-114" aria-hidden="true" tabindex="-1"></a>    np.hstack([fragments[i] <span class="cf">for</span> i <span class="kw">in</span> order[r <span class="op">*</span> <span class="dv">3</span>:(r <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">3</span>]])</span>
+<span id="cb63-115"><a href="#cb63-115" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)</span>
+<span id="cb63-116"><a href="#cb63-116" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb63-117"><a href="#cb63-117" aria-hidden="true" tabindex="-1"></a>show(photo_1)</span>
+<span id="cb63-118"><a href="#cb63-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-119"><a href="#cb63-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-120"><a href="#cb63-120" aria-hidden="true" tabindex="-1"></a>A nice thing to notice: <span class="in">`vsplit()`</span> and <span class="in">`hsplit()`</span> give lists of arrays, and <span class="in">`vstack()`</span> / <span class="in">`hstack()`</span> rebuild the full image from those lists.</span>
+<span id="cb63-121"><a href="#cb63-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-122"><a href="#cb63-122" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-123"><a href="#cb63-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-124"><a href="#cb63-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 2 — flattened, swapped, dimmed, mirrored</span></span>
+<span id="cb63-125"><a href="#cb63-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-126"><a href="#cb63-126" aria-hidden="true" tabindex="-1"></a>The file is one long column of numbers. Start by loading it and checking how many values we have.</span>
+<span id="cb63-127"><a href="#cb63-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-130"><a href="#cb63-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-131"><a href="#cb63-131" aria-hidden="true" tabindex="-1"></a>frozen <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_2/frozen.txt"</span>)</span>
+<span id="cb63-132"><a href="#cb63-132" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, frozen.shape)</span>
+<span id="cb63-133"><a href="#cb63-133" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"min / max:"</span>, frozen.<span class="bu">min</span>(), frozen.<span class="bu">max</span>())</span>
+<span id="cb63-134"><a href="#cb63-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-135"><a href="#cb63-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-136"><a href="#cb63-136" aria-hidden="true" tabindex="-1"></a>A photo has $300 \times 300 = 90000$ values, so reshape it back to a square.</span>
+<span id="cb63-137"><a href="#cb63-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-140"><a href="#cb63-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-141"><a href="#cb63-141" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> frozen.reshape(<span class="dv">300</span>, <span class="dv">300</span>)</span>
+<span id="cb63-142"><a href="#cb63-142" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reshaped shape:"</span>, stored.shape)</span>
+<span id="cb63-143"><a href="#cb63-143" aria-hidden="true" tabindex="-1"></a>show(stored)</span>
+<span id="cb63-144"><a href="#cb63-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-145"><a href="#cb63-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-146"><a href="#cb63-146" aria-hidden="true" tabindex="-1"></a>The image is very faint, so it looks almost flat. First swap the two halves.</span>
+<span id="cb63-147"><a href="#cb63-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-150"><a href="#cb63-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-151"><a href="#cb63-151" aria-hidden="true" tabindex="-1"></a>left, right <span class="op">=</span> np.hsplit(stored, <span class="dv">2</span>)</span>
+<span id="cb63-152"><a href="#cb63-152" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"left shape:"</span>, left.shape, <span class="st">"right shape:"</span>, right.shape)</span>
+<span id="cb63-153"><a href="#cb63-153" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> np.hstack((right, left))</span>
+<span id="cb63-154"><a href="#cb63-154" aria-hidden="true" tabindex="-1"></a>show(stored)</span>
+<span id="cb63-155"><a href="#cb63-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-156"><a href="#cb63-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-157"><a href="#cb63-157" aria-hidden="true" tabindex="-1"></a>Now stretch the values back to the interval $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. We apply a normalization formula to each pixel value: subtract the minimum and divide by the range.</span>
+<span id="cb63-158"><a href="#cb63-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-159"><a href="#cb63-159" aria-hidden="true" tabindex="-1"></a>:::{ .callout-tip, collapse="true"}</span>
+<span id="cb63-160"><a href="#cb63-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why normalize?</span></span>
+<span id="cb63-161"><a href="#cb63-161" aria-hidden="true" tabindex="-1"></a>We have an array $x$ with values in the range $<span class="co">[</span><span class="ot">a, b</span><span class="co">]</span>$. Our goal is to map that range to $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$, in a new array $x''$.</span>
+<span id="cb63-162"><a href="#cb63-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-163"><a href="#cb63-163" aria-hidden="true" tabindex="-1"></a>First lets make sure the minimum value is 0. We can do that by subtracting the minimum from every value: $x' = x - a$. Our new range is $<span class="co">[</span><span class="ot">0, b - a</span><span class="co">]</span>$.</span>
+<span id="cb63-164"><a href="#cb63-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-165"><a href="#cb63-165" aria-hidden="true" tabindex="-1"></a>Now, if we want the maximum value to be 1, we can divide every value by the new maximum: $x'' = x' / (b - a)$. Our final range is $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$.</span>
+<span id="cb63-166"><a href="#cb63-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-167"><a href="#cb63-167" aria-hidden="true" tabindex="-1"></a>In short, the normalization formula is:</span>
+<span id="cb63-168"><a href="#cb63-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-169"><a href="#cb63-169" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb63-170"><a href="#cb63-170" aria-hidden="true" tabindex="-1"></a>x'' = \frac{x - a}{b - a}</span>
+<span id="cb63-171"><a href="#cb63-171" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb63-172"><a href="#cb63-172" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb63-173"><a href="#cb63-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-176"><a href="#cb63-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-177"><a href="#cb63-177" aria-hidden="true" tabindex="-1"></a>mn <span class="op">=</span> stored.<span class="bu">min</span>()</span>
+<span id="cb63-178"><a href="#cb63-178" aria-hidden="true" tabindex="-1"></a>mx <span class="op">=</span> stored.<span class="bu">max</span>()</span>
+<span id="cb63-179"><a href="#cb63-179" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"stored min / max:"</span>, mn, mx)</span>
+<span id="cb63-180"><a href="#cb63-180" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"range:"</span>, mx <span class="op">-</span> mn)</span>
+<span id="cb63-181"><a href="#cb63-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-182"><a href="#cb63-182" aria-hidden="true" tabindex="-1"></a>stretched <span class="op">=</span> (stored <span class="op">-</span> mn) <span class="op">/</span> (mx <span class="op">-</span> mn)</span>
+<span id="cb63-183"><a href="#cb63-183" aria-hidden="true" tabindex="-1"></a>show(stretched)</span>
+<span id="cb63-184"><a href="#cb63-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-185"><a href="#cb63-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-186"><a href="#cb63-186" aria-hidden="true" tabindex="-1"></a>The image is mirrored across the diagonal, so transpose it.</span>
+<span id="cb63-187"><a href="#cb63-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-190"><a href="#cb63-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-191"><a href="#cb63-191" aria-hidden="true" tabindex="-1"></a>photo_2 <span class="op">=</span> stretched.T</span>
+<span id="cb63-192"><a href="#cb63-192" aria-hidden="true" tabindex="-1"></a>show(photo_2)</span>
+<span id="cb63-193"><a href="#cb63-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-194"><a href="#cb63-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-195"><a href="#cb63-195" aria-hidden="true" tabindex="-1"></a>The key is the contrast reduction factor. The original range was 1.</span>
+<span id="cb63-196"><a href="#cb63-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-199"><a href="#cb63-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-200"><a href="#cb63-200" aria-hidden="true" tabindex="-1"></a>key_2 <span class="op">=</span> <span class="bu">round</span>(<span class="dv">1</span> <span class="op">/</span> (mx <span class="op">-</span> mn))</span>
+<span id="cb63-201"><a href="#cb63-201" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"photo 2 key:"</span>, key_2)</span>
+<span id="cb63-202"><a href="#cb63-202" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">2</span>, key_2)</span>
+<span id="cb63-203"><a href="#cb63-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-204"><a href="#cb63-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-205"><a href="#cb63-205" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-206"><a href="#cb63-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-207"><a href="#cb63-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 3 — dark horizontal bands</span></span>
+<span id="cb63-208"><a href="#cb63-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-209"><a href="#cb63-209" aria-hidden="true" tabindex="-1"></a>Load the CSV file with semicolon separators.</span>
+<span id="cb63-210"><a href="#cb63-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-213"><a href="#cb63-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-214"><a href="#cb63-214" aria-hidden="true" tabindex="-1"></a>banded <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_3/banded.csv"</span>, delimiter<span class="op">=</span><span class="st">";"</span>)</span>
+<span id="cb63-215"><a href="#cb63-215" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, banded.shape)</span>
+<span id="cb63-216"><a href="#cb63-216" aria-hidden="true" tabindex="-1"></a>show(banded)</span>
+<span id="cb63-217"><a href="#cb63-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-218"><a href="#cb63-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-219"><a href="#cb63-219" aria-hidden="true" tabindex="-1"></a>Cut it into 4 vertical strips.</span>
+<span id="cb63-220"><a href="#cb63-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-223"><a href="#cb63-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-224"><a href="#cb63-224" aria-hidden="true" tabindex="-1"></a>strips <span class="op">=</span> np.hsplit(banded, <span class="dv">4</span>)</span>
+<span id="cb63-225"><a href="#cb63-225" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"type:"</span>, <span class="bu">type</span>(strips))</span>
+<span id="cb63-226"><a href="#cb63-226" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(strips))</span>
+<span id="cb63-227"><a href="#cb63-227" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"each strip shape:"</span>, strips[<span class="dv">0</span>].shape)</span>
+<span id="cb63-228"><a href="#cb63-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-229"><a href="#cb63-229" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, strip <span class="kw">in</span> <span class="bu">enumerate</span>(strips):</span>
+<span id="cb63-230"><a href="#cb63-230" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"strip"</span>, i)</span>
+<span id="cb63-231"><a href="#cb63-231" aria-hidden="true" tabindex="-1"></a>    show(strip)</span>
+<span id="cb63-232"><a href="#cb63-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-233"><a href="#cb63-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-234"><a href="#cb63-234" aria-hidden="true" tabindex="-1"></a>The black line on the border tells us the order. Try the candidate layouts.</span>
+<span id="cb63-235"><a href="#cb63-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-238"><a href="#cb63-238" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-239"><a href="#cb63-239" aria-hidden="true" tabindex="-1"></a>candidate_1 <span class="op">=</span> np.hstack((strips[<span class="dv">1</span>], strips[<span class="dv">0</span>], strips[<span class="dv">3</span>], strips[<span class="dv">2</span>]))</span>
+<span id="cb63-240"><a href="#cb63-240" aria-hidden="true" tabindex="-1"></a>candidate_2 <span class="op">=</span> np.hstack((strips[<span class="dv">1</span>], strips[<span class="dv">3</span>], strips[<span class="dv">0</span>], strips[<span class="dv">2</span>]))</span>
+<span id="cb63-241"><a href="#cb63-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-242"><a href="#cb63-242" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"candidate 1"</span>)</span>
+<span id="cb63-243"><a href="#cb63-243" aria-hidden="true" tabindex="-1"></a>show(candidate_1)</span>
+<span id="cb63-244"><a href="#cb63-244" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"candidate 2"</span>)</span>
+<span id="cb63-245"><a href="#cb63-245" aria-hidden="true" tabindex="-1"></a>show(candidate_2)</span>
+<span id="cb63-246"><a href="#cb63-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-247"><a href="#cb63-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-248"><a href="#cb63-248" aria-hidden="true" tabindex="-1"></a>The second one is correct.</span>
+<span id="cb63-249"><a href="#cb63-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-252"><a href="#cb63-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-253"><a href="#cb63-253" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> candidate_2</span>
+<span id="cb63-254"><a href="#cb63-254" aria-hidden="true" tabindex="-1"></a>show(stored)</span>
+<span id="cb63-255"><a href="#cb63-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-256"><a href="#cb63-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-257"><a href="#cb63-257" aria-hidden="true" tabindex="-1"></a>The first column is the row-by-row gain, because the white frame should have been all ones.</span>
+<span id="cb63-258"><a href="#cb63-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-261"><a href="#cb63-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-262"><a href="#cb63-262" aria-hidden="true" tabindex="-1"></a>gain <span class="op">=</span> stored[:, <span class="dv">0</span>]</span>
+<span id="cb63-263"><a href="#cb63-263" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"gain shape:"</span>, gain.shape)</span>
+<span id="cb63-264"><a href="#cb63-264" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"first 20 gains:"</span>, gain[:<span class="dv">20</span>])</span>
+<span id="cb63-265"><a href="#cb63-265" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"smallest gain at row:"</span>, np.argmin(gain))</span>
+<span id="cb63-266"><a href="#cb63-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-267"><a href="#cb63-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-268"><a href="#cb63-268" aria-hidden="true" tabindex="-1"></a>Broadcasting matters here. A 1D array divides columns, not rows.</span>
+<span id="cb63-269"><a href="#cb63-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-272"><a href="#cb63-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-273"><a href="#cb63-273" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"wrong shape result: divides columns"</span>)</span>
+<span id="cb63-274"><a href="#cb63-274" aria-hidden="true" tabindex="-1"></a>show(stored <span class="op">/</span> gain)</span>
+<span id="cb63-275"><a href="#cb63-275" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-276"><a href="#cb63-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-277"><a href="#cb63-277" aria-hidden="true" tabindex="-1"></a>Turn the gains into a column so each row gets divided by its own gain.</span>
+<span id="cb63-278"><a href="#cb63-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-281"><a href="#cb63-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-282"><a href="#cb63-282" aria-hidden="true" tabindex="-1"></a>gain_col <span class="op">=</span> gain.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb63-283"><a href="#cb63-283" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"gain_col shape:"</span>, gain_col.shape)</span>
+<span id="cb63-284"><a href="#cb63-284" aria-hidden="true" tabindex="-1"></a>photo_3 <span class="op">=</span> stored <span class="op">/</span> gain_col</span>
+<span id="cb63-285"><a href="#cb63-285" aria-hidden="true" tabindex="-1"></a>show(photo_3)</span>
+<span id="cb63-286"><a href="#cb63-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-287"><a href="#cb63-287" aria-hidden="true" tabindex="-1"></a>key_3 <span class="op">=</span> <span class="bu">int</span>(np.argmin(gain))</span>
+<span id="cb63-288"><a href="#cb63-288" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">3</span>, key_3)</span>
+<span id="cb63-289"><a href="#cb63-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-290"><a href="#cb63-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-291"><a href="#cb63-291" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-292"><a href="#cb63-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-293"><a href="#cb63-293" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 4 — a cursed lens and shuffled strips</span></span>
+<span id="cb63-294"><a href="#cb63-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-295"><a href="#cb63-295" aria-hidden="true" tabindex="-1"></a>Load the photo and split it into 5 horizontal strips.</span>
+<span id="cb63-296"><a href="#cb63-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-299"><a href="#cb63-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-300"><a href="#cb63-300" aria-hidden="true" tabindex="-1"></a>cursed <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_4/cursed.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb63-301"><a href="#cb63-301" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, cursed.shape)</span>
+<span id="cb63-302"><a href="#cb63-302" aria-hidden="true" tabindex="-1"></a>show(cursed)</span>
+<span id="cb63-303"><a href="#cb63-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-304"><a href="#cb63-304" aria-hidden="true" tabindex="-1"></a>strips <span class="op">=</span> np.vsplit(cursed, <span class="dv">5</span>)</span>
+<span id="cb63-305"><a href="#cb63-305" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(strips))</span>
+<span id="cb63-306"><a href="#cb63-306" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"strip shape:"</span>, strips[<span class="dv">0</span>].shape)</span>
+<span id="cb63-307"><a href="#cb63-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-308"><a href="#cb63-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-309"><a href="#cb63-309" aria-hidden="true" tabindex="-1"></a>Each strip hides its number in the top-left pixel.</span>
+<span id="cb63-310"><a href="#cb63-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-313"><a href="#cb63-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-314"><a href="#cb63-314" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.array([strip[<span class="dv">0</span>, <span class="dv">0</span>] <span class="cf">for</span> strip <span class="kw">in</span> strips])</span>
+<span id="cb63-315"><a href="#cb63-315" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"hidden numbers:"</span>, numbers)</span>
+<span id="cb63-316"><a href="#cb63-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-317"><a href="#cb63-317" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> np.argsort(numbers)</span>
+<span id="cb63-318"><a href="#cb63-318" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sorted strip order:"</span>, order)</span>
+<span id="cb63-319"><a href="#cb63-319" aria-hidden="true" tabindex="-1"></a>stored <span class="op">=</span> np.vstack([strips[i] <span class="cf">for</span> i <span class="kw">in</span> order])</span>
+<span id="cb63-320"><a href="#cb63-320" aria-hidden="true" tabindex="-1"></a>show(stored)</span>
+<span id="cb63-321"><a href="#cb63-321" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-322"><a href="#cb63-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-323"><a href="#cb63-323" aria-hidden="true" tabindex="-1"></a>Now inspect the three candidate lenses.</span>
+<span id="cb63-324"><a href="#cb63-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-327"><a href="#cb63-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-328"><a href="#cb63-328" aria-hidden="true" tabindex="-1"></a>lenses <span class="op">=</span> {}</span>
+<span id="cb63-329"><a href="#cb63-329" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">4</span>):</span>
+<span id="cb63-330"><a href="#cb63-330" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_4/lens_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb63-331"><a href="#cb63-331" aria-hidden="true" tabindex="-1"></a>    lenses[k] <span class="op">=</span> L</span>
+<span id="cb63-332"><a href="#cb63-332" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"lens </span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">: det = </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>det(L)<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb63-333"><a href="#cb63-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-334"><a href="#cb63-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-335"><a href="#cb63-335" aria-hidden="true" tabindex="-1"></a>Only lens 2 has a nonzero determinant, so it is the only one we can invert.</span>
+<span id="cb63-336"><a href="#cb63-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-339"><a href="#cb63-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-340"><a href="#cb63-340" aria-hidden="true" tabindex="-1"></a>key_4 <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb63-341"><a href="#cb63-341" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">4</span>, key_4)</span>
+<span id="cb63-342"><a href="#cb63-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-343"><a href="#cb63-343" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> lenses[key_4]</span>
+<span id="cb63-344"><a href="#cb63-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-345"><a href="#cb63-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-346"><a href="#cb63-346" aria-hidden="true" tabindex="-1"></a>Here is the inverse via matrix multiplication.</span>
+<span id="cb63-347"><a href="#cb63-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-350"><a href="#cb63-350" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-351"><a href="#cb63-351" aria-hidden="true" tabindex="-1"></a>photo_4 <span class="op">=</span> np.linalg.inv(L) <span class="op">@</span> stored</span>
+<span id="cb63-352"><a href="#cb63-352" aria-hidden="true" tabindex="-1"></a>show(photo_4)</span>
+<span id="cb63-353"><a href="#cb63-353" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-354"><a href="#cb63-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-355"><a href="#cb63-355" aria-hidden="true" tabindex="-1"></a>Now compare that with doing the same thing row by row in a for loop. This is the same linear algebra, just expanded manually.</span>
+<span id="cb63-356"><a href="#cb63-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-359"><a href="#cb63-359" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-360"><a href="#cb63-360" aria-hidden="true" tabindex="-1"></a>invL <span class="op">=</span> np.linalg.inv(L)</span>
+<span id="cb63-361"><a href="#cb63-361" aria-hidden="true" tabindex="-1"></a>manual <span class="op">=</span> np.zeros_like(stored)</span>
+<span id="cb63-362"><a href="#cb63-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-363"><a href="#cb63-363" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(invL.shape[<span class="dv">0</span>]):</span>
+<span id="cb63-364"><a href="#cb63-364" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> np.zeros(stored.shape[<span class="dv">1</span>])</span>
+<span id="cb63-365"><a href="#cb63-365" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(invL.shape[<span class="dv">1</span>]):</span>
+<span id="cb63-366"><a href="#cb63-366" aria-hidden="true" tabindex="-1"></a>        row <span class="op">+=</span> invL[i, j] <span class="op">*</span> stored[j]</span>
+<span id="cb63-367"><a href="#cb63-367" aria-hidden="true" tabindex="-1"></a>    manual[i] <span class="op">=</span> row</span>
+<span id="cb63-368"><a href="#cb63-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-369"><a href="#cb63-369" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"manual and matrix product match:"</span>, np.allclose(manual, photo_4))</span>
+<span id="cb63-370"><a href="#cb63-370" aria-hidden="true" tabindex="-1"></a>show(manual)</span>
+<span id="cb63-371"><a href="#cb63-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-372"><a href="#cb63-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-373"><a href="#cb63-373" aria-hidden="true" tabindex="-1"></a>That loop is useful for understanding, but the matrix product is the clean NumPy version.</span>
+<span id="cb63-374"><a href="#cb63-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-375"><a href="#cb63-375" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-376"><a href="#cb63-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-377"><a href="#cb63-377" aria-hidden="true" tabindex="-1"></a><span class="fu">## Photo 5 — colour channels, shuffled</span></span>
+<span id="cb63-378"><a href="#cb63-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-379"><a href="#cb63-379" aria-hidden="true" tabindex="-1"></a>Load the colour strip image and split it into 3 equal parts.</span>
+<span id="cb63-380"><a href="#cb63-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-383"><a href="#cb63-383" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-384"><a href="#cb63-384" aria-hidden="true" tabindex="-1"></a>colour <span class="op">=</span> np.loadtxt(<span class="ss">f"</span><span class="sc">{</span>BASE<span class="sc">}</span><span class="ss">/photo_5/colour.txt"</span>)</span>
+<span id="cb63-385"><a href="#cb63-385" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape:"</span>, colour.shape)</span>
+<span id="cb63-386"><a href="#cb63-386" aria-hidden="true" tabindex="-1"></a>show(colour)</span>
+<span id="cb63-387"><a href="#cb63-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-388"><a href="#cb63-388" aria-hidden="true" tabindex="-1"></a>images <span class="op">=</span> np.hsplit(colour, <span class="dv">3</span>)</span>
+<span id="cb63-389"><a href="#cb63-389" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length:"</span>, <span class="bu">len</span>(images))</span>
+<span id="cb63-390"><a href="#cb63-390" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, image <span class="kw">in</span> <span class="bu">enumerate</span>(images, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb63-391"><a href="#cb63-391" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"image </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> shape:"</span>, image.shape)</span>
+<span id="cb63-392"><a href="#cb63-392" aria-hidden="true" tabindex="-1"></a>    show(image)</span>
+<span id="cb63-393"><a href="#cb63-393" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-394"><a href="#cb63-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-395"><a href="#cb63-395" aria-hidden="true" tabindex="-1"></a>Take one ordering, stack the channels along a new axis, and undo the night-time squaring with a square root.</span>
+<span id="cb63-396"><a href="#cb63-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-399"><a href="#cb63-399" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-400"><a href="#cb63-400" aria-hidden="true" tabindex="-1"></a>attempt <span class="op">=</span> np.sqrt(np.stack((images[<span class="dv">0</span>], images[<span class="dv">1</span>], images[<span class="dv">2</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb63-401"><a href="#cb63-401" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"attempt shape:"</span>, attempt.shape)</span>
+<span id="cb63-402"><a href="#cb63-402" aria-hidden="true" tabindex="-1"></a>show(attempt)</span>
+<span id="cb63-403"><a href="#cb63-403" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-404"><a href="#cb63-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-405"><a href="#cb63-405" aria-hidden="true" tabindex="-1"></a>Try all 6 possible channel orders.</span>
+<span id="cb63-406"><a href="#cb63-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-409"><a href="#cb63-409" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-410"><a href="#cb63-410" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> order <span class="kw">in</span> permutations([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]):</span>
+<span id="cb63-411"><a href="#cb63-411" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"order:"</span>, order)</span>
+<span id="cb63-412"><a href="#cb63-412" aria-hidden="true" tabindex="-1"></a>    trial <span class="op">=</span> np.sqrt(np.stack((images[order[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>], images[order[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>], images[order[<span class="dv">2</span>] <span class="op">-</span> <span class="dv">1</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb63-413"><a href="#cb63-413" aria-hidden="true" tabindex="-1"></a>    show(trial)</span>
+<span id="cb63-414"><a href="#cb63-414" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-415"><a href="#cb63-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-416"><a href="#cb63-416" aria-hidden="true" tabindex="-1"></a>The orange flames identify the right order.</span>
+<span id="cb63-417"><a href="#cb63-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-420"><a href="#cb63-420" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-421"><a href="#cb63-421" aria-hidden="true" tabindex="-1"></a>photo_5 <span class="op">=</span> np.sqrt(np.stack((images[<span class="dv">2</span>], images[<span class="dv">0</span>], images[<span class="dv">1</span>]), axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb63-422"><a href="#cb63-422" aria-hidden="true" tabindex="-1"></a>show(photo_5)</span>
+<span id="cb63-423"><a href="#cb63-423" aria-hidden="true" tabindex="-1"></a>check(<span class="dv">5</span>, <span class="st">"312"</span>)</span>
+<span id="cb63-424"><a href="#cb63-424" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-425"><a href="#cb63-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-426"><a href="#cb63-426" aria-hidden="true" tabindex="-1"></a><span class="in">`np.savetxt()`</span> is great for 1D and 2D arrays, but not for a 3D colour image:</span>
+<span id="cb63-427"><a href="#cb63-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-430"><a href="#cb63-430" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-431"><a href="#cb63-431" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb63-432"><a href="#cb63-432" aria-hidden="true" tabindex="-1"></a>    np.savetxt(<span class="st">"photo_5.txt"</span>, photo_5)</span>
+<span id="cb63-433"><a href="#cb63-433" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb63-434"><a href="#cb63-434" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">type</span>(e).<span class="va">__name__</span> <span class="op">+</span> <span class="st">":"</span>, e)</span>
+<span id="cb63-435"><a href="#cb63-435" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-436"><a href="#cb63-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-437"><a href="#cb63-437" aria-hidden="true" tabindex="-1"></a><span class="in">`np.save()`</span> works perfectly:</span>
+<span id="cb63-438"><a href="#cb63-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-441"><a href="#cb63-441" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-442"><a href="#cb63-442" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_5.npy"</span>, photo_5)</span>
+<span id="cb63-443"><a href="#cb63-443" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.load(<span class="st">"photo_5.npy"</span>).shape)</span>
+<span id="cb63-444"><a href="#cb63-444" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-445"><a href="#cb63-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-446"><a href="#cb63-446" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-447"><a href="#cb63-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-448"><a href="#cb63-448" aria-hidden="true" tabindex="-1"></a><span class="fu">## The case number</span></span>
+<span id="cb63-449"><a href="#cb63-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-450"><a href="#cb63-450" aria-hidden="true" tabindex="-1"></a>Each recovered photo hides one digit. The digit is the second decimal of the mean brightness of the region <span class="in">`photo[100:250, 100:]`</span>.</span>
+<span id="cb63-451"><a href="#cb63-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-454"><a href="#cb63-454" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-455"><a href="#cb63-455" aria-hidden="true" tabindex="-1"></a>regions <span class="op">=</span> [</span>
+<span id="cb63-456"><a href="#cb63-456" aria-hidden="true" tabindex="-1"></a>    photo_1[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb63-457"><a href="#cb63-457" aria-hidden="true" tabindex="-1"></a>    photo_2[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb63-458"><a href="#cb63-458" aria-hidden="true" tabindex="-1"></a>    photo_3[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb63-459"><a href="#cb63-459" aria-hidden="true" tabindex="-1"></a>    photo_4[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:],</span>
+<span id="cb63-460"><a href="#cb63-460" aria-hidden="true" tabindex="-1"></a>    photo_5[<span class="dv">100</span>:<span class="dv">250</span>, <span class="dv">100</span>:, <span class="dv">0</span>],  <span class="co"># red channel only</span></span>
+<span id="cb63-461"><a href="#cb63-461" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb63-462"><a href="#cb63-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-463"><a href="#cb63-463" aria-hidden="true" tabindex="-1"></a>case <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb63-464"><a href="#cb63-464" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, region <span class="kw">in</span> <span class="bu">enumerate</span>(regions, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb63-465"><a href="#cb63-465" aria-hidden="true" tabindex="-1"></a>    mean <span class="op">=</span> region.mean()</span>
+<span id="cb63-466"><a href="#cb63-466" aria-hidden="true" tabindex="-1"></a>    digit <span class="op">=</span> <span class="bu">int</span>(mean <span class="op">*</span> <span class="dv">100</span>) <span class="op">%</span> <span class="dv">10</span></span>
+<span id="cb63-467"><a href="#cb63-467" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"photo </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: mean = </span><span class="sc">{</span>mean<span class="sc">:.4f}</span><span class="ss"> -&gt; digit = </span><span class="sc">{</span>digit<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb63-468"><a href="#cb63-468" aria-hidden="true" tabindex="-1"></a>    case <span class="op">+=</span> <span class="bu">str</span>(digit)</span>
+<span id="cb63-469"><a href="#cb63-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-470"><a href="#cb63-470" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"case number:"</span>, case)</span>
+<span id="cb63-471"><a href="#cb63-471" aria-hidden="true" tabindex="-1"></a>check(<span class="st">"case"</span>, case)</span>
+<span id="cb63-472"><a href="#cb63-472" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-473"><a href="#cb63-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-474"><a href="#cb63-474" aria-hidden="true" tabindex="-1"></a>A half-fixed photo gives the wrong digit, so the full recovery really matters.</span>
+<span id="cb63-475"><a href="#cb63-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-476"><a href="#cb63-476" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-477"><a href="#cb63-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-478"><a href="#cb63-478" aria-hidden="true" tabindex="-1"></a><span class="fu">## Save the evidence</span></span>
+<span id="cb63-479"><a href="#cb63-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-480"><a href="#cb63-480" aria-hidden="true" tabindex="-1"></a>When you recover an image, save it so you do not have to solve it again.</span>
+<span id="cb63-481"><a href="#cb63-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-484"><a href="#cb63-484" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb63-485"><a href="#cb63-485" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_1.npy"</span>, photo_1)</span>
+<span id="cb63-486"><a href="#cb63-486" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_2.npy"</span>, photo_2)</span>
+<span id="cb63-487"><a href="#cb63-487" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_3.npy"</span>, photo_3)</span>
+<span id="cb63-488"><a href="#cb63-488" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_4.npy"</span>, photo_4)</span>
+<span id="cb63-489"><a href="#cb63-489" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"photo_5.npy"</span>, photo_5)</span>
+<span id="cb63-490"><a href="#cb63-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-491"><a href="#cb63-491" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.allclose(np.load(<span class="st">"photo_1.npy"</span>), photo_1))</span>
+<span id="cb63-492"><a href="#cb63-492" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.allclose(np.load(<span class="st">"photo_5.npy"</span>), photo_5))</span>
+<span id="cb63-493"><a href="#cb63-493" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb63-494"><a href="#cb63-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-495"><a href="#cb63-495" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb63-496"><a href="#cb63-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-497"><a href="#cb63-497" aria-hidden="true" tabindex="-1"></a><span class="fu">## Back to the lesson</span></span>
+<span id="cb63-498"><a href="#cb63-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-499"><a href="#cb63-499" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Return to the original session</span><span class="co">](loading_and_saving_numpy_data.qmd)</span>{.btn .btn-primary}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024, Computer Programming I</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/load_solutions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/daniprec/Python-Course">
+      <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
