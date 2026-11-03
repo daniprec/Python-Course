@@ -174,7 +174,7 @@ Let's start by loading an image of a puppy and displaying it.
 
 ```{python}
 # Link to the image
-url_dog = "https://www.freeiconspng.com/thumbs/dog-png/dog-png-30.png"
+url_dog = "https://github.com/daniprec/Python-Course/blob/main/img/dog-nobg.png"
 
 # Load and display the image
 dog = load_image(url_dog)
@@ -202,7 +202,7 @@ Now, let's load another image, this time of a beach. We will later superimpose o
 
 ```{python}
 # Link to the image
-url_beach = "https://wallpaperset.com/w/full/1/4/e/13026.jpg"
+url_beach = "https://github.com/daniprec/Python-Course/blob/main/img/beach.jpg"
 
 # Load and display the image
 beach = load_image(url_beach)
@@ -263,8 +263,8 @@ Try to do the same thing using this other image. You will realise two issues:
 1. There is a white border around the image! How can you use masking to get rid of it?
 2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?
 
-```python
-url_dog_2 = "https://a.pinatafarm.com/1139x1138/f55da91a83/cheems.jpg"
+```{python}
+url_dog_2 = "https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.png"
 ```
 :::
 
@@ -340,7 +340,7 @@ Call the function `load_image` setting the argument `color=True`. This will load
 Repeat the exercise but now using 3D arrays, i.e. RGB images.
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=1f7BPWmgheYVFMY8GA7D5w1X82k9-a3Pd" width="300" />
+<img src="../../img/dog-right.png" width="300" />
 </p>
 :::
 
@@ -371,7 +371,7 @@ show_image(beach_rgb)
 Now try to insert the puppy on the bottom left corner.
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=10vrFfW0Zls-2jjr3-6hcQhwPHC1UGRNS" width="300" />
+<img src="../../img/dog-bottom-left.png" width="300" />
 </p>
 :::
 
@@ -398,7 +398,7 @@ show_image(beach_3)
 The puppy would rather look at the beach. Can you flip it?
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=1GbaBEoZdwe_aHYKBBJ9vau_g0WmwnYCX" width="300" />
+<img src="../../img/dog-flipped.png" width="300" />
 </p>
 :::
 
@@ -427,7 +427,7 @@ show_image(beach_4)
 Can you change the dog's color to green?
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=14QLrn4VuY3eM7ON4iR1vZVYTrLCVTYQn" width="300" />
+<img src="../../img/dog-green.png" width="300" />
 </p>
 :::
 
@@ -457,11 +457,11 @@ show_image(beach_5)
 Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=1XOP8a1xOaeSmXFuczE6iZDRlGzxJbg03" width="300" />
+<img src="../../img/dog-cat.png" width="300" />
 </p>
 
-```python
-url_cat = "https://img.freepik.com/premium-photo/cute-little-grey-white-fluffy-kitten-green-background_548832-7905.jpg"
+```{python}
+url_cat = "https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png"
 ```
 :::
 
@@ -500,7 +500,7 @@ We convert the channels to `int` before comparing because `uint8` values wrap ar
 Lets finish with something easier. Invert the colors of the image.
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=16qRn0MD3zg4-O3WrzarcTo5-prRWXKjC" width="300" />
+<img src="../../img/dog-invert.png" width="300" />
 </p>
 :::
 
@@ -525,7 +525,7 @@ In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a
 Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.
 
 <p align="center">
-<img src="https://s3.amazonaws.com/cms.ipressroom.com/401/files/202306/cats300.jpg" width="300" />
+<img src="../../img/cat-schrodinger.png" width="300" />
 </p>
 
 
@@ -551,19 +551,16 @@ This method effectively reduces the resolution of each image by half, but when v
 
 ```{python}
 # Start with this image
-url_schro = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-841990410-64481f99d3e11.jpg"
+url_schro = "https://github.com/daniprec/Python-Course/blob/main/img/cat-skeleton.png"
 schrodinger = load_image(url_schro)
 
 show_image(schrodinger)
 ```
 
-```{python}
-# Your first step is to split that image into two (the skelleton and the cat)
-# Then you will have to flip one of them so that both look at the same direction
-```
+Your first step is to split that image into two (the skelleton and the cat). Then you will have to flip one of them so that both look at the same direction.
 
 ::: {.callout-tip collapse="true"}
-## Possible solution
+## Solution
 
 ```python
 h, w = schrodinger.shape
@@ -572,6 +569,9 @@ half = w // 2
 # Split the picture into its two halves (same width for both)
 left = schrodinger[:, :half]
 right = schrodinger[:, half:2 * half]
+
+# Alternatively, you can use np.split:
+left, right = np.split(schrodinger, 2, axis=1)
 
 # Flip the right half so both animals face the same direction
 right = right[:, ::-1]
