@@ -224,11 +224,42 @@ To avoid copying, no two students sitting next to each other (left, right, in fr
 ## Solution
 
 ```{python}
-def seating_plan(n_rows, n_cols):
+def seating_plan(n_rows: int, n_cols: int) -> np.ndarray:
+    """
+    Number the seats of an exam room row by row, starting at 1.
+
+    Parameters
+    ----------
+    n_rows : int
+        Number of rows of seats in the room.
+    n_cols : int
+        Number of seats in each row.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n_rows, n_cols) with the seat numbers.
+    """
     return np.arange(1, n_rows * n_cols + 1).reshape(n_rows, n_cols)
 
 
-def exam_versions(n_rows, n_cols):
+def exam_versions(n_rows: int, n_cols: int) -> np.ndarray:
+    """
+    Assign exam versions so that no two neighbouring seats share one.
+
+    Parameters
+    ----------
+    n_rows : int
+        Number of rows of seats in the room.
+    n_cols : int
+        Number of seats in each row.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n_rows, n_cols) with 0 (version A) or
+        1 (version B) in each seat. The first seat gets version A.
+    """
     versions = np.zeros((n_rows, n_cols), dtype=int)
     versions[::2, 1::2] = 1   # even rows, odd columns
     versions[1::2, ::2] = 1   # odd rows, even columns
@@ -437,7 +468,22 @@ final_grades(marks, weights)
 ## Solution
 
 ```{python}
-def final_grades(marks, weights):
+def final_grades(marks: np.ndarray, weights: np.ndarray) -> np.ndarray:
+    """
+    Compute the final grade of each student out of 10.
+
+    Parameters
+    ----------
+    marks : np.ndarray
+        Marks between 0 and 1, of shape (n_students, n_exercises).
+    weights : np.ndarray
+        Points of each exercise, of shape (n_exercises,).
+
+    Returns
+    -------
+    np.ndarray
+        Final grades out of 10, of shape (n_students,).
+    """
     return 10 * (marks @ weights) / np.sum(weights)
 
 
@@ -466,8 +512,22 @@ In Module 1 you computed factorials with a loop. Now do it without one:
 ## Solution
 
 ```{python}
-def factorial(n):
-    return np.prod(np.arange(1, n + 1))
+def factorial(n: int) -> int:
+    """
+    Compute the factorial of n without loops.
+
+    Parameters
+    ----------
+    n : int
+        Non-negative integer.
+
+    Returns
+    -------
+    int
+        The product 1 * 2 * ... * n. It overflows (wrong result)
+        for n > 20, because NumPy uses 64-bit integers.
+    """
+    return int(np.prod(np.arange(1, n + 1)))
 
 
 print(factorial(5))
@@ -596,7 +656,21 @@ join_recordings(["day1.txt", "day2.txt"])
 
 ```{python}
 #| eval: false
-def join_recordings(filenames):
+def join_recordings(filenames: list[str]) -> np.ndarray:
+    """
+    Load several text files and join their values into one array.
+
+    Parameters
+    ----------
+    filenames : list[str]
+        Paths of the text files, with one value per line.
+
+    Returns
+    -------
+    np.ndarray
+        1D float array with the values of all the files, in the
+        order of `filenames`.
+    """
     arrays = []
     for filename in filenames:
         arrays.append(np.loadtxt(filename))
@@ -774,6 +848,19 @@ def fibonacci_sequence(n: int):
 
 ```{python}
 def fibonacci_sequence(n: int) -> np.ndarray:
+    """
+    Build the first n Fibonacci numbers.
+
+    Parameters
+    ----------
+    n : int
+        How many Fibonacci numbers to generate.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n,) starting 1, 1, 2, 3, ...
+    """
     arr = np.array([], dtype=int)
 
     for index in range(n):
@@ -842,7 +929,26 @@ part_points(marks, weights, [2, 4])
 ## Solution
 
 ```{python}
-def part_points(marks, weights, cuts):
+def part_points(
+    marks: np.ndarray, weights: np.ndarray, cuts: list[int]
+) -> np.ndarray:
+    """
+    Compute the points of each student in each part of the exam.
+
+    Parameters
+    ----------
+    marks : np.ndarray
+        Marks between 0 and 1, of shape (n_students, n_exercises).
+    weights : np.ndarray
+        Points of each exercise, of shape (n_exercises,).
+    cuts : list[int]
+        Column indices where each new part starts.
+
+    Returns
+    -------
+    np.ndarray
+        Points of shape (n_students, len(cuts) + 1), one column per part.
+    """
     mark_parts = np.hsplit(marks, cuts)
     weight_parts = np.split(weights, cuts)
 
@@ -1072,7 +1178,25 @@ The original `grades` array must not be modified.
 ## Solution
 
 ```{python}
-def apply_bonus(grades, bonus):
+def apply_bonus(grades: np.ndarray, bonus: float) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Add a bonus to every grade, capping the result at 10.
+
+    Parameters
+    ----------
+    grades : np.ndarray
+        Grades out of 10, of shape (n_students,). It is not modified.
+    bonus : float
+        Points added to every grade.
+
+    Returns
+    -------
+    new_grades : np.ndarray
+        Grades with the bonus, capped at 10, of shape (n_students,).
+    passed : np.ndarray
+        Boolean array of shape (n_students,), True where the new grade
+        is at least 5.
+    """
     new_grades = grades + bonus          # a new array: grades is not modified
     new_grades[new_grades > 10] = 10
     return new_grades, new_grades >= 5
@@ -1100,7 +1224,21 @@ In Module 1 you replaced every occurrence of the first character of a string wit
 ## Solution
 
 ```{python}
-def replace_first(s):
+def replace_first(s: str) -> str:
+    """
+    Replace repeats of the first character with "$".
+
+    Parameters
+    ----------
+    s : str
+        Non-empty input string.
+
+    Returns
+    -------
+    str
+        Copy of `s` where every occurrence of its first character,
+        except the first one, is replaced by "$".
+    """
     chars = np.array(list(s))
     mask = chars == chars[0]
     mask[0] = False
@@ -1126,7 +1264,20 @@ Write a function `is_prime(n)` without loops. Build the array of candidate divis
 ## Solution
 
 ```{python}
-def is_prime(n):
+def is_prime(n: int) -> bool:
+    """
+    Check whether n is a prime number, without loops.
+
+    Parameters
+    ----------
+    n : int
+        Number to check.
+
+    Returns
+    -------
+    bool
+        True if `n` is prime, False otherwise.
+    """
     if n < 2:
         return False
     divisors = np.arange(2, int(n ** 0.5) + 1)
@@ -1158,12 +1309,41 @@ In Module 1 you wrote `sum_of_divisors(num)` and `are_amicable(num1, num2)` with
 ## Solution
 
 ```{python}
-def sum_of_divisors(num):
+def sum_of_divisors(num: int) -> int:
+    """
+    Add up all the divisors of num, including num itself.
+
+    Parameters
+    ----------
+    num : int
+        Positive integer.
+
+    Returns
+    -------
+    int
+        Sum of every divisor of `num` from 1 to `num`.
+    """
     candidates = np.arange(1, num + 1)
-    return np.sum(candidates[num % candidates == 0])
+    return int(np.sum(candidates[num % candidates == 0]))
 
 
-def are_amicable(num1, num2):
+def are_amicable(num1: int, num2: int) -> bool:
+    """
+    Check whether two different numbers are amicable.
+
+    Parameters
+    ----------
+    num1 : int
+        First positive integer.
+    num2 : int
+        Second positive integer.
+
+    Returns
+    -------
+    bool
+        True if the numbers are different and the proper divisors of
+        each one add up to the other, False otherwise.
+    """
     if num1 == num2:
         return False
     return (sum_of_divisors(num1) - num1 == num2) and (sum_of_divisors(num2) - num2 == num1)
@@ -1480,7 +1660,25 @@ Write a function named `guess_probability(n_students, n_questions, n_options)` t
 ## Solution
 
 ```{python}
-def guess_probability(n_students, n_questions, n_options):
+def guess_probability(n_students: int, n_questions: int, n_options: int) -> float:
+    """
+    Estimate the probability of passing a multiple-choice test by guessing.
+
+    Parameters
+    ----------
+    n_students : int
+        Number of simulated students.
+    n_questions : int
+        Number of questions in the test.
+    n_options : int
+        Number of options of each question.
+
+    Returns
+    -------
+    float
+        Fraction of simulated students with at least half of the
+        questions right.
+    """
     key = np.random.randint(0, n_options, size=n_questions)
     answers = np.random.randint(0, n_options, size=(n_students, n_questions))
 
@@ -1526,20 +1724,76 @@ print(decrypt(secret, key))
 alphabet = np.array(list("abcdefghijklmnopqrstuvwxyz"))
 
 
-def make_key(seed):
+def make_key(seed: int) -> np.ndarray:
+    """
+    Create a random substitution key for the 26 letters.
+
+    Parameters
+    ----------
+    seed : int
+        Random seed, so the same seed always gives the same key.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (26,) with a permutation of 0 to 25.
+    """
     np.random.seed(seed)
     return np.random.permutation(26)
 
 
-def to_positions(message):
+def to_positions(message: str) -> np.ndarray:
+    """
+    Turn a lowercase message into the alphabet positions of its letters.
+
+    Parameters
+    ----------
+    message : str
+        Lowercase message without spaces.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (len(message),), with 0 for "a" and 25 for "z".
+    """
     return np.array([ord(ch) - ord("a") for ch in message])
 
 
-def encrypt(message, key):
+def encrypt(message: str, key: np.ndarray) -> str:
+    """
+    Encrypt a message with a substitution key.
+
+    Parameters
+    ----------
+    message : str
+        Lowercase message without spaces.
+    key : np.ndarray
+        Permutation of 0 to 25, of shape (26,), as returned by `make_key`.
+
+    Returns
+    -------
+    str
+        Encrypted message, with the same length as `message`.
+    """
     return "".join(alphabet[key[to_positions(message)]])
 
 
-def decrypt(message, key):
+def decrypt(message: str, key: np.ndarray) -> str:
+    """
+    Decrypt a message encrypted with `encrypt` and the same key.
+
+    Parameters
+    ----------
+    message : str
+        Encrypted lowercase message without spaces.
+    key : np.ndarray
+        Permutation of 0 to 25, of shape (26,), used to encrypt it.
+
+    Returns
+    -------
+    str
+        Original message.
+    """
     inverse = np.argsort(key)
     return "".join(alphabet[inverse[to_positions(message)]])
 
@@ -1716,15 +1970,33 @@ exercise_report(marks)
 ## Solution
 
 ```{python}
-def exercise_report(marks):
+def exercise_report(marks: np.ndarray) -> tuple[np.ndarray, int, int]:
+    """
+    Summarise how the students performed in each exercise.
+
+    Parameters
+    ----------
+    marks : np.ndarray
+        Marks of shape (n_students, n_exercises). No column may be constant.
+
+    Returns
+    -------
+    averages : np.ndarray
+        Average mark of each exercise, of shape (n_exercises,).
+    hardest : int
+        Number (starting at 1) of the exercise with the lowest average.
+    best : int
+        Number (starting at 1) of the exercise whose marks have the
+        highest correlation with the total score of the students.
+    """
     averages = np.mean(marks, axis=0)
-    hardest = np.argmin(averages) + 1
+    hardest = int(np.argmin(averages)) + 1
 
     total = np.sum(marks, axis=1)
     correlations = np.zeros(marks.shape[1])
     for j in range(marks.shape[1]):
         correlations[j] = np.corrcoef(marks[:, j], total)[0, 1]
-    best = np.argmax(correlations) + 1
+    best = int(np.argmax(correlations)) + 1
 
     return averages, hardest, best
 
@@ -1761,7 +2033,25 @@ In Module 2 you sorted bus lines by how far their route time is from the average
 ## Solution
 
 ```{python}
-def sort_lines(names, times):
+def sort_lines(names: list[str], times: list[float]) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Sort bus lines by how far their route time is from the average.
+
+    Parameters
+    ----------
+    names : list[str]
+        Name of each line.
+    times : list[float]
+        Route time of each line, in the same order as `names`.
+
+    Returns
+    -------
+    sorted_names : np.ndarray
+        Names sorted from closest to farthest from the average time,
+        with ties broken by the faster line.
+    sorted_times : np.ndarray
+        Route times in the same order as `sorted_names`.
+    """
     names = np.array(names)
     times = np.array(times)
     distances = np.abs(times - np.mean(times))
@@ -1863,7 +2153,29 @@ Explain why this would not work if two students had exactly the same marks.
 ## Solution
 
 ```{python}
-def recover_weights(marks, scores):
+def recover_weights(marks: np.ndarray, scores: np.ndarray) -> np.ndarray:
+    """
+    Find the points of each exercise from the marks and total scores.
+
+    Parameters
+    ----------
+    marks : np.ndarray
+        Marks between 0 and 1, of shape (n, n): one row per student and
+        one column per exercise.
+    scores : np.ndarray
+        Total points of each student, of shape (n,).
+
+    Returns
+    -------
+    np.ndarray
+        Points of each exercise, of shape (n,).
+
+    Raises
+    ------
+    np.linalg.LinAlgError
+        If `marks` is singular, for example when two students have
+        exactly the same marks.
+    """
     return np.linalg.solve(marks, scores)
 
 
@@ -1991,7 +2303,26 @@ Then create random marks for 10,000 students and 11 exercises, check that both f
 ## Solution
 
 ```{python}
-def grade_vectorized(marks, weights, late):
+def grade_vectorized(
+    marks: np.ndarray, weights: np.ndarray, late: np.ndarray
+) -> np.ndarray:
+    """
+    Compute the final grades with a 10% penalty for late students.
+
+    Parameters
+    ----------
+    marks : np.ndarray
+        Marks between 0 and 1, of shape (n_students, n_exercises).
+    weights : np.ndarray
+        Points of each exercise, of shape (n_exercises,), adding up to 100.
+    late : np.ndarray
+        Boolean array of shape (n_students,), True for late students.
+
+    Returns
+    -------
+    np.ndarray
+        Grades out of 10, rounded to 2 decimals, of shape (n_students,).
+    """
     grades = marks @ weights / 10
     grades[late] = grades[late] * 0.9
     return np.round(grades, 2)
@@ -2044,7 +2375,20 @@ In Module 1 you checked whether three given numbers form a Pythagorean triple. N
 ## Solution
 
 ```{python}
-def pythagorean_triples(n):
+def pythagorean_triples(n: int) -> np.ndarray:
+    """
+    Find all Pythagorean triples with a < b and c <= n.
+
+    Parameters
+    ----------
+    n : int
+        Largest allowed value of c.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n_triples, 3), one row [a, b, c] per triple.
+    """
     a = np.arange(1, n + 1).reshape(-1, 1)   # column
     b = np.arange(1, n + 1).reshape(1, -1)   # row
     c_squared = a**2 + b**2                  # table (n, n)

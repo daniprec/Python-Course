@@ -267,7 +267,20 @@ Write a function named `filter_even(numbers)` that returns a new list containing
 
 ```{python}
 #| eval: false
-def filter_even(numbers):
+def filter_even(numbers: list[int]) -> list[int]:
+    """
+    Return a new list with only the even numbers.
+
+    Parameters
+    ----------
+    numbers : list[int]
+        The integers to filter.
+
+    Returns
+    -------
+    list[int]
+        The even numbers, in their original order.
+    """
     even_numbers = []
     for number in numbers:
         if number % 2 == 0:
@@ -292,7 +305,20 @@ Write a function named `my_reverse(values)` that returns the elements of a list 
 
 ```{python}
 #| eval: false
-def my_reverse(values):
+def my_reverse(values: list) -> list:
+    """
+    Return a new list with the elements in reverse order.
+
+    Parameters
+    ----------
+    values : list
+        The list to reverse. It is not modified.
+
+    Returns
+    -------
+    list
+        A new list with the same elements, from last to first.
+    """
     return values[::-1]
 
 print(my_reverse([1, 2, 3, 4, 5]))
@@ -316,7 +342,21 @@ Write a function named `statistics(numbers)` that returns the average, populatio
 
 ```{python}
 #| eval: false
-def statistics(numbers):
+def statistics(numbers: list[float]) -> list[float]:
+    """
+    Return the average, population variance and standard deviation.
+
+    Parameters
+    ----------
+    numbers : list[float]
+        A non-empty list of numbers.
+
+    Returns
+    -------
+    list[float]
+        The values ``[average, variance, standard_deviation]``,
+        each rounded to 4 decimal places.
+    """
     average = sum(numbers) / len(numbers)
 
     squared_differences = []
@@ -353,7 +393,25 @@ Write a function named `vecmul(first, second)` that multiplies two lists element
 
 ```{python}
 #| eval: false
-def vecmul(first, second):
+def vecmul(
+    first: list[float], second: list[float]
+) -> list[float] | str:
+    """
+    Multiply two lists element by element.
+
+    Parameters
+    ----------
+    first : list[float]
+        The first list of numbers.
+    second : list[float]
+        The second list of numbers.
+
+    Returns
+    -------
+    list[float] | str
+        The element-wise products, or the message
+        ``"Lists are not the same size"`` if the lengths differ.
+    """
     if len(first) != len(second):
         return "Lists are not the same size"
 
@@ -383,7 +441,22 @@ Write a function named `intersection(first, second)` that returns a new list con
 
 ```{python}
 #| eval: false
-def intersection(first, second):
+def intersection(first: list, second: list) -> list:
+    """
+    Return the elements found in both lists, without repetitions.
+
+    Parameters
+    ----------
+    first : list
+        The first list.
+    second : list
+        The second list.
+
+    Returns
+    -------
+    list
+        The common elements, in the order they appear in ``first``.
+    """
     common = []
     for value in first:
         if value in second and value not in common:
@@ -420,7 +493,20 @@ Write a function named `has_three_equal(numbers)` that checks whether a list con
 
 ```{python}
 #| eval: false
-def has_three_equal(numbers):
+def has_three_equal(numbers: list[int]) -> bool:
+    """
+    Check whether a list has the same number in three consecutive positions.
+
+    Parameters
+    ----------
+    numbers : list[int]
+        The numbers to check.
+
+    Returns
+    -------
+    bool
+        True if three consecutive elements are equal, False otherwise.
+    """
     for index in range(len(numbers) - 2):
         if numbers[index] == numbers[index + 1] == numbers[index + 2]:
             return True
@@ -447,7 +533,21 @@ Write a function named `strongest_neighbours(numbers)` that returns the maximum 
 
 ```{python}
 #| eval: false
-def strongest_neighbours(numbers):
+def strongest_neighbours(numbers: list[int]) -> list[int]:
+    """
+    Return the maximum of every pair of adjacent numbers.
+
+    Parameters
+    ----------
+    numbers : list[int]
+        The numbers to compare.
+
+    Returns
+    -------
+    list[int]
+        One maximum per adjacent pair, so it has one element fewer
+        than ``numbers``.
+    """
     result = []
     for index in range(len(numbers) - 1):
         result.append(max(numbers[index], numbers[index + 1]))
@@ -471,14 +571,42 @@ Write a function named `sort_by_divisors(numbers)` that sorts positive integers 
 
 ```{python}
 #| eval: false
-def count_divisors(number):
+def count_divisors(number: int) -> int:
+    """
+    Count the positive divisors of a positive integer.
+
+    Parameters
+    ----------
+    number : int
+        A positive integer.
+
+    Returns
+    -------
+    int
+        How many integers from 1 to ``number`` divide it exactly.
+    """
     count = 0
     for divisor in range(1, number + 1):
         if number % divisor == 0:
             count += 1
     return count
 
-def sort_by_divisors(numbers):
+def sort_by_divisors(numbers: list[int]) -> list[int]:
+    """
+    Sort numbers from the most divisors to the fewest.
+
+    Numbers with the same number of divisors keep their original order.
+
+    Parameters
+    ----------
+    numbers : list[int]
+        The positive integers to sort.
+
+    Returns
+    -------
+    list[int]
+        A new sorted list.
+    """
     return sorted(numbers, key=count_divisors, reverse=True)
 
 print(sort_by_divisors([10, 6, 8, 7]))
@@ -516,7 +644,23 @@ Write a function named `sort_square_roots(groups)` that:
 
 ```{python}
 #| eval: false
-def sort_square_roots(groups):
+def sort_square_roots(groups: list[list[float]]) -> list[list[float]]:
+    """
+    Take the square roots of each sublist and sort the results.
+
+    Negative values are skipped. Sublists with more roots come first; ties
+    are broken by the largest root.
+
+    Parameters
+    ----------
+    groups : list[list[float]]
+        The sublists of numbers.
+
+    Returns
+    -------
+    list[list[float]]
+        The lists of square roots, sorted.
+    """
     roots = []
 
     for group in groups:
@@ -550,7 +694,20 @@ Write a function named `classify_words(sentence)` that places words into three l
 
 ```{python}
 #| eval: false
-def count_syllables(word):
+def count_syllables(word: str) -> int:
+    """
+    Count the syllables in a word as groups of consecutive vowels.
+
+    Parameters
+    ----------
+    word : str
+        The word to analyse.
+
+    Returns
+    -------
+    int
+        The number of vowel groups in ``word``.
+    """
     vowels = "aeiouAEIOU"
     count = 0
     previous_was_vowel = False
@@ -563,7 +720,21 @@ def count_syllables(word):
 
     return count
 
-def classify_words(sentence):
+def classify_words(sentence: str) -> tuple[list[str], list[str], list[str]]:
+    """
+    Split the words of a sentence by their number of syllables.
+
+    Parameters
+    ----------
+    sentence : str
+        The sentence to classify. Punctuation at the ends of each word is
+        removed.
+
+    Returns
+    -------
+    tuple[list[str], list[str], list[str]]
+        The monosyllabic, bisyllabic and polysyllabic words, in that order.
+    """
     mono = []
     bi = []
     poly = []
@@ -817,7 +988,20 @@ Write a function named `sentence(person)` that receives a tuple containing `(nam
 
 ```{python}
 #| eval: false
-def sentence(person):
+def sentence(person: tuple[str, int, str]) -> str:
+    """
+    Build a sentence describing a person.
+
+    Parameters
+    ----------
+    person : tuple[str, int, str]
+        The person's name, age and gender.
+
+    Returns
+    -------
+    str
+        A sentence such as ``"Alice is 30 years old and is a female."``.
+    """
     name, age, gender = person
     return f"{name} is {age} years old and is a {gender}."
 
@@ -841,7 +1025,20 @@ What happens when you pass the tuple `(1, 0, 3, 0, 4)` to the same function? Exp
 
 ```{python}
 #| eval: false
-def replace_zeros(values):
+def replace_zeros(values: list[int]) -> list[int]:
+    """
+    Replace every zero with 1, modifying the list in place.
+
+    Parameters
+    ----------
+    values : list[int]
+        The numbers to update. This list is changed.
+
+    Returns
+    -------
+    list[int]
+        The same list, after the replacement.
+    """
     for index in range(len(values)):
         if values[index] == 0:
             values[index] = 1
@@ -880,7 +1077,21 @@ Write a function named `erasmus_board(entries)` that receives a list of `(studen
 
 ```{python}
 #| eval: false
-def erasmus_board(entries):
+def erasmus_board(entries: list[tuple[str, str, bool]]) -> str:
+    """
+    Build a numbered board with the confirmed Erasmus destinations.
+
+    Parameters
+    ----------
+    entries : list[tuple[str, str, bool]]
+        Tuples of ``(student, destination, status)``. Only entries whose
+        status is True are included.
+
+    Returns
+    -------
+    str
+        One line per confirmed entry, sorted by student and destination.
+    """
     sorted_entries = sorted(entries, key=lambda entry: (entry[0], entry[1]))
     lines = []
 
@@ -1061,7 +1272,26 @@ ana = ["beach", "cinema", "mountain", "park", "party"]
 
 ```{python}
 #| eval: false
-def find_common_plans(list_1, list_2, list_3):
+def find_common_plans(
+    list_1: list[str], list_2: list[str], list_3: list[str]
+) -> set[str]:
+    """
+    Return the plans that appear in all three lists.
+
+    Parameters
+    ----------
+    list_1 : list[str]
+        The first person's plans.
+    list_2 : list[str]
+        The second person's plans.
+    list_3 : list[str]
+        The third person's plans.
+
+    Returns
+    -------
+    set[str]
+        The plans liked by all three people.
+    """
     set_1 = set(list_1)
     set_2 = set(list_2)
     set_3 = set(list_3)
@@ -1095,7 +1325,26 @@ Expected structure:
 
 ```{python}
 #| eval: false
-def find_exclusive_plans(list_1, list_2, list_3):
+def find_exclusive_plans(
+    list_1: list[str], list_2: list[str], list_3: list[str]
+) -> tuple[set[str], set[str], set[str]]:
+    """
+    Return the plans liked by only one of three people.
+
+    Parameters
+    ----------
+    list_1 : list[str]
+        The first person's plans.
+    list_2 : list[str]
+        The second person's plans.
+    list_3 : list[str]
+        The third person's plans.
+
+    Returns
+    -------
+    tuple[set[str], set[str], set[str]]
+        The plans exclusive to the first, second and third person.
+    """
     set_1 = set(list_1)
     set_2 = set(list_2)
     set_3 = set(list_3)
@@ -1256,7 +1505,22 @@ Write a function named `union(first, second)` that returns the union of two sets
 
 ```{python}
 #| eval: false
-def union(first, second):
+def union(first: set, second: set) -> set:
+    """
+    Return the union of two sets.
+
+    Parameters
+    ----------
+    first : set
+        The first set.
+    second : set
+        The second set.
+
+    Returns
+    -------
+    set
+        The elements that are in either set.
+    """
     return first | second
 
 print(union({1, 2, 3, 4}, {3, 4, 5, 6}))
@@ -1277,7 +1541,22 @@ Write a function named `intersection(first, second)` that returns the intersecti
 
 ```{python}
 #| eval: false
-def intersection(first, second):
+def intersection(first: set, second: set) -> set:
+    """
+    Return the intersection of two sets.
+
+    Parameters
+    ----------
+    first : set
+        The first set.
+    second : set
+        The second set.
+
+    Returns
+    -------
+    set
+        The elements that are in both sets.
+    """
     return first & second
 
 print(intersection({1, 2, 3, 4}, {3, 4, 5, 6}))
@@ -1301,7 +1580,22 @@ Write a function named `difference(first, second)` that returns the elements in 
 
 ```{python}
 #| eval: false
-def difference(first, second):
+def difference(first: set, second: set) -> set:
+    """
+    Return the elements of the first set that are not in the second.
+
+    Parameters
+    ----------
+    first : set
+        The set to take elements from.
+    second : set
+        The set of elements to remove.
+
+    Returns
+    -------
+    set
+        The elements in ``first`` but not in ``second``.
+    """
     return first - second
 
 print(difference({1, 2, 3, 4}, {3, 4, 5, 6}))
@@ -1324,7 +1618,25 @@ Sort the tuples by the total number of occurrences, from greatest to least. Brea
 
 ```{python}
 #| eval: false
-def common_letters(first, second):
+def common_letters(
+    first: str, second: str
+) -> list[tuple[str, int, int]]:
+    """
+    Count the letters that two strings have in common.
+
+    Parameters
+    ----------
+    first : str
+        The first string.
+    second : str
+        The second string.
+
+    Returns
+    -------
+    list[tuple[str, int, int]]
+        Tuples of ``(letter, count_in_first, count_in_second)``, sorted by
+        total count from greatest to least, then alphabetically.
+    """
     common = set(first) & set(second)
     result = []
 
@@ -1389,7 +1701,21 @@ Write a function named `maximum_product_pair(numbers)` that uses the distinct va
 
 ```{python}
 #| eval: false
-def maximum_product_pair(numbers):
+def maximum_product_pair(numbers: list[int]) -> tuple[int, int] | None:
+    """
+    Return the pair of distinct values with the greatest product.
+
+    Parameters
+    ----------
+    numbers : list[int]
+        The numbers to search. Repeated values are counted once.
+
+    Returns
+    -------
+    tuple[int, int] | None
+        The pair, smaller number first, or None if there are fewer than
+        two distinct values.
+    """
     unique_numbers = list(set(numbers))
 
     if len(unique_numbers) < 2:
@@ -1881,7 +2207,15 @@ Key is Portugal, value is Lisbon
 
 ```{python}
 #| eval: false
-def print_dictionary(dictionary):
+def print_dictionary(dictionary: dict) -> None:
+    """
+    Print every key-value pair of a dictionary on its own line.
+
+    Parameters
+    ----------
+    dictionary : dict
+        The dictionary to print.
+    """
     for key, value in dictionary.items():
         print(f"Key is {key}, value is {value}")
 
@@ -1925,7 +2259,24 @@ gradebook = {
 
 ```{python}
 #| eval: false
-def sum_collection_values(dictionary):
+def sum_collection_values(
+    dictionary: dict[str, object]
+) -> dict[str, object]:
+    """
+    Replace list, tuple and set values with their sum, in place.
+
+    Other values are left unchanged.
+
+    Parameters
+    ----------
+    dictionary : dict[str, object]
+        The dictionary to update. This dictionary is changed.
+
+    Returns
+    -------
+    dict[str, object]
+        The same dictionary, after the replacement.
+    """
     for key, value in dictionary.items():
         if isinstance(value, (list, tuple, set)):
             dictionary[key] = sum(value)
@@ -1955,7 +2306,20 @@ Write a function named `score_range(scores)` that receives a dictionary of playe
 
 ```{python}
 #| eval: false
-def score_range(scores):
+def score_range(scores: dict[str, int]) -> str:
+    """
+    Report the maximum and minimum score.
+
+    Parameters
+    ----------
+    scores : dict[str, int]
+        Each player's score.
+
+    Returns
+    -------
+    str
+        A message such as ``"Max = 25, Min = 5"``.
+    """
     maximum = max(scores.values())
     minimum = min(scores.values())
     return f"Max = {maximum}, Min = {minimum}"
@@ -1978,7 +2342,20 @@ Write a function named `unique_values(dictionary)` that returns a set containing
 
 ```{python}
 #| eval: false
-def unique_values(dictionary):
+def unique_values(dictionary: dict) -> set:
+    """
+    Return the distinct values of a dictionary.
+
+    Parameters
+    ----------
+    dictionary : dict
+        The dictionary to inspect. Its values must be hashable.
+
+    Returns
+    -------
+    set
+        The values, without repetitions.
+    """
     return set(dictionary.values())
 
 print(unique_values({"a": 1, "b": 2, "c": 1, "d": 3}))
@@ -2023,7 +2400,22 @@ Write a function named `are_anagrams(first, second)` that uses dictionaries to d
 
 ```{python}
 #| eval: false
-def letter_counts(text):
+def letter_counts(text: str) -> dict[str, int]:
+    """
+    Count each letter and digit in a text, ignoring case.
+
+    Spaces and punctuation are not counted.
+
+    Parameters
+    ----------
+    text : str
+        The text to analyse.
+
+    Returns
+    -------
+    dict[str, int]
+        How many times each lowercase character appears.
+    """
     counts = {}
 
     for character in text.lower():
@@ -2032,7 +2424,24 @@ def letter_counts(text):
 
     return counts
 
-def are_anagrams(first, second):
+def are_anagrams(first: str, second: str) -> bool:
+    """
+    Check whether two strings are anagrams.
+
+    Spaces, punctuation and capitalization are ignored.
+
+    Parameters
+    ----------
+    first : str
+        The first string.
+    second : str
+        The second string.
+
+    Returns
+    -------
+    bool
+        True if both strings use the same letters the same number of times.
+    """
     return letter_counts(first) == letter_counts(second)
 
 print(are_anagrams("listen", "silent"))
@@ -2148,7 +2557,26 @@ Expected result: `False`.
 
 ```{python}
 #| eval: false
-def is_continuous(f, c):
+from collections.abc import Callable
+
+
+def is_continuous(f: Callable[[float], float], c: float) -> bool:
+    """
+    Check numerically whether a function looks continuous at a point.
+
+    Parameters
+    ----------
+    f : Callable[[float], float]
+        The function to test.
+    c : float
+        The point where continuity is checked.
+
+    Returns
+    -------
+    bool
+        True if ``f`` just to the left and right of ``c`` is close to
+        ``f(c)``, False otherwise (also if ``f`` cannot be evaluated).
+    """
     epsilon = 1e-4
     delta = 1e-6
 
@@ -2179,7 +2607,43 @@ Extend `is_continuous()` with optional keyword arguments named `epsilon` and `de
 
 ```{python}
 #| eval: false
-def is_continuous(f, c, epsilon=1e-4, delta=1e-6):
+from collections.abc import Callable
+
+
+def is_continuous(
+    f: Callable[[float], float],
+    c: float,
+    epsilon: float = 1e-4,
+    delta: float = 1e-6,
+) -> bool:
+    """
+    Check numerically whether a function looks continuous at a point.
+
+    Parameters
+    ----------
+    f : Callable[[float], float]
+        The function to test.
+    c : float
+        The point where continuity is checked.
+    epsilon : float, optional
+        Maximum allowed difference between function values.
+        Default is 1e-4.
+    delta : float, optional
+        Distance from ``c`` of the points evaluated on each side.
+        Default is 1e-6.
+
+    Returns
+    -------
+    bool
+        True if ``f(c - delta)`` and ``f(c + delta)`` are both within
+        ``epsilon`` of ``f(c)``, False otherwise (also if ``f`` cannot be
+        evaluated).
+
+    Raises
+    ------
+    ValueError
+        If ``epsilon`` or ``delta`` is not positive.
+    """
     if epsilon <= 0 or delta <= 0:
         raise ValueError("epsilon and delta must be positive")
 
@@ -2220,7 +2684,23 @@ Expected result: `10`.
 from math import comb
 
 
-def count_subsets(sample, size=3):
+def count_subsets(sample: set, size: int = 3) -> int:
+    """
+    Count the subsets of a given size, ignoring order.
+
+    Parameters
+    ----------
+    sample : set
+        The elements to choose from.
+    size : int, optional
+        The number of elements in each subset. Default is 3.
+
+    Returns
+    -------
+    int
+        The number of subsets, or 0 if ``size`` is negative or larger
+        than ``sample``.
+    """
     if size < 0 or size > len(sample):
         return 0
 
@@ -2247,7 +2727,27 @@ Extend the previous function with a keyword argument named `show_subsets`, which
 from itertools import combinations
 
 
-def count_subsets(sample, size=3, show_subsets=False):
+def count_subsets(
+    sample: set, size: int = 3, show_subsets: bool = False
+) -> int | tuple[int, list[tuple]]:
+    """
+    Count the subsets of a given size, and optionally return them.
+
+    Parameters
+    ----------
+    sample : set
+        The elements to choose from.
+    size : int, optional
+        The number of elements in each subset. Default is 3.
+    show_subsets : bool, optional
+        Whether to also return the subsets. Default is False.
+
+    Returns
+    -------
+    int | tuple[int, list[tuple]]
+        The number of subsets, or ``(count, subsets)`` if ``show_subsets``
+        is True. Each subset is a tuple.
+    """
     subsets = list(combinations(sample, size))
 
     if show_subsets:
@@ -2294,7 +2794,27 @@ Expected result: `[2.5, 0.0, 2.5]`.
 
 ```{python}
 #| eval: false
-def dot_product(vector_1, vector_2):
+def dot_product(vector_1: list[float], vector_2: list[float]) -> float:
+    """
+    Return the dot product of two vectors.
+
+    Parameters
+    ----------
+    vector_1 : list[float]
+        The first vector.
+    vector_2 : list[float]
+        The second vector.
+
+    Returns
+    -------
+    float
+        The sum of the products of matching coordinates.
+
+    Raises
+    ------
+    ValueError
+        If the vectors have different lengths.
+    """
     if len(vector_1) != len(vector_2):
         raise ValueError("Vectors must have the same length")
 
@@ -2304,7 +2824,27 @@ def dot_product(vector_1, vector_2):
     )
 
 
-def projection(u, v):
+def projection(u: list[float], v: list[float]) -> list[float]:
+    """
+    Return the orthogonal projection of ``u`` onto ``v``.
+
+    Parameters
+    ----------
+    u : list[float]
+        The vector to project.
+    v : list[float]
+        The vector to project onto.
+
+    Returns
+    -------
+    list[float]
+        The projection of ``u`` onto ``v``.
+
+    Raises
+    ------
+    ValueError
+        If ``v`` is the zero vector or the vectors have different lengths.
+    """
     denominator = dot_product(v, v)
 
     if denominator == 0:
@@ -2348,7 +2888,30 @@ Expected result: `True`.
 
 ```{python}
 #| eval: false
-def matrix_rank(matrix, tolerance=1e-10):
+def matrix_rank(
+    matrix: list[list[float]], tolerance: float = 1e-10
+) -> int:
+    """
+    Return the rank of a matrix using Gaussian elimination.
+
+    Parameters
+    ----------
+    matrix : list[list[float]]
+        The matrix, given as a list of rows. It is not modified.
+    tolerance : float, optional
+        Values with absolute value at or below this are treated as zero.
+        Default is 1e-10.
+
+    Returns
+    -------
+    int
+        The rank of the matrix (0 for an empty matrix).
+
+    Raises
+    ------
+    ValueError
+        If the rows have different lengths.
+    """
     if not matrix:
         return 0
 
@@ -2397,7 +2960,25 @@ def matrix_rank(matrix, tolerance=1e-10):
     return rank
 
 
-def is_independent(vectors):
+def is_independent(vectors: list[list[float]]) -> bool:
+    """
+    Check whether a list of vectors is linearly independent.
+
+    Parameters
+    ----------
+    vectors : list[list[float]]
+        The vectors to check, all with the same length.
+
+    Returns
+    -------
+    bool
+        True if the vectors are linearly independent, False otherwise.
+
+    Raises
+    ------
+    ValueError
+        If the vectors have different lengths.
+    """
     return matrix_rank(vectors) == len(vectors)
 ```
 :::
@@ -2426,7 +3007,27 @@ This solution uses `matrix_rank()` from the previous exercise.
 
 ```{python}
 #| eval: false
-def independent_indices(vectors):
+def independent_indices(vectors: list[list[float]]) -> list[int]:
+    """
+    Return the positions of a linearly independent subset of vectors.
+
+    Each vector is kept if it is independent of the ones kept before it.
+
+    Parameters
+    ----------
+    vectors : list[list[float]]
+        The vectors to choose from, all with the same length.
+
+    Returns
+    -------
+    list[int]
+        The positions of the selected vectors, starting at 1.
+
+    Raises
+    ------
+    ValueError
+        If the vectors have different lengths.
+    """
     basis = []
     selected_indices = []
 
