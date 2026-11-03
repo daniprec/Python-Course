@@ -37,6 +37,19 @@ final_grades = np.array([8, 5, 9, 4.5, 9, 5])
 # %%
 
 # %% [markdown]
+### Exercise: Predict the mask
+
+Without running it: what does this print? Then select the values greater than or equal to `5`.
+
+```python
+values = np.array([2, 5, 8, 1, 9])
+mask = values % 2 == 1
+print(values[mask])
+```
+
+# %%
+
+# %% [markdown]
 ### Masks in mathematics
 
 The universe $U = \{1, \dots, 20\}$ and the set $A = \{x \in U : x \text{ is even}\}$.
@@ -128,6 +141,8 @@ arr[high] = -1
 
 *Project Euler, [Problem 1](https://projecteuler.net/problem=1).*
 
+<img src="https://raw.githubusercontent.com/daniprec/Python-Course/main/img/masking-multiples.png" width="600" alt="The numbers 1 to 29. Multiples of 3 in blue, of 5 in orange, of both in green.">
+
 1. Sum of the natural numbers below `1000` that are multiples of 3 or 5, with a mask.
 2. Check the inclusion–exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$. What is $A \cap B$?
 3. The multiples of $d$ below $n$ add up to $d \cdot \frac{m(m+1)}{2}$, with $m = \lfloor (n-1)/d \rfloor$. Get the same answer with no array at all.
@@ -143,9 +158,12 @@ arr[high] = -1
 
 The quarter disc $x^2 + y^2 < 1$ inside $[0, 1]^2$ has area $\pi / 4$.
 
+<img src="https://raw.githubusercontent.com/daniprec/Python-Course/main/img/masking-pi-grid.png" width="300" alt="A 20 by 20 grid of points: 316 inside the quarter circle in blue, 84 outside in grey.">
+
 1. A grid of $N \times N$ points: `x = (np.arange(N) + 0.5) / N`.
 2. Mask of the points inside the disc. Hint: broadcasting.
-3. Estimate $\pi$ for $N = 10, 100, 1000$.
+3. Estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error shrink?
+4. Show the mask with `plt.imshow(inside, cmap="gray", origin="lower")`.
 
 # %%
 
@@ -157,8 +175,12 @@ The quarter disc $x^2 + y^2 < 1$ inside $[0, 1]^2$ has area $\pi / 4$.
 $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.
 
 1. A $64 \times 64$ array with Pascal's triangle **modulo 2**. One loop over the rows; each row in one line, with slicing.
-2. Mask of the odd entries. Show it with `plt.imshow(odd, cmap="gray_r")`. What do you see?
+2. Mask of the odd entries. Show it with `plt.imshow(odd, cmap="gray_r")`. Which shape is it?
 3. How many odd entries in the first 64 rows? And in the first $2^k$?
+
+<img src="https://raw.githubusercontent.com/daniprec/Python-Course/main/img/masking-sierpinski.png" width="300" alt="The odd entries of the first 64 rows of Pascal's triangle in black: a triangle made of smaller triangles.">
+
+Bonus: Lucas's theorem says $\binom{n}{k}$ is odd exactly when `(n & k) == k`. Build the same mask with no loop.
 
 # %%
 import matplotlib.pyplot as plt
@@ -243,6 +265,29 @@ url_beach = url_img + "beach.jpg"
 # %%
 
 # %% [markdown]
+### Challenge: Schrödinger's cat
+
+`cat-skeleton.jpg` holds a live cat and a skeleton side by side. Superimpose them by alternating pixels like a chessboard: `a` from the live cat, `d` from the skeleton.
+
+```
+a d a
+d a d
+a d a
+```
+
+1. Split the picture in two halves. Flip one so both look the same way.
+2. A chessboard mask with two slicing assignments.
+3. Combine the halves with the mask.
+
+<img src="https://raw.githubusercontent.com/daniprec/Python-Course/main/img/cat-schrodinger.jpg" width="300" alt="A cat and its skeleton superimposed.">
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
 ## 7. Challenge: the Mandelbrot set
 
 $c \in M$ if the sequence $z_0 = 0$, $z_{k+1} = z_k^2 + c$ stays bounded. Once $|z_k| > 2$, it escapes.
@@ -250,6 +295,10 @@ $c \in M$ if the sequence $z_0 = 0$, $z_{k+1} = z_k^2 + c$ stays bounded. Once $
 1. A grid of complex numbers on $[-2, 0.5] \times [-1.25, 1.25]$: `x[np.newaxis, :] + 1j * y[:, np.newaxis]`.
 2. A mask `inside`, all `True`. Loop 50 times: update `z` only where `inside`, then remove the points with `np.abs(z) > 2`.
 3. Show `inside`.
+
+<img src="https://raw.githubusercontent.com/daniprec/Python-Course/main/img/masking-mandelbrot.png" width="300" alt="The Mandelbrot set in white on black.">
+
+Bonus: store the iteration at which each point escapes and show that array instead.
 
 # %%
 

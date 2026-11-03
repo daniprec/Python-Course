@@ -203,6 +203,7 @@ print(values[mask])
 The mask is `True` for the odd values, so only those are selected.
 
 ```{python}
+values = np.array([2, 5, 8, 1, 9])
 mask = values >= 5
 print(values[mask])  # [5 8 9]
 ```
@@ -300,6 +301,10 @@ If you do need the positions of the `True` values, use `np.flatnonzero(mask)`.
 
 The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6 and 9, and their sum is 23.
 
+<p align="center">
+<img src="../../img/masking-multiples.png" width="600" alt="The numbers 1 to 29 in a grid. Multiples of 3 are blue, multiples of 5 orange, and 15, a multiple of both, green." />
+</p>
+
 1. Write a function `multiples_3_or_5(n)` that returns the sum of all the natural numbers below `n` that are multiples of 3 or 5. Use a mask instead of a loop. Check that `multiples_3_or_5(10)` returns `23`.
 2. Let $A$ be the multiples of 3 below 1000 and $B$ the multiples of 5. Use masks to check the inclusion–exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$. What is $A \cap B$?
 3. The same principle works for sums. The multiples of $d$ below $n$ are $d, 2d, \dots, md$ with $m = \lfloor (n-1)/d \rfloor$, and their sum is $d \cdot \frac{m(m+1)}{2}$. Compute the answer for $n = 1000$ with this formula, without any array, and compare it with your function.
@@ -361,6 +366,10 @@ The formula needs three multiplications, whatever the value of $n$, while the ma
 
 The quarter disc $D = \{(x, y) \in [0, 1]^2 : x^2 + y^2 < 1\}$ has area $\pi / 4$. If we cover the unit square with a regular grid of $N \times N$ points, the proportion of points that fall inside $D$ approximates that area.
 
+<p align="center">
+<img src="../../img/masking-pi-grid.png" width="300" alt="A 20 by 20 grid of points in the unit square. The 316 points inside the quarter circle are blue, the 84 outside are grey. 4 times 316 over 400 is 3.16." />
+</p>
+
 1. Build the grid coordinates `x = (np.arange(N) + 0.5) / N`, the centres of $N$ equal cells.
 2. Use broadcasting to build an $N \times N$ mask that is `True` where $x^2 + y^2 < 1$.
 3. Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?
@@ -397,8 +406,12 @@ plt.show()
 Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.
 
 1. Build a $64 \times 64$ array `pascal` where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.
-2. Build the mask of the odd entries and display it with `plt.imshow(odd, cmap="gray_r")`. Do you recognise the shape? This is an extension, remember `matplotlib` is not part of this course.
+2. Build the mask of the odd entries and display it with `plt.imshow(odd, cmap="gray_r")`. Your result should look like the picture below. Do you recognise the shape? This is an extension, remember `matplotlib` is not part of this course.
 3. How many entries of the first 64 rows are odd? Can you guess a formula for the first $2^k$ rows?
+
+<p align="center">
+<img src="../../img/masking-sierpinski.png" width="300" alt="The odd entries of the first 64 rows of Pascal's triangle, drawn in black: a triangle made of smaller triangles." />
+</p>
 :::
 
 ::: {.callout-tip collapse="true"}
