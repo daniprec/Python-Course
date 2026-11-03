@@ -1,0 +1,2365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computer Programming I (Python) - Masking with Images</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../modules/numpy/random_fancy_indexing.html" rel="next">
+<link href="../../modules/numpy/masking.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/masking_images.html">Masking with Images</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Computer Programming I (Python)</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/python-fundamentals/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 1: Python Fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/arithmetic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Strings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/indexing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Indexing and Slicing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/functions_builtin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions: Built-in</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/functions_userdefined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions: User-Defined</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/scope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python Scope</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/recursion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/docstrings_typehints.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Docstrings and Type Hints</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/python-fundamentals/homework_fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/structures/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 2: Data Structures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lists</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/tuples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tuples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/dictionaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dictionaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/mutability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mutability</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/homework_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/structures/side_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Side Projects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_recommendation_system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recommendation System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_traveling_salesman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Traveling Salesman Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_parrondos_paradox.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parrondo’s Paradox</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_sudoku.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sudoku Solver</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_ticket_booking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ticket Booking System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/structures/sp_battleship.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Battleship</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/numpy/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 3: NumPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to NumPy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/arithmetics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Arithmetic and Broadcasting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array Manipulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/load.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Loading and Saving Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/masking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Masking: Sets and Logic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/masking_images.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Masking with Images</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/random_fancy_indexing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random Numbers &amp; Fancy Indexing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/statistics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistics and Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/linalg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vectorization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/homework_numpy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/numpy/side_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Side Projects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_numerical_linear_algebra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Numerical Linear Algebra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_mnist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">MNIST Digit Recognition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/numpy/sp_snell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Snell’s Law</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../modules/ides/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Module 4: IDEs &amp; Tools</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/review_general.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">General Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/ides/rsa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application: RSA Encryption</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../exams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exam Repository</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#masking-with-images" id="toc-masking-with-images" class="nav-link active" data-scroll-target="#masking-with-images">Masking with Images</a>
+  <ul class="collapse">
+  <li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up">Setting Up</a></li>
+  <li><a href="#loading-and-displaying-images" id="toc-loading-and-displaying-images" class="nav-link" data-scroll-target="#loading-and-displaying-images">Loading and Displaying Images</a></li>
+  <li><a href="#masking-the-basics" id="toc-masking-the-basics" class="nav-link" data-scroll-target="#masking-the-basics">Masking: The Basics</a></li>
+  <li><a href="#loading-a-second-image" id="toc-loading-a-second-image" class="nav-link" data-scroll-target="#loading-a-second-image">Loading a Second Image</a></li>
+  <li><a href="#creating-a-mask-for-the-beach-image" id="toc-creating-a-mask-for-the-beach-image" class="nav-link" data-scroll-target="#creating-a-mask-for-the-beach-image">Creating a Mask for the Beach Image</a></li>
+  <li><a href="#positioning-the-dog-mask-on-the-beach-mask" id="toc-positioning-the-dog-mask-on-the-beach-mask" class="nav-link" data-scroll-target="#positioning-the-dog-mask-on-the-beach-mask">Positioning the Dog Mask on the Beach Mask</a></li>
+  <li><a href="#superimposing-the-dog-image-onto-the-beach-image" id="toc-superimposing-the-dog-image-onto-the-beach-image" class="nav-link" data-scroll-target="#superimposing-the-dog-image-onto-the-beach-image">Superimposing the Dog Image onto the Beach Image</a></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
+  <li><a href="#challenge-schrödingers-cat" id="toc-challenge-schrödingers-cat" class="nav-link" data-scroll-target="#challenge-schrödingers-cat">Challenge: Schrödinger’s Cat</a>
+  <ul class="collapse">
+  <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective">Objective:</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions:</a></li>
+  <li><a href="#note" id="toc-note" class="nav-link" data-scroll-target="#note">Note:</a></li>
+  </ul></li>
+  <li><a href="#challenge-the-mandelbrot-set" id="toc-challenge-the-mandelbrot-set" class="nav-link" data-scroll-target="#challenge-the-mandelbrot-set">Challenge: The Mandelbrot Set</a></li>
+  <li><a href="#summary-and-reflection" id="toc-summary-and-reflection" class="nav-link" data-scroll-target="#summary-and-reflection">Summary and Reflection</a></li>
+  </ul></li>
+  <li><a href="#homework-and-review" id="toc-homework-and-review" class="nav-link" data-scroll-target="#homework-and-review">Homework and Review</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/masking_images.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../modules/numpy/index.html">Module 3: NumPy</a></li><li class="breadcrumb-item"><a href="../../modules/numpy/masking_images.html">Masking with Images</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Masking with Images</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Module 3: NumPy</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="masking-with-images" class="level1">
+<h1>Masking with Images</h1>
+<p>In <a href="../../modules/numpy/masking.html">Masking: Sets and Logic</a> we used Boolean arrays to describe sets of numbers. Now we apply exactly the same rules to pictures. An image is just an array of pixel values, so a mask is the set of pixels we want to select or change.</p>
+<p>In this lesson we will cut a dog out of one picture and place it on a beach, and finish by drawing one of the most famous sets in mathematics.</p>
+<hr>
+<section id="setting-up" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up">Setting Up</h2>
+<p>Before we dive into the main content, let’s import the required libraries.</p>
+<div id="5f6ed155" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2  <span class="co"># for image processing tasks</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># to display images</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># for numerical operations on arrays</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests  <span class="co"># to fetch images from the internet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ModuleNotFoundError: No module named 'cv2'</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="loading-and-displaying-images" class="level2">
+<h2 class="anchored" data-anchor-id="loading-and-displaying-images">Loading and Displaying Images</h2>
+<p>We’ve defined two functions to help us:</p>
+<ul>
+<li><code>load_image</code>: This function fetches an image from a given URL.</li>
+<li><code>show_image</code>: Displays the provided NumPy array as an image.</li>
+</ul>
+<div id="61d7aeb1" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">  NumPy array.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">  url : str</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">    The URL of the image to be fetched.</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">  color : bool, optional</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    If True, loads the image in color. If False, loads the image in grayscale.</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Default is False.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">  np.ndarray</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">    If `color` is False, returns a grayscale image represented as a 2D NumPy</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">    array with values ranging from 0 to 255. If `color` is True,</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">    returns a color image in RGB format.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  response <span class="op">=</span> requests.get(url)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  image_array <span class="op">=</span> np.asarray(<span class="bu">bytearray</span>(response.content), dtype<span class="op">=</span><span class="st">"uint8"</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> color:</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_COLOR)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  <span class="co"># Convert from BGR to RGB</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(img: np.ndarray):</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">  Display the provided NumPy array as an image.</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">  img : np.ndarray</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">    The image data represented as either a 2D NumPy array for grayscale images</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">    or a 3D NumPy array for color images.</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the image is color (3D) or grayscale (2D)</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> img.ndim <span class="op">==</span> <span class="dv">3</span>:  <span class="co"># Color image</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># Binary mask</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>      img <span class="op">=</span> np.mean(img, axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:  <span class="co"># Grayscale image</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  <span class="co"># Binary mask</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s start by loading an image of a puppy and displaying it.</p>
+<div id="c51a6d0c" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/dog-nobg.png"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>dog <span class="op">=</span> load_image(url_dog)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>show_image(dog)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="masking-the-basics" class="level2">
+<h2 class="anchored" data-anchor-id="masking-the-basics">Masking: The Basics</h2>
+<p>Masking is a technique where we create a boolean array (mask) of the same shape as our data. Here, we will create a mask for the dog image to identify regions with the dog’s presence.</p>
+<p>In our case, any pixel value greater than 0 in the grayscale image indicates the presence of the dog, so we will use this criterion to generate our mask.</p>
+<div id="bbc9d901" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mask_dog <span class="op">=</span> dog <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>show_image(mask_dog)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-a-second-image" class="level2">
+<h2 class="anchored" data-anchor-id="loading-a-second-image">Loading a Second Image</h2>
+<p>Now, let’s load another image, this time of a beach. We will later superimpose our dog image onto this beach image.</p>
+<div id="8719f0ce" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>url_beach <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/beach.jpg"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>beach <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>show_image(beach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-a-mask-for-the-beach-image" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-mask-for-the-beach-image">Creating a Mask for the Beach Image</h2>
+<p>We’ll create an initial mask for the beach image, initialized to all zeros (or <code>False</code>). This represents that no part of the beach image is currently masked.</p>
+<div id="ddf53425" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> np.zeros(beach.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> mask_beach.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask has dimension: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="positioning-the-dog-mask-on-the-beach-mask" class="level2">
+<h2 class="anchored" data-anchor-id="positioning-the-dog-mask-on-the-beach-mask">Positioning the Dog Mask on the Beach Mask</h2>
+<p>Our goal is to superimpose the dog onto the beach image. To do this, we’ll first position the dog mask at the bottom right corner of the beach mask.</p>
+<div id="408f3749" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog.shape</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The dog mask has shape (</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>mask_beach[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask has dimension: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'mask_dog' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="superimposing-the-dog-image-onto-the-beach-image" class="level2">
+<h2 class="anchored" data-anchor-id="superimposing-the-dog-image-onto-the-beach-image">Superimposing the Dog Image onto the Beach Image</h2>
+<p>With our masks ready, we can now superimpose the dog image onto the beach image. By using the masks, we ensure that only the region with the dog gets overlaid onto the beach image.</p>
+<div id="07db9b5e" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beach[mask_beach] <span class="op">=</span> dog[mask_dog]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>show_image(beach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog' is not defined</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="practice" class="level2">
+<h2 class="anchored" data-anchor-id="practice">Practice</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Adjusting Color and Size
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try to do the same thing using this other image. You will realise two issues:</p>
+<ol type="1">
+<li>There is a white border around the image! How can you use masking to get rid of it?</li>
+<li>This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?</li>
+</ol>
+<div id="d4487210" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>url_dog_2 <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.png"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="85139a69" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dog_2 <span class="op">=</span> load_image(url_dog_2)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>show_image(dog_2)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: We have to take away both black and white rectangle</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+<div id="e149a82e" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine masks using "&amp;" (and), similar to how we do "if" clauses</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>mask_dog_2 <span class="op">=</span> (dog_2 <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (dog_2 <span class="op">&lt;</span> <span class="dv">255</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>show_image(mask_dog_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog_2' is not defined</code></pre>
+</div>
+</div>
+<div id="60460f33" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload the beach</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>beach_2 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>mask_beach_2 <span class="op">=</span> np.zeros(beach_2.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>mask_beach_2 <span class="op">=</span> mask_beach_2.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog_2.shape</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>mask_beach_2[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog_2</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_2)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: the dog is too big</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+<div id="aeb60b2e" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever slicing to take one of every two pixels</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>dog_smol <span class="op">=</span> dog_2[::<span class="dv">2</span>, ::<span class="dv">2</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>mask_smol <span class="op">=</span> (dog_smol <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (dog_smol <span class="op">&lt;</span> <span class="dv">255</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>mask_beach_smol <span class="op">=</span> np.zeros(beach_2.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>mask_beach_smol <span class="op">=</span> mask_beach_smol.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_smol.shape</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>mask_beach_smol[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_smol</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_smol)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog_2' is not defined</code></pre>
+</div>
+</div>
+<div id="3968c0af" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, we add the dog using masking</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>beach_2[mask_beach_smol] <span class="op">=</span> dog_smol[mask_smol]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>show_image(beach_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog_smol' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Color Images
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Call the function <code>load_image</code> setting the argument <code>color=True</code>. This will load the images in color!</p>
+<p>Repeat the exercise but now using 3D arrays, i.e.&nbsp;RGB images.</p>
+<p align="center">
+<img src="../../img/dog-right.png" width="300">
+</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A color image has shape <code>(height, width, 3)</code>. The mask has the same shape, so the same indexing works; we only need to unpack three values from <code>shape</code>.</p>
+<div id="6982609f" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dog_rgb <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>beach_rgb <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dog_rgb.shape, beach_rgb.shape)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>mask_dog_rgb <span class="op">=</span> dog_rgb <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>mask_beach_rgb <span class="op">=</span> np.zeros(beach_rgb.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>h, w, _ <span class="op">=</span> mask_dog_rgb.shape</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>mask_beach_rgb[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog_rgb</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>beach_rgb[mask_beach_rgb] <span class="op">=</span> dog_rgb[mask_dog_rgb]</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>show_image(beach_rgb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Different Position
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now try to insert the puppy on the bottom left corner.</p>
+<p align="center">
+<img src="../../img/dog-bottom-left.png" width="300">
+</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Only the column slice changes: the first <code>w</code> columns instead of the last <code>w</code>.</p>
+<div id="f6b3501d" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>beach_3 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>mask_beach_3 <span class="op">=</span> np.zeros(beach_3.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog.shape</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>mask_beach_3[<span class="op">-</span>h:, :w] <span class="op">=</span> mask_dog</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>beach_3[mask_beach_3] <span class="op">=</span> dog[mask_dog]</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>show_image(beach_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Flipping Arrays
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The puppy would rather look at the beach. Can you flip it?</p>
+<p align="center">
+<img src="../../img/dog-flipped.png" width="300">
+</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A negative step on the column axis reverses the columns, which mirrors the image horizontally.</p>
+<div id="de5471d3" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dog_flipped <span class="op">=</span> dog[:, ::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>mask_flipped <span class="op">=</span> dog_flipped <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>beach_4 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>mask_beach_4 <span class="op">=</span> np.zeros(beach_4.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_flipped.shape</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>mask_beach_4[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_flipped</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>beach_4[mask_beach_4] <span class="op">=</span> dog_flipped[mask_flipped]</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>show_image(beach_4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'dog' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Green Dog
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Can you change the dog’s color to green?</p>
+<p align="center">
+<img src="../../img/dog-green.png" width="300">
+</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning <code>[0, 255, 0]</code> to a masked selection paints every selected pixel pure green.</p>
+<div id="a41a275b" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dog_green <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mask_pixels <span class="op">=</span> dog_green.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">2</span>) <span class="op">&gt;</span> <span class="dv">0</span>  <span class="co"># 2D mask: one value per pixel</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>dog_green[mask_pixels] <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">255</span>, <span class="dv">0</span>]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>beach_5 <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>mask_beach_5 <span class="op">=</span> np.zeros(beach_5.shape[:<span class="dv">2</span>]).astype(<span class="bu">bool</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_pixels.shape</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>mask_beach_5[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_pixels</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>beach_5[mask_beach_5] <span class="op">=</span> dog_green[mask_pixels]</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>show_image(beach_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Harder Masking
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.</p>
+<p align="center">
+<img src="../../img/dog-cat.png" width="300">
+</p>
+<div id="887f7154" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>url_cat <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Possible solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at <code>show_image(mask_cat)</code>.</p>
+<div id="26ba14b5" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> load_image(url_cat, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> cat[::<span class="dv">2</span>, ::<span class="dv">2</span>]  <span class="co"># make it smaller if it does not fit</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> cat[:, :, <span class="dv">0</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>green <span class="op">=</span> cat[:, :, <span class="dv">1</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>blue <span class="op">=</span> cat[:, :, <span class="dv">2</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>background <span class="op">=</span> (green <span class="op">&gt;</span> red <span class="op">+</span> <span class="dv">30</span>) <span class="op">&amp;</span> (green <span class="op">&gt;</span> blue <span class="op">+</span> <span class="dv">30</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>mask_cat <span class="op">=</span> <span class="op">~</span>background</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>show_image(mask_cat)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>beach_6 <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>mask_beach_6 <span class="op">=</span> np.zeros(beach_6.shape[:<span class="dv">2</span>]).astype(<span class="bu">bool</span>)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_cat.shape</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>mask_beach_6[<span class="op">-</span>h:, :w] <span class="op">=</span> mask_cat</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>beach_6[mask_beach_6] <span class="op">=</span> cat[mask_cat]</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>show_image(beach_6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+<p>We convert the channels to <code>int</code> before comparing because <code>uint8</code> values wrap around when adding (for example, <code>250 + 30</code> becomes <code>24</code>).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise: Invert Colors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s finish with something easier. Invert the colors of the image.</p>
+<p align="center">
+<img src="../../img/dog-invert.png" width="300">
+</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Pixel values go from <code>0</code> to <code>255</code>, so the inverse of a value <code>v</code> is <code>255 - v</code>. Broadcasting applies it to every pixel at once.</p>
+<div id="70c20e21" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>inverted <span class="op">=</span> <span class="dv">255</span> <span class="op">-</span> beach_2</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>show_image(inverted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'beach_2' is not defined</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="challenge-schrödingers-cat" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-schrödingers-cat">Challenge: Schrödinger’s Cat</h2>
+<p>In the realm of quantum mechanics, Schrödinger’s cat thought experiment poses a scenario where a cat is simultaneously both alive and dead until it is observed. As a nod to this concept, let’s create an image representation where both a live cat and a skeletal cat are superimposed.</p>
+<section id="objective" class="level3">
+<h3 class="anchored" data-anchor-id="objective">Objective:</h3>
+<p>Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.</p>
+<p align="center">
+<img src="../../img/cat-schrodinger.png" width="300">
+</p>
+</section>
+<section id="instructions" class="level3">
+<h3 class="anchored" data-anchor-id="instructions">Instructions:</h3>
+<ol type="1">
+<li>Consider two images: one representing a live cat (denoted by ‘a’) and the other representing a skeletal cat (denoted by ‘d’).</li>
+<li>To superimpose the images, alternate the pixels such that each pixel from one image is surrounded by pixels from the other image. This will give the effect of both images being merged into one.</li>
+</ol>
+<p>For instance, your pixel arrangement might look like this:</p>
+<pre><code>[
+  [a, d, a],
+  [d, a, d],
+  [a, d, a]
+]</code></pre>
+<p>Here, ‘a’ represents a pixel from the live cat image, and ‘d’ represents a pixel from the skeletal cat image. The resulting image will have an even distribution of pixels from both images.</p>
+</section>
+<section id="note" class="level3">
+<h3 class="anchored" data-anchor-id="note">Note:</h3>
+<p>This method effectively reduces the resolution of each image by half, but when viewed from a distance, the viewer should be able to discern both images superimposed upon each other.</p>
+<div id="8aaab875" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with this image</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>url_schro <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/cat-skeleton.png"</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>schrodinger <span class="op">=</span> load_image(url_schro)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>show_image(schrodinger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'requests' is not defined</code></pre>
+</div>
+</div>
+<p>Your first step is to split that image into two (the skeleton and the cat). Then you will have to flip one of them so that both look at the same direction.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="914c1163" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> schrodinger.shape</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>half <span class="op">=</span> w <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the picture into its two halves (same width for both)</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>left <span class="op">=</span> schrodinger[:, :half]</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>right <span class="op">=</span> schrodinger[:, half:<span class="dv">2</span> <span class="op">*</span> half]</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, you can use np.split:</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>left, right <span class="op">=</span> np.split(schrodinger, <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Flip the right half so both animals face the same direction</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>right <span class="op">=</span> right[:, ::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Checkerboard mask: True where (row + column) is even</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>checkerboard <span class="op">=</span> np.zeros(left.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>checkerboard[::<span class="dv">2</span>, ::<span class="dv">2</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>checkerboard[<span class="dv">1</span>::<span class="dv">2</span>, <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>superposition <span class="op">=</span> right.copy()</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>superposition[checkerboard] <span class="op">=</span> left[checkerboard]</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>show_image(superposition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'schrodinger' is not defined</code></pre>
+</div>
+</div>
+<p>If the result looks like two shifted animals, crop a few columns from one half so both figures line up before combining them.</p>
+</div>
+</div>
+</div>
+<hr>
+<hr>
+</section>
+</section>
+<section id="challenge-the-mandelbrot-set" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-the-mandelbrot-set">Challenge: The Mandelbrot Set</h2>
+<p>Masks do not need to come from a photo: we can also <em>compute</em> the image. The Mandelbrot set <span class="math inline">\(M\)</span> is the set of complex numbers <span class="math inline">\(c\)</span> for which the sequence</p>
+<p><span class="math display">\[z_0 = 0, \qquad z_{k+1} = z_k^2 + c\]</span></p>
+<p>stays bounded. It can be proved that once <span class="math inline">\(|z_k| &gt; 2\)</span> the sequence escapes to infinity, so we can test each point by iterating a fixed number of times and checking whether it has escaped.</p>
+<p>Your task is to draw <span class="math inline">\(M\)</span> on the region <span class="math inline">\(-2 \le \operatorname{Re}(c) \le 0.5\)</span>, <span class="math inline">\(-1.25 \le \operatorname{Im}(c) \le 1.25\)</span>, without looping over the pixels. You may loop over the iterations.</p>
+<ol type="1">
+<li>Build a 2D array <code>c</code> of complex numbers, one per pixel. Hint: broadcast a row of real parts against a column of imaginary parts, <code>x[np.newaxis, :] + 1j * y[:, np.newaxis]</code>.</li>
+<li>Start with <code>z = np.zeros_like(c)</code> and a mask <code>inside</code> that is <code>True</code> everywhere.</li>
+<li>At each iteration, update <code>z</code> <strong>only</strong> where <code>inside</code> is <code>True</code>, then remove from <code>inside</code> the points with <code>np.abs(z) &gt; 2</code>.</li>
+<li>Show <code>inside</code> as an image.</li>
+</ol>
+<p>As a bonus, store in an integer array the iteration at which each point escaped, and display that array instead. It gives the familiar coloured picture.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="1143e81f" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="fl">0.5</span>, <span class="dv">500</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="dv">500</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> x[np.newaxis, :] <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> y[:, np.newaxis]</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeros_like(c)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> np.ones(c.shape, dtype<span class="op">=</span><span class="bu">bool</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>escape_time <span class="op">=</span> np.zeros(c.shape, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>):</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    z[inside] <span class="op">=</span> z[inside] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> c[inside]  <span class="co"># only update the points still inside</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    escaped <span class="op">=</span> inside <span class="op">&amp;</span> (np.<span class="bu">abs</span>(z) <span class="op">&gt;</span> <span class="dv">2</span>)       <span class="co"># escaped in this iteration</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    escape_time[escaped] <span class="op">=</span> k</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    inside[escaped] <span class="op">=</span> <span class="va">False</span>                  <span class="co"># remove them from the set</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>show_image(inside)</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>plt.imshow(escape_time, cmap<span class="op">=</span><span class="st">"magma"</span>)</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'np' is not defined</code></pre>
+</div>
+</div>
+<p>Updating only <code>z[inside]</code> is what makes the masks essential: without it, the escaped points keep growing until they overflow.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="summary-and-reflection" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-reflection">Summary and Reflection</h2>
+<ul>
+<li>An image is an array, so the same masking rules apply to pixels.</li>
+<li><code>image[mask]</code> retrieves the pixels where the mask is <code>True</code>, and <code>image[mask] = value</code> changes only those pixels.</li>
+<li>A mask can be placed inside a larger one with slicing, to choose where a picture goes.</li>
+<li>In a colour image, a 2D mask selects whole pixels (all three channels at once).</li>
+<li>A mask can also be computed from a mathematical rule, as in the Mandelbrot set.</li>
+</ul>
+<p>Why do we convert the colour channels to <code>int</code> before comparing them in the green-screen exercise?</p>
+<hr>
+</section>
+</section>
+<section id="homework-and-review" class="level1">
+<h1>Homework and Review</h1>
+<p>Work through the homework exercises available here.</p>
+<p><a href="../../modules/numpy/homework_numpy.html#masking" class="btn btn-primary">Homework</a></p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../modules/numpy/masking.html" class="pagination-link  aria-label=" masking:="" sets="" and="" logic"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Masking: Sets and Logic</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../modules/numpy/random_fancy_indexing.html" class="pagination-link" aria-label="Random Numbers &amp; Fancy Indexing">
+        <span class="nav-page-text">Random Numbers &amp; Fancy Indexing</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb47" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Masking with Images"</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Module 3: NumPy"</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># Masking with Images</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>In <span class="co">[</span><span class="ot">Masking: Sets and Logic</span><span class="co">](masking.qmd)</span> we used Boolean arrays to describe sets of numbers. Now we apply exactly the same rules to pictures. An image is just an array of pixel values, so a mask is the set of pixels we want to select or change.</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>In this lesson we will cut a dog out of one picture and place it on a beach, and finish by drawing one of the most famous sets in mathematics.</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting Up</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>Before we dive into the main content, let's import the required libraries.</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2  <span class="co"># for image processing tasks</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># to display images</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># for numerical operations on arrays</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests  <span class="co"># to fetch images from the internet</span></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading and Displaying Images</span></span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>We've defined two functions to help us:</span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`load_image`</span>: This function fetches an image from a given URL.</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`show_image`</span>: Displays the provided NumPy array as an image.</span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(url: <span class="bu">str</span>, color: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a><span class="co">  Fetch and return an image from the provided URL as a grayscale</span></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="co">  NumPy array.</span></span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="co">  url : str</span></span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a><span class="co">    The URL of the image to be fetched.</span></span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a><span class="co">  color : bool, optional</span></span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a><span class="co">    If True, loads the image in color. If False, loads the image in grayscale.</span></span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a><span class="co">    Default is False.</span></span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a><span class="co">  Returns</span></span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a><span class="co">  -------</span></span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a><span class="co">  np.ndarray</span></span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a><span class="co">    If `color` is False, returns a grayscale image represented as a 2D NumPy</span></span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a><span class="co">    array with values ranging from 0 to 255. If `color` is True,</span></span>
+<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a><span class="co">    returns a color image in RGB format.</span></span>
+<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a>  response <span class="op">=</span> requests.get(url)</span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a>  image_array <span class="op">=</span> np.asarray(<span class="bu">bytearray</span>(response.content), dtype<span class="op">=</span><span class="st">"uint8"</span>)</span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> color:</span>
+<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_COLOR)</span>
+<span id="cb47-64"><a href="#cb47-64" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  <span class="co"># Convert from BGR to RGB</span></span>
+<span id="cb47-65"><a href="#cb47-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb47-66"><a href="#cb47-66" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)</span>
+<span id="cb47-67"><a href="#cb47-67" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image</span>
+<span id="cb47-68"><a href="#cb47-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-69"><a href="#cb47-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_image(img: np.ndarray):</span>
+<span id="cb47-70"><a href="#cb47-70" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb47-71"><a href="#cb47-71" aria-hidden="true" tabindex="-1"></a><span class="co">  Display the provided NumPy array as an image.</span></span>
+<span id="cb47-72"><a href="#cb47-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-73"><a href="#cb47-73" aria-hidden="true" tabindex="-1"></a><span class="co">  Parameters</span></span>
+<span id="cb47-74"><a href="#cb47-74" aria-hidden="true" tabindex="-1"></a><span class="co">  ----------</span></span>
+<span id="cb47-75"><a href="#cb47-75" aria-hidden="true" tabindex="-1"></a><span class="co">  img : np.ndarray</span></span>
+<span id="cb47-76"><a href="#cb47-76" aria-hidden="true" tabindex="-1"></a><span class="co">    The image data represented as either a 2D NumPy array for grayscale images</span></span>
+<span id="cb47-77"><a href="#cb47-77" aria-hidden="true" tabindex="-1"></a><span class="co">    or a 3D NumPy array for color images.</span></span>
+<span id="cb47-78"><a href="#cb47-78" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb47-79"><a href="#cb47-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the image is color (3D) or grayscale (2D)</span></span>
+<span id="cb47-80"><a href="#cb47-80" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> img.ndim <span class="op">==</span> <span class="dv">3</span>:  <span class="co"># Color image</span></span>
+<span id="cb47-81"><a href="#cb47-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb47-82"><a href="#cb47-82" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb47-83"><a href="#cb47-83" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># Binary mask</span></span>
+<span id="cb47-84"><a href="#cb47-84" aria-hidden="true" tabindex="-1"></a>      img <span class="op">=</span> np.mean(img, axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb47-85"><a href="#cb47-85" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb47-86"><a href="#cb47-86" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:  <span class="co"># Grayscale image</span></span>
+<span id="cb47-87"><a href="#cb47-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> img.<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">1</span>:  <span class="co"># Real image</span></span>
+<span id="cb47-88"><a href="#cb47-88" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">255</span>)</span>
+<span id="cb47-89"><a href="#cb47-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:  <span class="co"># Binary mask</span></span>
+<span id="cb47-90"><a href="#cb47-90" aria-hidden="true" tabindex="-1"></a>      plt.imshow(img, cmap<span class="op">=</span><span class="st">"gray"</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb47-91"><a href="#cb47-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-92"><a href="#cb47-92" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb47-93"><a href="#cb47-93" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
+<span id="cb47-94"><a href="#cb47-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-95"><a href="#cb47-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-96"><a href="#cb47-96" aria-hidden="true" tabindex="-1"></a>Let's start by loading an image of a puppy and displaying it.</span>
+<span id="cb47-97"><a href="#cb47-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-100"><a href="#cb47-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-101"><a href="#cb47-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb47-102"><a href="#cb47-102" aria-hidden="true" tabindex="-1"></a>url_dog <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/dog-nobg.png"</span></span>
+<span id="cb47-103"><a href="#cb47-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-104"><a href="#cb47-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb47-105"><a href="#cb47-105" aria-hidden="true" tabindex="-1"></a>dog <span class="op">=</span> load_image(url_dog)</span>
+<span id="cb47-106"><a href="#cb47-106" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>dog<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-107"><a href="#cb47-107" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb47-108"><a href="#cb47-108" aria-hidden="true" tabindex="-1"></a>show_image(dog)</span>
+<span id="cb47-109"><a href="#cb47-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-110"><a href="#cb47-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-111"><a href="#cb47-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Masking: The Basics</span></span>
+<span id="cb47-112"><a href="#cb47-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-113"><a href="#cb47-113" aria-hidden="true" tabindex="-1"></a>Masking is a technique where we create a boolean array (mask) of the same shape as our data. Here, we will create a mask for the dog image to identify regions with the dog's presence.</span>
+<span id="cb47-114"><a href="#cb47-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-115"><a href="#cb47-115" aria-hidden="true" tabindex="-1"></a>In our case, any pixel value greater than 0 in the grayscale image indicates the presence of the dog, so we will use this criterion to generate our mask.</span>
+<span id="cb47-116"><a href="#cb47-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-119"><a href="#cb47-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-120"><a href="#cb47-120" aria-hidden="true" tabindex="-1"></a>mask_dog <span class="op">=</span> dog <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb47-121"><a href="#cb47-121" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_dog<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb47-122"><a href="#cb47-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-123"><a href="#cb47-123" aria-hidden="true" tabindex="-1"></a>show_image(mask_dog)</span>
+<span id="cb47-124"><a href="#cb47-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-125"><a href="#cb47-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-126"><a href="#cb47-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading a Second Image</span></span>
+<span id="cb47-127"><a href="#cb47-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-128"><a href="#cb47-128" aria-hidden="true" tabindex="-1"></a>Now, let's load another image, this time of a beach. We will later superimpose our dog image onto this beach image.</span>
+<span id="cb47-129"><a href="#cb47-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-132"><a href="#cb47-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-133"><a href="#cb47-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Link to the image</span></span>
+<span id="cb47-134"><a href="#cb47-134" aria-hidden="true" tabindex="-1"></a>url_beach <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/beach.jpg"</span></span>
+<span id="cb47-135"><a href="#cb47-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-136"><a href="#cb47-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb47-137"><a href="#cb47-137" aria-hidden="true" tabindex="-1"></a>beach <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb47-138"><a href="#cb47-138" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array has dimension: </span><span class="sc">{</span>beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-139"><a href="#cb47-139" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The array contains values of type: </span><span class="sc">{</span>beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb47-140"><a href="#cb47-140" aria-hidden="true" tabindex="-1"></a>show_image(beach)</span>
+<span id="cb47-141"><a href="#cb47-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-142"><a href="#cb47-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-143"><a href="#cb47-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating a Mask for the Beach Image</span></span>
+<span id="cb47-144"><a href="#cb47-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-145"><a href="#cb47-145" aria-hidden="true" tabindex="-1"></a>We'll create an initial mask for the beach image, initialized to all zeros (or <span class="in">`False`</span>). This represents that no part of the beach image is currently masked.</span>
+<span id="cb47-146"><a href="#cb47-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-149"><a href="#cb47-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-150"><a href="#cb47-150" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> np.zeros(beach.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb47-151"><a href="#cb47-151" aria-hidden="true" tabindex="-1"></a>mask_beach <span class="op">=</span> mask_beach.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb47-152"><a href="#cb47-152" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask has dimension: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-153"><a href="#cb47-153" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb47-154"><a href="#cb47-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-155"><a href="#cb47-155" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach)</span>
+<span id="cb47-156"><a href="#cb47-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-157"><a href="#cb47-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-158"><a href="#cb47-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Positioning the Dog Mask on the Beach Mask</span></span>
+<span id="cb47-159"><a href="#cb47-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-160"><a href="#cb47-160" aria-hidden="true" tabindex="-1"></a>Our goal is to superimpose the dog onto the beach image. To do this, we'll first position the dog mask at the bottom right corner of the beach mask.</span>
+<span id="cb47-161"><a href="#cb47-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-164"><a href="#cb47-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-165"><a href="#cb47-165" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb47-166"><a href="#cb47-166" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog.shape</span>
+<span id="cb47-167"><a href="#cb47-167" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The dog mask has shape (</span><span class="sc">{</span>h<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb47-168"><a href="#cb47-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-169"><a href="#cb47-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb47-170"><a href="#cb47-170" aria-hidden="true" tabindex="-1"></a>mask_beach[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog</span>
+<span id="cb47-171"><a href="#cb47-171" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask has dimension: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb47-172"><a href="#cb47-172" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The mask contains values of type: </span><span class="sc">{</span>mask_beach<span class="sc">.</span>dtype<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb47-173"><a href="#cb47-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-174"><a href="#cb47-174" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach)</span>
+<span id="cb47-175"><a href="#cb47-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-176"><a href="#cb47-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-177"><a href="#cb47-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Superimposing the Dog Image onto the Beach Image</span></span>
+<span id="cb47-178"><a href="#cb47-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-179"><a href="#cb47-179" aria-hidden="true" tabindex="-1"></a>With our masks ready, we can now superimpose the dog image onto the beach image. By using the masks, we ensure that only the region with the dog gets overlaid onto the beach image.</span>
+<span id="cb47-180"><a href="#cb47-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-183"><a href="#cb47-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-184"><a href="#cb47-184" aria-hidden="true" tabindex="-1"></a>beach[mask_beach] <span class="op">=</span> dog[mask_dog]</span>
+<span id="cb47-185"><a href="#cb47-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-186"><a href="#cb47-186" aria-hidden="true" tabindex="-1"></a>show_image(beach)</span>
+<span id="cb47-187"><a href="#cb47-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-188"><a href="#cb47-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-189"><a href="#cb47-189" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-190"><a href="#cb47-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-191"><a href="#cb47-191" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practice</span></span>
+<span id="cb47-192"><a href="#cb47-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-193"><a href="#cb47-193" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-194"><a href="#cb47-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Adjusting Color and Size</span></span>
+<span id="cb47-195"><a href="#cb47-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-196"><a href="#cb47-196" aria-hidden="true" tabindex="-1"></a>Try to do the same thing using this other image. You will realise two issues:</span>
+<span id="cb47-197"><a href="#cb47-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-198"><a href="#cb47-198" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>There is a white border around the image! How can you use masking to get rid of it?</span>
+<span id="cb47-199"><a href="#cb47-199" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?</span>
+<span id="cb47-200"><a href="#cb47-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-203"><a href="#cb47-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-204"><a href="#cb47-204" aria-hidden="true" tabindex="-1"></a>url_dog_2 <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.png"</span></span>
+<span id="cb47-205"><a href="#cb47-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-206"><a href="#cb47-206" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-207"><a href="#cb47-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-208"><a href="#cb47-208" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-209"><a href="#cb47-209" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-210"><a href="#cb47-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-213"><a href="#cb47-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-214"><a href="#cb47-214" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and display the image</span></span>
+<span id="cb47-215"><a href="#cb47-215" aria-hidden="true" tabindex="-1"></a>dog_2 <span class="op">=</span> load_image(url_dog_2)</span>
+<span id="cb47-216"><a href="#cb47-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-217"><a href="#cb47-217" aria-hidden="true" tabindex="-1"></a>show_image(dog_2)</span>
+<span id="cb47-218"><a href="#cb47-218" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: We have to take away both black and white rectangle</span></span>
+<span id="cb47-219"><a href="#cb47-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-220"><a href="#cb47-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-223"><a href="#cb47-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-224"><a href="#cb47-224" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
+<span id="cb47-225"><a href="#cb47-225" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine masks using "&amp;" (and), similar to how we do "if" clauses</span></span>
+<span id="cb47-226"><a href="#cb47-226" aria-hidden="true" tabindex="-1"></a>mask_dog_2 <span class="op">=</span> (dog_2 <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (dog_2 <span class="op">&lt;</span> <span class="dv">255</span>)</span>
+<span id="cb47-227"><a href="#cb47-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-228"><a href="#cb47-228" aria-hidden="true" tabindex="-1"></a>show_image(mask_dog_2)</span>
+<span id="cb47-229"><a href="#cb47-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-230"><a href="#cb47-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-233"><a href="#cb47-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-234"><a href="#cb47-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload the beach</span></span>
+<span id="cb47-235"><a href="#cb47-235" aria-hidden="true" tabindex="-1"></a>beach_2 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb47-236"><a href="#cb47-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-237"><a href="#cb47-237" aria-hidden="true" tabindex="-1"></a>mask_beach_2 <span class="op">=</span> np.zeros(beach_2.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb47-238"><a href="#cb47-238" aria-hidden="true" tabindex="-1"></a>mask_beach_2 <span class="op">=</span> mask_beach_2.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb47-239"><a href="#cb47-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-240"><a href="#cb47-240" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb47-241"><a href="#cb47-241" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog_2.shape</span>
+<span id="cb47-242"><a href="#cb47-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-243"><a href="#cb47-243" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb47-244"><a href="#cb47-244" aria-hidden="true" tabindex="-1"></a>mask_beach_2[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog_2</span>
+<span id="cb47-245"><a href="#cb47-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-246"><a href="#cb47-246" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_2)</span>
+<span id="cb47-247"><a href="#cb47-247" aria-hidden="true" tabindex="-1"></a><span class="co"># Problem: the dog is too big</span></span>
+<span id="cb47-248"><a href="#cb47-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-249"><a href="#cb47-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-252"><a href="#cb47-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-253"><a href="#cb47-253" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution:</span></span>
+<span id="cb47-254"><a href="#cb47-254" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever slicing to take one of every two pixels</span></span>
+<span id="cb47-255"><a href="#cb47-255" aria-hidden="true" tabindex="-1"></a>dog_smol <span class="op">=</span> dog_2[::<span class="dv">2</span>, ::<span class="dv">2</span>]</span>
+<span id="cb47-256"><a href="#cb47-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-257"><a href="#cb47-257" aria-hidden="true" tabindex="-1"></a>mask_smol <span class="op">=</span> (dog_smol <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (dog_smol <span class="op">&lt;</span> <span class="dv">255</span>)</span>
+<span id="cb47-258"><a href="#cb47-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-259"><a href="#cb47-259" aria-hidden="true" tabindex="-1"></a>mask_beach_smol <span class="op">=</span> np.zeros(beach_2.shape)  <span class="co"># type: int (0)</span></span>
+<span id="cb47-260"><a href="#cb47-260" aria-hidden="true" tabindex="-1"></a>mask_beach_smol <span class="op">=</span> mask_beach_smol.astype(<span class="bu">bool</span>)  <span class="co"># type: bool (False)</span></span>
+<span id="cb47-261"><a href="#cb47-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-262"><a href="#cb47-262" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the width and height of the dog image</span></span>
+<span id="cb47-263"><a href="#cb47-263" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_smol.shape</span>
+<span id="cb47-264"><a href="#cb47-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-265"><a href="#cb47-265" aria-hidden="true" tabindex="-1"></a><span class="co"># Use clever indexing to replace a part of the beach mask with the dog</span></span>
+<span id="cb47-266"><a href="#cb47-266" aria-hidden="true" tabindex="-1"></a>mask_beach_smol[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_smol</span>
+<span id="cb47-267"><a href="#cb47-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-268"><a href="#cb47-268" aria-hidden="true" tabindex="-1"></a>show_image(mask_beach_smol)</span>
+<span id="cb47-269"><a href="#cb47-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-270"><a href="#cb47-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-273"><a href="#cb47-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-274"><a href="#cb47-274" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, we add the dog using masking</span></span>
+<span id="cb47-275"><a href="#cb47-275" aria-hidden="true" tabindex="-1"></a>beach_2[mask_beach_smol] <span class="op">=</span> dog_smol[mask_smol]</span>
+<span id="cb47-276"><a href="#cb47-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-277"><a href="#cb47-277" aria-hidden="true" tabindex="-1"></a>show_image(beach_2)</span>
+<span id="cb47-278"><a href="#cb47-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-279"><a href="#cb47-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-280"><a href="#cb47-280" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-281"><a href="#cb47-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-282"><a href="#cb47-282" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-283"><a href="#cb47-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Color Images</span></span>
+<span id="cb47-284"><a href="#cb47-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-285"><a href="#cb47-285" aria-hidden="true" tabindex="-1"></a>Call the function <span class="in">`load_image`</span> setting the argument <span class="in">`color=True`</span>. This will load the images in color!</span>
+<span id="cb47-286"><a href="#cb47-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-287"><a href="#cb47-287" aria-hidden="true" tabindex="-1"></a>Repeat the exercise but now using 3D arrays, i.e. RGB images.</span>
+<span id="cb47-288"><a href="#cb47-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-289"><a href="#cb47-289" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-290"><a href="#cb47-290" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-right.png" width="300" /&gt;</span>
+<span id="cb47-291"><a href="#cb47-291" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-292"><a href="#cb47-292" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-293"><a href="#cb47-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-294"><a href="#cb47-294" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-295"><a href="#cb47-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-296"><a href="#cb47-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-297"><a href="#cb47-297" aria-hidden="true" tabindex="-1"></a>A color image has shape <span class="in">`(height, width, 3)`</span>. The mask has the same shape, so the same indexing works; we only need to unpack three values from <span class="in">`shape`</span>.</span>
+<span id="cb47-298"><a href="#cb47-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-301"><a href="#cb47-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-302"><a href="#cb47-302" aria-hidden="true" tabindex="-1"></a>dog_rgb <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-303"><a href="#cb47-303" aria-hidden="true" tabindex="-1"></a>beach_rgb <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-304"><a href="#cb47-304" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dog_rgb.shape, beach_rgb.shape)</span>
+<span id="cb47-305"><a href="#cb47-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-306"><a href="#cb47-306" aria-hidden="true" tabindex="-1"></a>mask_dog_rgb <span class="op">=</span> dog_rgb <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb47-307"><a href="#cb47-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-308"><a href="#cb47-308" aria-hidden="true" tabindex="-1"></a>mask_beach_rgb <span class="op">=</span> np.zeros(beach_rgb.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-309"><a href="#cb47-309" aria-hidden="true" tabindex="-1"></a>h, w, _ <span class="op">=</span> mask_dog_rgb.shape</span>
+<span id="cb47-310"><a href="#cb47-310" aria-hidden="true" tabindex="-1"></a>mask_beach_rgb[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_dog_rgb</span>
+<span id="cb47-311"><a href="#cb47-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-312"><a href="#cb47-312" aria-hidden="true" tabindex="-1"></a>beach_rgb[mask_beach_rgb] <span class="op">=</span> dog_rgb[mask_dog_rgb]</span>
+<span id="cb47-313"><a href="#cb47-313" aria-hidden="true" tabindex="-1"></a>show_image(beach_rgb)</span>
+<span id="cb47-314"><a href="#cb47-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-315"><a href="#cb47-315" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-316"><a href="#cb47-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-317"><a href="#cb47-317" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-318"><a href="#cb47-318" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Different Position</span></span>
+<span id="cb47-319"><a href="#cb47-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-320"><a href="#cb47-320" aria-hidden="true" tabindex="-1"></a>Now try to insert the puppy on the bottom left corner.</span>
+<span id="cb47-321"><a href="#cb47-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-322"><a href="#cb47-322" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-323"><a href="#cb47-323" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-bottom-left.png" width="300" /&gt;</span>
+<span id="cb47-324"><a href="#cb47-324" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-325"><a href="#cb47-325" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-326"><a href="#cb47-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-327"><a href="#cb47-327" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-328"><a href="#cb47-328" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-329"><a href="#cb47-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-330"><a href="#cb47-330" aria-hidden="true" tabindex="-1"></a>Only the column slice changes: the first <span class="in">`w`</span> columns instead of the last <span class="in">`w`</span>.</span>
+<span id="cb47-331"><a href="#cb47-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-334"><a href="#cb47-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-335"><a href="#cb47-335" aria-hidden="true" tabindex="-1"></a>beach_3 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb47-336"><a href="#cb47-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-337"><a href="#cb47-337" aria-hidden="true" tabindex="-1"></a>mask_beach_3 <span class="op">=</span> np.zeros(beach_3.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-338"><a href="#cb47-338" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_dog.shape</span>
+<span id="cb47-339"><a href="#cb47-339" aria-hidden="true" tabindex="-1"></a>mask_beach_3[<span class="op">-</span>h:, :w] <span class="op">=</span> mask_dog</span>
+<span id="cb47-340"><a href="#cb47-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-341"><a href="#cb47-341" aria-hidden="true" tabindex="-1"></a>beach_3[mask_beach_3] <span class="op">=</span> dog[mask_dog]</span>
+<span id="cb47-342"><a href="#cb47-342" aria-hidden="true" tabindex="-1"></a>show_image(beach_3)</span>
+<span id="cb47-343"><a href="#cb47-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-344"><a href="#cb47-344" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-345"><a href="#cb47-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-346"><a href="#cb47-346" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-347"><a href="#cb47-347" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Flipping Arrays</span></span>
+<span id="cb47-348"><a href="#cb47-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-349"><a href="#cb47-349" aria-hidden="true" tabindex="-1"></a>The puppy would rather look at the beach. Can you flip it?</span>
+<span id="cb47-350"><a href="#cb47-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-351"><a href="#cb47-351" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-352"><a href="#cb47-352" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-flipped.png" width="300" /&gt;</span>
+<span id="cb47-353"><a href="#cb47-353" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-354"><a href="#cb47-354" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-355"><a href="#cb47-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-356"><a href="#cb47-356" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-357"><a href="#cb47-357" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-358"><a href="#cb47-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-359"><a href="#cb47-359" aria-hidden="true" tabindex="-1"></a>A negative step on the column axis reverses the columns, which mirrors the image horizontally.</span>
+<span id="cb47-360"><a href="#cb47-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-363"><a href="#cb47-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-364"><a href="#cb47-364" aria-hidden="true" tabindex="-1"></a>dog_flipped <span class="op">=</span> dog[:, ::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb47-365"><a href="#cb47-365" aria-hidden="true" tabindex="-1"></a>mask_flipped <span class="op">=</span> dog_flipped <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb47-366"><a href="#cb47-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-367"><a href="#cb47-367" aria-hidden="true" tabindex="-1"></a>beach_4 <span class="op">=</span> load_image(url_beach)</span>
+<span id="cb47-368"><a href="#cb47-368" aria-hidden="true" tabindex="-1"></a>mask_beach_4 <span class="op">=</span> np.zeros(beach_4.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-369"><a href="#cb47-369" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_flipped.shape</span>
+<span id="cb47-370"><a href="#cb47-370" aria-hidden="true" tabindex="-1"></a>mask_beach_4[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_flipped</span>
+<span id="cb47-371"><a href="#cb47-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-372"><a href="#cb47-372" aria-hidden="true" tabindex="-1"></a>beach_4[mask_beach_4] <span class="op">=</span> dog_flipped[mask_flipped]</span>
+<span id="cb47-373"><a href="#cb47-373" aria-hidden="true" tabindex="-1"></a>show_image(beach_4)</span>
+<span id="cb47-374"><a href="#cb47-374" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-375"><a href="#cb47-375" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-376"><a href="#cb47-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-377"><a href="#cb47-377" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-378"><a href="#cb47-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Green Dog</span></span>
+<span id="cb47-379"><a href="#cb47-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-380"><a href="#cb47-380" aria-hidden="true" tabindex="-1"></a>Can you change the dog's color to green?</span>
+<span id="cb47-381"><a href="#cb47-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-382"><a href="#cb47-382" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-383"><a href="#cb47-383" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-green.png" width="300" /&gt;</span>
+<span id="cb47-384"><a href="#cb47-384" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-385"><a href="#cb47-385" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-386"><a href="#cb47-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-387"><a href="#cb47-387" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-388"><a href="#cb47-388" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-389"><a href="#cb47-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-390"><a href="#cb47-390" aria-hidden="true" tabindex="-1"></a>Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning <span class="in">`[0, 255, 0]`</span> to a masked selection paints every selected pixel pure green.</span>
+<span id="cb47-391"><a href="#cb47-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-394"><a href="#cb47-394" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-395"><a href="#cb47-395" aria-hidden="true" tabindex="-1"></a>dog_green <span class="op">=</span> load_image(url_dog, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-396"><a href="#cb47-396" aria-hidden="true" tabindex="-1"></a>mask_pixels <span class="op">=</span> dog_green.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">2</span>) <span class="op">&gt;</span> <span class="dv">0</span>  <span class="co"># 2D mask: one value per pixel</span></span>
+<span id="cb47-397"><a href="#cb47-397" aria-hidden="true" tabindex="-1"></a>dog_green[mask_pixels] <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">255</span>, <span class="dv">0</span>]</span>
+<span id="cb47-398"><a href="#cb47-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-399"><a href="#cb47-399" aria-hidden="true" tabindex="-1"></a>beach_5 <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-400"><a href="#cb47-400" aria-hidden="true" tabindex="-1"></a>mask_beach_5 <span class="op">=</span> np.zeros(beach_5.shape[:<span class="dv">2</span>]).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-401"><a href="#cb47-401" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_pixels.shape</span>
+<span id="cb47-402"><a href="#cb47-402" aria-hidden="true" tabindex="-1"></a>mask_beach_5[<span class="op">-</span>h:, <span class="op">-</span>w:] <span class="op">=</span> mask_pixels</span>
+<span id="cb47-403"><a href="#cb47-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-404"><a href="#cb47-404" aria-hidden="true" tabindex="-1"></a>beach_5[mask_beach_5] <span class="op">=</span> dog_green[mask_pixels]</span>
+<span id="cb47-405"><a href="#cb47-405" aria-hidden="true" tabindex="-1"></a>show_image(beach_5)</span>
+<span id="cb47-406"><a href="#cb47-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-407"><a href="#cb47-407" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-408"><a href="#cb47-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-409"><a href="#cb47-409" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-410"><a href="#cb47-410" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Harder Masking</span></span>
+<span id="cb47-411"><a href="#cb47-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-412"><a href="#cb47-412" aria-hidden="true" tabindex="-1"></a>Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.</span>
+<span id="cb47-413"><a href="#cb47-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-414"><a href="#cb47-414" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-415"><a href="#cb47-415" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-cat.png" width="300" /&gt;</span>
+<span id="cb47-416"><a href="#cb47-416" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-417"><a href="#cb47-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-420"><a href="#cb47-420" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-421"><a href="#cb47-421" aria-hidden="true" tabindex="-1"></a>url_cat <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png"</span></span>
+<span id="cb47-422"><a href="#cb47-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-423"><a href="#cb47-423" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-424"><a href="#cb47-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-425"><a href="#cb47-425" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-426"><a href="#cb47-426" aria-hidden="true" tabindex="-1"></a><span class="fu">## Possible solution</span></span>
+<span id="cb47-427"><a href="#cb47-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-428"><a href="#cb47-428" aria-hidden="true" tabindex="-1"></a>A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at <span class="in">`show_image(mask_cat)`</span>.</span>
+<span id="cb47-429"><a href="#cb47-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-432"><a href="#cb47-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-433"><a href="#cb47-433" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> load_image(url_cat, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-434"><a href="#cb47-434" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> cat[::<span class="dv">2</span>, ::<span class="dv">2</span>]  <span class="co"># make it smaller if it does not fit</span></span>
+<span id="cb47-435"><a href="#cb47-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-436"><a href="#cb47-436" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> cat[:, :, <span class="dv">0</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb47-437"><a href="#cb47-437" aria-hidden="true" tabindex="-1"></a>green <span class="op">=</span> cat[:, :, <span class="dv">1</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb47-438"><a href="#cb47-438" aria-hidden="true" tabindex="-1"></a>blue <span class="op">=</span> cat[:, :, <span class="dv">2</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb47-439"><a href="#cb47-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-440"><a href="#cb47-440" aria-hidden="true" tabindex="-1"></a>background <span class="op">=</span> (green <span class="op">&gt;</span> red <span class="op">+</span> <span class="dv">30</span>) <span class="op">&amp;</span> (green <span class="op">&gt;</span> blue <span class="op">+</span> <span class="dv">30</span>)</span>
+<span id="cb47-441"><a href="#cb47-441" aria-hidden="true" tabindex="-1"></a>mask_cat <span class="op">=</span> <span class="op">~</span>background</span>
+<span id="cb47-442"><a href="#cb47-442" aria-hidden="true" tabindex="-1"></a>show_image(mask_cat)</span>
+<span id="cb47-443"><a href="#cb47-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-444"><a href="#cb47-444" aria-hidden="true" tabindex="-1"></a>beach_6 <span class="op">=</span> load_image(url_beach, color<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb47-445"><a href="#cb47-445" aria-hidden="true" tabindex="-1"></a>mask_beach_6 <span class="op">=</span> np.zeros(beach_6.shape[:<span class="dv">2</span>]).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-446"><a href="#cb47-446" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> mask_cat.shape</span>
+<span id="cb47-447"><a href="#cb47-447" aria-hidden="true" tabindex="-1"></a>mask_beach_6[<span class="op">-</span>h:, :w] <span class="op">=</span> mask_cat</span>
+<span id="cb47-448"><a href="#cb47-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-449"><a href="#cb47-449" aria-hidden="true" tabindex="-1"></a>beach_6[mask_beach_6] <span class="op">=</span> cat[mask_cat]</span>
+<span id="cb47-450"><a href="#cb47-450" aria-hidden="true" tabindex="-1"></a>show_image(beach_6)</span>
+<span id="cb47-451"><a href="#cb47-451" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-452"><a href="#cb47-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-453"><a href="#cb47-453" aria-hidden="true" tabindex="-1"></a>We convert the channels to <span class="in">`int`</span> before comparing because <span class="in">`uint8`</span> values wrap around when adding (for example, <span class="in">`250 + 30`</span> becomes <span class="in">`24`</span>).</span>
+<span id="cb47-454"><a href="#cb47-454" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-455"><a href="#cb47-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-456"><a href="#cb47-456" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb47-457"><a href="#cb47-457" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise: Invert Colors</span></span>
+<span id="cb47-458"><a href="#cb47-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-459"><a href="#cb47-459" aria-hidden="true" tabindex="-1"></a>Let's finish with something easier. Invert the colors of the image.</span>
+<span id="cb47-460"><a href="#cb47-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-461"><a href="#cb47-461" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-462"><a href="#cb47-462" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/dog-invert.png" width="300" /&gt;</span>
+<span id="cb47-463"><a href="#cb47-463" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-464"><a href="#cb47-464" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-465"><a href="#cb47-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-466"><a href="#cb47-466" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-467"><a href="#cb47-467" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-468"><a href="#cb47-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-469"><a href="#cb47-469" aria-hidden="true" tabindex="-1"></a>Pixel values go from <span class="in">`0`</span> to <span class="in">`255`</span>, so the inverse of a value <span class="in">`v`</span> is <span class="in">`255 - v`</span>. Broadcasting applies it to every pixel at once.</span>
+<span id="cb47-470"><a href="#cb47-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-473"><a href="#cb47-473" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-474"><a href="#cb47-474" aria-hidden="true" tabindex="-1"></a>inverted <span class="op">=</span> <span class="dv">255</span> <span class="op">-</span> beach_2</span>
+<span id="cb47-475"><a href="#cb47-475" aria-hidden="true" tabindex="-1"></a>show_image(inverted)</span>
+<span id="cb47-476"><a href="#cb47-476" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-477"><a href="#cb47-477" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-478"><a href="#cb47-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-479"><a href="#cb47-479" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-480"><a href="#cb47-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-481"><a href="#cb47-481" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge: Schrödinger's Cat</span></span>
+<span id="cb47-482"><a href="#cb47-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-483"><a href="#cb47-483" aria-hidden="true" tabindex="-1"></a>In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a scenario where a cat is simultaneously both alive and dead until it is observed. As a nod to this concept, let's create an image representation where both a live cat and a skeletal cat are superimposed.</span>
+<span id="cb47-484"><a href="#cb47-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-485"><a href="#cb47-485" aria-hidden="true" tabindex="-1"></a><span class="fu">### Objective:</span></span>
+<span id="cb47-486"><a href="#cb47-486" aria-hidden="true" tabindex="-1"></a>Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.</span>
+<span id="cb47-487"><a href="#cb47-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-488"><a href="#cb47-488" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb47-489"><a href="#cb47-489" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/cat-schrodinger.png" width="300" /&gt;</span>
+<span id="cb47-490"><a href="#cb47-490" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb47-491"><a href="#cb47-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-492"><a href="#cb47-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-493"><a href="#cb47-493" aria-hidden="true" tabindex="-1"></a><span class="fu">### Instructions:</span></span>
+<span id="cb47-494"><a href="#cb47-494" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Consider two images: one representing a live cat (denoted by 'a') and the other representing a skeletal cat (denoted by 'd').</span>
+<span id="cb47-495"><a href="#cb47-495" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>To superimpose the images, alternate the pixels such that each pixel from one image is surrounded by pixels from the other image. This will give the effect of both images being merged into one.</span>
+<span id="cb47-496"><a href="#cb47-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-497"><a href="#cb47-497" aria-hidden="true" tabindex="-1"></a>For instance, your pixel arrangement might look like this:</span>
+<span id="cb47-498"><a href="#cb47-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-499"><a href="#cb47-499" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-500"><a href="#cb47-500" aria-hidden="true" tabindex="-1"></a><span class="in">[</span></span>
+<span id="cb47-501"><a href="#cb47-501" aria-hidden="true" tabindex="-1"></a><span class="in">  [a, d, a],</span></span>
+<span id="cb47-502"><a href="#cb47-502" aria-hidden="true" tabindex="-1"></a><span class="in">  [d, a, d],</span></span>
+<span id="cb47-503"><a href="#cb47-503" aria-hidden="true" tabindex="-1"></a><span class="in">  [a, d, a]</span></span>
+<span id="cb47-504"><a href="#cb47-504" aria-hidden="true" tabindex="-1"></a><span class="in">]</span></span>
+<span id="cb47-505"><a href="#cb47-505" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-506"><a href="#cb47-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-507"><a href="#cb47-507" aria-hidden="true" tabindex="-1"></a>Here, 'a' represents a pixel from the live cat image, and 'd' represents a pixel from the skeletal cat image. The resulting image will have an even distribution of pixels from both images.</span>
+<span id="cb47-508"><a href="#cb47-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-509"><a href="#cb47-509" aria-hidden="true" tabindex="-1"></a><span class="fu">### Note:</span></span>
+<span id="cb47-510"><a href="#cb47-510" aria-hidden="true" tabindex="-1"></a>This method effectively reduces the resolution of each image by half, but when viewed from a distance, the viewer should be able to discern both images superimposed upon each other.</span>
+<span id="cb47-511"><a href="#cb47-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-512"><a href="#cb47-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-515"><a href="#cb47-515" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-516"><a href="#cb47-516" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with this image</span></span>
+<span id="cb47-517"><a href="#cb47-517" aria-hidden="true" tabindex="-1"></a>url_schro <span class="op">=</span> <span class="st">"https://github.com/daniprec/Python-Course/blob/main/img/cat-skeleton.png"</span></span>
+<span id="cb47-518"><a href="#cb47-518" aria-hidden="true" tabindex="-1"></a>schrodinger <span class="op">=</span> load_image(url_schro)</span>
+<span id="cb47-519"><a href="#cb47-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-520"><a href="#cb47-520" aria-hidden="true" tabindex="-1"></a>show_image(schrodinger)</span>
+<span id="cb47-521"><a href="#cb47-521" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-522"><a href="#cb47-522" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-523"><a href="#cb47-523" aria-hidden="true" tabindex="-1"></a>Your first step is to split that image into two (the skeleton and the cat). Then you will have to flip one of them so that both look at the same direction.</span>
+<span id="cb47-524"><a href="#cb47-524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-525"><a href="#cb47-525" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-526"><a href="#cb47-526" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-527"><a href="#cb47-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-530"><a href="#cb47-530" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-531"><a href="#cb47-531" aria-hidden="true" tabindex="-1"></a>h, w <span class="op">=</span> schrodinger.shape</span>
+<span id="cb47-532"><a href="#cb47-532" aria-hidden="true" tabindex="-1"></a>half <span class="op">=</span> w <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb47-533"><a href="#cb47-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-534"><a href="#cb47-534" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the picture into its two halves (same width for both)</span></span>
+<span id="cb47-535"><a href="#cb47-535" aria-hidden="true" tabindex="-1"></a>left <span class="op">=</span> schrodinger[:, :half]</span>
+<span id="cb47-536"><a href="#cb47-536" aria-hidden="true" tabindex="-1"></a>right <span class="op">=</span> schrodinger[:, half:<span class="dv">2</span> <span class="op">*</span> half]</span>
+<span id="cb47-537"><a href="#cb47-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-538"><a href="#cb47-538" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, you can use np.split:</span></span>
+<span id="cb47-539"><a href="#cb47-539" aria-hidden="true" tabindex="-1"></a>left, right <span class="op">=</span> np.split(schrodinger, <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb47-540"><a href="#cb47-540" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-541"><a href="#cb47-541" aria-hidden="true" tabindex="-1"></a><span class="co"># Flip the right half so both animals face the same direction</span></span>
+<span id="cb47-542"><a href="#cb47-542" aria-hidden="true" tabindex="-1"></a>right <span class="op">=</span> right[:, ::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb47-543"><a href="#cb47-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-544"><a href="#cb47-544" aria-hidden="true" tabindex="-1"></a><span class="co"># Checkerboard mask: True where (row + column) is even</span></span>
+<span id="cb47-545"><a href="#cb47-545" aria-hidden="true" tabindex="-1"></a>checkerboard <span class="op">=</span> np.zeros(left.shape).astype(<span class="bu">bool</span>)</span>
+<span id="cb47-546"><a href="#cb47-546" aria-hidden="true" tabindex="-1"></a>checkerboard[::<span class="dv">2</span>, ::<span class="dv">2</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb47-547"><a href="#cb47-547" aria-hidden="true" tabindex="-1"></a>checkerboard[<span class="dv">1</span>::<span class="dv">2</span>, <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb47-548"><a href="#cb47-548" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-549"><a href="#cb47-549" aria-hidden="true" tabindex="-1"></a>superposition <span class="op">=</span> right.copy()</span>
+<span id="cb47-550"><a href="#cb47-550" aria-hidden="true" tabindex="-1"></a>superposition[checkerboard] <span class="op">=</span> left[checkerboard]</span>
+<span id="cb47-551"><a href="#cb47-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-552"><a href="#cb47-552" aria-hidden="true" tabindex="-1"></a>show_image(superposition)</span>
+<span id="cb47-553"><a href="#cb47-553" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-554"><a href="#cb47-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-555"><a href="#cb47-555" aria-hidden="true" tabindex="-1"></a>If the result looks like two shifted animals, crop a few columns from one half so both figures line up before combining them.</span>
+<span id="cb47-556"><a href="#cb47-556" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-557"><a href="#cb47-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-558"><a href="#cb47-558" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-559"><a href="#cb47-559" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-560"><a href="#cb47-560" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-561"><a href="#cb47-561" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-562"><a href="#cb47-562" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge: The Mandelbrot Set</span></span>
+<span id="cb47-563"><a href="#cb47-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-564"><a href="#cb47-564" aria-hidden="true" tabindex="-1"></a>Masks do not need to come from a photo: we can also *compute* the image. The Mandelbrot set $M$ is the set of complex numbers $c$ for which the sequence</span>
+<span id="cb47-565"><a href="#cb47-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-566"><a href="#cb47-566" aria-hidden="true" tabindex="-1"></a>$$z_0 = 0, \qquad z_{k+1} = z_k^2 + c$$</span>
+<span id="cb47-567"><a href="#cb47-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-568"><a href="#cb47-568" aria-hidden="true" tabindex="-1"></a>stays bounded. It can be proved that once $|z_k| &gt; 2$ the sequence escapes to infinity, so we can test each point by iterating a fixed number of times and checking whether it has escaped.</span>
+<span id="cb47-569"><a href="#cb47-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-570"><a href="#cb47-570" aria-hidden="true" tabindex="-1"></a>Your task is to draw $M$ on the region $-2 \le \operatorname{Re}(c) \le 0.5$, $-1.25 \le \operatorname{Im}(c) \le 1.25$, without looping over the pixels. You may loop over the iterations.</span>
+<span id="cb47-571"><a href="#cb47-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-572"><a href="#cb47-572" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build a 2D array <span class="in">`c`</span> of complex numbers, one per pixel. Hint: broadcast a row of real parts against a column of imaginary parts, <span class="in">`x[np.newaxis, :] + 1j * y[:, np.newaxis]`</span>.</span>
+<span id="cb47-573"><a href="#cb47-573" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Start with <span class="in">`z = np.zeros_like(c)`</span> and a mask <span class="in">`inside`</span> that is <span class="in">`True`</span> everywhere.</span>
+<span id="cb47-574"><a href="#cb47-574" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>At each iteration, update <span class="in">`z`</span> **only** where <span class="in">`inside`</span> is <span class="in">`True`</span>, then remove from <span class="in">`inside`</span> the points with <span class="in">`np.abs(z) &gt; 2`</span>.</span>
+<span id="cb47-575"><a href="#cb47-575" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Show <span class="in">`inside`</span> as an image.</span>
+<span id="cb47-576"><a href="#cb47-576" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-577"><a href="#cb47-577" aria-hidden="true" tabindex="-1"></a>As a bonus, store in an integer array the iteration at which each point escaped, and display that array instead. It gives the familiar coloured picture.</span>
+<span id="cb47-578"><a href="#cb47-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-579"><a href="#cb47-579" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb47-580"><a href="#cb47-580" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb47-581"><a href="#cb47-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-584"><a href="#cb47-584" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb47-585"><a href="#cb47-585" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="fl">0.5</span>, <span class="dv">500</span>)</span>
+<span id="cb47-586"><a href="#cb47-586" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="dv">500</span>)</span>
+<span id="cb47-587"><a href="#cb47-587" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> x[np.newaxis, :] <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> y[:, np.newaxis]</span>
+<span id="cb47-588"><a href="#cb47-588" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-589"><a href="#cb47-589" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeros_like(c)</span>
+<span id="cb47-590"><a href="#cb47-590" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> np.ones(c.shape, dtype<span class="op">=</span><span class="bu">bool</span>)</span>
+<span id="cb47-591"><a href="#cb47-591" aria-hidden="true" tabindex="-1"></a>escape_time <span class="op">=</span> np.zeros(c.shape, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb47-592"><a href="#cb47-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-593"><a href="#cb47-593" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>):</span>
+<span id="cb47-594"><a href="#cb47-594" aria-hidden="true" tabindex="-1"></a>    z[inside] <span class="op">=</span> z[inside] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> c[inside]  <span class="co"># only update the points still inside</span></span>
+<span id="cb47-595"><a href="#cb47-595" aria-hidden="true" tabindex="-1"></a>    escaped <span class="op">=</span> inside <span class="op">&amp;</span> (np.<span class="bu">abs</span>(z) <span class="op">&gt;</span> <span class="dv">2</span>)       <span class="co"># escaped in this iteration</span></span>
+<span id="cb47-596"><a href="#cb47-596" aria-hidden="true" tabindex="-1"></a>    escape_time[escaped] <span class="op">=</span> k</span>
+<span id="cb47-597"><a href="#cb47-597" aria-hidden="true" tabindex="-1"></a>    inside[escaped] <span class="op">=</span> <span class="va">False</span>                  <span class="co"># remove them from the set</span></span>
+<span id="cb47-598"><a href="#cb47-598" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-599"><a href="#cb47-599" aria-hidden="true" tabindex="-1"></a>show_image(inside)</span>
+<span id="cb47-600"><a href="#cb47-600" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-601"><a href="#cb47-601" aria-hidden="true" tabindex="-1"></a>plt.imshow(escape_time, cmap<span class="op">=</span><span class="st">"magma"</span>)</span>
+<span id="cb47-602"><a href="#cb47-602" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb47-603"><a href="#cb47-603" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb47-604"><a href="#cb47-604" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-605"><a href="#cb47-605" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-606"><a href="#cb47-606" aria-hidden="true" tabindex="-1"></a>Updating only <span class="in">`z[inside]`</span> is what makes the masks essential: without it, the escaped points keep growing until they overflow.</span>
+<span id="cb47-607"><a href="#cb47-607" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb47-608"><a href="#cb47-608" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-609"><a href="#cb47-609" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-610"><a href="#cb47-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-611"><a href="#cb47-611" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
+<span id="cb47-612"><a href="#cb47-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-613"><a href="#cb47-613" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An image is an array, so the same masking rules apply to pixels.</span>
+<span id="cb47-614"><a href="#cb47-614" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`image[mask]`</span> retrieves the pixels where the mask is <span class="in">`True`</span>, and <span class="in">`image[mask] = value`</span> changes only those pixels.</span>
+<span id="cb47-615"><a href="#cb47-615" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A mask can be placed inside a larger one with slicing, to choose where a picture goes.</span>
+<span id="cb47-616"><a href="#cb47-616" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In a colour image, a 2D mask selects whole pixels (all three channels at once).</span>
+<span id="cb47-617"><a href="#cb47-617" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A mask can also be computed from a mathematical rule, as in the Mandelbrot set.</span>
+<span id="cb47-618"><a href="#cb47-618" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-619"><a href="#cb47-619" aria-hidden="true" tabindex="-1"></a>Why do we convert the colour channels to <span class="in">`int`</span> before comparing them in the green-screen exercise?</span>
+<span id="cb47-620"><a href="#cb47-620" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-621"><a href="#cb47-621" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb47-622"><a href="#cb47-622" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-623"><a href="#cb47-623" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
+<span id="cb47-624"><a href="#cb47-624" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-625"><a href="#cb47-625" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
+<span id="cb47-626"><a href="#cb47-626" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-627"><a href="#cb47-627" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#masking)</span>{.btn .btn-primary}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024, Computer Programming I</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/daniprec/Python-Course/edit/main/modules/numpy/masking_images.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/daniprec/Python-Course/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/daniprec/Python-Course">
+      <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
