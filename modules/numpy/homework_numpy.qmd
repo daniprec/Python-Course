@@ -1050,7 +1050,7 @@ print(arr[(arr.astype(int) / 2) != (arr / 2)])
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-The outputs are `[2 4]`, `[1 3 5]`, and `[1 3 5]`. The first expression selects odd **indices**. The other expressions select odd **values**, although `arr % 2 != 0` is much clearer than comparing two division results.
+The outputs are `[2 4]`, `[1 3 5]`, and `[]`. The first expression selects odd **indices**, while the second selects odd **values**. The third one looks like an odd-value test, but `arr` already has an integer dtype, so `arr.astype(int) / 2` and `arr / 2` are identical, the mask is all `False`, and the result is empty. `arr % 2 != 0` is the clear way to select odd values.
 :::
 
 ::: {.callout-note}
@@ -1451,13 +1451,13 @@ games = np.array([
 
 ```{python}
 door_two = games[:, 1]
-gain_rate = np.mean(games)
+gain_rate = np.mean(door_two)
 
 print(door_two)
 print(gain_rate)
 ```
 
-Door number 2 uses index `1`. Because each row contains one car, one third of all entries are winning entries.
+Door number 2 uses index `1`. The car is behind door 2 in two of the three games, so its proportion of winning entries is `2/3`.
 :::
 
 ::: {.callout-note}

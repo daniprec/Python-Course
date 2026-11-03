@@ -418,10 +418,15 @@ Series: Wendnesday
 ```{python}
 #| eval: false
 s = "Wendnesday S01E03"
-parts = s.split()
-series_name = parts[0]
-season = parts[1][1:3]
-episode = parts[1][4:6]
+
+# Find the last space and the last "S" and "E" (they belong to the code at the end)
+name_index = s.rfind(" ")
+season_index = s.rfind("S")
+episode_index = s.rfind("E")
+
+series_name = s[:name_index]
+season = s[season_index + 1:episode_index]
+episode = s[episode_index + 1:]
 
 print(f"Series: {series_name}")
 print(f"    Season: {season}")
@@ -784,13 +789,22 @@ Write a Python program that checks if a password is valid.
 ```{python}
 #| eval: false
 password = "goodpassword?"
+is_valid = True
+
+# Check each condition independently, so every problem is reported
 if len(password) < 10:
     print("Password too short")
-elif password.startswith("admin"):
+    is_valid = False
+
+if password.startswith("admin"):
     print("Password not allowed: starts with 'admin'")
-elif password[-1] not in "!?#$":
+    is_valid = False
+
+if password[-1] not in "!?#$":
     print("Password does not end with a special character")
-else:
+    is_valid = False
+
+if is_valid:
     print("Password correct")
 ```
 
@@ -1033,10 +1047,13 @@ Write a Python program that gets a positive integer and then calculates its fact
 ```{python}
 #| eval: false
 num = 4
-factorial = 1
-for i in range(1, num + 1):
-    factorial *= i
-print(factorial)
+if num >= 0:
+    factorial = 1
+    for i in range(num, 0, -1):
+        factorial *= i
+    print(factorial)
+else:
+    print(f"{num} is negative. Enter a positive integer.")
 ```
 
 :::
@@ -1059,10 +1076,14 @@ Write a Python program that finds and displays all the multiples of a given numb
 #| eval: false
 num = 7
 limit = 50
-multiples = []
-for i in range(num, limit, num):
-    multiples.append(str(i))
-print(", ".join(multiples))
+multiples = ""
+for multiple in range(num, limit + 1, num):
+    if multiples == "":
+        # The first multiple goes without a comma
+        multiples = f"{multiple}"
+    else:
+        multiples += f", {multiple}"
+print(multiples)
 ```
 :::
 
@@ -1086,11 +1107,14 @@ Write a Python program that takes a positive integer as input and then calculate
 ```{python}
 #| eval: false
 num = 517
-digit_sum = 0
-while num > 0:
-    digit_sum += num % 10
-    num //= 10
-print(digit_sum)
+if num >= 0:
+    digit_sum = 0
+    while num > 0:
+        digit_sum += num % 10
+        num //= 10
+    print(digit_sum)
+else:
+    print(f"{num} is negative. Enter a positive integer.")
 ```
 
 :::
@@ -2075,8 +2099,9 @@ Define a function `time_difference(day1, hour1, min1, day2, hour2, min2)` that c
 def time_difference(day1, hour1, min1, day2, hour2, min2):
     total_min1 = day1 * 24 * 60 + hour1 * 60 + min1
     total_min2 = day2 * 24 * 60 + hour2 * 60 + min2
-    diff_min = total_min2 - total_min1
-    
+    # abs() makes the order of the two dates irrelevant
+    diff_min = abs(total_min2 - total_min1)
+
     days = diff_min // (24 * 60)
     hours = (diff_min % (24 * 60)) // 60
     minutes = diff_min % 60
@@ -2676,16 +2701,19 @@ Create a generator function `prime_numbers(num)` that yields prime numbers withi
 
 ```{python}
 #| eval: false
-def prime_numbers(num):
-    def is_prime(n):
-        if n < 2:
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
             return False
-        for i in range(2, int(n**0.5) + 1):
-            if n % i == 0:
-                return False
-        return True
-    
-    for i in range(2, num):
+    return True
+
+def prime_numbers(num):
+    # 2 is the only even prime; after it, only odd numbers need checking
+    if num >= 2:
+        yield 2
+    for i in range(3, num + 1, 2):
         if is_prime(i):
             yield i
 
