@@ -571,7 +571,7 @@ window.Quarto = {
 <h1>Masking: Sets and Logic</h1>
 <p>Masking means using an array of <code>True</code> and <code>False</code> values to select or modify part of another array. If the idea feels new, here is the good news: you already know it from mathematics. <strong>A mask is a set.</strong> Every rule you know about sets (intersection, union, complement, counting) has a NumPy version.</p>
 <p>In this lesson we build masks from numbers and treat them as sets. In the next lesson, <a href="../../modules/numpy/masking_images.html">Masking with Images</a>, we apply the same rules to pictures.</p>
-<div id="b0e1a6c4" class="cell" data-execution_count="1">
+<div id="5ad60c43" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -581,7 +581,7 @@ window.Quarto = {
 <p>Take the universe <span class="math inline">\(U = \{1, 2, \dots, 20\}\)</span> and the set of even numbers in it:</p>
 <p><span class="math display">\[A = \{x \in U : x \text{ is even}\}\]</span></p>
 <p>In NumPy, the universe is an array and the condition “<span class="math inline">\(x\)</span> is even” becomes a comparison:</p>
-<div id="27e61932" class="cell" data-execution_count="2">
+<div id="a508258a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">21</span>)  <span class="co"># the universe U</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>is_even <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>  <span class="co"># the condition, checked for every element</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -596,14 +596,14 @@ window.Quarto = {
 <p>The comparison does not return the set <span class="math inline">\(A\)</span> directly. It returns one answer per element of <span class="math inline">\(U\)</span>: “is this element in <span class="math inline">\(A\)</span>?”. In mathematics this is the <strong>indicator function</strong> of <span class="math inline">\(A\)</span>:</p>
 <p><span class="math display">\[\mathbf{1}_A(x) = \begin{cases} 1 &amp; \text{if } x \in A \\ 0 &amp; \text{if } x \notin A \end{cases}\]</span></p>
 <p><code>True</code> behaves as <code>1</code> and <code>False</code> as <code>0</code>, so the mask <em>is</em> the indicator function evaluated on every element of <span class="math inline">\(U\)</span>:</p>
-<div id="cb24423e" class="cell" data-execution_count="3">
+<div id="26bfe25e" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_even.astype(<span class="bu">int</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1]</code></pre>
 </div>
 </div>
 <p>To obtain the set itself, we index the universe with the mask. NumPy keeps the elements where the mask is <code>True</code>:</p>
-<div id="1bb5d7b1" class="cell" data-execution_count="4">
+<div id="ca818250" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[is_even])  <span class="co"># the set A</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[ 2  4  6  8 10 12 14 16 18 20]</code></pre>
@@ -631,7 +631,7 @@ Two arrays, two roles
 <section id="set-operations-are-logical-operations" class="level2">
 <h2 class="anchored" data-anchor-id="set-operations-are-logical-operations">Set Operations Are Logical Operations</h2>
 <p>Let’s add a second set, the multiples of 3: <span class="math inline">\(B = \{x \in U : 3 \mid x\}\)</span>.</p>
-<div id="6a9f5451" class="cell" data-execution_count="5">
+<div id="a91c4cfb" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>is_mult3 <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[is_mult3])  <span class="co"># the set B</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -695,7 +695,7 @@ Two arrays, two roles
 </tr>
 </tbody>
 </table>
-<div id="d81258b4" class="cell" data-execution_count="6">
+<div id="56ea6aa5" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A ∩ B:"</span>, numbers[is_even <span class="op">&amp;</span> is_mult3])</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A ∪ B:"</span>, numbers[is_even <span class="op">|</span> is_mult3])</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A^c:  "</span>, numbers[<span class="op">~</span>is_even])</span>
@@ -709,7 +709,7 @@ A \ B: [ 2  4  8 10 14 16 20]</code></pre>
 </div>
 <p>As expected, <span class="math inline">\(A \cap B\)</span> contains the multiples of 6.</p>
 <p>Because <code>True</code> is <code>1</code> and <code>False</code> is <code>0</code>, adding a mask counts its elements, and averaging it gives a proportion, that is, the probability that a random element of <span class="math inline">\(U\)</span> belongs to the set:</p>
-<div id="8250acf1" class="cell" data-execution_count="7">
+<div id="68fd465e" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"|A| ="</span>, np.<span class="bu">sum</span>(is_even))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"|A ∩ B| ="</span>, np.<span class="bu">sum</span>(is_even <span class="op">&amp;</span> is_mult3))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"P(x ∈ A ∪ B) ="</span>, np.mean(is_even <span class="op">|</span> is_mult3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -720,7 +720,7 @@ P(x ∈ A ∪ B) = 0.65</code></pre>
 </div>
 </div>
 <p><code>np.any()</code> and <code>np.all()</code> play the role of the quantifiers <span class="math inline">\(\exists\)</span> and <span class="math inline">\(\forall\)</span>:</p>
-<div id="5b780e7f" class="cell" data-execution_count="8">
+<div id="462e593d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">any</span>(numbers[is_even] <span class="op">&gt;</span> <span class="dv">15</span>))  <span class="co"># is some even number above 15?</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">all</span>(numbers[is_even <span class="op">&amp;</span> is_mult3] <span class="op">%</span> <span class="dv">6</span> <span class="op">==</span> <span class="dv">0</span>))  <span class="co"># is every element of A ∩ B a multiple of 6?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -758,7 +758,7 @@ Solution
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="36eef3e0" class="cell" data-execution_count="9">
+<div id="cdb77a6a" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>law_1 <span class="op">=</span> np.array_equal(<span class="op">~</span>(is_even <span class="op">|</span> is_mult3), <span class="op">~</span>is_even <span class="op">&amp;</span> <span class="op">~</span>is_mult3)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>law_2 <span class="op">=</span> np.array_equal(<span class="op">~</span>(is_even <span class="op">&amp;</span> is_mult3), <span class="op">~</span>is_even <span class="op">|</span> <span class="op">~</span>is_mult3)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(law_1, law_2)</span>
@@ -778,7 +778,7 @@ Solution
 <section id="masking-with-numbers" class="level2">
 <h2 class="anchored" data-anchor-id="masking-with-numbers">Masking with Numbers</h2>
 <p>Let’s go back to the midterm one last time. In Session 15 we computed the final grade of every student, but we left one question open: <strong>who passed?</strong></p>
-<div id="0b4e30e3" class="cell" data-execution_count="10">
+<div id="fea13fba" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> np.array([<span class="st">"Ana"</span>, <span class="st">"Bruno"</span>, <span class="st">"Chloe"</span>, <span class="st">"Diego"</span>, <span class="st">"Emma"</span>, <span class="st">"Farid"</span>])</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>final_grades <span class="op">=</span> np.array([<span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="fl">4.5</span>, <span class="dv">9</span>, <span class="dv">5</span>])</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -792,7 +792,7 @@ Solution
 </div>
 </div>
 <p>The mask describes the set of students who passed. Because <code>students</code> is also an array with the same length, the same mask selects the names:</p>
-<div id="ff4cc4fc" class="cell" data-execution_count="11">
+<div id="8babc301" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[passed])</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="op">~</span>passed])  <span class="co"># the complement: who failed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -801,7 +801,7 @@ Solution
 </div>
 </div>
 <p>Counting the set is a sum, as before:</p>
-<div id="b77b02ca" class="cell" data-execution_count="12">
+<div id="8a198e72" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(passed), <span class="st">"students passed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 students passed</code></pre>
@@ -818,7 +818,7 @@ Exercise: Passing Point, Revisited
 </div>
 <div class="callout-body-container callout-body">
 <p>In Session 15 we read from the output after which exercise Ana reached 50 points. Now let NumPy find it: combine a mask with <code>np.argmax()</code>, which returns the position of the first <code>True</code>.</p>
-<div id="c1d24d45" class="cell" data-execution_count="13">
+<div id="8d0fb6fb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ana_cumulative <span class="op">=</span> np.array([<span class="dv">15</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">55</span>, <span class="dv">60</span>, <span class="dv">65</span>, <span class="dv">65</span>, <span class="dv">70</span>, <span class="dv">75</span>, <span class="dv">80</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -835,7 +835,7 @@ Solution
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="b9233d22" class="cell" data-execution_count="14">
+<div id="8ec7388e" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>reached <span class="op">=</span> ana_cumulative <span class="op">&gt;=</span> <span class="dv">50</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.argmax(reached) <span class="op">+</span> <span class="dv">1</span>)  <span class="co"># 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -876,7 +876,7 @@ Solution
 <div class="callout-body-container callout-body">
 <pre class="text"><code>[5 1 9]</code></pre>
 <p>The mask is <code>True</code> for the odd values, so only those are selected.</p>
-<div id="d8f72b28" class="cell" data-execution_count="15">
+<div id="4daad19b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> values <span class="op">&gt;=</span> <span class="dv">5</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(values[mask])  <span class="co"># [5 8 9]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
@@ -891,7 +891,7 @@ Solution
 <section id="changing-values-with-a-mask" class="level2">
 <h2 class="anchored" data-anchor-id="changing-values-with-a-mask">Changing Values with a Mask</h2>
 <p>A mask on the left of <code>=</code> changes only the selected elements and leaves the rest untouched. Suppose every student gets 1.5 bonus points, but grades cannot go above 10:</p>
-<div id="b64c5f90" class="cell" data-execution_count="16">
+<div id="bd1035f0" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>with_bonus <span class="op">=</span> final_grades <span class="op">+</span> <span class="fl">1.5</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>with_bonus[with_bonus <span class="op">&gt;</span> <span class="dv">10</span>] <span class="op">=</span> <span class="dv">10</span>  <span class="co"># only the grades above 10 change</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -901,7 +901,7 @@ Solution
 </div>
 </div>
 <p>When we want to choose between two values for every element, <code>np.where(mask, value_if_true, value_if_false)</code> builds a new array. It is the array version of <code>if ... else</code>:</p>
-<div id="b1ff0a4d" class="cell" data-execution_count="17">
+<div id="2b79a46c" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(passed, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>['Pass' 'Pass' 'Pass' 'Fail' 'Pass' 'Pass']</code></pre>
@@ -914,12 +914,12 @@ Solution
 <section id="parentheses-around-each-condition" class="level3">
 <h3 class="anchored" data-anchor-id="parentheses-around-each-condition">Parentheses around each condition</h3>
 <p>Run this code and read the error:</p>
-<div id="6b248455" class="cell" data-execution_count="18">
+<div id="658ba393" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">|</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>ValueError: The truth value of an array with more than one element is ambiguous.</code></pre>
 <p>In Python, <code>|</code> and <code>&amp;</code> are evaluated <strong>before</strong> <code>==</code>, so Python reads <code>numbers % 3 == (0 | numbers % 5) == 0</code>, which is not what we meant. Always wrap each condition in parentheses:</p>
-<div id="74c9202e" class="cell" data-execution_count="19">
+<div id="6937fcdc" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[(numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)]</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -929,7 +929,7 @@ Solution
 </section>
 <section id="and-or-not-do-not-work-on-arrays" class="level3">
 <h3 class="anchored" data-anchor-id="and-or-not-do-not-work-on-arrays"><code>and</code>, <code>or</code>, <code>not</code> do not work on arrays</h3>
-<div id="b85f41ab" class="cell" data-execution_count="20">
+<div id="b15bcc25" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="kw">and</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>ValueError: The truth value of an array with more than one element is ambiguous.</code></pre>
@@ -938,14 +938,14 @@ Solution
 <section id="values-are-not-positions" class="level3">
 <h3 class="anchored" data-anchor-id="values-are-not-positions">Values are not positions</h3>
 <p>What is wrong with this code?</p>
-<div id="b01e6497" class="cell" data-execution_count="21">
+<div id="e2a08ed5" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> arr[arr <span class="op">&gt;</span> <span class="dv">6</span>]  <span class="co"># [8 9 7]</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>arr[high] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>IndexError: index 8 is out of bounds for axis 0 with size 6</code></pre>
 <p><code>high</code> contains the <strong>values</strong> of the selected elements, not their <strong>positions</strong>, so <code>arr[high]</code> tries to read position 8. Use the mask itself to modify the array:</p>
-<div id="0523cfb6" class="cell" data-execution_count="22">
+<div id="8f5758cf" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>arr[arr <span class="op">&gt;</span> <span class="dv">6</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -990,7 +990,7 @@ Solution
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="0704cb16" class="cell" data-execution_count="23">
+<div id="fcd8fbfd" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiples_3_or_5(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Sum the natural numbers below n that are multiples of 3 or 5.</span></span>
@@ -1015,7 +1015,7 @@ Solution
 <pre><code>23</code></pre>
 </div>
 </div>
-<div id="7e71b21b" class="cell" data-execution_count="24">
+<div id="251e2c2b" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>in_a <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>in_b <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span></span>
@@ -1028,7 +1028,7 @@ Solution
 </div>
 </div>
 <p>Both counts are equal. <span class="math inline">\(A \cap B\)</span> is the set of multiples of 15: they appear in both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, so adding <span class="math inline">\(|A|\)</span> and <span class="math inline">\(|B|\)</span> counts them twice.</p>
-<div id="843cd391" class="cell" data-execution_count="25">
+<div id="eeff28ef" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_of_multiples(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Sum the multiples of d below n with the triangular number formula."""</span></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> d</span>
@@ -1060,7 +1060,7 @@ Estimating π by Counting Points
 <li>Build the grid coordinates <code>x = (np.arange(N) + 0.5) / N</code>, the centres of <span class="math inline">\(N\)</span> equal cells.</li>
 <li>Use broadcasting to build an <span class="math inline">\(N \times N\)</span> mask that is <code>True</code> where <span class="math inline">\(x^2 + y^2 &lt; 1\)</span>.</li>
 <li>Use the mask to estimate <span class="math inline">\(\pi\)</span> for <span class="math inline">\(N = 10, 100, 1000\)</span>. How fast does the error decrease?</li>
-<li>Display the mask with <code>plt.imshow(inside, cmap="gray")</code>. This is an extension, remember <code>matplotlib</code> is not part of this course.</li>
+<li>Display the mask with <code>plt.imshow(inside, cmap="gray")</code>.</li>
 </ol>
 </div>
 </div>
@@ -1076,7 +1076,7 @@ Solution
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="77b22d2d" class="cell" data-execution_count="26">
+<div id="39568da8" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> [<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]:</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
@@ -1088,7 +1088,7 @@ N =  100: π ≈ 3.142800, error = 0.001207
 N = 1000: π ≈ 3.141676, error = 0.000083</code></pre>
 </div>
 </div>
-<div id="290d6a58" class="cell" data-execution_count="27">
+<div id="af2a4320" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
@@ -1121,7 +1121,7 @@ Pascal’s Triangle and the Sierpiński Triangle
 <p>Each row of Pascal’s triangle is built from the previous one: every entry is the sum of the two entries above it, <span class="math inline">\(\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}\)</span>.</p>
 <ol type="1">
 <li>Build a <span class="math inline">\(64 \times 64\)</span> array <code>pascal</code> where row <span class="math inline">\(n\)</span> holds <span class="math inline">\(\binom{n}{0}, \dots, \binom{n}{n}\)</span> followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry <strong>modulo 2</strong>.</li>
-<li>Build the mask of the odd entries and display it with <code>plt.imshow(odd, cmap="gray_r")</code>. Do you recognise the shape? This is an extension, remember <code>matplotlib</code> is not part of this course.</li>
+<li>Build the mask of the odd entries and display it with <code>plt.imshow(odd, cmap="gray_r")</code>. Do you recognise the shape?</li>
 <li>How many entries of the first 64 rows are odd? Can you guess a formula for the first <span class="math inline">\(2^k\)</span> rows?</li>
 </ol>
 </div>
@@ -1138,7 +1138,7 @@ Solution
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="a593143a" class="cell" data-execution_count="28">
+<div id="951b7478" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">64</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>pascal <span class="op">=</span> np.zeros((N, N), dtype<span class="op">=</span><span class="bu">int</span>)</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>pascal[:, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span>  <span class="co"># the first entry of every row is 1</span></span>
@@ -1166,7 +1166,7 @@ Solution
 </div>
 <p>The odd entries draw the Sierpiński triangle, a fractal. The first <span class="math inline">\(2^k\)</span> rows contain <span class="math inline">\(3^k\)</span> odd entries: each triangle is made of three copies of the previous one, each with half the size.</p>
 <p><strong>Bonus.</strong> Lucas’s theorem says that <span class="math inline">\(\binom{n}{k}\)</span> is odd exactly when every binary digit of <span class="math inline">\(k\)</span> is at most the matching digit of <span class="math inline">\(n\)</span>. With integers, <code>&amp;</code> is the bitwise AND, so this condition is <code>(n &amp; k) == k</code>, and the whole mask can be built without any loop:</p>
-<div id="fa57d778" class="cell" data-execution_count="29">
+<div id="979d78ce" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(N)[:, np.newaxis]</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.arange(N)[np.newaxis, :]</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>odd_lucas <span class="op">=</span> (k <span class="op">&lt;=</span> n) <span class="op">&amp;</span> ((n <span class="op">&amp;</span> k) <span class="op">==</span> k)</span>
@@ -2028,7 +2028,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb58-414"><a href="#cb58-414" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build the grid coordinates <span class="in">`x = (np.arange(N) + 0.5) / N`</span>, the centres of $N$ equal cells.</span>
 <span id="cb58-415"><a href="#cb58-415" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Use broadcasting to build an $N \times N$ mask that is <span class="in">`True`</span> where $x^2 + y^2 &lt; 1$.</span>
 <span id="cb58-416"><a href="#cb58-416" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?</span>
-<span id="cb58-417"><a href="#cb58-417" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Display the mask with <span class="in">`plt.imshow(inside, cmap="gray")`</span>. This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
+<span id="cb58-417"><a href="#cb58-417" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Display the mask with <span class="in">`plt.imshow(inside, cmap="gray")`</span>.</span>
 <span id="cb58-418"><a href="#cb58-418" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb58-419"><a href="#cb58-419" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-420"><a href="#cb58-420" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
@@ -2061,7 +2061,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb58-451"><a href="#cb58-451" aria-hidden="true" tabindex="-1"></a>Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.</span>
 <span id="cb58-452"><a href="#cb58-452" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-453"><a href="#cb58-453" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build a $64 \times 64$ array <span class="in">`pascal`</span> where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.</span>
-<span id="cb58-454"><a href="#cb58-454" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build the mask of the odd entries and display it with <span class="in">`plt.imshow(odd, cmap="gray_r")`</span>. Do you recognise the shape? This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
+<span id="cb58-454"><a href="#cb58-454" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build the mask of the odd entries and display it with <span class="in">`plt.imshow(odd, cmap="gray_r")`</span>. Do you recognise the shape?</span>
 <span id="cb58-455"><a href="#cb58-455" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>How many entries of the first 64 rows are odd? Can you guess a formula for the first $2^k$ rows?</span>
 <span id="cb58-456"><a href="#cb58-456" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb58-457"><a href="#cb58-457" aria-hidden="true" tabindex="-1"></a></span>
