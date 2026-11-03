@@ -547,11 +547,11 @@ window.Quarto = {
 
 <section id="rsa" class="level1">
 <h1>RSA</h1>
-<div id="001b90ae" class="cell" data-execution_count="1">
+<div id="4940e582" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As a starting point for RSA, choose two prime numbers <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. We need a function that generates prime numbers.</p>
-<div id="fc2ffdd9" class="cell" data-execution_count="2">
+<div id="eccfca97" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_primes_lower_than(stop: <span class="bu">int</span>, start: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Generate all prime numbers lower than the input `stop`</span></span>
@@ -582,7 +582,7 @@ window.Quarto = {
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ls_primes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ee8d0201" class="cell" data-execution_count="3">
+<div id="e536c47b" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ls_primes <span class="op">=</span> generate_primes_lower_than(<span class="dv">1000</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># See the ten highest primes we have generated</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ls_primes[<span class="op">-</span><span class="dv">10</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -591,7 +591,7 @@ window.Quarto = {
 </div>
 </div>
 <p>As a starting point for RSA, choose two prime numbers <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. For the algorithm to work, the two prime numbers must be different.</p>
-<div id="a97d4e06" class="cell" data-execution_count="4">
+<div id="ca4f2d66" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> choose_prime_numbers(ls_primes: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">int</span>]:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Choose two primes from the list, ensuring they are not the same.</span></span>
@@ -614,13 +614,13 @@ window.Quarto = {
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> np.random.choice(ls_primes)</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (p, q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c0757a74" class="cell" data-execution_count="5">
+<div id="7abb0a8d" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p, q <span class="op">=</span> choose_prime_numbers(ls_primes)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Prime p = </span><span class="sc">{</span>p<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Prime q = </span><span class="sc">{</span>q<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Prime p = 881
-Prime q = 227</code></pre>
+<pre><code>Prime p = 37
+Prime q = 157</code></pre>
 </div>
 </div>
 <p>The next steps will calculate the two keys.</p>
@@ -647,7 +647,7 @@ Prime q = 227</code></pre>
 (e \cdot d)\ \text{mod}\ \phi (n) = 1
 \]</span></p>
 <p><span class="math inline">\(d\)</span> can be calculated with the extended Euclidean algorithm.</p>
-<div id="79af5dfe" class="cell" data-execution_count="6">
+<div id="ffa0d5e5" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gcd(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">  Calculate the greatest common divisor of two numbers,</span></span>
@@ -661,14 +661,14 @@ Prime q = 227</code></pre>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    r1 <span class="op">=</span> r2</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> r1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ec6cfedb" class="cell" data-execution_count="7">
+<div id="8ae20365" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the gcd</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gcd(<span class="dv">17</span>, <span class="dv">120</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1</code></pre>
 </div>
 </div>
-<div id="6a6372da" class="cell" data-execution_count="8">
+<div id="085df647" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_rsa_keys(p: <span class="bu">int</span>, q: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">int</span>]:</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> p <span class="op">*</span> q</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  phi <span class="op">=</span> (p <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> (q <span class="op">-</span> <span class="dv">1</span>)</span>
@@ -682,13 +682,13 @@ Prime q = 227</code></pre>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.random.randint(<span class="dv">1</span>, phi)</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (n, e), (n, d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="8d7bef3e" class="cell" data-execution_count="9">
+<div id="8ce6104f" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(n, e), (n, d) <span class="op">=</span> generate_rsa_keys(p, q)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Public key: (</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">)"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Private key: (</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Public key: (199987, 162817)
-Private key: (199987, 49953)</code></pre>
+<pre><code>Public key: (5809, 3421)
+Private key: (5809, 1333)</code></pre>
 </div>
 </div>
 <p>To encrypt a number <span class="math inline">\(m\)</span> to ciphertext <span class="math inline">\(c\)</span> the following formula is applied. It uses the numbers of the public key:</p>
@@ -696,32 +696,32 @@ Private key: (199987, 49953)</code></pre>
 c = m^e\ \text{mod}\ n
 \]</span></p>
 <p>RSA encrypts only numbers. These must be greater-equal <span class="math inline">\(0\)</span> and less than <span class="math inline">\(n\)</span>.</p>
-<div id="18b05ecf" class="cell" data-execution_count="10">
+<div id="707831d9" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encrypt_number(m: <span class="bu">int</span>, pub: <span class="bu">tuple</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  n, e <span class="op">=</span> pub</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># To ensure m**e can be computed, we change the variable type</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  c <span class="op">=</span> <span class="bu">int</span>(m)<span class="op">**</span><span class="bu">int</span>(e) <span class="op">%</span> <span class="bu">int</span>(n)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ce380016" class="cell" data-execution_count="11">
+<div id="3a127e51" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> encrypt_number(<span class="dv">88</span>, (n, e))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Encrypted number: </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Encrypted number: 144295</code></pre>
+<pre><code>Encrypted number: 2160</code></pre>
 </div>
 </div>
 <p>For decryption the inverse formula is applied. It uses the numbers of the private key:</p>
 <p><span class="math display">\[
 m' = c^d\ \text{mod}\ n
 \]</span></p>
-<div id="323792d2" class="cell" data-execution_count="12">
+<div id="05dbe73f" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decrypt_number(c: <span class="bu">int</span>, priv: <span class="bu">tuple</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  n, d <span class="op">=</span> priv</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># To ensure c**d can be computed, we change the variable type</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  m <span class="op">=</span> <span class="bu">int</span>(c)<span class="op">**</span><span class="bu">int</span>(d) <span class="op">%</span> <span class="bu">int</span>(n)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="91bda527" class="cell" data-execution_count="13">
+<div id="2d6409f6" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> decrypt_number(c, (n, d))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Decrypted number: </span><span class="sc">{</span>m<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -730,7 +730,7 @@ m' = c^d\ \text{mod}\ n
 </div>
 <p>If we did not have the private key, we can try to find it via brute force.</p>
 <p>Choose three numbers, encrypt them using the known public key, then find a private key that decrypts them properly.</p>
-<div id="38ca5c6c" class="cell" data-execution_count="14">
+<div id="8855acce" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize private key at 1</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dd <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -982,7 +982,171 @@ Private key not valid: 229
 Private key not valid: 230
 Private key not valid: 231
 Private key not valid: 232
-Private key found: 233</code></pre>
+Private key not valid: 233
+Private key not valid: 234
+Private key not valid: 235
+Private key not valid: 236
+Private key not valid: 237
+Private key not valid: 238
+Private key not valid: 239
+Private key not valid: 240
+Private key not valid: 241
+Private key not valid: 242
+Private key not valid: 243
+Private key not valid: 244
+Private key not valid: 245
+Private key not valid: 246
+Private key not valid: 247
+Private key not valid: 248
+Private key not valid: 249
+Private key not valid: 250
+Private key not valid: 251
+Private key not valid: 252
+Private key not valid: 253
+Private key not valid: 254
+Private key not valid: 255
+Private key not valid: 256
+Private key not valid: 257
+Private key not valid: 258
+Private key not valid: 259
+Private key not valid: 260
+Private key not valid: 261
+Private key not valid: 262
+Private key not valid: 263
+Private key not valid: 264
+Private key not valid: 265
+Private key not valid: 266
+Private key not valid: 267
+Private key not valid: 268
+Private key not valid: 269
+Private key not valid: 270
+Private key not valid: 271
+Private key not valid: 272
+Private key not valid: 273
+Private key not valid: 274
+Private key not valid: 275
+Private key not valid: 276
+Private key not valid: 277
+Private key not valid: 278
+Private key not valid: 279
+Private key not valid: 280
+Private key not valid: 281
+Private key not valid: 282
+Private key not valid: 283
+Private key not valid: 284
+Private key not valid: 285
+Private key not valid: 286
+Private key not valid: 287
+Private key not valid: 288
+Private key not valid: 289
+Private key not valid: 290
+Private key not valid: 291
+Private key not valid: 292
+Private key not valid: 293
+Private key not valid: 294
+Private key not valid: 295
+Private key not valid: 296
+Private key not valid: 297
+Private key not valid: 298
+Private key not valid: 299
+Private key not valid: 300
+Private key not valid: 301
+Private key not valid: 302
+Private key not valid: 303
+Private key not valid: 304
+Private key not valid: 305
+Private key not valid: 306
+Private key not valid: 307
+Private key not valid: 308
+Private key not valid: 309
+Private key not valid: 310
+Private key not valid: 311
+Private key not valid: 312
+Private key not valid: 313
+Private key not valid: 314
+Private key not valid: 315
+Private key not valid: 316
+Private key not valid: 317
+Private key not valid: 318
+Private key not valid: 319
+Private key not valid: 320
+Private key not valid: 321
+Private key not valid: 322
+Private key not valid: 323
+Private key not valid: 324
+Private key not valid: 325
+Private key not valid: 326
+Private key not valid: 327
+Private key not valid: 328
+Private key not valid: 329
+Private key not valid: 330
+Private key not valid: 331
+Private key not valid: 332
+Private key not valid: 333
+Private key not valid: 334
+Private key not valid: 335
+Private key not valid: 336
+Private key not valid: 337
+Private key not valid: 338
+Private key not valid: 339
+Private key not valid: 340
+Private key not valid: 341
+Private key not valid: 342
+Private key not valid: 343
+Private key not valid: 344
+Private key not valid: 345
+Private key not valid: 346
+Private key not valid: 347
+Private key not valid: 348
+Private key not valid: 349
+Private key not valid: 350
+Private key not valid: 351
+Private key not valid: 352
+Private key not valid: 353
+Private key not valid: 354
+Private key not valid: 355
+Private key not valid: 356
+Private key not valid: 357
+Private key not valid: 358
+Private key not valid: 359
+Private key not valid: 360
+Private key not valid: 361
+Private key not valid: 362
+Private key not valid: 363
+Private key not valid: 364
+Private key not valid: 365
+Private key not valid: 366
+Private key not valid: 367
+Private key not valid: 368
+Private key not valid: 369
+Private key not valid: 370
+Private key not valid: 371
+Private key not valid: 372
+Private key not valid: 373
+Private key not valid: 374
+Private key not valid: 375
+Private key not valid: 376
+Private key not valid: 377
+Private key not valid: 378
+Private key not valid: 379
+Private key not valid: 380
+Private key not valid: 381
+Private key not valid: 382
+Private key not valid: 383
+Private key not valid: 384
+Private key not valid: 385
+Private key not valid: 386
+Private key not valid: 387
+Private key not valid: 388
+Private key not valid: 389
+Private key not valid: 390
+Private key not valid: 391
+Private key not valid: 392
+Private key not valid: 393
+Private key not valid: 394
+Private key not valid: 395
+Private key not valid: 396
+Private key found: 397</code></pre>
 </div>
 </div>
 
