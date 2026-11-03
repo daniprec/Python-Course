@@ -247,7 +247,7 @@ print(exam_versions(3, 4))
 
 You have a grid of lights, all of them off (`0`). Each instruction switches on (`1`) or off (`0`) a whole rectangle of lights, given by two opposite corners `(r1, c1)` and `(r2, c2)`, both included.
 
-Write a Python function `switch(grid, action, r1, c1, r2, c2)` that applies one instruction to the grid, where `action` is either `"on"` or `"off"`. Do not use loops.
+Write a Python function `switch(grid, action, r1, c1, r2, c2)` that applies one instruction to the grid, where `action` is either `"on"` or `"off"`. Do not use loops. The function should modify `grid` in place and not return anything.
 
 *Sample input:*
 
@@ -524,7 +524,7 @@ NumPy does not raise an error when dividing by zero: it shows a `RuntimeWarning`
 
 The sum of the squares of the first ten natural numbers is $1^2 + 2^2 + \dots + 10^2 = 385$, while the square of their sum is $(1 + 2 + \dots + 10)^2 = 3025$. The difference between them is $3025 - 385 = 2640$.
 
-Write a Python function `sum_square_difference(n)` that computes this difference for the first `n` natural numbers, without loops.
+Write a Python function `sum_square_difference(n)` that computes this difference for the first `n` natural numbers, without loops. Assume `n` is a positive integer.
 
 *Sample input:* `sum_square_difference(10)`  
 *Expected result:* `2640`
@@ -535,7 +535,7 @@ Write a Python function `sum_square_difference(n)` that computes this difference
 
 *Inspired by Project Euler [Problem 29](https://projecteuler.net/problem=29).*
 
-Consider all the powers $a^b$ with $2 \le a \le 5$ and $2 \le b \le 5$. Some of them are repeated, such as $2^4 = 4^2 = 16$, so there are only 15 distinct values. Write a Python function `distinct_powers(n)` that counts the distinct values of $a^b$ for $2 \le a \le n$ and $2 \le b \le n$, without loops.
+Consider all the powers $a^b$ with $2 \le a \le 5$ and $2 \le b \le 5$. Some of them are repeated, such as $2^4 = 4^2 = 16$, so there are only 15 distinct values. Write a Python function `distinct_powers(n)` that counts the distinct values of $a^b$ for $2 \le a \le n$ and $2 \le b \le n$, without loops. Assume `n` is an integer greater than or equal to 2.
 
 *Sample input:* `distinct_powers(5)`  
 *Expected result:* `15`
@@ -1183,7 +1183,7 @@ We subtract the number itself to keep only its proper divisors.
 
 The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6, and 9, and their sum is 23.
 
-Write a Python function `multiples_3_or_5(n)` that returns the sum of all the natural numbers below `n` that are multiples of 3 or 5. Use a mask instead of a loop.
+Write a Python function `multiples_3_or_5(n)` that returns the sum of all the natural numbers below `n` that are multiples of 3 or 5. Use a mask instead of a loop. Assume `n` is a positive integer.
 
 *Sample input 1:* `multiples_3_or_5(10)`  
 *Expected result 1:* `23`
@@ -1198,7 +1198,7 @@ Write a Python function `multiples_3_or_5(n)` that returns the sum of all the na
 
 The Sieve of Eratosthenes is an ancient method to find all the prime numbers up to a given limit $n$. Write down all the numbers from 2 to $n$. Take the first number that is not crossed out, 2, and cross out all its multiples. Then take the next number that is not crossed out, 3, and cross out all its multiples. Repeat until you reach $\sqrt{n}$: the numbers that remain are the primes.
 
-Write a Python function `sieve(n)` that returns an array with all the primes up to `n`, using a Boolean mask to keep track of the crossed-out numbers. You may loop over the numbers up to $\sqrt{n}$, but cross out all the multiples of each one in a single assignment.
+Write a Python function `sieve(n)` that returns an array with all the primes up to and including `n`, using a Boolean mask to keep track of the crossed-out numbers. You may loop over the numbers up to $\sqrt{n}$, but cross out all the multiples of each one in a single assignment. Starting each strike at $p^2$ is fine.
 
 How many primes are there below 1000?
 
@@ -1560,7 +1560,7 @@ A group of `n` friends write their names on pieces of paper, shuffle them, and e
 
 Write a Python function `secret_santa(n, n_trials)` that simulates `n_trials` random draws and returns the fraction of them where nobody draws their own name. Do not use loops. Hint: a draw can be represented as a random permutation of `np.arange(n)`, where friend `i` gives a present to friend `perm[i]`.
 
-Try it with a growing number of friends. Which number does the probability approach?
+Try it with a growing number of friends. As `n` grows, the probability should approach $1/e \approx 0.368$.
 
 *Sample input:* `secret_santa(10, 100_000)`  
 *Expected result:* approximately `0.37` (it will change slightly with every run)
@@ -1782,7 +1782,7 @@ print(sort_lines(["A", "B", "C", "D", "E"], [20, 35, 50, 30, 40]))
 
 Alice rolls five four-sided dice (faces 1 to 4) and Bob rolls three six-sided dice (faces 1 to 6). The player with the highest total wins, and equal totals are a tie.
 
-Write a Python function `dice_duel(n_games)` that simulates `n_games` games without loops, and returns the estimated probabilities that Alice wins, that Bob wins, and that they tie. How much do the estimates change when you simulate 100, 1,000, or 100,000 games?
+Write a Python function `dice_duel(n_games)` that simulates `n_games` games without loops, and returns the estimated probabilities that Alice wins, that Bob wins, and that they tie. How much do the estimates change when you simulate 100, 1,000, or 100,000 games? Return the probabilities in this order: `(alice_wins, bob_wins, ties)`.
 
 *Sample input:* `dice_duel(100_000)`  
 *Expected result:* approximately `(0.65, 0.26, 0.09)` (it will change slightly with every run)
@@ -2068,7 +2068,7 @@ print(pythagorean_triples(20))
 
 A height map of a cave floor is stored as a 2D array of digits, from 0 (lowest) to 9 (highest). A low point is a cell that is strictly lower than all its neighbours: up, down, left, and right. Diagonals do not count, and cells on the border have fewer neighbours.
 
-Write a Python function `low_points(heights)` that returns a Boolean mask of the low points, without loops. Hint: `np.pad(heights, 1, constant_values=10)` surrounds the map with a border of 10s, so every cell has four neighbours.
+Write a Python function `low_points(heights)` that returns a Boolean mask of the low points, without loops. Hint: `np.pad(heights, 1, constant_values=10)` surrounds the map with a border of 10s, so every cell has four neighbours. The returned mask should have the same shape as `heights`.
 
 The risk level of a low point is its height plus one. What is the sum of the risk levels of all the low points?
 
