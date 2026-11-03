@@ -571,7 +571,7 @@ window.Quarto = {
 <h1>Masking: Sets and Logic</h1>
 <p>Masking means using an array of <code>True</code> and <code>False</code> values to select or modify part of another array. If the idea feels new, here is the good news: you already know it from mathematics. <strong>A mask is a set.</strong> Every rule you know about sets (intersection, union, complement, counting) has a NumPy version.</p>
 <p>In this lesson we build masks from numbers and treat them as sets. In the next lesson, <a href="../../modules/numpy/masking_images.html">Masking with Images</a>, we apply the same rules to pictures.</p>
-<div id="2603c979" class="cell" data-execution_count="1">
+<div id="3fa987e3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -581,7 +581,7 @@ window.Quarto = {
 <p>Take the universe <span class="math inline">\(U = \{1, 2, \dots, 20\}\)</span> and the set of even numbers in it:</p>
 <p><span class="math display">\[A = \{x \in U : x \text{ is even}\}\]</span></p>
 <p>In NumPy, the universe is an array and the condition “<span class="math inline">\(x\)</span> is even” becomes a comparison:</p>
-<div id="a4c4009c" class="cell" data-execution_count="2">
+<div id="f0b9a0b9" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">21</span>)  <span class="co"># the universe U</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>is_even <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>  <span class="co"># the condition, checked for every element</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -596,14 +596,14 @@ window.Quarto = {
 <p>The comparison does not return the set <span class="math inline">\(A\)</span> directly. It returns one answer per element of <span class="math inline">\(U\)</span>: “is this element in <span class="math inline">\(A\)</span>?”. In mathematics this is the <strong>indicator function</strong> of <span class="math inline">\(A\)</span>:</p>
 <p><span class="math display">\[\mathbf{1}_A(x) = \begin{cases} 1 &amp; \text{if } x \in A \\ 0 &amp; \text{if } x \notin A \end{cases}\]</span></p>
 <p><code>True</code> behaves as <code>1</code> and <code>False</code> as <code>0</code>, so the mask <em>is</em> the indicator function evaluated on every element of <span class="math inline">\(U\)</span>:</p>
-<div id="e589b4e2" class="cell" data-execution_count="3">
+<div id="4e81484d" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is_even.astype(<span class="bu">int</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1]</code></pre>
 </div>
 </div>
 <p>To obtain the set itself, we index the universe with the mask. NumPy keeps the elements where the mask is <code>True</code>:</p>
-<div id="78e2e61a" class="cell" data-execution_count="4">
+<div id="f4cfe899" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[is_even])  <span class="co"># the set A</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[ 2  4  6  8 10 12 14 16 18 20]</code></pre>
@@ -631,7 +631,7 @@ Two arrays, two roles
 <section id="set-operations-are-logical-operations" class="level2">
 <h2 class="anchored" data-anchor-id="set-operations-are-logical-operations">Set Operations Are Logical Operations</h2>
 <p>Let’s add a second set, the multiples of 3: <span class="math inline">\(B = \{x \in U : 3 \mid x\}\)</span>.</p>
-<div id="97a9f1eb" class="cell" data-execution_count="5">
+<div id="496852c9" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>is_mult3 <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers[is_mult3])  <span class="co"># the set B</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -695,7 +695,7 @@ Two arrays, two roles
 </tr>
 </tbody>
 </table>
-<div id="6b5a0d7c" class="cell" data-execution_count="6">
+<div id="b612ed9d" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A ∩ B:"</span>, numbers[is_even <span class="op">&amp;</span> is_mult3])</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A ∪ B:"</span>, numbers[is_even <span class="op">|</span> is_mult3])</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A^c:  "</span>, numbers[<span class="op">~</span>is_even])</span>
@@ -709,7 +709,7 @@ A \ B: [ 2  4  8 10 14 16 20]</code></pre>
 </div>
 <p>As expected, <span class="math inline">\(A \cap B\)</span> contains the multiples of 6.</p>
 <p>Because <code>True</code> is <code>1</code> and <code>False</code> is <code>0</code>, adding a mask counts its elements, and averaging it gives a proportion, that is, the probability that a random element of <span class="math inline">\(U\)</span> belongs to the set:</p>
-<div id="c7ee8007" class="cell" data-execution_count="7">
+<div id="77330639" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"|A| ="</span>, np.<span class="bu">sum</span>(is_even))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"|A ∩ B| ="</span>, np.<span class="bu">sum</span>(is_even <span class="op">&amp;</span> is_mult3))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"P(x ∈ A ∪ B) ="</span>, np.mean(is_even <span class="op">|</span> is_mult3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -720,7 +720,7 @@ P(x ∈ A ∪ B) = 0.65</code></pre>
 </div>
 </div>
 <p><code>np.any()</code> and <code>np.all()</code> play the role of the quantifiers <span class="math inline">\(\exists\)</span> and <span class="math inline">\(\forall\)</span>:</p>
-<div id="daf2661d" class="cell" data-execution_count="8">
+<div id="088cee0c" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">any</span>(numbers[is_even] <span class="op">&gt;</span> <span class="dv">15</span>))  <span class="co"># is some even number above 15?</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">all</span>(numbers[is_even <span class="op">&amp;</span> is_mult3] <span class="op">%</span> <span class="dv">6</span> <span class="op">==</span> <span class="dv">0</span>))  <span class="co"># is every element of A ∩ B a multiple of 6?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -758,7 +758,7 @@ Solution
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="09d351ee" class="cell" data-execution_count="9">
+<div id="6faf0deb" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>law_1 <span class="op">=</span> np.array_equal(<span class="op">~</span>(is_even <span class="op">|</span> is_mult3), <span class="op">~</span>is_even <span class="op">&amp;</span> <span class="op">~</span>is_mult3)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>law_2 <span class="op">=</span> np.array_equal(<span class="op">~</span>(is_even <span class="op">&amp;</span> is_mult3), <span class="op">~</span>is_even <span class="op">|</span> <span class="op">~</span>is_mult3)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(law_1, law_2)</span>
@@ -778,7 +778,7 @@ Solution
 <section id="masking-with-numbers" class="level2">
 <h2 class="anchored" data-anchor-id="masking-with-numbers">Masking with Numbers</h2>
 <p>Let’s go back to the midterm one last time. In Session 15 we computed the final grade of every student, but we left one question open: <strong>who passed?</strong></p>
-<div id="486c9a88" class="cell" data-execution_count="10">
+<div id="9d1f050e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> np.array([<span class="st">"Ana"</span>, <span class="st">"Bruno"</span>, <span class="st">"Chloe"</span>, <span class="st">"Diego"</span>, <span class="st">"Emma"</span>, <span class="st">"Farid"</span>])</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>final_grades <span class="op">=</span> np.array([<span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="fl">4.5</span>, <span class="dv">9</span>, <span class="dv">5</span>])</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -792,7 +792,7 @@ Solution
 </div>
 </div>
 <p>The mask describes the set of students who passed. Because <code>students</code> is also an array with the same length, the same mask selects the names:</p>
-<div id="86c84304" class="cell" data-execution_count="11">
+<div id="f770fa02" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[passed])</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students[<span class="op">~</span>passed])  <span class="co"># the complement: who failed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -801,7 +801,7 @@ Solution
 </div>
 </div>
 <p>Counting the set is a sum, as before:</p>
-<div id="98b8b0f4" class="cell" data-execution_count="12">
+<div id="74a39a6c" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(passed), <span class="st">"students passed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 students passed</code></pre>
@@ -818,7 +818,7 @@ Exercise: Passing Point, Revisited
 </div>
 <div class="callout-body-container callout-body">
 <p>In Session 15 we read from the output after which exercise Ana reached 50 points. Now let NumPy find it: combine a mask with <code>np.argmax()</code>, which returns the position of the first <code>True</code>.</p>
-<div id="19df9a6c" class="cell" data-execution_count="13">
+<div id="168b02ed" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ana_cumulative <span class="op">=</span> np.array([<span class="dv">15</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">55</span>, <span class="dv">60</span>, <span class="dv">65</span>, <span class="dv">65</span>, <span class="dv">70</span>, <span class="dv">75</span>, <span class="dv">80</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -835,7 +835,7 @@ Solution
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="7a149c4a" class="cell" data-execution_count="14">
+<div id="b6b3a0f7" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>reached <span class="op">=</span> ana_cumulative <span class="op">&gt;=</span> <span class="dv">50</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.argmax(reached) <span class="op">+</span> <span class="dv">1</span>)  <span class="co"># 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -876,11 +876,12 @@ Solution
 <div class="callout-body-container callout-body">
 <pre class="text"><code>[5 1 9]</code></pre>
 <p>The mask is <code>True</code> for the odd values, so only those are selected.</p>
-<div id="fa480c32" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> values <span class="op">&gt;=</span> <span class="dv">5</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(values[mask])  <span class="co"># [5 8 9]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>NameError: name 'values' is not defined</code></pre>
+<div id="b441b299" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>])</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> values <span class="op">&gt;=</span> <span class="dv">5</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(values[mask])  <span class="co"># [5 8 9]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[5 8 9]</code></pre>
 </div>
 </div>
 </div>
@@ -891,7 +892,7 @@ Solution
 <section id="changing-values-with-a-mask" class="level2">
 <h2 class="anchored" data-anchor-id="changing-values-with-a-mask">Changing Values with a Mask</h2>
 <p>A mask on the left of <code>=</code> changes only the selected elements and leaves the rest untouched. Suppose every student gets 1.5 bonus points, but grades cannot go above 10:</p>
-<div id="cbf2046a" class="cell" data-execution_count="16">
+<div id="b9003182" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>with_bonus <span class="op">=</span> final_grades <span class="op">+</span> <span class="fl">1.5</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>with_bonus[with_bonus <span class="op">&gt;</span> <span class="dv">10</span>] <span class="op">=</span> <span class="dv">10</span>  <span class="co"># only the grades above 10 change</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -901,7 +902,7 @@ Solution
 </div>
 </div>
 <p>When we want to choose between two values for every element, <code>np.where(mask, value_if_true, value_if_false)</code> builds a new array. It is the array version of <code>if ... else</code>:</p>
-<div id="3b28cc6b" class="cell" data-execution_count="17">
+<div id="81108586" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(passed, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>['Pass' 'Pass' 'Pass' 'Fail' 'Pass' 'Pass']</code></pre>
@@ -914,12 +915,12 @@ Solution
 <section id="parentheses-around-each-condition" class="level3">
 <h3 class="anchored" data-anchor-id="parentheses-around-each-condition">Parentheses around each condition</h3>
 <p>Run this code and read the error:</p>
-<div id="6ccfe878" class="cell" data-execution_count="18">
+<div id="0a26c3fe" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">|</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>ValueError: The truth value of an array with more than one element is ambiguous.</code></pre>
 <p>In Python, <code>|</code> and <code>&amp;</code> are evaluated <strong>before</strong> <code>==</code>, so Python reads <code>numbers % 3 == (0 | numbers % 5) == 0</code>, which is not what we meant. Always wrap each condition in parentheses:</p>
-<div id="77924614" class="cell" data-execution_count="19">
+<div id="3c8e737d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[(numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)]</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -929,7 +930,7 @@ Solution
 </section>
 <section id="and-or-not-do-not-work-on-arrays" class="level3">
 <h3 class="anchored" data-anchor-id="and-or-not-do-not-work-on-arrays"><code>and</code>, <code>or</code>, <code>not</code> do not work on arrays</h3>
-<div id="1e717d81" class="cell" data-execution_count="20">
+<div id="a43b63f1" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="kw">and</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>ValueError: The truth value of an array with more than one element is ambiguous.</code></pre>
@@ -938,14 +939,14 @@ Solution
 <section id="values-are-not-positions" class="level3">
 <h3 class="anchored" data-anchor-id="values-are-not-positions">Values are not positions</h3>
 <p>What is wrong with this code?</p>
-<div id="41c218a2" class="cell" data-execution_count="21">
+<div id="d92c0c2b" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> arr[arr <span class="op">&gt;</span> <span class="dv">6</span>]  <span class="co"># [8 9 7]</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>arr[high] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="text"><code>IndexError: index 8 is out of bounds for axis 0 with size 6</code></pre>
 <p><code>high</code> contains the <strong>values</strong> of the selected elements, not their <strong>positions</strong>, so <code>arr[high]</code> tries to read position 8. Use the mask itself to modify the array:</p>
-<div id="e80e7340" class="cell" data-execution_count="22">
+<div id="e0504dae" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>arr[arr <span class="op">&gt;</span> <span class="dv">6</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -971,6 +972,9 @@ Multiples of 3 or 5
 <div class="callout-body-container callout-body">
 <p><em>Inspired by Project Euler, <a href="https://projecteuler.net/problem=1">Problem 1</a>.</em></p>
 <p>The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6 and 9, and their sum is 23.</p>
+<p align="center">
+<img src="../../img/masking-multiples.png" width="600" alt="The numbers 1 to 29 in a grid. Multiples of 3 are blue, multiples of 5 orange, and 15, a multiple of both, green.">
+</p>
 <ol type="1">
 <li>Write a function <code>multiples_3_or_5(n)</code> that returns the sum of all the natural numbers below <code>n</code> that are multiples of 3 or 5. Use a mask instead of a loop. Check that <code>multiples_3_or_5(10)</code> returns <code>23</code>.</li>
 <li>Let <span class="math inline">\(A\)</span> be the multiples of 3 below 1000 and <span class="math inline">\(B\)</span> the multiples of 5. Use masks to check the inclusion–exclusion principle: <span class="math inline">\(|A \cup B| = |A| + |B| - |A \cap B|\)</span>. What is <span class="math inline">\(A \cap B\)</span>?</li>
@@ -990,7 +994,7 @@ Solution
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="0101f35b" class="cell" data-execution_count="23">
+<div id="89b45788" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiples_3_or_5(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Sum the natural numbers below n that are multiples of 3 or 5.</span></span>
@@ -1015,7 +1019,7 @@ Solution
 <pre><code>23</code></pre>
 </div>
 </div>
-<div id="3c647cb9" class="cell" data-execution_count="24">
+<div id="45946f27" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>in_a <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>in_b <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span></span>
@@ -1028,7 +1032,7 @@ Solution
 </div>
 </div>
 <p>Both counts are equal. <span class="math inline">\(A \cap B\)</span> is the set of multiples of 15: they appear in both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, so adding <span class="math inline">\(|A|\)</span> and <span class="math inline">\(|B|\)</span> counts them twice.</p>
-<div id="66e213e4" class="cell" data-execution_count="25">
+<div id="f0dcc3dc" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_of_multiples(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Sum the multiples of d below n with the triangular number formula."""</span></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> d</span>
@@ -1056,6 +1060,9 @@ Estimating π by Counting Points
 </div>
 <div class="callout-body-container callout-body">
 <p>The quarter disc <span class="math inline">\(D = \{(x, y) \in [0, 1]^2 : x^2 + y^2 &lt; 1\}\)</span> has area <span class="math inline">\(\pi / 4\)</span>. If we cover the unit square with a regular grid of <span class="math inline">\(N \times N\)</span> points, the proportion of points that fall inside <span class="math inline">\(D\)</span> approximates that area.</p>
+<p align="center">
+<img src="../../img/masking-pi-grid.png" width="300" alt="A 20 by 20 grid of points in the unit square. The 316 points inside the quarter circle are blue, the 84 outside are grey. 4 times 316 over 400 is 3.16.">
+</p>
 <ol type="1">
 <li>Build the grid coordinates <code>x = (np.arange(N) + 0.5) / N</code>, the centres of <span class="math inline">\(N\)</span> equal cells.</li>
 <li>Use broadcasting to build an <span class="math inline">\(N \times N\)</span> mask that is <code>True</code> where <span class="math inline">\(x^2 + y^2 &lt; 1\)</span>.</li>
@@ -1076,7 +1083,7 @@ Solution
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="71f3c8b6" class="cell" data-execution_count="26">
+<div id="1441068d" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> [<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]:</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
@@ -1088,7 +1095,7 @@ N =  100: π ≈ 3.142800, error = 0.001207
 N = 1000: π ≈ 3.141676, error = 0.000083</code></pre>
 </div>
 </div>
-<div id="39e6d259" class="cell" data-execution_count="27">
+<div id="9f9d010c" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
@@ -1121,9 +1128,12 @@ Pascal’s Triangle and the Sierpiński Triangle
 <p>Each row of Pascal’s triangle is built from the previous one: every entry is the sum of the two entries above it, <span class="math inline">\(\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}\)</span>.</p>
 <ol type="1">
 <li>Build a <span class="math inline">\(64 \times 64\)</span> array <code>pascal</code> where row <span class="math inline">\(n\)</span> holds <span class="math inline">\(\binom{n}{0}, \dots, \binom{n}{n}\)</span> followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry <strong>modulo 2</strong>.</li>
-<li>Build the mask of the odd entries and display it with <code>plt.imshow(odd, cmap="gray_r")</code>. Do you recognise the shape? This is an extension, remember <code>matplotlib</code> is not part of this course.</li>
+<li>Build the mask of the odd entries and display it with <code>plt.imshow(odd, cmap="gray_r")</code>. Your result should look like the picture below. Do you recognise the shape? This is an extension, remember <code>matplotlib</code> is not part of this course.</li>
 <li>How many entries of the first 64 rows are odd? Can you guess a formula for the first <span class="math inline">\(2^k\)</span> rows?</li>
 </ol>
+<p align="center">
+<img src="../../img/masking-sierpinski.png" width="300" alt="The odd entries of the first 64 rows of Pascal's triangle, drawn in black: a triangle made of smaller triangles.">
+</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1138,7 +1148,7 @@ Solution
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="51b22ec4" class="cell" data-execution_count="28">
+<div id="71fa9be2" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">64</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>pascal <span class="op">=</span> np.zeros((N, N), dtype<span class="op">=</span><span class="bu">int</span>)</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>pascal[:, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span>  <span class="co"># the first entry of every row is 1</span></span>
@@ -1166,7 +1176,7 @@ Solution
 </div>
 <p>The odd entries draw the Sierpiński triangle, a fractal. The first <span class="math inline">\(2^k\)</span> rows contain <span class="math inline">\(3^k\)</span> odd entries: each triangle is made of three copies of the previous one, each with half the size.</p>
 <p><strong>Bonus.</strong> Lucas’s theorem says that <span class="math inline">\(\binom{n}{k}\)</span> is odd exactly when every binary digit of <span class="math inline">\(k\)</span> is at most the matching digit of <span class="math inline">\(n\)</span>. With integers, <code>&amp;</code> is the bitwise AND, so this condition is <code>(n &amp; k) == k</code>, and the whole mask can be built without any loop:</p>
-<div id="efa1be1e" class="cell" data-execution_count="29">
+<div id="90c006ec" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(N)[:, np.newaxis]</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.arange(N)[np.newaxis, :]</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>odd_lucas <span class="op">=</span> (k <span class="op">&lt;=</span> n) <span class="op">&amp;</span> ((n <span class="op">&amp;</span> k) <span class="op">==</span> k)</span>
@@ -1867,265 +1877,278 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb58-231"><a href="#cb58-231" aria-hidden="true" tabindex="-1"></a>The mask is <span class="in">`True`</span> for the odd values, so only those are selected.</span>
 <span id="cb58-232"><a href="#cb58-232" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-235"><a href="#cb58-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-236"><a href="#cb58-236" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> values <span class="op">&gt;=</span> <span class="dv">5</span></span>
-<span id="cb58-237"><a href="#cb58-237" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(values[mask])  <span class="co"># [5 8 9]</span></span>
-<span id="cb58-238"><a href="#cb58-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-239"><a href="#cb58-239" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb58-240"><a href="#cb58-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-241"><a href="#cb58-241" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb58-242"><a href="#cb58-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-243"><a href="#cb58-243" aria-hidden="true" tabindex="-1"></a><span class="fu">## Changing Values with a Mask</span></span>
-<span id="cb58-244"><a href="#cb58-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-245"><a href="#cb58-245" aria-hidden="true" tabindex="-1"></a>A mask on the left of <span class="in">`=`</span> changes only the selected elements and leaves the rest untouched. Suppose every student gets 1.5 bonus points, but grades cannot go above 10:</span>
-<span id="cb58-246"><a href="#cb58-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-249"><a href="#cb58-249" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-250"><a href="#cb58-250" aria-hidden="true" tabindex="-1"></a>with_bonus <span class="op">=</span> final_grades <span class="op">+</span> <span class="fl">1.5</span></span>
-<span id="cb58-251"><a href="#cb58-251" aria-hidden="true" tabindex="-1"></a>with_bonus[with_bonus <span class="op">&gt;</span> <span class="dv">10</span>] <span class="op">=</span> <span class="dv">10</span>  <span class="co"># only the grades above 10 change</span></span>
-<span id="cb58-252"><a href="#cb58-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-253"><a href="#cb58-253" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(with_bonus)</span>
-<span id="cb58-254"><a href="#cb58-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-255"><a href="#cb58-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-256"><a href="#cb58-256" aria-hidden="true" tabindex="-1"></a>When we want to choose between two values for every element, <span class="in">`np.where(mask, value_if_true, value_if_false)`</span> builds a new array. It is the array version of <span class="in">`if ... else`</span>:</span>
-<span id="cb58-257"><a href="#cb58-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-260"><a href="#cb58-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-261"><a href="#cb58-261" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(passed, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>))</span>
-<span id="cb58-262"><a href="#cb58-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-263"><a href="#cb58-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-264"><a href="#cb58-264" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb58-265"><a href="#cb58-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-266"><a href="#cb58-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common Pitfalls</span></span>
-<span id="cb58-267"><a href="#cb58-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-268"><a href="#cb58-268" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parentheses around each condition</span></span>
-<span id="cb58-269"><a href="#cb58-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-270"><a href="#cb58-270" aria-hidden="true" tabindex="-1"></a>Run this code and read the error:</span>
-<span id="cb58-271"><a href="#cb58-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-274"><a href="#cb58-274" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-275"><a href="#cb58-275" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb58-276"><a href="#cb58-276" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">|</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>]</span>
-<span id="cb58-277"><a href="#cb58-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-278"><a href="#cb58-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-279"><a href="#cb58-279" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb58-280"><a href="#cb58-280" aria-hidden="true" tabindex="-1"></a><span class="in">ValueError: The truth value of an array with more than one element is ambiguous.</span></span>
-<span id="cb58-281"><a href="#cb58-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-282"><a href="#cb58-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-283"><a href="#cb58-283" aria-hidden="true" tabindex="-1"></a>In Python, <span class="in">`|`</span> and <span class="in">`&amp;`</span> are evaluated **before** <span class="in">`==`</span>, so Python reads <span class="in">`numbers % 3 == (0 | numbers % 5) == 0`</span>, which is not what we meant. Always wrap each condition in parentheses:</span>
-<span id="cb58-284"><a href="#cb58-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-287"><a href="#cb58-287" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-288"><a href="#cb58-288" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[(numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)]</span>
-<span id="cb58-289"><a href="#cb58-289" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples)</span>
-<span id="cb58-290"><a href="#cb58-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-291"><a href="#cb58-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-292"><a href="#cb58-292" aria-hidden="true" tabindex="-1"></a><span class="fu">### `and`, `or`, `not` do not work on arrays</span></span>
-<span id="cb58-293"><a href="#cb58-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-296"><a href="#cb58-296" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-297"><a href="#cb58-297" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb58-298"><a href="#cb58-298" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="kw">and</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span>
-<span id="cb58-299"><a href="#cb58-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-300"><a href="#cb58-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-301"><a href="#cb58-301" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb58-302"><a href="#cb58-302" aria-hidden="true" tabindex="-1"></a><span class="in">ValueError: The truth value of an array with more than one element is ambiguous.</span></span>
-<span id="cb58-303"><a href="#cb58-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-304"><a href="#cb58-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-305"><a href="#cb58-305" aria-hidden="true" tabindex="-1"></a>The keywords <span class="in">`and`</span>, <span class="in">`or`</span> and <span class="in">`not`</span> need one single <span class="in">`True`</span> or <span class="in">`False`</span>, and Python does not know how to turn a whole array into one value (should it use "any" or "all"?). For masks, use the element-wise operators <span class="in">`&amp;`</span>, <span class="in">`|`</span> and <span class="in">`~`</span>.</span>
-<span id="cb58-306"><a href="#cb58-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-307"><a href="#cb58-307" aria-hidden="true" tabindex="-1"></a><span class="fu">### Values are not positions</span></span>
-<span id="cb58-308"><a href="#cb58-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-309"><a href="#cb58-309" aria-hidden="true" tabindex="-1"></a>What is wrong with this code?</span>
-<span id="cb58-310"><a href="#cb58-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-313"><a href="#cb58-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-314"><a href="#cb58-314" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb58-315"><a href="#cb58-315" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
-<span id="cb58-316"><a href="#cb58-316" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> arr[arr <span class="op">&gt;</span> <span class="dv">6</span>]  <span class="co"># [8 9 7]</span></span>
-<span id="cb58-317"><a href="#cb58-317" aria-hidden="true" tabindex="-1"></a>arr[high] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb58-318"><a href="#cb58-318" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-319"><a href="#cb58-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-320"><a href="#cb58-320" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb58-321"><a href="#cb58-321" aria-hidden="true" tabindex="-1"></a><span class="in">IndexError: index 8 is out of bounds for axis 0 with size 6</span></span>
-<span id="cb58-322"><a href="#cb58-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-323"><a href="#cb58-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-324"><a href="#cb58-324" aria-hidden="true" tabindex="-1"></a><span class="in">`high`</span> contains the **values** of the selected elements, not their **positions**, so <span class="in">`arr[high]`</span> tries to read position 8. Use the mask itself to modify the array:</span>
-<span id="cb58-325"><a href="#cb58-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-328"><a href="#cb58-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-329"><a href="#cb58-329" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
-<span id="cb58-330"><a href="#cb58-330" aria-hidden="true" tabindex="-1"></a>arr[arr <span class="op">&gt;</span> <span class="dv">6</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb58-331"><a href="#cb58-331" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr)</span>
-<span id="cb58-332"><a href="#cb58-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-333"><a href="#cb58-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-334"><a href="#cb58-334" aria-hidden="true" tabindex="-1"></a>If you do need the positions of the <span class="in">`True`</span> values, use <span class="in">`np.flatnonzero(mask)`</span>.</span>
-<span id="cb58-335"><a href="#cb58-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-336"><a href="#cb58-336" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb58-337"><a href="#cb58-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-338"><a href="#cb58-338" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercises</span></span>
-<span id="cb58-339"><a href="#cb58-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-340"><a href="#cb58-340" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb58-341"><a href="#cb58-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multiples of 3 or 5</span></span>
-<span id="cb58-342"><a href="#cb58-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-343"><a href="#cb58-343" aria-hidden="true" tabindex="-1"></a>*Inspired by Project Euler, [Problem 1](https://projecteuler.net/problem=1).*</span>
-<span id="cb58-344"><a href="#cb58-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-345"><a href="#cb58-345" aria-hidden="true" tabindex="-1"></a>The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6 and 9, and their sum is 23.</span>
-<span id="cb58-346"><a href="#cb58-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-347"><a href="#cb58-347" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`multiples_3_or_5(n)`</span> that returns the sum of all the natural numbers below <span class="in">`n`</span> that are multiples of 3 or 5. Use a mask instead of a loop. Check that <span class="in">`multiples_3_or_5(10)`</span> returns <span class="in">`23`</span>.</span>
-<span id="cb58-348"><a href="#cb58-348" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Let $A$ be the multiples of 3 below 1000 and $B$ the multiples of 5. Use masks to check the inclusion–exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$. What is $A \cap B$?</span>
-<span id="cb58-349"><a href="#cb58-349" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>The same principle works for sums. The multiples of $d$ below $n$ are $d, 2d, \dots, md$ with $m = \lfloor (n-1)/d \rfloor$, and their sum is $d \cdot \frac{m(m+1)}{2}$. Compute the answer for $n = 1000$ with this formula, without any array, and compare it with your function.</span>
-<span id="cb58-350"><a href="#cb58-350" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-236"><a href="#cb58-236" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>])</span>
+<span id="cb58-237"><a href="#cb58-237" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> values <span class="op">&gt;=</span> <span class="dv">5</span></span>
+<span id="cb58-238"><a href="#cb58-238" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(values[mask])  <span class="co"># [5 8 9]</span></span>
+<span id="cb58-239"><a href="#cb58-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-240"><a href="#cb58-240" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-241"><a href="#cb58-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-242"><a href="#cb58-242" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb58-243"><a href="#cb58-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-244"><a href="#cb58-244" aria-hidden="true" tabindex="-1"></a><span class="fu">## Changing Values with a Mask</span></span>
+<span id="cb58-245"><a href="#cb58-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-246"><a href="#cb58-246" aria-hidden="true" tabindex="-1"></a>A mask on the left of <span class="in">`=`</span> changes only the selected elements and leaves the rest untouched. Suppose every student gets 1.5 bonus points, but grades cannot go above 10:</span>
+<span id="cb58-247"><a href="#cb58-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-250"><a href="#cb58-250" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-251"><a href="#cb58-251" aria-hidden="true" tabindex="-1"></a>with_bonus <span class="op">=</span> final_grades <span class="op">+</span> <span class="fl">1.5</span></span>
+<span id="cb58-252"><a href="#cb58-252" aria-hidden="true" tabindex="-1"></a>with_bonus[with_bonus <span class="op">&gt;</span> <span class="dv">10</span>] <span class="op">=</span> <span class="dv">10</span>  <span class="co"># only the grades above 10 change</span></span>
+<span id="cb58-253"><a href="#cb58-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-254"><a href="#cb58-254" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(with_bonus)</span>
+<span id="cb58-255"><a href="#cb58-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-256"><a href="#cb58-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-257"><a href="#cb58-257" aria-hidden="true" tabindex="-1"></a>When we want to choose between two values for every element, <span class="in">`np.where(mask, value_if_true, value_if_false)`</span> builds a new array. It is the array version of <span class="in">`if ... else`</span>:</span>
+<span id="cb58-258"><a href="#cb58-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-261"><a href="#cb58-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-262"><a href="#cb58-262" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.where(passed, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>))</span>
+<span id="cb58-263"><a href="#cb58-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-264"><a href="#cb58-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-265"><a href="#cb58-265" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb58-266"><a href="#cb58-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-267"><a href="#cb58-267" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common Pitfalls</span></span>
+<span id="cb58-268"><a href="#cb58-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-269"><a href="#cb58-269" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parentheses around each condition</span></span>
+<span id="cb58-270"><a href="#cb58-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-271"><a href="#cb58-271" aria-hidden="true" tabindex="-1"></a>Run this code and read the error:</span>
+<span id="cb58-272"><a href="#cb58-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-275"><a href="#cb58-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-276"><a href="#cb58-276" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb58-277"><a href="#cb58-277" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">|</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb58-278"><a href="#cb58-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-279"><a href="#cb58-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-280"><a href="#cb58-280" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb58-281"><a href="#cb58-281" aria-hidden="true" tabindex="-1"></a><span class="in">ValueError: The truth value of an array with more than one element is ambiguous.</span></span>
+<span id="cb58-282"><a href="#cb58-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-283"><a href="#cb58-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-284"><a href="#cb58-284" aria-hidden="true" tabindex="-1"></a>In Python, <span class="in">`|`</span> and <span class="in">`&amp;`</span> are evaluated **before** <span class="in">`==`</span>, so Python reads <span class="in">`numbers % 3 == (0 | numbers % 5) == 0`</span>, which is not what we meant. Always wrap each condition in parentheses:</span>
+<span id="cb58-285"><a href="#cb58-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-288"><a href="#cb58-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-289"><a href="#cb58-289" aria-hidden="true" tabindex="-1"></a>multiples <span class="op">=</span> numbers[(numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)]</span>
+<span id="cb58-290"><a href="#cb58-290" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples)</span>
+<span id="cb58-291"><a href="#cb58-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-292"><a href="#cb58-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-293"><a href="#cb58-293" aria-hidden="true" tabindex="-1"></a><span class="fu">### `and`, `or`, `not` do not work on arrays</span></span>
+<span id="cb58-294"><a href="#cb58-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-297"><a href="#cb58-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-298"><a href="#cb58-298" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb58-299"><a href="#cb58-299" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="kw">and</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb58-300"><a href="#cb58-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-301"><a href="#cb58-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-302"><a href="#cb58-302" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb58-303"><a href="#cb58-303" aria-hidden="true" tabindex="-1"></a><span class="in">ValueError: The truth value of an array with more than one element is ambiguous.</span></span>
+<span id="cb58-304"><a href="#cb58-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-305"><a href="#cb58-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-306"><a href="#cb58-306" aria-hidden="true" tabindex="-1"></a>The keywords <span class="in">`and`</span>, <span class="in">`or`</span> and <span class="in">`not`</span> need one single <span class="in">`True`</span> or <span class="in">`False`</span>, and Python does not know how to turn a whole array into one value (should it use "any" or "all"?). For masks, use the element-wise operators <span class="in">`&amp;`</span>, <span class="in">`|`</span> and <span class="in">`~`</span>.</span>
+<span id="cb58-307"><a href="#cb58-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-308"><a href="#cb58-308" aria-hidden="true" tabindex="-1"></a><span class="fu">### Values are not positions</span></span>
+<span id="cb58-309"><a href="#cb58-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-310"><a href="#cb58-310" aria-hidden="true" tabindex="-1"></a>What is wrong with this code?</span>
+<span id="cb58-311"><a href="#cb58-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-314"><a href="#cb58-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-315"><a href="#cb58-315" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb58-316"><a href="#cb58-316" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
+<span id="cb58-317"><a href="#cb58-317" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> arr[arr <span class="op">&gt;</span> <span class="dv">6</span>]  <span class="co"># [8 9 7]</span></span>
+<span id="cb58-318"><a href="#cb58-318" aria-hidden="true" tabindex="-1"></a>arr[high] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb58-319"><a href="#cb58-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-320"><a href="#cb58-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-321"><a href="#cb58-321" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb58-322"><a href="#cb58-322" aria-hidden="true" tabindex="-1"></a><span class="in">IndexError: index 8 is out of bounds for axis 0 with size 6</span></span>
+<span id="cb58-323"><a href="#cb58-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-324"><a href="#cb58-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-325"><a href="#cb58-325" aria-hidden="true" tabindex="-1"></a><span class="in">`high`</span> contains the **values** of the selected elements, not their **positions**, so <span class="in">`arr[high]`</span> tries to read position 8. Use the mask itself to modify the array:</span>
+<span id="cb58-326"><a href="#cb58-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-329"><a href="#cb58-329" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-330"><a href="#cb58-330" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">7</span>])</span>
+<span id="cb58-331"><a href="#cb58-331" aria-hidden="true" tabindex="-1"></a>arr[arr <span class="op">&gt;</span> <span class="dv">6</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb58-332"><a href="#cb58-332" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr)</span>
+<span id="cb58-333"><a href="#cb58-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-334"><a href="#cb58-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-335"><a href="#cb58-335" aria-hidden="true" tabindex="-1"></a>If you do need the positions of the <span class="in">`True`</span> values, use <span class="in">`np.flatnonzero(mask)`</span>.</span>
+<span id="cb58-336"><a href="#cb58-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-337"><a href="#cb58-337" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb58-338"><a href="#cb58-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-339"><a href="#cb58-339" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercises</span></span>
+<span id="cb58-340"><a href="#cb58-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-341"><a href="#cb58-341" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb58-342"><a href="#cb58-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multiples of 3 or 5</span></span>
+<span id="cb58-343"><a href="#cb58-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-344"><a href="#cb58-344" aria-hidden="true" tabindex="-1"></a>*Inspired by Project Euler, [Problem 1](https://projecteuler.net/problem=1).*</span>
+<span id="cb58-345"><a href="#cb58-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-346"><a href="#cb58-346" aria-hidden="true" tabindex="-1"></a>The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6 and 9, and their sum is 23.</span>
+<span id="cb58-347"><a href="#cb58-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-348"><a href="#cb58-348" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb58-349"><a href="#cb58-349" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/masking-multiples.png" width="600" alt="The numbers 1 to 29 in a grid. Multiples of 3 are blue, multiples of 5 orange, and 15, a multiple of both, green." /&gt;</span>
+<span id="cb58-350"><a href="#cb58-350" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
 <span id="cb58-351"><a href="#cb58-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-352"><a href="#cb58-352" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb58-353"><a href="#cb58-353" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb58-354"><a href="#cb58-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-357"><a href="#cb58-357" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-358"><a href="#cb58-358" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiples_3_or_5(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb58-359"><a href="#cb58-359" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb58-360"><a href="#cb58-360" aria-hidden="true" tabindex="-1"></a><span class="co">    Sum the natural numbers below n that are multiples of 3 or 5.</span></span>
-<span id="cb58-361"><a href="#cb58-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-362"><a href="#cb58-362" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb58-363"><a href="#cb58-363" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb58-364"><a href="#cb58-364" aria-hidden="true" tabindex="-1"></a><span class="co">    n : int</span></span>
-<span id="cb58-365"><a href="#cb58-365" aria-hidden="true" tabindex="-1"></a><span class="co">        Upper limit (excluded). Must be positive.</span></span>
+<span id="cb58-352"><a href="#cb58-352" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Write a function <span class="in">`multiples_3_or_5(n)`</span> that returns the sum of all the natural numbers below <span class="in">`n`</span> that are multiples of 3 or 5. Use a mask instead of a loop. Check that <span class="in">`multiples_3_or_5(10)`</span> returns <span class="in">`23`</span>.</span>
+<span id="cb58-353"><a href="#cb58-353" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Let $A$ be the multiples of 3 below 1000 and $B$ the multiples of 5. Use masks to check the inclusion–exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$. What is $A \cap B$?</span>
+<span id="cb58-354"><a href="#cb58-354" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>The same principle works for sums. The multiples of $d$ below $n$ are $d, 2d, \dots, md$ with $m = \lfloor (n-1)/d \rfloor$, and their sum is $d \cdot \frac{m(m+1)}{2}$. Compute the answer for $n = 1000$ with this formula, without any array, and compare it with your function.</span>
+<span id="cb58-355"><a href="#cb58-355" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-356"><a href="#cb58-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-357"><a href="#cb58-357" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb58-358"><a href="#cb58-358" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb58-359"><a href="#cb58-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-362"><a href="#cb58-362" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-363"><a href="#cb58-363" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiples_3_or_5(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb58-364"><a href="#cb58-364" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb58-365"><a href="#cb58-365" aria-hidden="true" tabindex="-1"></a><span class="co">    Sum the natural numbers below n that are multiples of 3 or 5.</span></span>
 <span id="cb58-366"><a href="#cb58-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-367"><a href="#cb58-367" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
-<span id="cb58-368"><a href="#cb58-368" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
-<span id="cb58-369"><a href="#cb58-369" aria-hidden="true" tabindex="-1"></a><span class="co">    int</span></span>
-<span id="cb58-370"><a href="#cb58-370" aria-hidden="true" tabindex="-1"></a><span class="co">        The sum of the multiples of 3 or 5 below n.</span></span>
-<span id="cb58-371"><a href="#cb58-371" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb58-372"><a href="#cb58-372" aria-hidden="true" tabindex="-1"></a>    numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, n)</span>
-<span id="cb58-373"><a href="#cb58-373" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span>
-<span id="cb58-374"><a href="#cb58-374" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">int</span>(np.<span class="bu">sum</span>(numbers[mask]))</span>
-<span id="cb58-375"><a href="#cb58-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-376"><a href="#cb58-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-377"><a href="#cb58-377" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples_3_or_5(<span class="dv">10</span>))</span>
-<span id="cb58-378"><a href="#cb58-378" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-379"><a href="#cb58-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-382"><a href="#cb58-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-383"><a href="#cb58-383" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
-<span id="cb58-384"><a href="#cb58-384" aria-hidden="true" tabindex="-1"></a>in_a <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
-<span id="cb58-385"><a href="#cb58-385" aria-hidden="true" tabindex="-1"></a>in_b <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span></span>
-<span id="cb58-386"><a href="#cb58-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-387"><a href="#cb58-387" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(in_a <span class="op">|</span> in_b))</span>
-<span id="cb58-388"><a href="#cb58-388" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(in_a) <span class="op">+</span> np.<span class="bu">sum</span>(in_b) <span class="op">-</span> np.<span class="bu">sum</span>(in_a <span class="op">&amp;</span> in_b))</span>
-<span id="cb58-389"><a href="#cb58-389" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-390"><a href="#cb58-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-391"><a href="#cb58-391" aria-hidden="true" tabindex="-1"></a>Both counts are equal. $A \cap B$ is the set of multiples of 15: they appear in both $A$ and $B$, so adding $|A|$ and $|B|$ counts them twice.</span>
-<span id="cb58-392"><a href="#cb58-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-395"><a href="#cb58-395" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-396"><a href="#cb58-396" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_of_multiples(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb58-397"><a href="#cb58-397" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Sum the multiples of d below n with the triangular number formula."""</span></span>
-<span id="cb58-398"><a href="#cb58-398" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> d</span>
-<span id="cb58-399"><a href="#cb58-399" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d <span class="op">*</span> m <span class="op">*</span> (m <span class="op">+</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
-<span id="cb58-400"><a href="#cb58-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-401"><a href="#cb58-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-402"><a href="#cb58-402" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> sum_of_multiples(<span class="dv">3</span>, <span class="dv">1000</span>) <span class="op">+</span> sum_of_multiples(<span class="dv">5</span>, <span class="dv">1000</span>) <span class="op">-</span> sum_of_multiples(<span class="dv">15</span>, <span class="dv">1000</span>)</span>
-<span id="cb58-403"><a href="#cb58-403" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(formula, multiples_3_or_5(<span class="dv">1000</span>))</span>
-<span id="cb58-404"><a href="#cb58-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-367"><a href="#cb58-367" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb58-368"><a href="#cb58-368" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb58-369"><a href="#cb58-369" aria-hidden="true" tabindex="-1"></a><span class="co">    n : int</span></span>
+<span id="cb58-370"><a href="#cb58-370" aria-hidden="true" tabindex="-1"></a><span class="co">        Upper limit (excluded). Must be positive.</span></span>
+<span id="cb58-371"><a href="#cb58-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-372"><a href="#cb58-372" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb58-373"><a href="#cb58-373" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb58-374"><a href="#cb58-374" aria-hidden="true" tabindex="-1"></a><span class="co">    int</span></span>
+<span id="cb58-375"><a href="#cb58-375" aria-hidden="true" tabindex="-1"></a><span class="co">        The sum of the multiples of 3 or 5 below n.</span></span>
+<span id="cb58-376"><a href="#cb58-376" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb58-377"><a href="#cb58-377" aria-hidden="true" tabindex="-1"></a>    numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, n)</span>
+<span id="cb58-378"><a href="#cb58-378" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> (numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>) <span class="op">|</span> (numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb58-379"><a href="#cb58-379" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">int</span>(np.<span class="bu">sum</span>(numbers[mask]))</span>
+<span id="cb58-380"><a href="#cb58-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-381"><a href="#cb58-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-382"><a href="#cb58-382" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(multiples_3_or_5(<span class="dv">10</span>))</span>
+<span id="cb58-383"><a href="#cb58-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-384"><a href="#cb58-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-387"><a href="#cb58-387" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-388"><a href="#cb58-388" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
+<span id="cb58-389"><a href="#cb58-389" aria-hidden="true" tabindex="-1"></a>in_a <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb58-390"><a href="#cb58-390" aria-hidden="true" tabindex="-1"></a>in_b <span class="op">=</span> numbers <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb58-391"><a href="#cb58-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-392"><a href="#cb58-392" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(in_a <span class="op">|</span> in_b))</span>
+<span id="cb58-393"><a href="#cb58-393" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(in_a) <span class="op">+</span> np.<span class="bu">sum</span>(in_b) <span class="op">-</span> np.<span class="bu">sum</span>(in_a <span class="op">&amp;</span> in_b))</span>
+<span id="cb58-394"><a href="#cb58-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-395"><a href="#cb58-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-396"><a href="#cb58-396" aria-hidden="true" tabindex="-1"></a>Both counts are equal. $A \cap B$ is the set of multiples of 15: they appear in both $A$ and $B$, so adding $|A|$ and $|B|$ counts them twice.</span>
+<span id="cb58-397"><a href="#cb58-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-400"><a href="#cb58-400" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-401"><a href="#cb58-401" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_of_multiples(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb58-402"><a href="#cb58-402" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Sum the multiples of d below n with the triangular number formula."""</span></span>
+<span id="cb58-403"><a href="#cb58-403" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> d</span>
+<span id="cb58-404"><a href="#cb58-404" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d <span class="op">*</span> m <span class="op">*</span> (m <span class="op">+</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
 <span id="cb58-405"><a href="#cb58-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-406"><a href="#cb58-406" aria-hidden="true" tabindex="-1"></a>The formula needs three multiplications, whatever the value of $n$, while the mask builds an array of $n$ elements. Masks are a great way to *check* a formula, but a formula, when we have one, is faster.</span>
-<span id="cb58-407"><a href="#cb58-407" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb58-408"><a href="#cb58-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-409"><a href="#cb58-409" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb58-410"><a href="#cb58-410" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estimating π by Counting Points</span></span>
-<span id="cb58-411"><a href="#cb58-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-412"><a href="#cb58-412" aria-hidden="true" tabindex="-1"></a>The quarter disc $D = <span class="sc">\{</span>(x, y) \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>^2 : x^2 + y^2 &lt; 1<span class="sc">\}</span>$ has area $\pi / 4$. If we cover the unit square with a regular grid of $N \times N$ points, the proportion of points that fall inside $D$ approximates that area.</span>
+<span id="cb58-406"><a href="#cb58-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-407"><a href="#cb58-407" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> sum_of_multiples(<span class="dv">3</span>, <span class="dv">1000</span>) <span class="op">+</span> sum_of_multiples(<span class="dv">5</span>, <span class="dv">1000</span>) <span class="op">-</span> sum_of_multiples(<span class="dv">15</span>, <span class="dv">1000</span>)</span>
+<span id="cb58-408"><a href="#cb58-408" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(formula, multiples_3_or_5(<span class="dv">1000</span>))</span>
+<span id="cb58-409"><a href="#cb58-409" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-410"><a href="#cb58-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-411"><a href="#cb58-411" aria-hidden="true" tabindex="-1"></a>The formula needs three multiplications, whatever the value of $n$, while the mask builds an array of $n$ elements. Masks are a great way to *check* a formula, but a formula, when we have one, is faster.</span>
+<span id="cb58-412"><a href="#cb58-412" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb58-413"><a href="#cb58-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-414"><a href="#cb58-414" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build the grid coordinates <span class="in">`x = (np.arange(N) + 0.5) / N`</span>, the centres of $N$ equal cells.</span>
-<span id="cb58-415"><a href="#cb58-415" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Use broadcasting to build an $N \times N$ mask that is <span class="in">`True`</span> where $x^2 + y^2 &lt; 1$.</span>
-<span id="cb58-416"><a href="#cb58-416" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?</span>
-<span id="cb58-417"><a href="#cb58-417" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Display the mask with <span class="in">`plt.imshow(inside, cmap="gray")`</span>. This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
-<span id="cb58-418"><a href="#cb58-418" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb58-419"><a href="#cb58-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-420"><a href="#cb58-420" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb58-421"><a href="#cb58-421" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb58-414"><a href="#cb58-414" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb58-415"><a href="#cb58-415" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estimating π by Counting Points</span></span>
+<span id="cb58-416"><a href="#cb58-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-417"><a href="#cb58-417" aria-hidden="true" tabindex="-1"></a>The quarter disc $D = <span class="sc">\{</span>(x, y) \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>^2 : x^2 + y^2 &lt; 1<span class="sc">\}</span>$ has area $\pi / 4$. If we cover the unit square with a regular grid of $N \times N$ points, the proportion of points that fall inside $D$ approximates that area.</span>
+<span id="cb58-418"><a href="#cb58-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-419"><a href="#cb58-419" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb58-420"><a href="#cb58-420" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/masking-pi-grid.png" width="300" alt="A 20 by 20 grid of points in the unit square. The 316 points inside the quarter circle are blue, the 84 outside are grey. 4 times 316 over 400 is 3.16." /&gt;</span>
+<span id="cb58-421"><a href="#cb58-421" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
 <span id="cb58-422"><a href="#cb58-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-425"><a href="#cb58-425" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-426"><a href="#cb58-426" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> [<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]:</span>
-<span id="cb58-427"><a href="#cb58-427" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
-<span id="cb58-428"><a href="#cb58-428" aria-hidden="true" tabindex="-1"></a>    inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
-<span id="cb58-429"><a href="#cb58-429" aria-hidden="true" tabindex="-1"></a>    estimate <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> np.mean(inside)  <span class="co"># proportion of points inside, times 4</span></span>
-<span id="cb58-430"><a href="#cb58-430" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"N = </span><span class="sc">{</span>N<span class="sc">:4d}</span><span class="ss">: π ≈ </span><span class="sc">{</span>estimate<span class="sc">:.6f}</span><span class="ss">, error = </span><span class="sc">{</span><span class="bu">abs</span>(estimate <span class="op">-</span> np.pi)<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
-<span id="cb58-431"><a href="#cb58-431" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-432"><a href="#cb58-432" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-435"><a href="#cb58-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-436"><a href="#cb58-436" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb58-437"><a href="#cb58-437" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
-<span id="cb58-438"><a href="#cb58-438" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
-<span id="cb58-439"><a href="#cb58-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-440"><a href="#cb58-440" aria-hidden="true" tabindex="-1"></a>plt.imshow(inside, cmap<span class="op">=</span><span class="st">"gray"</span>, origin<span class="op">=</span><span class="st">"lower"</span>)</span>
-<span id="cb58-441"><a href="#cb58-441" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
-<span id="cb58-442"><a href="#cb58-442" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb58-443"><a href="#cb58-443" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-444"><a href="#cb58-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-445"><a href="#cb58-445" aria-hidden="true" tabindex="-1"></a><span class="in">`np.mean(inside)`</span> is $|D \cap \text{grid}| \,/\, |\text{grid}|$, so this is a counting version of an integral. In Session 19 we will replace the regular grid with random points: that is the **Monte Carlo** method.</span>
-<span id="cb58-446"><a href="#cb58-446" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb58-447"><a href="#cb58-447" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-448"><a href="#cb58-448" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb58-449"><a href="#cb58-449" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pascal's Triangle and the Sierpiński Triangle</span></span>
-<span id="cb58-450"><a href="#cb58-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-451"><a href="#cb58-451" aria-hidden="true" tabindex="-1"></a>Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.</span>
-<span id="cb58-452"><a href="#cb58-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-453"><a href="#cb58-453" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build a $64 \times 64$ array <span class="in">`pascal`</span> where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.</span>
-<span id="cb58-454"><a href="#cb58-454" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build the mask of the odd entries and display it with <span class="in">`plt.imshow(odd, cmap="gray_r")`</span>. Do you recognise the shape? This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
-<span id="cb58-455"><a href="#cb58-455" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>How many entries of the first 64 rows are odd? Can you guess a formula for the first $2^k$ rows?</span>
-<span id="cb58-456"><a href="#cb58-456" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb58-457"><a href="#cb58-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-458"><a href="#cb58-458" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb58-459"><a href="#cb58-459" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
-<span id="cb58-460"><a href="#cb58-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-463"><a href="#cb58-463" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-464"><a href="#cb58-464" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">64</span></span>
-<span id="cb58-465"><a href="#cb58-465" aria-hidden="true" tabindex="-1"></a>pascal <span class="op">=</span> np.zeros((N, N), dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb58-466"><a href="#cb58-466" aria-hidden="true" tabindex="-1"></a>pascal[:, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span>  <span class="co"># the first entry of every row is 1</span></span>
-<span id="cb58-467"><a href="#cb58-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-468"><a href="#cb58-468" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, N):</span>
-<span id="cb58-469"><a href="#cb58-469" aria-hidden="true" tabindex="-1"></a>    pascal[n, <span class="dv">1</span>:] <span class="op">=</span> (pascal[n <span class="op">-</span> <span class="dv">1</span>, <span class="dv">1</span>:] <span class="op">+</span> pascal[n <span class="op">-</span> <span class="dv">1</span>, :<span class="op">-</span><span class="dv">1</span>]) <span class="op">%</span> <span class="dv">2</span></span>
+<span id="cb58-423"><a href="#cb58-423" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build the grid coordinates <span class="in">`x = (np.arange(N) + 0.5) / N`</span>, the centres of $N$ equal cells.</span>
+<span id="cb58-424"><a href="#cb58-424" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Use broadcasting to build an $N \times N$ mask that is <span class="in">`True`</span> where $x^2 + y^2 &lt; 1$.</span>
+<span id="cb58-425"><a href="#cb58-425" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?</span>
+<span id="cb58-426"><a href="#cb58-426" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Display the mask with <span class="in">`plt.imshow(inside, cmap="gray")`</span>. This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
+<span id="cb58-427"><a href="#cb58-427" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-428"><a href="#cb58-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-429"><a href="#cb58-429" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb58-430"><a href="#cb58-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb58-431"><a href="#cb58-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-434"><a href="#cb58-434" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-435"><a href="#cb58-435" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> [<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]:</span>
+<span id="cb58-436"><a href="#cb58-436" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
+<span id="cb58-437"><a href="#cb58-437" aria-hidden="true" tabindex="-1"></a>    inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
+<span id="cb58-438"><a href="#cb58-438" aria-hidden="true" tabindex="-1"></a>    estimate <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> np.mean(inside)  <span class="co"># proportion of points inside, times 4</span></span>
+<span id="cb58-439"><a href="#cb58-439" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"N = </span><span class="sc">{</span>N<span class="sc">:4d}</span><span class="ss">: π ≈ </span><span class="sc">{</span>estimate<span class="sc">:.6f}</span><span class="ss">, error = </span><span class="sc">{</span><span class="bu">abs</span>(estimate <span class="op">-</span> np.pi)<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
+<span id="cb58-440"><a href="#cb58-440" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-441"><a href="#cb58-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-444"><a href="#cb58-444" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-445"><a href="#cb58-445" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb58-446"><a href="#cb58-446" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (np.arange(N) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> N</span>
+<span id="cb58-447"><a href="#cb58-447" aria-hidden="true" tabindex="-1"></a>inside <span class="op">=</span> x[:, np.newaxis] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> x[np.newaxis, :] <span class="op">**</span> <span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">1</span></span>
+<span id="cb58-448"><a href="#cb58-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-449"><a href="#cb58-449" aria-hidden="true" tabindex="-1"></a>plt.imshow(inside, cmap<span class="op">=</span><span class="st">"gray"</span>, origin<span class="op">=</span><span class="st">"lower"</span>)</span>
+<span id="cb58-450"><a href="#cb58-450" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb58-451"><a href="#cb58-451" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb58-452"><a href="#cb58-452" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-453"><a href="#cb58-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-454"><a href="#cb58-454" aria-hidden="true" tabindex="-1"></a><span class="in">`np.mean(inside)`</span> is $|D \cap \text{grid}| \,/\, |\text{grid}|$, so this is a counting version of an integral. In Session 19 we will replace the regular grid with random points: that is the **Monte Carlo** method.</span>
+<span id="cb58-455"><a href="#cb58-455" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-456"><a href="#cb58-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-457"><a href="#cb58-457" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb58-458"><a href="#cb58-458" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pascal's Triangle and the Sierpiński Triangle</span></span>
+<span id="cb58-459"><a href="#cb58-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-460"><a href="#cb58-460" aria-hidden="true" tabindex="-1"></a>Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.</span>
+<span id="cb58-461"><a href="#cb58-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-462"><a href="#cb58-462" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build a $64 \times 64$ array <span class="in">`pascal`</span> where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.</span>
+<span id="cb58-463"><a href="#cb58-463" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build the mask of the odd entries and display it with <span class="in">`plt.imshow(odd, cmap="gray_r")`</span>. Your result should look like the picture below. Do you recognise the shape? This is an extension, remember <span class="in">`matplotlib`</span> is not part of this course.</span>
+<span id="cb58-464"><a href="#cb58-464" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>How many entries of the first 64 rows are odd? Can you guess a formula for the first $2^k$ rows?</span>
+<span id="cb58-465"><a href="#cb58-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-466"><a href="#cb58-466" aria-hidden="true" tabindex="-1"></a>&lt;p align="center"&gt;</span>
+<span id="cb58-467"><a href="#cb58-467" aria-hidden="true" tabindex="-1"></a>&lt;img src="../../img/masking-sierpinski.png" width="300" alt="The odd entries of the first 64 rows of Pascal's triangle, drawn in black: a triangle made of smaller triangles." /&gt;</span>
+<span id="cb58-468"><a href="#cb58-468" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span>
+<span id="cb58-469"><a href="#cb58-469" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb58-470"><a href="#cb58-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-471"><a href="#cb58-471" aria-hidden="true" tabindex="-1"></a>odd <span class="op">=</span> pascal <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb58-472"><a href="#cb58-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-473"><a href="#cb58-473" aria-hidden="true" tabindex="-1"></a>plt.imshow(odd, cmap<span class="op">=</span><span class="st">"gray_r"</span>)</span>
-<span id="cb58-474"><a href="#cb58-474" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
-<span id="cb58-475"><a href="#cb58-475" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb58-476"><a href="#cb58-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-477"><a href="#cb58-477" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(odd), <span class="dv">3</span><span class="op">**</span><span class="dv">6</span>)</span>
-<span id="cb58-478"><a href="#cb58-478" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-479"><a href="#cb58-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-480"><a href="#cb58-480" aria-hidden="true" tabindex="-1"></a>The odd entries draw the Sierpiński triangle, a fractal. The first $2^k$ rows contain $3^k$ odd entries: each triangle is made of three copies of the previous one, each with half the size.</span>
-<span id="cb58-481"><a href="#cb58-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-482"><a href="#cb58-482" aria-hidden="true" tabindex="-1"></a>**Bonus.** Lucas's theorem says that $\binom{n}{k}$ is odd exactly when every binary digit of $k$ is at most the matching digit of $n$. With integers, <span class="in">`&amp;`</span> is the bitwise AND, so this condition is <span class="in">`(n &amp; k) == k`</span>, and the whole mask can be built without any loop:</span>
+<span id="cb58-471"><a href="#cb58-471" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb58-472"><a href="#cb58-472" aria-hidden="true" tabindex="-1"></a><span class="fu">## Solution</span></span>
+<span id="cb58-473"><a href="#cb58-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-476"><a href="#cb58-476" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-477"><a href="#cb58-477" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">64</span></span>
+<span id="cb58-478"><a href="#cb58-478" aria-hidden="true" tabindex="-1"></a>pascal <span class="op">=</span> np.zeros((N, N), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb58-479"><a href="#cb58-479" aria-hidden="true" tabindex="-1"></a>pascal[:, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span>  <span class="co"># the first entry of every row is 1</span></span>
+<span id="cb58-480"><a href="#cb58-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-481"><a href="#cb58-481" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, N):</span>
+<span id="cb58-482"><a href="#cb58-482" aria-hidden="true" tabindex="-1"></a>    pascal[n, <span class="dv">1</span>:] <span class="op">=</span> (pascal[n <span class="op">-</span> <span class="dv">1</span>, <span class="dv">1</span>:] <span class="op">+</span> pascal[n <span class="op">-</span> <span class="dv">1</span>, :<span class="op">-</span><span class="dv">1</span>]) <span class="op">%</span> <span class="dv">2</span></span>
 <span id="cb58-483"><a href="#cb58-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-486"><a href="#cb58-486" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb58-487"><a href="#cb58-487" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(N)[:, np.newaxis]</span>
-<span id="cb58-488"><a href="#cb58-488" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.arange(N)[np.newaxis, :]</span>
-<span id="cb58-489"><a href="#cb58-489" aria-hidden="true" tabindex="-1"></a>odd_lucas <span class="op">=</span> (k <span class="op">&lt;=</span> n) <span class="op">&amp;</span> ((n <span class="op">&amp;</span> k) <span class="op">==</span> k)</span>
-<span id="cb58-490"><a href="#cb58-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-491"><a href="#cb58-491" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(odd, odd_lucas))</span>
-<span id="cb58-492"><a href="#cb58-492" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb58-493"><a href="#cb58-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-494"><a href="#cb58-494" aria-hidden="true" tabindex="-1"></a>This is also why <span class="in">`&amp;`</span> works on masks: <span class="in">`True`</span> and <span class="in">`False`</span> are the bits <span class="in">`1`</span> and <span class="in">`0`</span>, and AND on a single bit is exactly the logical "and".</span>
-<span id="cb58-495"><a href="#cb58-495" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-484"><a href="#cb58-484" aria-hidden="true" tabindex="-1"></a>odd <span class="op">=</span> pascal <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb58-485"><a href="#cb58-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-486"><a href="#cb58-486" aria-hidden="true" tabindex="-1"></a>plt.imshow(odd, cmap<span class="op">=</span><span class="st">"gray_r"</span>)</span>
+<span id="cb58-487"><a href="#cb58-487" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb58-488"><a href="#cb58-488" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb58-489"><a href="#cb58-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-490"><a href="#cb58-490" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(odd), <span class="dv">3</span><span class="op">**</span><span class="dv">6</span>)</span>
+<span id="cb58-491"><a href="#cb58-491" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-492"><a href="#cb58-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-493"><a href="#cb58-493" aria-hidden="true" tabindex="-1"></a>The odd entries draw the Sierpiński triangle, a fractal. The first $2^k$ rows contain $3^k$ odd entries: each triangle is made of three copies of the previous one, each with half the size.</span>
+<span id="cb58-494"><a href="#cb58-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-495"><a href="#cb58-495" aria-hidden="true" tabindex="-1"></a>**Bonus.** Lucas's theorem says that $\binom{n}{k}$ is odd exactly when every binary digit of $k$ is at most the matching digit of $n$. With integers, <span class="in">`&amp;`</span> is the bitwise AND, so this condition is <span class="in">`(n &amp; k) == k`</span>, and the whole mask can be built without any loop:</span>
 <span id="cb58-496"><a href="#cb58-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-497"><a href="#cb58-497" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb58-498"><a href="#cb58-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-499"><a href="#cb58-499" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
-<span id="cb58-500"><a href="#cb58-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-501"><a href="#cb58-501" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Boolean mask is the indicator function of a set: one <span class="in">`True`</span>/<span class="in">`False`</span> per element.</span>
-<span id="cb58-502"><a href="#cb58-502" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`array[mask]`</span> retrieves the elements of the set; <span class="in">`array[mask] = value`</span> modifies only them.</span>
-<span id="cb58-503"><a href="#cb58-503" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`&amp;`</span>, <span class="in">`|`</span> and <span class="in">`~`</span> are intersection, union and complement. Place each comparison in parentheses.</span>
-<span id="cb58-504"><a href="#cb58-504" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.sum(mask)`</span> counts the elements of the set and <span class="in">`np.mean(mask)`</span> gives its proportion.</span>
-<span id="cb58-505"><a href="#cb58-505" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.any()`</span> and <span class="in">`np.all()`</span> are the quantifiers "there exists" and "for all".</span>
-<span id="cb58-506"><a href="#cb58-506" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.where(mask, a, b)`</span> chooses between two values for every element.</span>
-<span id="cb58-507"><a href="#cb58-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-508"><a href="#cb58-508" aria-hidden="true" tabindex="-1"></a>Explain why Python's scalar operators <span class="in">`and`</span>, <span class="in">`or`</span>, and <span class="in">`not`</span> cannot be used directly with Boolean arrays.</span>
+<span id="cb58-499"><a href="#cb58-499" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb58-500"><a href="#cb58-500" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(N)[:, np.newaxis]</span>
+<span id="cb58-501"><a href="#cb58-501" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.arange(N)[np.newaxis, :]</span>
+<span id="cb58-502"><a href="#cb58-502" aria-hidden="true" tabindex="-1"></a>odd_lucas <span class="op">=</span> (k <span class="op">&lt;=</span> n) <span class="op">&amp;</span> ((n <span class="op">&amp;</span> k) <span class="op">==</span> k)</span>
+<span id="cb58-503"><a href="#cb58-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-504"><a href="#cb58-504" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(odd, odd_lucas))</span>
+<span id="cb58-505"><a href="#cb58-505" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-506"><a href="#cb58-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-507"><a href="#cb58-507" aria-hidden="true" tabindex="-1"></a>This is also why <span class="in">`&amp;`</span> works on masks: <span class="in">`True`</span> and <span class="in">`False`</span> are the bits <span class="in">`1`</span> and <span class="in">`0`</span>, and AND on a single bit is exactly the logical "and".</span>
+<span id="cb58-508"><a href="#cb58-508" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb58-509"><a href="#cb58-509" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-510"><a href="#cb58-510" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb58-511"><a href="#cb58-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-512"><a href="#cb58-512" aria-hidden="true" tabindex="-1"></a><span class="fu"># Next: Masking with Images</span></span>
+<span id="cb58-512"><a href="#cb58-512" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary and Reflection</span></span>
 <span id="cb58-513"><a href="#cb58-513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-514"><a href="#cb58-514" aria-hidden="true" tabindex="-1"></a>Now apply the same ideas to pictures.</span>
-<span id="cb58-515"><a href="#cb58-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-516"><a href="#cb58-516" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Masking with Images</span><span class="co">](masking_images.qmd)</span>{.btn .btn-primary}</span>
-<span id="cb58-517"><a href="#cb58-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-518"><a href="#cb58-518" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
-<span id="cb58-519"><a href="#cb58-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-520"><a href="#cb58-520" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
-<span id="cb58-521"><a href="#cb58-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-522"><a href="#cb58-522" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#masking)</span>{.btn .btn-primary}</span>
+<span id="cb58-514"><a href="#cb58-514" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Boolean mask is the indicator function of a set: one <span class="in">`True`</span>/<span class="in">`False`</span> per element.</span>
+<span id="cb58-515"><a href="#cb58-515" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`array[mask]`</span> retrieves the elements of the set; <span class="in">`array[mask] = value`</span> modifies only them.</span>
+<span id="cb58-516"><a href="#cb58-516" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`&amp;`</span>, <span class="in">`|`</span> and <span class="in">`~`</span> are intersection, union and complement. Place each comparison in parentheses.</span>
+<span id="cb58-517"><a href="#cb58-517" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.sum(mask)`</span> counts the elements of the set and <span class="in">`np.mean(mask)`</span> gives its proportion.</span>
+<span id="cb58-518"><a href="#cb58-518" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.any()`</span> and <span class="in">`np.all()`</span> are the quantifiers "there exists" and "for all".</span>
+<span id="cb58-519"><a href="#cb58-519" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`np.where(mask, a, b)`</span> chooses between two values for every element.</span>
+<span id="cb58-520"><a href="#cb58-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-521"><a href="#cb58-521" aria-hidden="true" tabindex="-1"></a>Explain why Python's scalar operators <span class="in">`and`</span>, <span class="in">`or`</span>, and <span class="in">`not`</span> cannot be used directly with Boolean arrays.</span>
+<span id="cb58-522"><a href="#cb58-522" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-523"><a href="#cb58-523" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb58-524"><a href="#cb58-524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-525"><a href="#cb58-525" aria-hidden="true" tabindex="-1"></a><span class="fu"># Next: Masking with Images</span></span>
+<span id="cb58-526"><a href="#cb58-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-527"><a href="#cb58-527" aria-hidden="true" tabindex="-1"></a>Now apply the same ideas to pictures.</span>
+<span id="cb58-528"><a href="#cb58-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-529"><a href="#cb58-529" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Masking with Images</span><span class="co">](masking_images.qmd)</span>{.btn .btn-primary}</span>
+<span id="cb58-530"><a href="#cb58-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-531"><a href="#cb58-531" aria-hidden="true" tabindex="-1"></a><span class="fu"># Homework and Review</span></span>
+<span id="cb58-532"><a href="#cb58-532" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-533"><a href="#cb58-533" aria-hidden="true" tabindex="-1"></a>Work through the homework exercises available here.</span>
+<span id="cb58-534"><a href="#cb58-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-535"><a href="#cb58-535" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Homework</span><span class="co">](homework_numpy.qmd#masking)</span>{.btn .btn-primary}</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
