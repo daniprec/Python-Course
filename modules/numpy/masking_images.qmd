@@ -13,94 +13,64 @@ In this lesson we will cut a dog out of one picture and place it on a beach, and
 ---
 
 ## Setting Up
-Before we dive into the main content, let's import the required libraries.
+
+We only need NumPy and Matplotlib.
 
 ```{python}
-import cv2  # for image processing tasks
 import matplotlib.pyplot as plt  # to display images
 import numpy as np  # for numerical operations on arrays
-import requests  # to fetch images from the internet
 ```
 
----
-
-## Loading and Displaying Images
-
-We've defined two functions to help us:
-
-- `load_image`: This function fetches an image from a given URL.
-- `show_image`: Displays the provided NumPy array as an image.
+`show_image` displays an array as a picture: a grayscale image, a colour image, or a mask.
 
 ```{python}
-def load_image(url: str, color: bool=False) -> np.ndarray:
-  """
-  Fetch and return an image from the provided URL as a grayscale
-  NumPy array.
-
-  Parameters
-  ----------
-  url : str
-    The URL of the image to be fetched.
-  color : bool, optional
-    If True, loads the image in color. If False, loads the image in grayscale.
-    Default is False.
-
-  Returns
-  -------
-  np.ndarray
-    If `color` is False, returns a grayscale image represented as a 2D NumPy
-    array with values ranging from 0 to 255. If `color` is True,
-    returns a color image in RGB format.
-  """
-  response = requests.get(url)
-  image_array = np.asarray(bytearray(response.content), dtype="uint8")
-
-  if color:
-    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
-  else:
-    image = cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)
-  return image
-
 def show_image(img: np.ndarray):
   """
-  Display the provided NumPy array as an image.
+  Display a NumPy array as an image.
 
   Parameters
   ----------
   img : np.ndarray
-    The image data represented as either a 2D NumPy array for grayscale images
-    or a 3D NumPy array for color images.
+    A 2D array (grayscale image with values from 0 to 255, or Boolean mask)
+    or a 3D array of shape (rows, columns, 3) (colour image).
   """
-  # Check if the image is color (3D) or grayscale (2D)
-  if img.ndim == 3:  # Color image
-    if img.max() > 1:  # Real image
-      plt.imshow(img, vmax=255)
-    else: # Binary mask
-      img = np.mean(img, axis=2)
-      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
+  if img.ndim == 3:  # Colour image
+    plt.imshow(img.astype(np.uint8))
+  elif img.dtype == bool:  # Mask
+    plt.imshow(img, cmap="gray", vmin=0, vmax=1)
   else:  # Grayscale image
-    if img.max() > 1:  # Real image
-      plt.imshow(img, cmap="gray", vmin=0, vmax=255)
-    else:  # Binary mask
-      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
-
+    plt.imshow(img, cmap="gray", vmin=0, vmax=255)
+  plt.axis("off")
   plt.show()
   plt.close()
 ```
 
-Let's start by loading an image of a puppy and displaying it.
+---
+
+## Loading the Images: A Review of Session 17
+
+In Session 17 we loaded the ghost photos from text files on the internet. Our pictures are stored in the same way: each file is a table of numbers, one per pixel, from `0` (black) to `255` (white). `BASE` is the address of the folder:
 
 ```{python}
-# Link to the image
-url_dog = "https://github.com/daniprec/Python-Course/blob/main/img/dog-nobg.png"
+BASE = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking"
+```
 
-# Load and display the image
-dog = load_image(url_dog)
-print(f"The array has dimension: {dog.ndim}")
-print(f"The array contains values of type: {dog.dtype}\n")
+`np.loadtxt()` reads a text file straight from its URL. It returns floats by default, but pixels are integers, so we ask for `dtype=int`:
+
+```{python}
+dog = np.loadtxt(f"{BASE}/dog.txt", dtype=int)
+
+print(f"The array has shape: {dog.shape}")
+print(f"The array contains values of type: {dog.dtype}")
+print(f"Values from {dog.min()} to {dog.max()}\n")
 show_image(dog)
 ```
+
+::: {.callout-note}
+## Remember: `np.load()` vs `np.loadtxt()`
+
+`np.loadtxt()` reads text files, also from a URL. `np.load()` reads the binary `.npy` files that `np.save()` writes on your computer. At the end of the lesson you will use both to keep your collage.
+:::
 
 ## Masking: The Basics
 
@@ -120,15 +90,14 @@ show_image(mask_dog)
 Now, let's load another image, this time of a beach. We will later superimpose our dog image onto this beach image.
 
 ```{python}
-# Link to the image
-url_beach = "https://github.com/daniprec/Python-Course/blob/main/img/beach.jpg"
+beach = np.loadtxt(f"{BASE}/beach.txt", dtype=int)
+beach_original = beach.copy()  # keep an untouched copy for the exercises
 
-# Load and display the image
-beach = load_image(url_beach)
-print(f"The array has dimension: {beach.ndim}")
-print(f"The array contains values of type: {beach.dtype}\n")
+print(f"The array has shape: {beach.shape}")
 show_image(beach)
 ```
+
+We keep a copy because masking assignments change the array **in place**: once the dog is pasted, the original beach is gone.
 
 ## Creating a Mask for the Beach Image
 
@@ -170,6 +139,27 @@ beach[mask_beach] = dog[mask_dog]
 show_image(beach)
 ```
 
+::: {.callout-note}
+## Exercise: Save the Evidence
+
+As with the ghost photos, save your collage with `np.save()`, load it back with `np.load()`, and check that both arrays are equal. Can you also save it with `np.savetxt()`?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+#| eval: false
+np.save("dog_on_beach.npy", beach)
+collage = np.load("dog_on_beach.npy")
+print(np.array_equal(beach, collage))  # True
+
+np.savetxt("dog_on_beach.txt", beach, fmt="%d")
+```
+
+`np.save()` keeps the shape and the data type exactly. `np.savetxt()` writes readable text, but only for 1D and 2D arrays: keep that in mind for colour images.
+:::
+
 ---
 
 ## Practice
@@ -183,7 +173,8 @@ Try to do the same thing using this other image. You will realise two issues:
 2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?
 
 ```{python}
-url_dog_2 = "https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.png"
+#| eval: false
+dog_2 = np.loadtxt(f"{BASE}/dog_2.txt", dtype=int)
 ```
 :::
 
@@ -192,7 +183,7 @@ url_dog_2 = "https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.
 
 ```{python}
 # Load and display the image
-dog_2 = load_image(url_dog_2)
+dog_2 = np.loadtxt(f"{BASE}/dog_2.txt", dtype=int)
 
 show_image(dog_2)
 # Problem: We have to take away both black and white rectangle
@@ -207,8 +198,8 @@ show_image(mask_dog_2)
 ```
 
 ```{python}
-# Reload the beach
-beach_2 = load_image(url_beach)
+# Start again from a clean beach
+beach_2 = beach_original.copy()
 
 mask_beach_2 = np.zeros(beach_2.shape)  # type: int (0)
 mask_beach_2 = mask_beach_2.astype(bool)  # type: bool (False)
@@ -254,9 +245,10 @@ show_image(beach_2)
 ::: {.callout-note}
 ## Exercise: Color Images
 
-Call the function `load_image` setting the argument `color=True`. This will load the images in color!
+The colour versions are `dog_rgb.txt` and `beach_rgb.txt`. A colour image has three numbers per pixel (red, green, blue), so its shape is `(rows, columns, 3)`. But `np.savetxt()` only writes 2D arrays, so the files store each image with shape `(rows, columns * 3)`.
 
-Repeat the exercise but now using 3D arrays, i.e. RGB images.
+1. Load both files and `reshape()` them back to 3D (Session 16). Hint: `-1` lets NumPy compute one dimension for you.
+2. Repeat the exercise with the colour images.
 
 <p align="center">
 <img src="../../img/dog-right.png" width="300" />
@@ -266,12 +258,17 @@ Repeat the exercise but now using 3D arrays, i.e. RGB images.
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-A color image has shape `(height, width, 3)`. The mask has the same shape, so the same indexing works; we only need to unpack three values from `shape`.
+Each row of the file holds the three channels of every pixel, one pixel after another, so `reshape(rows, -1, 3)` restores the image. The mask has the same 3D shape, so the same indexing works; we only need to unpack three values from `shape`.
 
 ```{python}
-dog_rgb = load_image(url_dog, color=True)
-beach_rgb = load_image(url_beach, color=True)
-print(dog_rgb.shape, beach_rgb.shape)
+dog_rgb = np.loadtxt(f"{BASE}/dog_rgb.txt", dtype=int)
+beach_rgb = np.loadtxt(f"{BASE}/beach_rgb.txt", dtype=int)
+print(dog_rgb.shape, beach_rgb.shape)  # 2D, as stored
+
+dog_rgb = dog_rgb.reshape(dog_rgb.shape[0], -1, 3)
+beach_rgb = beach_rgb.reshape(beach_rgb.shape[0], -1, 3)
+beach_rgb_original = beach_rgb.copy()
+print(dog_rgb.shape, beach_rgb.shape)  # 3D
 
 mask_dog_rgb = dog_rgb > 0
 
@@ -300,7 +297,7 @@ Now try to insert the puppy on the bottom left corner.
 Only the column slice changes: the first `w` columns instead of the last `w`.
 
 ```{python}
-beach_3 = load_image(url_beach)
+beach_3 = beach_original.copy()
 
 mask_beach_3 = np.zeros(beach_3.shape).astype(bool)
 h, w = mask_dog.shape
@@ -330,7 +327,7 @@ A negative step on the column axis reverses the columns, which mirrors the image
 dog_flipped = dog[:, ::-1]
 mask_flipped = dog_flipped > 0
 
-beach_4 = load_image(url_beach)
+beach_4 = beach_original.copy()
 mask_beach_4 = np.zeros(beach_4.shape).astype(bool)
 h, w = mask_flipped.shape
 mask_beach_4[-h:, -w:] = mask_flipped
@@ -356,11 +353,11 @@ Can you change the dog's color to green?
 Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning `[0, 255, 0]` to a masked selection paints every selected pixel pure green.
 
 ```{python}
-dog_green = load_image(url_dog, color=True)
+dog_green = dog_rgb.copy()
 mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
 dog_green[mask_pixels] = [0, 255, 0]
 
-beach_5 = load_image(url_beach, color=True)
+beach_5 = beach_rgb_original.copy()
 mask_beach_5 = np.zeros(beach_5.shape[:2]).astype(bool)
 h, w = mask_pixels.shape
 mask_beach_5[-h:, -w:] = mask_pixels
@@ -379,9 +376,7 @@ Speaking about green, the dog has a cat friend, but its image appears with a gre
 <img src="../../img/dog-cat.png" width="300" />
 </p>
 
-```{python}
-url_cat = "https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png"
-```
+It is stored like the other colour images, in `cat_green_rgb.txt`.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -390,18 +385,19 @@ url_cat = "https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png
 A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at `show_image(mask_cat)`.
 
 ```{python}
-cat = load_image(url_cat, color=True)
+cat = np.loadtxt(f"{BASE}/cat_green_rgb.txt", dtype=int)
+cat = cat.reshape(cat.shape[0], -1, 3)
 cat = cat[::2, ::2]  # make it smaller if it does not fit
 
-red = cat[:, :, 0].astype(int)
-green = cat[:, :, 1].astype(int)
-blue = cat[:, :, 2].astype(int)
+red = cat[:, :, 0]
+green = cat[:, :, 1]
+blue = cat[:, :, 2]
 
 background = (green > red + 30) & (green > blue + 30)
 mask_cat = ~background
 show_image(mask_cat)
 
-beach_6 = load_image(url_beach, color=True)
+beach_6 = beach_rgb_original.copy()
 mask_beach_6 = np.zeros(beach_6.shape[:2]).astype(bool)
 h, w = mask_cat.shape
 mask_beach_6[-h:, :w] = mask_cat
@@ -409,8 +405,6 @@ mask_beach_6[-h:, :w] = mask_cat
 beach_6[mask_beach_6] = cat[mask_cat]
 show_image(beach_6)
 ```
-
-We convert the channels to `int` before comparing because `uint8` values wrap around when adding (for example, `250 + 30` becomes `24`).
 :::
 
 ::: {.callout-note}
@@ -429,7 +423,7 @@ Let's finish with something easier. Invert the colors of the image.
 Pixel values go from `0` to `255`, so the inverse of a value `v` is `255 - v`. Broadcasting applies it to every pixel at once.
 
 ```{python}
-inverted = 255 - beach_2
+inverted = 255 - beach_original
 show_image(inverted)
 ```
 :::
@@ -444,7 +438,7 @@ In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a
 Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.
 
 <p align="center">
-<img src="../../img/cat-schrodinger.png" width="300" />
+<img src="../../img/cat-schrodinger.jpg" width="300" />
 </p>
 
 
@@ -470,8 +464,7 @@ This method effectively reduces the resolution of each image by half, but when v
 
 ```{python}
 # Start with this image
-url_schro = "https://github.com/daniprec/Python-Course/blob/main/img/cat-skeleton.png"
-schrodinger = load_image(url_schro)
+schrodinger = np.loadtxt(f"{BASE}/cat_skeleton.txt", dtype=int)
 
 show_image(schrodinger)
 ```
@@ -508,8 +501,6 @@ show_image(superposition)
 
 If the result looks like two shifted animals, crop a few columns from one half so both figures line up before combining them.
 :::
-
----
 
 ---
 
@@ -566,13 +557,13 @@ Updating only `z[inside]` is what makes the masks essential: without it, the esc
 
 ## Summary and Reflection
 
-- An image is an array, so the same masking rules apply to pixels.
+- An image is an array, so the same masking rules apply to pixels. Images stored as text load with `np.loadtxt()`, as in Session 17.
 - `image[mask]` retrieves the pixels where the mask is `True`, and `image[mask] = value` changes only those pixels.
 - A mask can be placed inside a larger one with slicing, to choose where a picture goes.
 - In a colour image, a 2D mask selects whole pixels (all three channels at once).
 - A mask can also be computed from a mathematical rule, as in the Mandelbrot set.
 
-Why do we convert the colour channels to `int` before comparing them in the green-screen exercise?
+Why are the colour images stored with shape `(rows, columns * 3)`, and why must you keep a copy of the beach before pasting the dog?
 
 ---
 

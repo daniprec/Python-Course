@@ -192,44 +192,38 @@ import matplotlib.pyplot as plt
 # %% [markdown]
 ## 6. Masking with images
 
-An image is an array, a mask is a set of pixels. Run the helpers below.
+An image is an array, a mask is a set of pixels.
+
+Review of Session 17: the pictures are text files online, one number per pixel from `0` (black) to `255` (white). Load them with `np.loadtxt()`, as the ghost photos.
 
 # %%
-import cv2
-import requests
-
-
-def load_image(url: str, color: bool = False) -> np.ndarray:
-    """Download an image as a NumPy array (grayscale by default, RGB if color=True)."""
-    response = requests.get(url)
-    image_array = np.asarray(bytearray(response.content), dtype="uint8")
-    if color:
-        image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-        return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    return cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)
+BASE = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking"
 
 
 def show_image(img: np.ndarray):
-    """Display an image or a mask."""
-    if img.ndim == 3 and img.max() > 1:
-        plt.imshow(img)
+    """Display a grayscale image, a colour image (rows, columns, 3) or a mask."""
+    if img.ndim == 3:
+        plt.imshow(img.astype(np.uint8))
+    elif img.dtype == bool:
+        plt.imshow(img, cmap="gray", vmin=0, vmax=1)
     else:
-        plt.imshow(img, cmap="gray", vmin=0, vmax=max(1, img.max()))
+        plt.imshow(img, cmap="gray", vmin=0, vmax=255)
     plt.axis("off")
     plt.show()
-
-
-url_img = "https://raw.githubusercontent.com/daniprec/Python-Course/main/img/"
-url_dog = url_img + "dog-nobg.png"
-url_beach = url_img + "beach.jpg"
 
 # %% [markdown]
 ### A dog on the beach
 
-- Load the dog and the beach. Shape? Type?
+- Load `dog.txt` and `beach.txt`. Shape? Type? Hint: pixels are integers, `dtype=int`.
+- Keep a copy of the beach. Why?
 - Which pixels belong to the dog? Show the mask.
 - An empty mask for the beach (all `False`). Put the dog mask in the bottom-right corner.
 - Paste the dog on the beach.
+- Save the collage with `np.save()` and load it back with `np.load()`. Same array?
+
+# %%
+
+# %%
 
 # %%
 
@@ -244,10 +238,10 @@ url_beach = url_img + "beach.jpg"
 
 1. **Bottom-left corner.**
 2. **Flip it**: the puppy would rather look at the sea.
-3. **A bigger dog** (`dog-cheems.png`): remove its white border and make it smaller.
-4. **Colour**: repeat with `color=True`. What changes in the shape of the mask?
+3. **A bigger dog** (`dog_2.txt`): remove its white border and make it smaller.
+4. **Colour** (`dog_rgb.txt`, `beach_rgb.txt`): `np.savetxt()` only writes 2D arrays, so they are stored with shape `(rows, columns * 3)`. Reshape them to `(rows, columns, 3)` and repeat. What changes in the shape of the mask?
 5. **Green dog**: paint the dog green.
-6. **Green screen** (`cat-green.jpg`): cut the cat out of its green background.
+6. **Green screen** (`cat_green_rgb.txt`): cut the cat out of its green background.
 7. **Negative**: invert the colours of the beach.
 
 # %%
@@ -267,7 +261,7 @@ url_beach = url_img + "beach.jpg"
 # %% [markdown]
 ### Challenge: Schrödinger's cat
 
-`cat-skeleton.jpg` holds a live cat and a skeleton side by side. Superimpose them by alternating pixels like a chessboard: `a` from the live cat, `d` from the skeleton.
+`cat_skeleton.txt` holds a live cat and a skeleton side by side. Superimpose them by alternating pixels like a chessboard: `a` from the live cat, `d` from the skeleton.
 
 ```
 a d a
