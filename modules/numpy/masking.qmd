@@ -48,7 +48,7 @@ print(np.sum(passed), "students passed")
 
 In Session 15 we read from the output after which exercise Ana reached 50 points. Now let NumPy find it: combine a mask with `np.argmax()`, which returns the position of the first `True`.
 
-```python
+```{python}
 ana_cumulative = np.array([15, 35, 40, 50, 55, 60, 65, 65, 70, 75, 80])
 ```
 :::
@@ -56,7 +56,7 @@ ana_cumulative = np.array([15, 35, 40, 50, 55, 60, 65, 65, 70, 75, 80])
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-```python
+```{python}
 reached = ana_cumulative >= 50
 print(np.argmax(reached) + 1)  # 4
 ```
@@ -69,7 +69,7 @@ print(np.argmax(reached) + 1)  # 4
 
 Without running the code, write what it prints. Then modify it to select the values greater than or equal to `5`.
 
-```python
+```{python}
 values = np.array([2, 5, 8, 1, 9])
 mask = values % 2 == 1
 print(values[mask])
@@ -85,7 +85,7 @@ print(values[mask])
 
 The mask is `True` for the odd values, so only those are selected.
 
-```python
+```{python}
 mask = values >= 5
 print(values[mask])  # [5 8 9]
 ```
@@ -349,7 +349,7 @@ Repeat the exercise but now using 3D arrays, i.e. RGB images.
 
 A color image has shape `(height, width, 3)`. The mask has the same shape, so the same indexing works; we only need to unpack three values from `shape`.
 
-```python
+```{python}
 dog_rgb = load_image(url_dog, color=True)
 beach_rgb = load_image(url_beach, color=True)
 print(dog_rgb.shape, beach_rgb.shape)
@@ -380,7 +380,7 @@ Now try to insert the puppy on the bottom left corner.
 
 Only the column slice changes: the first `w` columns instead of the last `w`.
 
-```python
+```{python}
 beach_3 = load_image(url_beach)
 
 mask_beach_3 = np.zeros(beach_3.shape).astype(bool)
@@ -407,7 +407,7 @@ The puppy would rather look at the beach. Can you flip it?
 
 A negative step on the column axis reverses the columns, which mirrors the image horizontally.
 
-```python
+```{python}
 dog_flipped = dog[:, ::-1]
 mask_flipped = dog_flipped > 0
 
@@ -436,7 +436,7 @@ Can you change the dog's color to green?
 
 Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning `[0, 255, 0]` to a masked selection paints every selected pixel pure green.
 
-```python
+```{python}
 dog_green = load_image(url_dog, color=True)
 mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
 dog_green[mask_pixels] = [0, 255, 0]
@@ -470,7 +470,7 @@ url_cat = "https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png
 
 A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at `show_image(mask_cat)`.
 
-```python
+```{python}
 cat = load_image(url_cat, color=True)
 cat = cat[::2, ::2]  # make it smaller if it does not fit
 
@@ -509,7 +509,7 @@ Lets finish with something easier. Invert the colors of the image.
 
 Pixel values go from `0` to `255`, so the inverse of a value `v` is `255 - v`. Broadcasting applies it to every pixel at once.
 
-```python
+```{python}
 inverted = 255 - beach_2
 show_image(inverted)
 ```
@@ -562,7 +562,7 @@ Your first step is to split that image into two (the skelleton and the cat). The
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-```python
+```{python}
 h, w = schrodinger.shape
 half = w // 2
 
