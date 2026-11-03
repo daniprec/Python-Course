@@ -1,24 +1,143 @@
 ---
-title: "NumPy Masking"
+title: "Masking: Sets and Logic"
 subtitle: "Module 3: NumPy"
 format: html
 ---
 
-# NumPy Masking
+# Masking: Sets and Logic
 
-Welcome to our interactive exploration of masking using NumPy! Masking means utilizing boolean arrays to select or modify specific portions of an array.
+Masking means using an array of `True` and `False` values to select or modify part of another array. If the idea feels new, here is the good news: you already know it from mathematics. **A mask is a set.** Every rule you know about sets (intersection, union, complement, counting) has a NumPy version.
 
-What arrays are we working with today? Images! Since images are essentially arrays of pixel values, tools like NumPy allow us to manipulate these arrays, achieving various visual effects.
+In this lesson we build masks from numbers and treat them as sets. In the next lesson, [Masking with Images](masking_images.qmd), we apply the same rules to pictures.
 
-In this lesson, we will first use a small numerical array to understand the mechanism. We will then apply the same idea to image pixels and place one image inside another.
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+```
+
+---
+
+## A Mask Is a Set
+
+Take the universe $U = \{1, 2, \dots, 20\}$ and the set of even numbers in it:
+
+$$A = \{x \in U : x \text{ is even}\}$$
+
+In NumPy, the universe is an array and the condition "$x$ is even" becomes a comparison:
+
+```{python}
+numbers = np.arange(1, 21)  # the universe U
+is_even = numbers % 2 == 0  # the condition, checked for every element
+
+print(numbers)
+print(is_even)
+```
+
+The comparison does not return the set $A$ directly. It returns one answer per element of $U$: "is this element in $A$?". In mathematics this is the **indicator function** of $A$:
+
+$$\mathbf{1}_A(x) = \begin{cases} 1 & \text{if } x \in A \\ 0 & \text{if } x \notin A \end{cases}$$
+
+`True` behaves as `1` and `False` as `0`, so the mask *is* the indicator function evaluated on every element of $U$:
+
+```{python}
+print(is_even.astype(int))
+```
+
+To obtain the set itself, we index the universe with the mask. NumPy keeps the elements where the mask is `True`:
+
+```{python}
+print(numbers[is_even])  # the set A
+```
+
+::: {.callout-important}
+## Two arrays, two roles
+
+- `is_even` is the **mask**: it has the same length as `numbers`, and it only contains `True`/`False`.
+- `numbers[is_even]` is the **selection**: it contains only the elements of $A$, so it is usually shorter.
+
+Most masking errors come from mixing up these two arrays.
+:::
+
+---
+
+## Set Operations Are Logical Operations
+
+Let's add a second set, the multiples of 3: $B = \{x \in U : 3 \mid x\}$.
+
+```{python}
+is_mult3 = numbers % 3 == 0
+print(numbers[is_mult3])  # the set B
+```
+
+Every set operation has an element-wise logical operator:
+
+| Mathematics | Meaning | NumPy |
+|---|---|---|
+| $A \cap B$ | in $A$ **and** in $B$ | `is_even & is_mult3` |
+| $A \cup B$ | in $A$ **or** in $B$ | <code>is_even &#124; is_mult3</code> |
+| $A^c = U \setminus A$ | **not** in $A$ | `~is_even` |
+| $A \setminus B$ | in $A$ and not in $B$ | `is_even & ~is_mult3` |
+| $\lvert A \rvert$ | number of elements | `np.sum(is_even)` |
+| $\lvert A \rvert / \lvert U \rvert$ | proportion of $U$ | `np.mean(is_even)` |
+| $\exists x \in U : x \in A$ | at least one | `np.any(is_even)` |
+| $\forall x \in U : x \in A$ | all of them | `np.all(is_even)` |
+
+```{python}
+print("A ∩ B:", numbers[is_even & is_mult3])
+print("A ∪ B:", numbers[is_even | is_mult3])
+print("A^c:  ", numbers[~is_even])
+print("A \\ B:", numbers[is_even & ~is_mult3])
+```
+
+As expected, $A \cap B$ contains the multiples of 6.
+
+Because `True` is `1` and `False` is `0`, adding a mask counts its elements, and averaging it gives a proportion, that is, the probability that a random element of $U$ belongs to the set:
+
+```{python}
+print("|A| =", np.sum(is_even))
+print("|A ∩ B| =", np.sum(is_even & is_mult3))
+print("P(x ∈ A ∪ B) =", np.mean(is_even | is_mult3))
+```
+
+`np.any()` and `np.all()` play the role of the quantifiers $\exists$ and $\forall$:
+
+```{python}
+print(np.any(numbers[is_even] > 15))  # is some even number above 15?
+print(np.all(numbers[is_even & is_mult3] % 6 == 0))  # is every element of A ∩ B a multiple of 6?
+```
+
+::: {.callout-note}
+## Exercise: De Morgan's Laws
+
+De Morgan's laws state that
+
+$$(A \cup B)^c = A^c \cap B^c \qquad \text{and} \qquad (A \cap B)^c = A^c \cup B^c$$
+
+1. Write both sides of each law with the masks `is_even` and `is_mult3`, and check that they are equal with `np.array_equal()`.
+2. Which numbers of $U$ are neither even nor multiples of 3? Answer with a single mask.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+law_1 = np.array_equal(~(is_even | is_mult3), ~is_even & ~is_mult3)
+law_2 = np.array_equal(~(is_even & is_mult3), ~is_even | ~is_mult3)
+print(law_1, law_2)
+
+print(numbers[~(is_even | is_mult3)])
+```
+
+These are the numbers coprime with 6. Notice that `np.array_equal()` returns a single `True` or `False`, while `==` on two arrays would return one value per element.
+:::
+
+---
 
 ## Masking with Numbers
 
 Let's go back to the midterm one last time. In Session 15 we computed the final grade of every student, but we left one question open: **who passed?**
 
 ```{python}
-import numpy as np
-
 students = np.array(["Ana", "Bruno", "Chloe", "Diego", "Emma", "Farid"])
 final_grades = np.array([8, 5, 9, 4.5, 9, 5])
 
@@ -28,14 +147,14 @@ print(passed)
 print(final_grades[passed])
 ```
 
-The comparison creates one Boolean value for each grade. Indexing with that Boolean array selects the values whose mask is `True`. Because `students` is also an array with the same length, the same mask selects the names:
+The mask describes the set of students who passed. Because `students` is also an array with the same length, the same mask selects the names:
 
 ```{python}
 print(students[passed])
-print(students[~passed])  # ~ negates the mask: who failed
+print(students[~passed])  # the complement: who failed
 ```
 
-`True` counts as `1` and `False` as `0`, so summing a mask counts how many elements satisfy the condition:
+Counting the set is a sum, as before:
 
 ```{python}
 print(np.sum(passed), "students passed")
@@ -91,516 +210,252 @@ print(values[mask])  # [5 8 9]
 
 ---
 
-## Setting Up
-Before we dive into the main content, let's import the required libraries.
+## Changing Values with a Mask
+
+A mask on the left of `=` changes only the selected elements and leaves the rest untouched. Suppose every student gets 1.5 bonus points, but grades cannot go above 10:
 
 ```{python}
-import cv2  # for image processing tasks
-import matplotlib.pyplot as plt  # to display images
-import numpy as np  # for numerical operations on arrays
-import requests  # to fetch images from the internet
+with_bonus = final_grades + 1.5
+with_bonus[with_bonus > 10] = 10  # only the grades above 10 change
+
+print(with_bonus)
+```
+
+When we want to choose between two values for every element, `np.where(mask, value_if_true, value_if_false)` builds a new array. It is the array version of `if ... else`:
+
+```{python}
+print(np.where(passed, "Pass", "Fail"))
 ```
 
 ---
 
-## Loading and Displaying Images
+## Common Pitfalls
 
-We've defined two functions to help us:
+### Parentheses around each condition
 
-- `load_image`: This function fetches an image from a given URL.
-- `show_image`: Displays the provided NumPy array as an image.
-
-```{python}
-def load_image(url: str, color: bool=False) -> np.ndarray:
-  """
-  Fetch and return an image from the provided URL as a grayscale
-  NumPy array.
-
-  Parameters
-  ----------
-  url : str
-    The URL of the image to be fetched.
-  color : bool, optional
-    If True, loads the image in color. If False, loads the image in grayscale.
-    Default is False.
-
-  Returns
-  -------
-  np.ndarray
-    If `color` is False, returns a grayscale image represented as a 2D NumPy
-    array with values ranging from 0 to 255. If `color` is True,
-    returns a color image in RGB format.
-  """
-  response = requests.get(url)
-  image_array = np.asarray(bytearray(response.content), dtype="uint8")
-
-  if color:
-    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
-  else:
-    image = cv2.imdecode(image_array, cv2.IMREAD_GRAYSCALE)
-  return image
-
-def show_image(img: np.ndarray):
-  """
-  Display the provided NumPy array as an image.
-
-  Parameters
-  ----------
-  img : np.ndarray
-    The image data represented as either a 2D NumPy array for grayscale images
-    or a 3D NumPy array for color images.
-  """
-  # Check if the image is color (3D) or grayscale (2D)
-  if img.ndim == 3:  # Color image
-    if img.max() > 1:  # Real image
-      plt.imshow(img, vmax=255)
-    else: # Binary mask
-      img = np.mean(img, axis=2)
-      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
-  else:  # Grayscale image
-    if img.max() > 1:  # Real image
-      plt.imshow(img, cmap="gray", vmin=0, vmax=255)
-    else:  # Binary mask
-      plt.imshow(img, cmap="gray", vmin=0, vmax=1)
-
-  plt.show()
-  plt.close()
-```
-
-Let's start by loading an image of a puppy and displaying it.
+Run this code and read the error:
 
 ```{python}
-# Link to the image
-url_dog = "https://github.com/daniprec/Python-Course/blob/main/img/dog-nobg.png"
-
-# Load and display the image
-dog = load_image(url_dog)
-print(f"The array has dimension: {dog.ndim}")
-print(f"The array contains values of type: {dog.dtype}\n")
-show_image(dog)
+#| eval: false
+multiples = numbers[numbers % 3 == 0 | numbers % 5 == 0]
 ```
 
-## Masking: The Basics
+```text
+ValueError: The truth value of an array with more than one element is ambiguous.
+```
 
-Masking is a technique where we create a boolean array (mask) of the same shape as our data. Here, we will create a mask for the dog image to identify regions with the dog's presence.
-
-In our case, any pixel value greater than 0 in the grayscale image indicates the presence of the dog, so we will use this criterion to generate our mask.
+In Python, `|` and `&` are evaluated **before** `==`, so Python reads `numbers % 3 == (0 | numbers % 5) == 0`, which is not what we meant. Always wrap each condition in parentheses:
 
 ```{python}
-mask_dog = dog > 0
-print(f"The mask contains values of type: {mask_dog.dtype}\n")
-
-show_image(mask_dog)
+multiples = numbers[(numbers % 3 == 0) | (numbers % 5 == 0)]
+print(multiples)
 ```
 
-## Loading a Second Image
-
-Now, let's load another image, this time of a beach. We will later superimpose our dog image onto this beach image.
+### `and`, `or`, `not` do not work on arrays
 
 ```{python}
-# Link to the image
-url_beach = "https://github.com/daniprec/Python-Course/blob/main/img/beach.jpg"
-
-# Load and display the image
-beach = load_image(url_beach)
-print(f"The array has dimension: {beach.ndim}")
-print(f"The array contains values of type: {beach.dtype}\n")
-show_image(beach)
+#| eval: false
+both = (numbers % 3 == 0) and (numbers % 5 == 0)
 ```
 
-## Creating a Mask for the Beach Image
+```text
+ValueError: The truth value of an array with more than one element is ambiguous.
+```
 
-We'll create an initial mask for the beach image, initialized to all zeros (or `False`). This represents that no part of the beach image is currently masked.
+The keywords `and`, `or` and `not` need one single `True` or `False`, and Python does not know how to turn a whole array into one value (should it use "any" or "all"?). For masks, use the element-wise operators `&`, `|` and `~`.
+
+### Values are not positions
+
+What is wrong with this code?
 
 ```{python}
-mask_beach = np.zeros(beach.shape)  # type: int (0)
-mask_beach = mask_beach.astype(bool)  # type: bool (False)
-print(f"The mask has dimension: {mask_beach.ndim}")
-print(f"The mask contains values of type: {mask_beach.dtype}\n")
-
-show_image(mask_beach)
+#| eval: false
+arr = np.array([2, 8, 1, 9, 3, 7])
+high = arr[arr > 6]  # [8 9 7]
+arr[high] = -1
 ```
 
-## Positioning the Dog Mask on the Beach Mask
+```text
+IndexError: index 8 is out of bounds for axis 0 with size 6
+```
 
-Our goal is to superimpose the dog onto the beach image. To do this, we'll first position the dog mask at the bottom right corner of the beach mask.
+`high` contains the **values** of the selected elements, not their **positions**, so `arr[high]` tries to read position 8. Use the mask itself to modify the array:
 
 ```{python}
-# Get the width and height of the dog image
-h, w = mask_dog.shape
-print(f"The dog mask has shape ({h}, {w})")
-
-# Use clever indexing to replace a part of the beach mask with the dog
-mask_beach[-h:, -w:] = mask_dog
-print(f"The mask has dimension: {mask_beach.ndim}")
-print(f"The mask contains values of type: {mask_beach.dtype}\n")
-
-show_image(mask_beach)
+arr = np.array([2, 8, 1, 9, 3, 7])
+arr[arr > 6] = -1
+print(arr)
 ```
 
-## Superimposing the Dog Image onto the Beach Image
-
-With our masks ready, we can now superimpose the dog image onto the beach image. By using the masks, we ensure that only the region with the dog gets overlaid onto the beach image.
-
-```{python}
-beach[mask_beach] = dog[mask_dog]
-
-show_image(beach)
-```
+If you do need the positions of the `True` values, use `np.flatnonzero(mask)`.
 
 ---
 
-## Practice
+## In-Class Exercises
 
 ::: {.callout-note}
-## Exercise: Adjusting Color and Size
+## Exercise: Multiples of 3 or 5
 
-Try to do the same thing using this other image. You will realise two issues:
+*Inspired by Project Euler, [Problem 1](https://projecteuler.net/problem=1).*
 
-1. There is a white border around the image! How can you use masking to get rid of it?
-2. This dog is much bigger! How can you make this picture smaller so that it fits neatly in the beach?
+The natural numbers below 10 that are multiples of 3 or 5 are 3, 5, 6 and 9, and their sum is 23.
 
-```{python}
-url_dog_2 = "https://github.com/daniprec/Python-Course/blob/main/img/dog-cheems.png"
-```
+1. Write a function `multiples_3_or_5(n)` that returns the sum of all the natural numbers below `n` that are multiples of 3 or 5. Use a mask instead of a loop. Check that `multiples_3_or_5(10)` returns `23`.
+2. Let $A$ be the multiples of 3 below 1000 and $B$ the multiples of 5. Use masks to check the inclusion–exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$. What is $A \cap B$?
+3. The same principle works for sums. The multiples of $d$ below $n$ are $d, 2d, \dots, md$ with $m = \lfloor (n-1)/d \rfloor$, and their sum is $d \cdot \frac{m(m+1)}{2}$. Compute the answer for $n = 1000$ with this formula, without any array, and compare it with your function.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
 ```{python}
-# Load and display the image
-dog_2 = load_image(url_dog_2)
+def multiples_3_or_5(n: int) -> int:
+    """
+    Sum the natural numbers below n that are multiples of 3 or 5.
 
-show_image(dog_2)
-# Problem: We have to take away both black and white rectangle
+    Parameters
+    ----------
+    n : int
+        Upper limit (excluded). Must be positive.
+
+    Returns
+    -------
+    int
+        The sum of the multiples of 3 or 5 below n.
+    """
+    numbers = np.arange(1, n)
+    mask = (numbers % 3 == 0) | (numbers % 5 == 0)
+    return int(np.sum(numbers[mask]))
+
+
+print(multiples_3_or_5(10))
 ```
 
 ```{python}
-# Solution:
-# Combine masks using "&" (and), similar to how we do "if" clauses
-mask_dog_2 = (dog_2 > 0) & (dog_2 < 255)
+numbers = np.arange(1, 1000)
+in_a = numbers % 3 == 0
+in_b = numbers % 5 == 0
 
-show_image(mask_dog_2)
+print(np.sum(in_a | in_b))
+print(np.sum(in_a) + np.sum(in_b) - np.sum(in_a & in_b))
 ```
+
+Both counts are equal. $A \cap B$ is the set of multiples of 15: they appear in both $A$ and $B$, so adding $|A|$ and $|B|$ counts them twice.
 
 ```{python}
-# Reload the beach
-beach_2 = load_image(url_beach)
+def sum_of_multiples(d: int, n: int) -> int:
+    """Sum the multiples of d below n with the triangular number formula."""
+    m = (n - 1) // d
+    return d * m * (m + 1) // 2
 
-mask_beach_2 = np.zeros(beach_2.shape)  # type: int (0)
-mask_beach_2 = mask_beach_2.astype(bool)  # type: bool (False)
 
-# Get the width and height of the dog image
-h, w = mask_dog_2.shape
-
-# Use clever indexing to replace a part of the beach mask with the dog
-mask_beach_2[-h:, -w:] = mask_dog_2
-
-show_image(mask_beach_2)
-# Problem: the dog is too big
+formula = sum_of_multiples(3, 1000) + sum_of_multiples(5, 1000) - sum_of_multiples(15, 1000)
+print(formula, multiples_3_or_5(1000))
 ```
 
-```{python}
-# Solution:
-# Use clever slicing to take one of every two pixels
-dog_smol = dog_2[::2, ::2]
-
-mask_smol = (dog_smol > 0) & (dog_smol < 255)
-
-mask_beach_smol = np.zeros(beach_2.shape)  # type: int (0)
-mask_beach_smol = mask_beach_smol.astype(bool)  # type: bool (False)
-
-# Get the width and height of the dog image
-h, w = mask_smol.shape
-
-# Use clever indexing to replace a part of the beach mask with the dog
-mask_beach_smol[-h:, -w:] = mask_smol
-
-show_image(mask_beach_smol)
-```
-
-```{python}
-# Finally, we add the dog using masking
-beach_2[mask_beach_smol] = dog_smol[mask_smol]
-
-show_image(beach_2)
-```
-
+The formula needs three multiplications, whatever the value of $n$, while the mask builds an array of $n$ elements. Masks are a great way to *check* a formula, but a formula, when we have one, is faster.
 :::
 
 ::: {.callout-note}
-## Exercise: Color Images
+## Exercise: Estimating π by Counting Points
 
-Call the function `load_image` setting the argument `color=True`. This will load the images in color!
+The quarter disc $D = \{(x, y) \in [0, 1]^2 : x^2 + y^2 < 1\}$ has area $\pi / 4$. If we cover the unit square with a regular grid of $N \times N$ points, the proportion of points that fall inside $D$ approximates that area.
 
-Repeat the exercise but now using 3D arrays, i.e. RGB images.
-
-<p align="center">
-<img src="../../img/dog-right.png" width="300" />
-</p>
+1. Build the grid coordinates `x = (np.arange(N) + 0.5) / N`, the centres of $N$ equal cells.
+2. Use broadcasting to build an $N \times N$ mask that is `True` where $x^2 + y^2 < 1$.
+3. Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?
+4. Display the mask with `plt.imshow(inside, cmap="gray")`.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-A color image has shape `(height, width, 3)`. The mask has the same shape, so the same indexing works; we only need to unpack three values from `shape`.
+```{python}
+for N in [10, 100, 1000]:
+    x = (np.arange(N) + 0.5) / N
+    inside = x[:, np.newaxis] ** 2 + x[np.newaxis, :] ** 2 < 1
+    estimate = 4 * np.mean(inside)  # proportion of points inside, times 4
+    print(f"N = {N:4d}: π ≈ {estimate:.6f}, error = {abs(estimate - np.pi):.6f}")
+```
 
 ```{python}
-dog_rgb = load_image(url_dog, color=True)
-beach_rgb = load_image(url_beach, color=True)
-print(dog_rgb.shape, beach_rgb.shape)
+N = 50
+x = (np.arange(N) + 0.5) / N
+inside = x[:, np.newaxis] ** 2 + x[np.newaxis, :] ** 2 < 1
 
-mask_dog_rgb = dog_rgb > 0
-
-mask_beach_rgb = np.zeros(beach_rgb.shape).astype(bool)
-h, w, _ = mask_dog_rgb.shape
-mask_beach_rgb[-h:, -w:] = mask_dog_rgb
-
-beach_rgb[mask_beach_rgb] = dog_rgb[mask_dog_rgb]
-show_image(beach_rgb)
+plt.imshow(inside, cmap="gray", origin="lower")
+plt.axis("off")
+plt.show()
 ```
+
+`np.mean(inside)` is $|D \cap \text{grid}| \,/\, |\text{grid}|$, so this is a counting version of an integral. In Session 19 we will replace the regular grid with random points: that is the **Monte Carlo** method.
 :::
 
 ::: {.callout-note}
-## Exercise: Different Position
+## Exercise: Pascal's Triangle and the Sierpiński Triangle
 
-Now try to insert the puppy on the bottom left corner.
+Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.
 
-<p align="center">
-<img src="../../img/dog-bottom-left.png" width="300" />
-</p>
+1. Build a $64 \times 64$ array `pascal` where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.
+2. Build the mask of the odd entries and display it with `plt.imshow(odd, cmap="gray_r")`. Do you recognise the shape?
+3. How many entries of the first 64 rows are odd? Can you guess a formula for the first $2^k$ rows?
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-Only the column slice changes: the first `w` columns instead of the last `w`.
+```{python}
+N = 64
+pascal = np.zeros((N, N), dtype=int)
+pascal[:, 0] = 1  # the first entry of every row is 1
+
+for n in range(1, N):
+    pascal[n, 1:] = (pascal[n - 1, 1:] + pascal[n - 1, :-1]) % 2
+
+odd = pascal == 1
+
+plt.imshow(odd, cmap="gray_r")
+plt.axis("off")
+plt.show()
+
+print(np.sum(odd), 3**6)
+```
+
+The odd entries draw the Sierpiński triangle, a fractal. The first $2^k$ rows contain $3^k$ odd entries: each triangle is made of three copies of the previous one, each with half the size.
+
+**Bonus.** Lucas's theorem says that $\binom{n}{k}$ is odd exactly when every binary digit of $k$ is at most the matching digit of $n$. With integers, `&` is the bitwise AND, so this condition is `(n & k) == k`, and the whole mask can be built without any loop:
 
 ```{python}
-beach_3 = load_image(url_beach)
+n = np.arange(N)[:, np.newaxis]
+k = np.arange(N)[np.newaxis, :]
+odd_lucas = (k <= n) & ((n & k) == k)
 
-mask_beach_3 = np.zeros(beach_3.shape).astype(bool)
-h, w = mask_dog.shape
-mask_beach_3[-h:, :w] = mask_dog
-
-beach_3[mask_beach_3] = dog[mask_dog]
-show_image(beach_3)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Flipping Arrays
-
-The puppy would rather look at the beach. Can you flip it?
-
-<p align="center">
-<img src="../../img/dog-flipped.png" width="300" />
-</p>
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-A negative step on the column axis reverses the columns, which mirrors the image horizontally.
-
-```{python}
-dog_flipped = dog[:, ::-1]
-mask_flipped = dog_flipped > 0
-
-beach_4 = load_image(url_beach)
-mask_beach_4 = np.zeros(beach_4.shape).astype(bool)
-h, w = mask_flipped.shape
-mask_beach_4[-h:, -w:] = mask_flipped
-
-beach_4[mask_beach_4] = dog_flipped[mask_flipped]
-show_image(beach_4)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Green Dog
-
-Can you change the dog's color to green?
-
-<p align="center">
-<img src="../../img/dog-green.png" width="300" />
-</p>
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-Work with the color image. A pixel belongs to the dog if any of its channels is above zero, so we add the channels and compare. Assigning `[0, 255, 0]` to a masked selection paints every selected pixel pure green.
-
-```{python}
-dog_green = load_image(url_dog, color=True)
-mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
-dog_green[mask_pixels] = [0, 255, 0]
-
-beach_5 = load_image(url_beach, color=True)
-mask_beach_5 = np.zeros(beach_5.shape[:2]).astype(bool)
-h, w = mask_pixels.shape
-mask_beach_5[-h:, -w:] = mask_pixels
-
-beach_5[mask_beach_5] = dog_green[mask_pixels]
-show_image(beach_5)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Harder Masking
-
-Speaking about green, the dog has a cat friend, but its image appears with a green background! Try to crop the cat out of its image and insert it in the beach.
-
-<p align="center">
-<img src="../../img/dog-cat.png" width="300" />
-</p>
-
-```{python}
-url_cat = "https://github.com/daniprec/Python-Course/blob/main/img/cat-green.png"
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Possible solution
-
-A background pixel has a strong green channel and weaker red and blue channels. The thresholds below are a starting point; adjust them while looking at `show_image(mask_cat)`.
-
-```{python}
-cat = load_image(url_cat, color=True)
-cat = cat[::2, ::2]  # make it smaller if it does not fit
-
-red = cat[:, :, 0].astype(int)
-green = cat[:, :, 1].astype(int)
-blue = cat[:, :, 2].astype(int)
-
-background = (green > red + 30) & (green > blue + 30)
-mask_cat = ~background
-show_image(mask_cat)
-
-beach_6 = load_image(url_beach, color=True)
-mask_beach_6 = np.zeros(beach_6.shape[:2]).astype(bool)
-h, w = mask_cat.shape
-mask_beach_6[-h:, :w] = mask_cat
-
-beach_6[mask_beach_6] = cat[mask_cat]
-show_image(beach_6)
+print(np.array_equal(odd, odd_lucas))
 ```
 
-We convert the channels to `int` before comparing because `uint8` values wrap around when adding (for example, `250 + 30` becomes `24`).
-:::
-
-::: {.callout-note}
-## Exercise: Invert Colors
-
-Lets finish with something easier. Invert the colors of the image.
-
-<p align="center">
-<img src="../../img/dog-invert.png" width="300" />
-</p>
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-Pixel values go from `0` to `255`, so the inverse of a value `v` is `255 - v`. Broadcasting applies it to every pixel at once.
-
-```{python}
-inverted = 255 - beach_2
-show_image(inverted)
-```
-:::
-
----
-
-## Challenge: Schrödinger's Cat
-
-In the realm of quantum mechanics, Schrödinger's cat thought experiment poses a scenario where a cat is simultaneously both alive and dead until it is observed. As a nod to this concept, let's create an image representation where both a live cat and a skeletal cat are superimposed.
-
-### Objective:
-Produce an image where both the alive cat and the skeletal cat appear superimposed by alternating the pixels from each image.
-
-<p align="center">
-<img src="../../img/cat-schrodinger.png" width="300" />
-</p>
-
-
-### Instructions:
-1. Consider two images: one representing a live cat (denoted by 'a') and the other representing a skeletal cat (denoted by 'd').
-2. To superimpose the images, alternate the pixels such that each pixel from one image is surrounded by pixels from the other image. This will give the effect of both images being merged into one.
-
-For instance, your pixel arrangement might look like this:
-
-```
-[
-  [a, d, a],
-  [d, a, d],
-  [a, d, a]
-]
-```
-
-Here, 'a' represents a pixel from the live cat image, and 'd' represents a pixel from the skeletal cat image. The resulting image will have an even distribution of pixels from both images.
-
-### Note:
-This method effectively reduces the resolution of each image by half, but when viewed from a distance, the viewer should be able to discern both images superimposed upon each other.
-
-
-```{python}
-# Start with this image
-url_schro = "https://github.com/daniprec/Python-Course/blob/main/img/cat-skeleton.png"
-schrodinger = load_image(url_schro)
-
-show_image(schrodinger)
-```
-
-Your first step is to split that image into two (the skelleton and the cat). Then you will have to flip one of them so that both look at the same direction.
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-h, w = schrodinger.shape
-half = w // 2
-
-# Split the picture into its two halves (same width for both)
-left = schrodinger[:, :half]
-right = schrodinger[:, half:2 * half]
-
-# Alternatively, you can use np.split:
-left, right = np.split(schrodinger, 2, axis=1)
-
-# Flip the right half so both animals face the same direction
-right = right[:, ::-1]
-
-# Checkerboard mask: True where (row + column) is even
-checkerboard = np.zeros(left.shape).astype(bool)
-checkerboard[::2, ::2] = True
-checkerboard[1::2, 1::2] = True
-
-superposition = right.copy()
-superposition[checkerboard] = left[checkerboard]
-
-show_image(superposition)
-```
-
-If the result looks like two shifted animals, crop a few columns from one half so both figures line up before combining them.
+This is also why `&` works on masks: `True` and `False` are the bits `1` and `0`, and AND on a single bit is exactly the logical "and".
 :::
 
 ---
 
 ## Summary and Reflection
 
-- A Boolean mask has the same relevant shape as the data it selects.
-- `array[mask]` retrieves values where the mask is `True`.
-- `array[mask] = value` modifies only the selected values.
-- Combine conditions with `&`, `|`, and `~`; place each comparison in parentheses.
-- An image is an array, so the same masking rules apply to pixels.
+- A Boolean mask is the indicator function of a set: one `True`/`False` per element.
+- `array[mask]` retrieves the elements of the set; `array[mask] = value` modifies only them.
+- `&`, `|` and `~` are intersection, union and complement. Place each comparison in parentheses.
+- `np.sum(mask)` counts the elements of the set and `np.mean(mask)` gives its proportion.
+- `np.any()` and `np.all()` are the quantifiers "there exists" and "for all".
+- `np.where(mask, a, b)` chooses between two values for every element.
 
 Explain why Python's scalar operators `and`, `or`, and `not` cannot be used directly with Boolean arrays.
 
 ---
+
+# Next: Masking with Images
+
+Now apply the same ideas to pictures.
+
+[Masking with Images](masking_images.qmd){.btn .btn-primary}
 
 # Homework and Review
 
