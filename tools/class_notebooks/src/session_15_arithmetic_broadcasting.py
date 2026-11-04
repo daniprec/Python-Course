@@ -179,6 +179,32 @@ weights       (11,)  -> (1, 11) -> (6, 11)
 # %%
 
 # %% [markdown]
+### One value per row, or one per column?
+
+- Exercise 4 was badly worded: extra points **per exercise**. Add `correction` to `marks`.
+- An attendance bonus **per student**. Does `marks + bonus` work? Fix it.
+- Same rule for `-`, `*`, `/`, `**`, `>`?
+- What if `marks` were square, `(6, 6)`?
+
+# %%
+correction = np.array([0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0])  # one value per exercise
+bonus = np.array([0, 0.5, 0, 0, 0.25, 0])  # one value per student
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+- Linear algebra: multiplying a matrix by a row scales its columns; by a column, its rows. Which products with a diagonal matrix are these?
+- A column times a row: the multiplication table from `np.arange(1, 4)` and `np.arange(1, 6)`. Which product of linear algebra is it? And with `+`?
+
+# %%
+
+# %%
+
+# %% [markdown]
 ### Exercise: Which shapes broadcast?
 
 Without running code: which can be added to `house`, shape `(5, 2)`? Shape of the result?

@@ -23,7 +23,6 @@ ls_exercises = [
     "Empty Arrays",
     "Array-Creation Debugging",
     "Battleship",
-    "Exam Versions",
     # "Holiday Lights",  # Done in class
     # Array Arithmetic and Broadcasting
     "Matrix Multiplication",
@@ -41,6 +40,7 @@ ls_exercises = [
     "Text and Binary Formats",
     "Join Daily Recordings",
     # Array Manipulation
+    "Exam Versions",
     "Joining Two Vectors",
     "Predicting a Reshape",
     "Vertical Stacking",

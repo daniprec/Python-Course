@@ -277,6 +277,125 @@ print(y[idx, idy])
 ```
 :::
 
+### Views and Copies
+
+In Session 14 we saw that a row of an array is not a new array, but a **view** of the original data: changing it changes the original. Fancy indexing behaves differently, and the difference causes some of the most confusing bugs in NumPy.
+
+A **slice** is a view. Changing it changes `y`:
+
+```{python}
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+top = y[:2]       # rows 0 and 1, with a slice
+top[0, 0] = 100
+print(y)
+```
+
+**Fancy indexing** returns a **copy**. Changing it leaves `y` untouched:
+
+```{python}
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+picked = y[[0, 1]]  # the same rows, with a list of indices
+picked[0, 0] = 100
+print(y)
+```
+
+Why? A slice is a regular pattern (start, stop, step), so NumPy can describe it as a new way of reading the **same** memory. An arbitrary list of positions, such as `[2, 0, 0]`, has no such pattern, so NumPy must copy the selected values into a new array. Masks from Session 18 are the same: `y[y > 5]` is a copy. We can check whether two arrays share their data with `np.shares_memory()`:
+
+```{python}
+print(np.shares_memory(y, y[:2]))
+print(np.shares_memory(y, y[[0, 1]]))
+print(np.shares_memory(y, y[y > 5]))
+```
+
+This is only about **reading**. With an index on the **left** of `=`, every kind of indexing modifies the original array. That is how we will place the cars, one per row, in a single line:
+
+```{python}
+y[[0, 1, 2], [0, 1, 2]] = 0  # fancy indexing on the left: changes y
+y[y > 7] = -1                # a mask on the left: changes y
+print(y)
+```
+
+| Selection | Example | Reading it gives... | `y[...] = value`... |
+|---|---|---|---|
+| One index or a slice | `y[0]`, `y[:2, 1:]` | a **view** | changes `y` |
+| Fancy indexing | `y[[0, 2]]`, `y[[0, 1], [2, 0]]` | a **copy** | changes `y` |
+| Mask | `y[y > 5]` | a **copy** | changes `y` |
+
+::: {.callout-important}
+## Chained indexing
+
+Be careful when you chain two selections and assign to the result. In `y[[0, 2]][:, 0] = 0`, the first selection is a copy, so the assignment changes the copy, which is immediately thrown away: `y` does not change, and there is no error. Write the selection in one step instead, `y[[0, 2], 0] = 0`. When you need an independent array, ask for it explicitly with `.copy()`.
+:::
+
+::: {.callout-note}
+## Exercise: Which ones change `y`?
+
+Without running the code, decide which of these cells change `y`. Each one starts from `y = np.arange(1, 10).reshape(3, 3)`.
+
+```python
+a = y[1]
+a[0] = 0
+```
+
+```python
+b = y[[1]]
+b[0, 0] = 0
+```
+
+```python
+c = y[y > 5]
+c[:] = 0
+```
+
+```python
+y[y > 5] = 0
+```
+
+```python
+y[[0, 2]][:, 0] = -1
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+1. Changes `y`: `y[1]` is a view of the second row.
+2. Does not change `y`: `y[[1]]` is fancy indexing, a copy.
+3. Does not change `y`: the mask selects a copy, and `c[:] = 0` only changes the copy.
+4. Changes `y`: a mask on the left of `=` modifies the original.
+5. Does not change `y`: chained indexing, the assignment goes to a copy.
+
+```{python}
+for name in ["a", "b", "c", "mask", "chain"]:
+    y = np.arange(1, 10).reshape(3, 3)
+    original = y.copy()
+    if name == "a":
+        a = y[1]
+        a[0] = 0
+    elif name == "b":
+        b = y[[1]]
+        b[0, 0] = 0
+    elif name == "c":
+        c = y[y > 5]
+        c[:] = 0
+    elif name == "mask":
+        y[y > 5] = 0
+    else:
+        y[[0, 2]][:, 0] = -1
+    print(name, "changes y:", not np.array_equal(y, original))
+```
+:::
+
 ### Random Integer Generator
 
 The advanced indexing will allow us to choose one index per row, and fill it with "1" (a car).

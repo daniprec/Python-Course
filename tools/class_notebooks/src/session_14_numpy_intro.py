@@ -168,33 +168,6 @@ broken_list = [
 # %%
 
 # %% [markdown]
-### From a form to a table
-
-The online form exports all the marks in one long list, student by student.
-
-# %%
-form_list = [
-    0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1,
-    0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1,
-    1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1,
-    0.25, 0.5, 0, 0.5, 0.5, 0, 1, 0, 1, 0, 1,
-    1, 0.75, 0.5, 1, 1, 1, 0, 1, 1, 1, 1,
-    0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0,
-]
-
-# %%
-
-# %%
-
-# %% [markdown]
-- Can we reshape to `(6, 10)`?
-- What if the form was filled **exercise by exercise**?
-
-# %%
-
-# %%
-
-# %% [markdown]
 ## 6. Indexing: one mark
 
 - The value of exercise 1? Alice's mark in exercise 4?
@@ -202,14 +175,6 @@ form_list = [
 - Diego in exercise 1, without counting rows?
 
 # %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-- Diego asks for a revision: exercise 3 goes up to `0.5`.
-- Emma asks for a revision: exercise 2 deserves full marks.
 
 # %%
 
@@ -231,7 +196,63 @@ version_B_list = [[0.75, 0, 1], [1, 0.5, 0.5]]
 # %%
 
 # %% [markdown]
-## 7. Slicing: rows, columns, blocks
+## 7. Changing values: arrays are mutable
+
+- Diego asks for a revision: exercise 3 goes up to `0.5`.
+- Emma asks for a revision: exercise 2 deserves full marks.
+
+# %%
+
+# %%
+
+# %% [markdown]
+### The type does not change
+
+- Diego's debugging marks, typed on their own. Which type? Give him `0.5` in the first one.
+- How do we fix it?
+- Type `"?"` for Farid's exercise 2 in `marks`. What happens? Compare with Farid's `"?"` at creation.
+
+# %%
+diego_debugging_list = [0, 1, 0]
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Two names, one array
+
+- `first_student = draft[0]`. Change one of its marks. What happens to `draft`?
+- How do we keep `draft` untouched?
+
+# %%
+draft_list = [[1, 0.5, 0], [0.25, 1, 1]]
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Exercise: The Backup
+
+Without running it, what does this print? Then fix it: `original` keeps the old marks, and the partial credit is stored.
+
+```python
+bruno_mc = np.array([1, 0, 1, 1])
+original = bruno_mc
+
+bruno_mc[1] = 1     # question 2 was right after all
+bruno_mc[2] = 0.75  # partial credit in question 3
+
+print(original)
+```
+
+# %%
+
+# %% [markdown]
+## 8. Slicing: rows, columns, blocks
 
 - The three parts of the exam, in `weights`.
 - Exercise 4 for the whole class. Bruno's whole exam.
@@ -275,7 +296,7 @@ mc_machine = [
 # %%
 
 # %% [markdown]
-## 8. Challenge: Madrid and Segovia
+## 9. Challenge: Madrid and Segovia
 
 Dimensions: **campus**, **student**, **exercise**.
 
@@ -315,7 +336,7 @@ exam_list = [
 # %%
 
 # %% [markdown]
-## 9. Extra: an image is also an array
+## 10. Extra: an image is also an array
 
 `0` is black, `1` is white.
 

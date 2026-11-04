@@ -107,6 +107,61 @@ print(y[-idx, -idy])
 # %%
 
 # %% [markdown]
+### Views and copies
+
+- `top = y[:2]`. Change `top[0, 0]`. What happens to `y`?
+- `picked = y[[0, 1]]`. Change `picked[0, 0]`. And now?
+- Why the difference? Check with `np.shares_memory()`. And a mask, `y[y > 5]`?
+- On the left of `=`: does `y[y > 7] = -1` change `y`?
+
+# %%
+y = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+])
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Exercise: Which ones change `y`?
+
+Without running, decide which change `y`. Each one starts from `y = np.arange(1, 10).reshape(3, 3)`. Then check.
+
+```python
+a = y[1]
+a[0] = 0
+```
+
+```python
+b = y[[1]]
+b[0, 0] = 0
+```
+
+```python
+c = y[y > 5]
+c[:] = 0
+```
+
+```python
+y[y > 5] = 0
+```
+
+```python
+y[[0, 2]][:, 0] = -1
+```
+
+# %%
+
+# %%
+
+# %% [markdown]
 ## 3. Random integers
 
 - A random integer with `np.random.randint(0, 3)`. Which values can it take?
