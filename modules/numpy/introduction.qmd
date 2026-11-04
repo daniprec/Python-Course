@@ -196,7 +196,7 @@ print(chloe_debugging, chloe_debugging.dtype)
 [1.  1.  0.5] float64
 ```
 
-The first array only contains integers, so it keeps an integer type. In the second, a single `0.5` is enough to turn every element into a float, so the array has one data type. (On some Windows installations the integer type may show as `int32`.)
+The first array only contains integers, so it keeps an integer type. In the second, a single `0.5` is enough to turn every element into a float, so the array has one data type. NumPy chooses this type when the array is created; later in this session we will see what happens when we change a value afterwards. (On some Windows installations the integer type may show as `int32`.)
 :::
 
 This rule has a consequence. Why don't we store the student names inside the array, as the first column?
@@ -419,47 +419,6 @@ print(open_rubric)
 `np.arange()` excludes its stopping value, so we must stop one step after `1`. `np.linspace()` includes both ends and asks for the number of values instead of the step, which is usually easier for rubrics.
 :::
 
-### Reshape: From a Form to an Array
-
-Imagine that you graded the exams in an online form, which exports all the marks as one long list: first the 11 marks of the first student, then the 11 marks of the second, and so on.
-
-```{python}
-form_export = np.array([
-    0.75, 1, 0.5, 1, 0.5, 1, 1, 0, 1, 1, 1,
-    0.5, 0.25, 1, 0.5, 0, 1, 0, 1, 1, 0, 1,
-    1, 1, 1, 1, 0.5, 1, 1, 1, 0, 1, 1,
-    0.25, 0.5, 0, 0.5, 0.5, 0, 1, 0, 1, 0, 1,
-    1, 0.75, 0.5, 1, 1, 1, 0, 1, 1, 1, 1,
-    0.5, 0.5, 0.5, 0, 1, 1, 1, 0, 0, 1, 0,
-])
-print(form_export.shape)
-```
-
-The `reshape()` method reorganizes the same values into a new shape, row by row. It returns a new array and does not modify the original.
-
-```{python}
-table = form_export.reshape(6, 11)
-print(table)
-```
-
-The requested shape must contain exactly the same number of elements as the original array.
-
-```{python}
-table = form_export.reshape(6, 10)
-```
-
-::: {.callout-note}
-## Exercise: Grading Exercise by Exercise
-
-Many professors grade **exercise by exercise**: first exercise 1 for every student, then exercise 2 for every student, and so on. A form filled in that order exports the 6 marks of exercise 1, then the 6 marks of exercise 2, and so on. Which `reshape()` gives an array with the right structure? What is its shape, and what does each row represent?
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-`.reshape(11, 6)`, which gives an array with shape `(11, 6)`: one row per **exercise** and one column per student. Reshape fills the new array row by row, so the reshape must follow the order in which the values arrive. Turning this array into one row per student is a different operation (transposing), which we will see in a later session.
-:::
-
 ---
 
 ## Array Indexing: One Mark
@@ -495,13 +454,6 @@ We do not need to remember the position of every student. The list method `index
 row = students.index("Diego")
 
 print(marks[row, 0])  # Diego, exercise 1
-```
-
-Indexing also lets us **change** a value. Diego asked for a revision of exercise 3, and you realize he found one of the two errors. His mark goes up to `0.5`:
-
-```{python}
-marks[3, 2] = 0.5
-print(marks[3])
 ```
 
 ::: {.callout-note}
@@ -567,6 +519,19 @@ print(x)
 `versions[1]` is a list index that returns `version_B`. Then `[0, 2]` is an array index: first student, third exercise. The array contains floats, so the value prints as `1.0`.
 :::
 
+---
+
+## Changing Values: Arrays Are Mutable
+
+Like lists (see [Mutability](../structures/mutability.qmd) in Module 2), arrays are **mutable**: we can change their values after creating them. An index on the left of `=` replaces the value at that position.
+
+Diego asked for a revision of exercise 3, and you realize he found one of the two errors. His mark goes up to `0.5`:
+
+```{python}
+marks[3, 2] = 0.5
+print(marks[3])
+```
+
 ::: {.callout-note}
 ## Exercise: Grade Revision
 
@@ -582,6 +547,103 @@ col = 2 - 1  # exercise 2 is at index 1
 
 marks[row, col] = 1
 print(marks[row])
+```
+:::
+
+### The Type Does Not Change
+
+The `dtype` of an array is chosen **once, when the array is created**. Assigning a new value does not change it: NumPy converts the value to the type of the array. This can hide errors.
+
+Suppose Diego's debugging marks had been typed on their own. All of them were whole numbers, so NumPy chose an integer type:
+
+```{python}
+diego_debugging = np.array([0, 1, 0])
+print(diego_debugging.dtype)
+```
+
+Now apply the same revision, half a point in the first debugging exercise:
+
+```{python}
+diego_debugging[0] = 0.5
+print(diego_debugging)
+```
+
+No error and no warning, but Diego still has `0`. An integer array can only store integers, so NumPy **truncated** `0.5` to `0`: it drops the decimals, it does not round (`0.9` would also become `0`). Compare it with the exercise Mixed Marks: a `0.5` turns the whole array into floats only when it is there **at creation**.
+
+The fix is to choose the type when we create the array:
+
+```{python}
+diego_debugging = np.array([0, 1, 0], float)
+diego_debugging[0] = 0.5
+print(diego_debugging)
+```
+
+When a value cannot be converted at all, NumPy raises an error instead. Remember Farid's unreadable answer: at creation, a `"?"` turned the whole row into text. In an existing array of floats, it is rejected, and `marks` is not modified:
+
+```{python}
+marks[5, 1] = "?"
+```
+
+### Two Names, One Array
+
+As with lists, assigning an array to a new name does **not** copy it: `b = a` gives a second name to the same array, and a change made through one name is visible through the other.
+
+The same happens when we take a row of a 2D array. `draft[0]` is not a new array of marks: it is a view of the first row of `draft`, so changing it changes `draft`.
+
+```{python}
+draft = np.array([[1, 0.5, 0], [0.25, 1, 1]])
+
+first_student = draft[0]
+first_student[2] = 1
+print(draft)
+```
+
+To work on an independent array, ask for a copy with the `.copy()` method:
+
+```{python}
+draft = np.array([[1, 0.5, 0], [0.25, 1, 1]])
+
+first_student = draft[0].copy()
+first_student[2] = 1
+print(draft)
+```
+
+This is a difference with lists: a slice of a list is a new list, but the slices of an array, which we will see in the next section, are also views of the original data.
+
+::: {.callout-note}
+## Exercise: The Backup
+
+Before revising Bruno's multiple-choice marks, you keep the original ones in `original`. Without running the code, write down what it prints. Then fix the code, so that `original` keeps the old marks and the partial credit is stored.
+
+```python
+bruno_mc = np.array([1, 0, 1, 1])
+original = bruno_mc
+
+bruno_mc[1] = 1     # question 2 was right after all
+bruno_mc[2] = 0.75  # partial credit in question 3
+
+print(original)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+[1 1 0 1]
+```
+
+There are two problems. `original` is a second name for the same array, so it shows the revisions. And the array was created with integers, so `0.75` was truncated to `0`. Choose the type at creation, and copy before revising:
+
+```{python}
+bruno_mc = np.array([1, 0, 1, 1], float)
+original = bruno_mc.copy()
+
+bruno_mc[1] = 1
+bruno_mc[2] = 0.75
+
+print(original)
+print(bruno_mc)
 ```
 :::
 
@@ -839,9 +901,11 @@ Color images add a third dimension: each pixel stores three numbers (red, green,
 
 - A NumPy array is a table of values of **one** data type; mixing types changes the `dtype` of every element.
 - `ndim`, `shape`, `size`, and `dtype` describe an array.
-- `np.zeros()`, `np.ones()`, `np.arange()`, and `np.linspace()` build arrays without typing the values; `reshape()` reorganizes them.
+- `np.zeros()`, `np.ones()`, `np.arange()`, and `np.linspace()` build arrays without typing the values.
 - `marks[row, col]` selects one value; slices such as `marks[:, 3]` or `marks[1:4, :2]` select rows, columns, and blocks.
 - Slice stopping positions are excluded, just as they are for lists.
+- Arrays are mutable: `marks[row, col] = value` changes one value, but never the `dtype`. An integer array truncates `0.5` to `0`, and a value that cannot be converted raises an error.
+- A new name for an array, or a row or slice of it, shares its data. Use `.copy()` to get an independent array.
 
 Explain in your own words why `marks[2, 4]` works for a NumPy array but not for a nested Python list.
 

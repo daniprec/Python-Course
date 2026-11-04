@@ -193,84 +193,6 @@ print(board)
 Using `dtype=int` keeps the board readable when printed. Slices place the whole ship in one assignment, which with nested lists would require a loop.
 :::
 
-::: {.callout-note}
-## Exam Versions
-
-To avoid copying, no two students sitting next to each other (left, right, in front, or behind) may get the same version of the exam. Using only `np.zeros()`, `np.arange()`, `reshape()`, indexing, and slicing (no loops):
-
-1. Write a function named `seating_plan(n_rows, n_cols)` that returns a 2D array with the seat numbers of the room, starting at 1 and numbered row by row.
-2. Write a function named `exam_versions(n_rows, n_cols)` that returns a 2D integer array with the version of each seat: `0` for version A and `1` for version B. The seat in the first row and first column gets version A.
-
-*Sample input 1:* `seating_plan(3, 4)`  
-*Expected result 1:*
-
-```text
-[[ 1  2  3  4]
- [ 5  6  7  8]
- [ 9 10 11 12]]
-```
-
-*Sample input 2:* `exam_versions(3, 4)`  
-*Expected result 2:*
-
-```text
-[[0 1 0 1]
- [1 0 1 0]
- [0 1 0 1]]
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-def seating_plan(n_rows: int, n_cols: int) -> np.ndarray:
-    """
-    Number the seats of an exam room row by row, starting at 1.
-
-    Parameters
-    ----------
-    n_rows : int
-        Number of rows of seats in the room.
-    n_cols : int
-        Number of seats in each row.
-
-    Returns
-    -------
-    np.ndarray
-        Integer array of shape (n_rows, n_cols) with the seat numbers.
-    """
-    return np.arange(1, n_rows * n_cols + 1).reshape(n_rows, n_cols)
-
-
-def exam_versions(n_rows: int, n_cols: int) -> np.ndarray:
-    """
-    Assign exam versions so that no two neighbouring seats share one.
-
-    Parameters
-    ----------
-    n_rows : int
-        Number of rows of seats in the room.
-    n_cols : int
-        Number of seats in each row.
-
-    Returns
-    -------
-    np.ndarray
-        Integer array of shape (n_rows, n_cols) with 0 (version A) or
-        1 (version B) in each seat. The first seat gets version A.
-    """
-    versions = np.zeros((n_rows, n_cols), dtype=int)
-    versions[::2, 1::2] = 1   # even rows, odd columns
-    versions[1::2, ::2] = 1   # odd rows, even columns
-    return versions
-
-
-print(seating_plan(3, 4))
-print(exam_versions(3, 4))
-```
-:::
-
 ::: {.callout-warning}
 ## Holiday Lights
 
@@ -690,6 +612,84 @@ print(np.array_equal(np.load("joined.npy"), joined))  # True
 ---
 
 # Array Manipulation
+
+::: {.callout-note}
+## Exam Versions
+
+To avoid copying, no two students sitting next to each other (left, right, in front, or behind) may get the same version of the exam. Using only `np.zeros()`, `np.arange()`, `reshape()`, indexing, and slicing (no loops):
+
+1. Write a function named `seating_plan(n_rows, n_cols)` that returns a 2D array with the seat numbers of the room, starting at 1 and numbered row by row.
+2. Write a function named `exam_versions(n_rows, n_cols)` that returns a 2D integer array with the version of each seat: `0` for version A and `1` for version B. The seat in the first row and first column gets version A.
+
+*Sample input 1:* `seating_plan(3, 4)`  
+*Expected result 1:*
+
+```text
+[[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]]
+```
+
+*Sample input 2:* `exam_versions(3, 4)`  
+*Expected result 2:*
+
+```text
+[[0 1 0 1]
+ [1 0 1 0]
+ [0 1 0 1]]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+def seating_plan(n_rows: int, n_cols: int) -> np.ndarray:
+    """
+    Number the seats of an exam room row by row, starting at 1.
+
+    Parameters
+    ----------
+    n_rows : int
+        Number of rows of seats in the room.
+    n_cols : int
+        Number of seats in each row.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n_rows, n_cols) with the seat numbers.
+    """
+    return np.arange(1, n_rows * n_cols + 1).reshape(n_rows, n_cols)
+
+
+def exam_versions(n_rows: int, n_cols: int) -> np.ndarray:
+    """
+    Assign exam versions so that no two neighbouring seats share one.
+
+    Parameters
+    ----------
+    n_rows : int
+        Number of rows of seats in the room.
+    n_cols : int
+        Number of seats in each row.
+
+    Returns
+    -------
+    np.ndarray
+        Integer array of shape (n_rows, n_cols) with 0 (version A) or
+        1 (version B) in each seat. The first seat gets version A.
+    """
+    versions = np.zeros((n_rows, n_cols), dtype=int)
+    versions[::2, 1::2] = 1   # even rows, odd columns
+    versions[1::2, ::2] = 1   # odd rows, even columns
+    return versions
+
+
+print(seating_plan(3, 4))
+print(exam_versions(3, 4))
+```
+:::
 
 ::: {.callout-note}
 ## Joining Two Vectors
