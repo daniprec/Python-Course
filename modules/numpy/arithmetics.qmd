@@ -319,6 +319,72 @@ pull_column  (5, 1)   -> stretched to (5, 2)
 result       (5, 2)
 ```
 
+### One Value per Row, or One per Column?
+
+The roof example hides the most common broadcasting mistake. Go back to `marks`, with 6 students (rows) and 11 exercises (columns), and imagine two corrections:
+
+- Exercise 4 was badly worded, so every student gets extra points **in that exercise**: one value per exercise, 11 values.
+- Some students get a bonus for attendance: one value per student, 6 values.
+
+Both sound like "one value per something", but they need different shapes. A 1D array is always lined up with the **last** dimension, the columns. An array of 11 values works directly:
+
+```{python}
+correction = np.array([0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0])  # one value per exercise
+print((marks + correction).shape)
+```
+
+An array of 6 values does not become "one value per student", even though 6 is the number of rows. NumPy compares it with the last dimension, `6` against `11`, and fails:
+
+```{python}
+bonus = np.array([0, 0.5, 0, 0, 0.25, 0])  # one value per student
+print(marks + bonus)
+```
+
+To give one value to each **row**, the array must be a **column**, with shape `(6, 1)`:
+
+```{python}
+print((marks + bonus.reshape(6, 1)).shape)
+```
+
+The rule is the same for **every element-wise operation**: `+`, `-`, `*`, `/`, `**`, and also comparisons such as `>`. Only the shapes matter, never the operator. This table sums up every option for an array combined with `marks`, with shape `(6, 11)`:
+
+| Shape of the other array | Compared with `(6, 11)` | Result | Meaning |
+|---|---|---|---|
+| scalar | nothing to compare | `(6, 11)` | the same value for every mark |
+| `(11,)` | `11` with `11` | `(6, 11)` | one value per exercise (column) |
+| `(1, 11)` | `11` with `11`, `1` with `6` | `(6, 11)` | one value per exercise (column) |
+| `(6, 1)` | `1` with `11`, `6` with `6` | `(6, 11)` | one value per student (row) |
+| `(6,)` | `6` with `11` | **error** | |
+
+::: {.callout-important}
+## A 1D array behaves like a row
+
+- A 1D array with one value per **column** works as it is.
+- For one value per **row**, turn it into a column, with shape `(n, 1)`.
+- Be careful with **square** arrays. If `marks` had shape `(6, 6)`, adding `bonus` would raise no error: it would silently add the bonus of each student to an exercise. Always check which dimension a 1D array is matched with.
+:::
+
+In linear algebra, these two cases are familiar operations. Multiplying a matrix $A$ by a row $w$ multiplies column $j$ by $w_j$: it is the product $A \, \text{diag}(w)$, with the diagonal matrix on the **right**. Multiplying it by a column $v$ multiplies row $i$ by $v_i$: it is $\text{diag}(v) \, A$, with the diagonal matrix on the **left**. Broadcasting gives the same result without building the diagonal matrix. Below, `np.diag(w)` builds the diagonal matrix with `w` on its diagonal, and `@` is the matrix product, which we will meet in the second part of this session:
+
+```{python}
+A = np.array([[1, 2, 3], [4, 5, 6]])
+w = np.array([10, 1, 0])  # one factor per column
+v = np.array([2, -1])     # one factor per row
+
+print(np.array_equal(A * w, A @ np.diag(w)))
+print(np.array_equal(A * v.reshape(2, 1), np.diag(v) @ A))
+```
+
+When **both** arrays are stretched, a column and a row build a whole table. A column $u$ of shape `(m, 1)` times a row $v$ of shape `(n,)` gives the $m \times n$ matrix of all the products $u_i v_j$: the **outer product** $u v^T$. For instance, the multiplication table:
+
+```{python}
+u = np.arange(1, 4).reshape(3, 1)  # column (3, 1)
+v = np.arange(1, 6)                # row (5,)
+print(u * v)                       # (3, 1) * (5,) -> (3, 5)
+```
+
+With `+` instead of `*`, the same idea builds the table of all the sums $u_i + v_j$.
+
 ::: {.callout-note}
 ## Exercise: Which Shapes Broadcast?
 
