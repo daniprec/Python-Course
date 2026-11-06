@@ -177,8 +177,8 @@ RSA encrypts only numbers. These must be greater-equal $0$ and less than $n$.
 ```{python}
 def encrypt_number(m: int, pub: tuple[int]) -> int:
   n, e = pub
-  # To ensure m**e can be computed, we change the variable type
-  c = int(m)**int(e) % int(n)
+  # Compute m**e mod n without constructing the enormous value m**e
+  c = pow(int(m), int(e), int(n))
   return c
 ```
 
@@ -197,8 +197,8 @@ $$
 ```{python}
 def decrypt_number(c: int, priv: tuple[int]) -> int:
   n, d = priv
-  # To ensure c**d can be computed, we change the variable type
-  m = int(c)**int(d) % int(n)
+  # Compute c**d mod n without constructing the enormous value c**d
+  m = pow(int(c), int(d), int(n))
   return m
 ```
 
@@ -212,6 +212,7 @@ If we did not have the private key, we can try to find it via brute force.
 Choose three numbers, encrypt them using the known public key, then find a private key that decrypts them properly.
 
 ```{python}
+#| eval: false
 # Initialize private key at 1
 dd = 1
 

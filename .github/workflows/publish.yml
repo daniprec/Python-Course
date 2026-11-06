@@ -57,7 +57,8 @@ jobs:
           quarto check jupyter
 
       - name: Restore Quarto execution cache
-        uses: actions/cache@v4
+        id: quarto-cache
+        uses: actions/cache/restore@v4
         with:
           path: .jupyter_cache
           key: quarto-jupyter-${{ runner.os }}-py312-${{ hashFiles('requirements.txt', 'data/**', 'scripts/**/*.py') }}-${{ github.sha }}
@@ -76,6 +77,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/report_quarto_failure.py quarto-render.log
+
+      - name: Save Quarto execution cache
+        if: always() && steps.quarto-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .jupyter_cache
+          key: quarto-jupyter-${{ runner.os }}-py312-${{ hashFiles('requirements.txt', 'data/**', 'scripts/**/*.py') }}-${{ github.sha }}
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
