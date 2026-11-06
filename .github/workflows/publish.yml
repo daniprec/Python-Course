@@ -19,6 +19,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  statuses: write
 
 concurrency:
   group: pages
@@ -64,7 +65,17 @@ jobs:
             quarto-jupyter-${{ runner.os }}-py312-${{ hashFiles('requirements.txt', 'data/**', 'scripts/**/*.py') }}-
 
       - name: Render Quarto website
-        run: quarto render
+        id: render
+        shell: bash
+        run: |
+          set -o pipefail
+          quarto render 2>&1 | tee quarto-render.log
+
+      - name: Report render failure
+        if: failure() && steps.render.outcome == 'failure'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/report_quarto_failure.py quarto-render.log
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
