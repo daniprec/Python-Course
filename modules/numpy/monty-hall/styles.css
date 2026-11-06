@@ -1,22 +1,90 @@
 :root {
-  --ink: #16213e;
-  --muted: #667085;
-  --paper: #fffdf8;
-  --cream: #f6f1e8;
-  --navy: #172342;
-  --blue: #3d62ff;
-  --blue-dark: #2848d8;
-  --cyan: #55d6df;
-  --yellow: #ffd757;
-  --coral: #ff766b;
-  --green: #44b987;
-  --door: #dc5d4f;
-  --door-dark: #9f3d36;
-  --shadow: 0 18px 55px rgba(23, 35, 66, 0.13);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Semantic layer: built only from IE tokens (../../../theme/ie-tokens.css).
+     Light values here; dark values in [data-theme="dark"] below. */
+  --font-ui: "Montserrat", Arial, Helvetica, sans-serif;
+  --font-read: "PT Serif", Georgia, "Times New Roman", serif;
+
+  --ink: var(--ie-black);
+  --muted: var(--ie-darkgrey);
+  --page: var(--ie-white-ie);
+  --paper: var(--ie-white);
+  --card: var(--ie-white);
+  --card-soft: var(--ie-softgrey);
+  --line: color-mix(in srgb, var(--ie-lightgrey) 70%, transparent);
+  --line-strong: var(--ie-midgrey);
+  --chip: var(--ie-white-ie);
+  --track: var(--ie-white-ie);
+
+  --navy: var(--ie-oceanblue);          /* host bar + experiment panel */
+  --on-navy: var(--ie-white);
+  --on-navy-muted: var(--ie-lightblue);
+  --blue: var(--ie-electricblue);       /* switch, primary actions, labels */
+  --blue-dark: var(--ie-oceanblue);
+  --on-blue: var(--ie-white);
+  --cyan: var(--ie-seablue);            /* accents on the navy panels */
+  --on-cyan: var(--ie-techblack);
+  --stay: var(--ie-techgreen);          /* your door / stay strategy (fills only) */
+  --stay-text: var(--ie-techgreen-new);
+  --yellow: var(--ie-lemon);            /* door numbers and knobs */
+  --focus: var(--ie-electricblue);
+
+  --door: var(--ie-vigred);
+  --door-dark: #A3000B;
+  --door-shadow: #5E0007;
+  --frame: #1A1A3D;
+  --frame-shadow: #10102A;
+  --doorway: var(--ie-techblack);
+
+  --win-fg: var(--ie-techgreen-new);
+  --win-bg: color-mix(in srgb, var(--ie-techgreen) 18%, white);
+  --loss-fg: #8A0009;
+  --loss-bg: color-mix(in srgb, var(--ie-vigred) 10%, white);
+  --note-fg: var(--ie-oceanblue);
+  --note-bg: var(--ie-iceblue);
+  --note-line: var(--ie-vigred);
+
+  --shadow: 0 18px 55px rgba(0, 0, 36, 0.10);
+  font-family: var(--font-ui);
   color: var(--ink);
-  background: var(--cream);
+  background: var(--page);
+  color-scheme: light;
   font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  --ink: var(--ie-white-ie);
+  --muted: var(--ie-lightgrey);
+  --page: var(--ie-techblack);
+  --paper: var(--ie-night-surface);
+  --card: var(--ie-techblack);
+  --card-soft: var(--ie-techblack);
+  --line: var(--ie-night-border);
+  --line-strong: var(--ie-midgrey);
+  --chip: var(--ie-night-border);
+  --track: var(--ie-night-border);
+
+  --navy: var(--ie-oceanblue);
+  --blue: var(--ie-seablue);
+  --blue-dark: var(--ie-lightblue);
+  --on-blue: var(--ie-techblack);
+  --stay-text: var(--ie-techgreen);
+  --focus: var(--ie-seablue);
+
+  --frame: #2B2B5E;
+  --frame-shadow: #000012;
+  --doorway: #00000F;
+  --door-shadow: #3A0004;
+
+  --win-fg: var(--ie-techgreen);
+  --win-bg: color-mix(in srgb, var(--ie-techgreen) 16%, var(--ie-techblack));
+  --loss-fg: var(--ie-red-on-dark);
+  --loss-bg: color-mix(in srgb, var(--ie-vigred) 18%, var(--ie-techblack));
+  --note-fg: var(--ie-lightblue);
+  --note-bg: var(--ie-oceanblue);
+  --note-line: var(--ie-red-on-dark);
+
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
 }
 
 * {
@@ -27,8 +95,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at 9% 5%, rgba(255, 215, 87, 0.32), transparent 20rem),
-    var(--cream);
+    radial-gradient(circle at 9% 5%, color-mix(in srgb, var(--cyan) 22%, transparent), transparent 20rem),
+    var(--page);
 }
 
 button {
@@ -36,8 +104,30 @@ button {
 }
 
 button:focus-visible {
-  outline: 4px solid rgba(61, 98, 255, 0.3);
+  outline: 3px solid var(--focus);
   outline-offset: 4px;
+}
+
+.theme-toggle {
+  position: fixed;
+  z-index: 10;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
 }
 
 .hero {
@@ -59,7 +149,7 @@ button:focus-visible {
 
 .hero h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-read);
   font-size: clamp(3.4rem, 9vw, 6.8rem);
   font-weight: 700;
   letter-spacing: -0.065em;
@@ -90,7 +180,7 @@ section {
 .game-card,
 .dashboard,
 .explanation {
-  border: 1px solid rgba(22, 33, 62, 0.08);
+  border: 1px solid var(--line);
   border-radius: 28px;
   background: var(--paper);
   box-shadow: var(--shadow);
@@ -135,14 +225,14 @@ h2 {
 
 .button--quiet {
   color: var(--muted);
-  background: #eeeae2;
+  background: var(--chip);
 }
 
 .button--primary,
 .button--switch {
-  color: #fff;
+  color: var(--on-blue);
   background: var(--blue);
-  box-shadow: 0 8px 20px rgba(61, 98, 255, 0.25);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--blue) 25%, transparent);
 }
 
 .button--primary:hover,
@@ -153,7 +243,7 @@ h2 {
 .button--stay {
   color: var(--ink);
   background: var(--yellow);
-  box-shadow: 0 8px 20px rgba(255, 215, 87, 0.24);
+  box-shadow: none;
 }
 
 .host-message {
@@ -165,7 +255,7 @@ h2 {
   margin: 30px auto 8px;
   padding: 12px 18px;
   border-radius: 14px;
-  color: #fff;
+  color: var(--on-navy);
   background: var(--navy);
   font-weight: 700;
 }
@@ -212,13 +302,13 @@ h2 {
   inset: 0;
   display: grid;
   place-items: center;
-  border: 9px solid #342822;
+  border: 9px solid var(--frame);
   border-bottom-width: 12px;
   border-radius: inherit;
   background:
-    radial-gradient(ellipse at 50% 85%, rgba(255, 215, 87, 0.22), transparent 60%),
-    #0c1222;
-  box-shadow: 0 13px 0 #2a201b, 0 23px 25px rgba(37, 25, 24, 0.18);
+    radial-gradient(ellipse at 50% 85%, color-mix(in srgb, var(--yellow) 22%, transparent), transparent 60%),
+    var(--doorway);
+  box-shadow: 0 13px 0 var(--frame-shadow), 0 23px 25px rgba(0, 0, 36, 0.18);
 }
 
 .door__prize {
@@ -241,7 +331,7 @@ h2 {
   border-bottom-width: 12px;
   border-radius: inherit;
   background: var(--door);
-  box-shadow: 0 13px 0 #6f2d29, 0 23px 25px rgba(37, 25, 24, 0.18);
+  box-shadow: 0 13px 0 var(--door-shadow), 0 23px 25px rgba(0, 0, 36, 0.18);
   transform-origin: left center;
   transition: transform 650ms cubic-bezier(0.2, 0.85, 0.3, 1), filter 650ms ease;
 }
@@ -264,12 +354,12 @@ h2 {
   height: 47px;
   display: grid;
   place-items: center;
-  border: 3px solid #ffe9bb;
+  border: 3px solid color-mix(in srgb, var(--yellow) 40%, white);
   border-radius: 50%;
   color: var(--ink);
   background: var(--yellow);
-  box-shadow: 0 3px 0 rgba(67, 34, 24, 0.32);
-  font-family: Georgia, serif;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+  font-family: var(--font-read);
   font-size: 1.6rem;
   font-weight: 800;
   transform: translateX(-50%);
@@ -279,8 +369,8 @@ h2 {
   position: absolute;
   left: 14%;
   right: 14%;
-  border: 4px solid rgba(116, 41, 35, 0.8);
-  box-shadow: inset 0 0 0 3px rgba(255, 160, 131, 0.2);
+  border: 4px solid color-mix(in srgb, var(--door-dark) 85%, transparent);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.14);
 }
 
 .door__panel--top {
@@ -301,7 +391,7 @@ h2 {
   height: 15px;
   border-radius: 50%;
   background: var(--yellow);
-  box-shadow: 0 2px 0 #9a7418;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--yellow) 55%, black);
 }
 
 /* Tag under the door: "Your pick", "Switch?", "Final pick", "First pick" */
@@ -313,7 +403,7 @@ h2 {
   width: max-content;
   padding: 5px 10px;
   border-radius: 999px;
-  color: var(--navy);
+  color: var(--on-cyan);
   background: var(--cyan);
   font-size: 0.75rem;
   font-weight: 850;
@@ -326,7 +416,11 @@ h2 {
 }
 
 .door.is-selected {
-  box-shadow: 0 0 0 6px var(--cyan);
+  box-shadow: 0 0 0 6px var(--stay);
+}
+
+.door.is-selected .door__tag {
+  background: var(--stay);
 }
 
 /* Deciding phase: the other closed door is offered as the switch */
@@ -336,7 +430,7 @@ h2 {
 }
 
 .door.is-offer .door__tag {
-  color: #fff;
+  color: var(--on-blue);
   background: var(--blue);
 }
 
@@ -348,22 +442,22 @@ h2 {
 
 .doors.is-deciding .door.is-selected:hover .door__tag,
 .doors.is-deciding .door.is-selected:focus-visible .door__tag {
-  color: var(--ink);
-  background: var(--yellow);
+  color: var(--on-cyan);
+  background: var(--stay);
 }
 
 .door.is-previous {
-  box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.25);
+  box-shadow: 0 0 0 3px var(--line-strong);
 }
 
 .door.is-previous .door__tag {
   color: var(--muted);
-  background: #eeeae2;
+  background: var(--chip);
 }
 
 @keyframes offer-pulse {
   0%, 100% { box-shadow: 0 0 0 4px var(--blue); }
-  50% { box-shadow: 0 0 0 4px var(--blue), 0 0 0 12px rgba(61, 98, 255, 0.16); }
+  50% { box-shadow: 0 0 0 4px var(--blue), 0 0 0 12px color-mix(in srgb, var(--blue) 18%, transparent); }
 }
 
 .result-actions {
@@ -395,9 +489,9 @@ h2 {
 
 .strategy {
   padding: 22px;
-  border: 1px solid #e7e4dc;
+  border: 1px solid var(--line);
   border-radius: 18px;
-  background: #fff;
+  background: var(--card);
 }
 
 .strategy__heading {
@@ -417,7 +511,7 @@ h2 {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--yellow);
+  background: var(--stay);
 }
 
 .strategy--switch .strategy__dot {
@@ -429,7 +523,7 @@ h2 {
   margin: 17px 0 13px;
   overflow: hidden;
   border-radius: 999px;
-  background: #ecebe7;
+  background: var(--track);
 }
 
 .meter span {
@@ -437,7 +531,7 @@ h2 {
   width: 0;
   height: 100%;
   border-radius: inherit;
-  background: var(--yellow);
+  background: var(--stay);
   transition: width 500ms ease;
 }
 
@@ -472,22 +566,22 @@ h2 {
 }
 
 .history__empty {
-  color: #9095a2;
+  color: var(--muted);
   font-size: 0.92rem;
 }
 
 .history__item {
   padding: 6px 10px;
   border-radius: 999px;
-  color: #28513f;
-  background: #e0f6ec;
+  color: var(--win-fg);
+  background: var(--win-bg);
   font-size: 0.78rem;
   font-weight: 800;
 }
 
 .history__item.is-loss {
-  color: #733933;
-  background: #ffe5e1;
+  color: var(--loss-fg);
+  background: var(--loss-bg);
 }
 
 .experiment {
@@ -495,7 +589,7 @@ h2 {
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
   border-radius: 28px;
-  color: #fff;
+  color: var(--on-navy);
   background: var(--navy);
   box-shadow: var(--shadow);
 }
@@ -511,13 +605,13 @@ h2 {
 
 .experiment h2 {
   max-width: 420px;
-  color: #fff;
+  color: var(--on-navy);
 }
 
 .experiment__copy > p:not(.section-label) {
   max-width: 520px;
   margin: 16px 0 26px;
-  color: #bcc5dc;
+  color: var(--on-navy-muted);
   line-height: 1.6;
 }
 
@@ -528,7 +622,7 @@ h2 {
 }
 
 .button--light {
-  color: #fff;
+  color: var(--on-navy);
   background: rgba(255, 255, 255, 0.12);
 }
 
@@ -537,8 +631,8 @@ h2 {
 }
 
 .button--yellow {
-  color: var(--navy);
-  background: var(--yellow);
+  color: var(--on-cyan);
+  background: var(--cyan);
 }
 
 .experiment__visual {
@@ -566,7 +660,7 @@ h2 {
 }
 
 .comparison__row span {
-  color: #d7dcec;
+  color: var(--on-navy-muted);
   font-weight: 750;
 }
 
@@ -585,7 +679,7 @@ h2 {
   display: block;
   width: 0;
   height: 100%;
-  background: var(--yellow);
+  background: var(--stay);
   transition: width 750ms cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
@@ -596,7 +690,7 @@ h2 {
 .experiment__note {
   min-height: 44px;
   margin: 22px 0 0;
-  color: #aeb8d0;
+  color: var(--on-navy-muted);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -638,7 +732,7 @@ h2 {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #fff;
+  color: var(--on-blue);
   background: var(--blue);
   font-size: 1.7rem;
   transition: transform 200ms ease;
@@ -665,18 +759,19 @@ h2 {
   gap: 18px;
   padding: 22px;
   border-radius: 18px;
-  background: #f4f0e7;
+  background: var(--card-soft);
+  border: 1px solid var(--line);
 }
 
 .probability > span {
   flex: 0 0 auto;
-  font-family: Georgia, serif;
+  font-family: var(--font-read);
   font-size: 3rem;
   font-weight: 750;
 }
 
 .probability--third > span {
-  color: #b58b14;
+  color: var(--stay-text);
 }
 
 .probability--twothirds > span {
@@ -696,10 +791,10 @@ h2 {
 .rule-callout {
   grid-column: 1 / -1;
   padding: 16px 20px;
-  border-left: 5px solid var(--coral);
+  border-left: 5px solid var(--note-line);
   border-radius: 5px 12px 12px 5px;
-  color: #68463f;
-  background: #fff0ec;
+  color: var(--note-fg);
+  background: var(--note-bg);
   line-height: 1.5;
 }
 
@@ -707,7 +802,7 @@ footer {
   display: flex;
   justify-content: space-between;
   padding: 18px 8px 40px;
-  color: #7c8190;
+  color: var(--muted);
   font-size: 0.78rem;
   font-weight: 700;
 }

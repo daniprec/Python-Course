@@ -8,10 +8,29 @@
       content="An interactive, classroom-friendly Monty Hall simulator."
     />
     <title>Monty Hall — Stay or Switch?</title>
+    <script>
+      // Same light/dark preference as the course site (Quarto stores
+      // "default" = light, "alternate" = dark); otherwise follow the OS.
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem("quarto-color-scheme"); } catch (e) {}
+        var dark = saved ? saved === "alternate"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../../theme/ie-tokens.css" />
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
   </head>
   <body>
+    <button class="theme-toggle" id="theme-toggle" type="button"></button>
     <header class="hero">
       <div class="hero__eyebrow">Probability Lab</div>
       <h1>Stay or <em>switch?</em></h1>
