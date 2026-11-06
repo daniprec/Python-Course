@@ -1,11 +1,10 @@
 "use strict";
 
+const doorsRow = document.querySelector("#doors");
 const doors = [...document.querySelectorAll(".door")];
 const hostCopy = document.querySelector("#host-copy");
-const decisionPanel = document.querySelector("#decision");
+const gameTitle = document.querySelector("#game-title");
 const resultActions = document.querySelector("#result-actions");
-const stayButton = document.querySelector("#stay");
-const switchButton = document.querySelector("#switch");
 const newGameButton = document.querySelector("#new-game");
 const playAgainButton = document.querySelector("#play-again");
 
@@ -42,16 +41,26 @@ function randomDoor() {
 }
 
 function setPrizeIcon(doorIndex, icon) {
-  const prize = doors[doorIndex].querySelector(".door__prize");
-  prize.textContent = icon;
+  doors[doorIndex].querySelector(".door__prize").textContent = icon;
+}
+
+function setTag(doorIndex, text) {
+  doors[doorIndex].querySelector(".door__tag").textContent = text;
 }
 
 function openDoor(doorIndex, contents) {
   setPrizeIcon(doorIndex, contents === "car" ? "🚗" : "🐐");
   doors[doorIndex].classList.add("is-open");
+  doors[doorIndex].disabled = true;
   doors[doorIndex].setAttribute(
     "aria-label",
     `Door ${doorIndex + 1}, open, showing a ${contents}`,
+  );
+}
+
+function otherClosedDoor() {
+  return [0, 1, 2].find(
+    (door) => door !== game.chosenDoor && door !== game.revealedDoor,
   );
 }
 
@@ -61,51 +70,65 @@ function startGame() {
   game.chosenDoor = null;
   game.revealedDoor = null;
 
+  gameTitle.textContent = "Choose your first door";
   hostCopy.textContent = "The car is hidden. Which door do you choose?";
-  decisionPanel.hidden = true;
   resultActions.hidden = true;
+  doorsRow.classList.remove("is-deciding");
 
   doors.forEach((door, index) => {
     door.disabled = false;
-    door.classList.remove("is-selected", "is-open");
+    door.classList.remove("is-selected", "is-open", "is-offer", "is-previous");
     door.setAttribute("aria-label", `Choose door ${index + 1}`);
     setPrizeIcon(index, "");
+    setTag(index, "");
   });
 }
 
 function chooseDoor(chosenDoor) {
-  if (game.phase !== "choosing") return;
-
   game.phase = "deciding";
   game.chosenDoor = chosenDoor;
-  doors[chosenDoor].classList.add("is-selected");
 
+  // Monty knows where the car is and opens a goat door you did not pick.
   const possibleReveals = [0, 1, 2].filter(
     (door) => door !== game.chosenDoor && door !== game.prizeDoor,
   );
   game.revealedDoor = possibleReveals[Math.floor(Math.random() * possibleReveals.length)];
+  const offer = otherClosedDoor();
 
-  doors.forEach((door) => {
-    door.disabled = true;
-  });
+  doors[chosenDoor].classList.add("is-selected");
+  setTag(chosenDoor, "Your pick");
+  doors[chosenDoor].setAttribute(
+    "aria-label",
+    `Door ${chosenDoor + 1}, your pick. Click to stay with it`,
+  );
+  doors[offer].classList.add("is-offer");
+  setTag(offer, "Switch?");
+  doors[offer].setAttribute("aria-label", `Door ${offer + 1}. Click to switch to it`);
+
   openDoor(game.revealedDoor, "goat");
-  hostCopy.textContent = `Monty opens door ${game.revealedDoor + 1} and reveals a goat. Stay or switch?`;
-  decisionPanel.hidden = false;
+  doorsRow.classList.add("is-deciding");
+
+  gameTitle.textContent = "Stay or switch?";
+  hostCopy.textContent =
+    `Monty opens door ${game.revealedDoor + 1}: a goat! ` +
+    `Click door ${chosenDoor + 1} again to stay, or door ${offer + 1} to switch.`;
 }
 
-function finishGame(strategy) {
-  if (game.phase !== "deciding") return;
+function finishGame(finalDoor) {
   game.phase = "finished";
 
-  const remainingDoor = [0, 1, 2].find(
-    (door) => door !== game.chosenDoor && door !== game.revealedDoor,
-  );
-  const finalDoor = strategy === "stay" ? game.chosenDoor : remainingDoor;
+  const strategy = finalDoor === game.chosenDoor ? "stay" : "switch";
   const won = finalDoor === game.prizeDoor;
 
+  doorsRow.classList.remove("is-deciding");
+  doors.forEach((door) => door.classList.remove("is-offer", "is-selected"));
+  doors[finalDoor].classList.add("is-selected");
+  setTag(finalDoor, "Final pick");
   if (strategy === "switch") {
-    doors[game.chosenDoor].classList.remove("is-selected");
-    doors[finalDoor].classList.add("is-selected");
+    doors[game.chosenDoor].classList.add("is-previous");
+    setTag(game.chosenDoor, "First pick");
+  } else {
+    setTag(otherClosedDoor(), "");
   }
 
   [0, 1, 2]
@@ -119,11 +142,19 @@ function finishGame(strategy) {
   updateStats();
 
   const action = strategy === "stay" ? "stayed" : "switched";
+  gameTitle.textContent = won ? "You won the car!" : "A goat, this time";
   hostCopy.textContent = won
     ? `You ${action} — and won the car!`
     : `You ${action} — but the car was behind door ${game.prizeDoor + 1}.`;
-  decisionPanel.hidden = true;
   resultActions.hidden = false;
+}
+
+function handleDoorClick(doorIndex) {
+  if (game.phase === "choosing") {
+    chooseDoor(doorIndex);
+  } else if (game.phase === "deciding" && doorIndex !== game.revealedDoor) {
+    finishGame(doorIndex);
+  }
 }
 
 function updateStats() {
@@ -188,11 +219,9 @@ function simulate(rounds) {
 }
 
 doors.forEach((door) => {
-  door.addEventListener("click", () => chooseDoor(Number(door.dataset.door)));
+  door.addEventListener("click", () => handleDoorClick(Number(door.dataset.door)));
 });
 
-stayButton.addEventListener("click", () => finishGame("stay"));
-switchButton.addEventListener("click", () => finishGame("switch"));
 newGameButton.addEventListener("click", startGame);
 playAgainButton.addEventListener("click", startGame);
 document.querySelector("#reset-stats").addEventListener("click", resetStats);

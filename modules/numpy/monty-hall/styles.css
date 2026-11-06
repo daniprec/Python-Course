@@ -179,40 +179,85 @@ h2 {
   grid-template-columns: repeat(3, minmax(110px, 190px));
   justify-content: center;
   gap: clamp(18px, 6vw, 66px);
-  padding: 52px 0 40px;
-  perspective: 1100px;
+  padding: 52px 0 56px;
 }
 
+/* Each door = a fixed doorway (.door__inside, holds the prize)
+   + a leaf (.door__leaf) that swings open on its left hinge.
+   The prize lives in the doorway, so it stays put and is seen *behind* the open leaf. */
 .door {
   position: relative;
   aspect-ratio: 0.58;
   padding: 0;
-  border: 9px solid var(--door-dark);
-  border-bottom-width: 12px;
-  border-radius: 5px 5px 2px 2px;
+  border: 0;
+  border-radius: 6px 6px 2px 2px;
   color: #fff;
-  background: var(--door);
-  box-shadow:
-    0 13px 0 #6f2d29,
-    0 23px 25px rgba(37, 25, 24, 0.18);
+  background: transparent;
   cursor: pointer;
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  transition: transform 480ms cubic-bezier(0.2, 0.85, 0.3, 1), filter 180ms ease;
-}
-
-.door:not(:disabled):hover {
-  filter: brightness(1.08);
-  transform: translateY(-6px);
+  perspective: 1400px;
+  perspective-origin: 15% 50%;
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .door:disabled {
   cursor: default;
 }
 
+.door:not(:disabled):hover {
+  transform: translateY(-6px);
+}
+
+.door__inside {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 9px solid #342822;
+  border-bottom-width: 12px;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(255, 215, 87, 0.22), transparent 60%),
+    #0c1222;
+  box-shadow: 0 13px 0 #2a201b, 0 23px 25px rgba(37, 25, 24, 0.18);
+}
+
+.door__prize {
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 260ms ease 220ms, transform 360ms cubic-bezier(0.2, 1.4, 0.4, 1) 220ms;
+}
+
+.door.is-open .door__prize {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.door__leaf {
+  position: absolute;
+  inset: 0;
+  border: 9px solid var(--door-dark);
+  border-bottom-width: 12px;
+  border-radius: inherit;
+  background: var(--door);
+  box-shadow: 0 13px 0 #6f2d29, 0 23px 25px rgba(37, 25, 24, 0.18);
+  transform-origin: left center;
+  transition: transform 650ms cubic-bezier(0.2, 0.85, 0.3, 1), filter 650ms ease;
+}
+
+.door:not(:disabled):hover .door__leaf {
+  filter: brightness(1.08);
+}
+
+.door.is-open .door__leaf {
+  transform: rotateY(-82deg);
+  filter: brightness(0.7);
+  box-shadow: none;
+}
+
 .door__number {
   position: absolute;
-  z-index: 2;
   top: 7%;
   left: 50%;
   width: 47px;
@@ -250,7 +295,6 @@ h2 {
 
 .door__knob {
   position: absolute;
-  z-index: 2;
   top: 61%;
   right: 10%;
   width: 15px;
@@ -260,12 +304,12 @@ h2 {
   box-shadow: 0 2px 0 #9a7418;
 }
 
+/* Tag under the door: "Your pick", "Switch?", "Final pick", "First pick" */
 .door__tag {
   position: absolute;
   z-index: 3;
   left: 50%;
-  bottom: -38px;
-  display: none;
+  bottom: -40px;
   width: max-content;
   padding: 5px 10px;
   border-radius: 999px;
@@ -274,67 +318,57 @@ h2 {
   font-size: 0.75rem;
   font-weight: 850;
   transform: translateX(-50%);
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.door__tag:empty {
+  display: none;
 }
 
 .door.is-selected {
-  box-shadow:
-    0 0 0 6px var(--cyan),
-    0 13px 0 #6f2d29,
-    0 23px 25px rgba(37, 25, 24, 0.18);
+  box-shadow: 0 0 0 6px var(--cyan);
 }
 
-.door.is-selected .door__tag {
-  display: block;
+/* Deciding phase: the other closed door is offered as the switch */
+.door.is-offer {
+  box-shadow: 0 0 0 4px var(--blue);
+  animation: offer-pulse 1.8s ease-in-out infinite;
 }
 
-.door.is-open {
-  transform: perspective(850px) rotateY(-76deg);
-  filter: brightness(0.84);
+.door.is-offer .door__tag {
+  color: #fff;
+  background: var(--blue);
 }
 
-.door.is-open::after {
-  content: "";
-  position: absolute;
-  inset: -9px;
-  z-index: -2;
-  border: 9px solid #342822;
-  background: #0c1222;
-  transform: translateZ(-12px);
+.door.is-offer:hover,
+.door.is-offer:focus-visible {
+  animation: none;
+  box-shadow: 0 0 0 6px var(--blue);
 }
 
-.door__prize {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: clamp(2.2rem, 6vw, 4.2rem);
-  transform: translateZ(-20px);
+.doors.is-deciding .door.is-selected:hover .door__tag,
+.doors.is-deciding .door.is-selected:focus-visible .door__tag {
+  color: var(--ink);
+  background: var(--yellow);
 }
 
-.door.is-open .door__prize {
-  z-index: -1;
+.door.is-previous {
+  box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.25);
 }
 
-.decision,
-.result-actions {
-  text-align: center;
-}
-
-.decision p {
-  margin: 6px 0 18px;
+.door.is-previous .door__tag {
   color: var(--muted);
-  font-weight: 650;
+  background: #eeeae2;
 }
 
-.decision__buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+@keyframes offer-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px var(--blue); }
+  50% { box-shadow: 0 0 0 4px var(--blue), 0 0 0 12px rgba(61, 98, 255, 0.16); }
 }
 
-.decision__buttons .button {
-  min-width: 132px;
+.result-actions {
+  margin-top: 14px;
+  text-align: center;
 }
 
 .dashboard {
@@ -692,12 +726,10 @@ footer {
     padding-top: 42px;
   }
 
-  .door {
+  .door__inside,
+  .door__leaf {
     border-width: 6px;
     border-bottom-width: 9px;
-    box-shadow:
-      0 9px 0 #6f2d29,
-      0 17px 18px rgba(37, 25, 24, 0.15);
   }
 
   .door__number {
@@ -753,14 +785,6 @@ footer {
     font-size: 0.85rem;
   }
 
-  .decision__buttons {
-    flex-direction: column;
-  }
-
-  .decision__buttons .button {
-    width: 100%;
-  }
-
   footer {
     flex-direction: column;
     gap: 5px;
@@ -774,5 +798,9 @@ footer {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+
+  .door.is-offer {
+    animation: none;
   }
 }
