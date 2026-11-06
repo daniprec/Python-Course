@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 def failure_description(log: str) -> str:
     """Extract the last rendered document and final useful error from a log."""
+    log = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", log)
     documents = re.findall(r"\[\s*\d+/\d+\]\s+([^\r\n]+)", log)
     error_lines = re.findall(
         r"^(?:[A-Za-z_][\w.]*(?:Error|Exception): .+|ERROR: .+)$",
