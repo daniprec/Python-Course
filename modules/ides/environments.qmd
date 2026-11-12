@@ -10,8 +10,8 @@ An **environment** is a separate space that keeps its own Python version and its
 
 Imagine two projects:
 
-- Project A needs NumPy 1.18.
-- Project B needs NumPy 1.20.
+- Project A was written for NumPy 1.26.
+- Project B needs NumPy 2.x.
 
 If both shared one installation, installing one version would break the other project. With environments, each project has its own copy of the libraries and they never interfere.
 
@@ -28,13 +28,19 @@ We use **conda**, which came with Anaconda.
 1. Open a terminal:
    - **Windows:** open **Anaconda Prompt** from the Start menu.
    - **macOS and Linux:** open your normal terminal.
-2. Create the environment with `conda create`. The `-n` flag gives it a name. Let's create `demo_env` with Python 3.11:
+2. Create the environment with `conda create`. The `-n` flag gives it a name. Let's create `demo_env` with Python 3.12:
 
 ```bash
-conda create -n demo_env python=3.11
+conda create -n demo_env python=3.12
 ```
 
 Conda lists the packages it will install and asks `Proceed ([y]/n)?`. Type `y` and press `Enter`.
+
+::: {.callout-note}
+## Terms of Service prompt
+
+The first time you run a command such as `conda create` or `conda install`, conda may ask you to accept Anaconda's **Terms of Service** for its default channels (`Do you accept the Terms of Service (ToS) for ...? [(a)ccept/(r)eject/(v)iew]`). Read them, type `a` to accept, and the command continues. You can also run `conda tos accept` in advance. If you reject, conda cannot install from those channels.
+:::
 
 ## Activating the environment
 
@@ -66,7 +72,7 @@ With the environment **active**, install the libraries you need:
 conda install numpy
 ```
 
-You can check what is installed with `conda list`. If a library is not available in conda, use pip *inside the active environment*:
+You can check what is installed with `conda list`. Anaconda also offers the community channel *conda-forge*, with many more packages: `conda install -c conda-forge package_name`. If a library is not available in conda, use pip *inside the active environment*:
 
 ```bash
 pip install typer
@@ -79,6 +85,8 @@ A very common mistake is to install a library in one environment and then run yo
 :::
 
 ## Using the environment in VS Code
+
+VS Code can also create environments for you: run **Python: Create Environment** from the Command Palette and choose `venv` or `conda`. In this course we create them from the terminal, to understand what is happening.
 
 ### In a script
 
@@ -115,7 +123,7 @@ pip install -r requirements.txt
 A `requirements.txt` file has one library per line. You can ask for a specific version, or the latest one:
 
 ```text
-numpy==1.26.4
+numpy>=2,<3
 typer
 ```
 
@@ -124,7 +132,7 @@ typer
 ::: {.callout-note}
 ## Exercise: Your own environment
 
-1. Create an environment called `cp_env` with Python 3.11.
+1. Create an environment called `cp_env` with Python 3.12.
 2. Activate it and install `numpy` and `ipykernel`.
 3. Create a notebook in VS Code and select `cp_env` as the kernel.
 4. In the first cell run:
@@ -141,7 +149,7 @@ print(np.__version__)
 ## Solution
 
 ```bash
-conda create -n cp_env python=3.11
+conda create -n cp_env python=3.12
 conda activate cp_env
 conda install numpy ipykernel
 ```
