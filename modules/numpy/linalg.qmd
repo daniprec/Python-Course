@@ -233,8 +233,12 @@ $$A = Q\ \Lambda\ Q^{-1}$$
 # Reconstruct the compressed image
 compressed_image = eigenvectors @ np.diag(eigenvalues) @ np.linalg.inv(eigenvectors)
 
-# Display the compressed image
-show_image(compressed_image)
+# The eigenvalues are complex, so the result is complex too
+print(compressed_image.dtype)
+print(np.abs(compressed_image.imag).max())  # the imaginary part is only numerical noise
+
+# Display the real part (imshow cannot draw complex numbers)
+show_image(compressed_image.real)
 ```
 
 For a general, non-symmetric image matrix, eigenvalues and eigenvectors may be complex. The reconstruction formula also requires the inverse of the eigenvector matrix, not its transpose. These facts make eigen decomposition an awkward compression tool for a general image.
