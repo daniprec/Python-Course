@@ -1,0 +1,269 @@
+---
+title: "Masking: Practice with the Cardboard"
+subtitle: "Module 3: NumPy (extra practice)"
+author: "Manuel Morante"
+format: html
+---
+
+# Masking: Practice with the Cardboard
+
+This page is extra practice for [Masking: Sets and Logic](masking.qmd). If masks still feel slippery, think of a **piece of cardboard with holes** laid over your array:
+
+- `True` cuts a hole. `False` leaves the cardboard.
+- You can only **read** the numbers that show through the holes: `A[mask]`.
+- You can only **write** through the holes: `A[mask] = value`. The covered numbers do not change.
+
+::: {.callout-important icon=false}
+## Play with the cardboard first
+
+Type any array and any mask, lay the cardboard on top, and read or write through it. The lab prints what NumPy would print, and it fails with the same errors as NumPy.
+
+[Launch the Cardboard Mask lab](masking-cardboard/index.html){.btn .btn-primary target="_blank"}
+:::
+
+```{python}
+import numpy as np
+```
+
+---
+
+## Three Kinds of Mask
+
+A mask must fit the array, like cardboard cut to the size of the sheet. What "fit" means depends on what you want to select.
+
+| Mask | Shape of the mask | Read | Write |
+|---|---|---|---|
+| One hole per **cell** | the same shape as `A` | `A[mask]` | `A[mask] = v` |
+| One slot per **row** | `(rows,)` | `A[mask]` | `A[mask] = v` |
+| One slot per **column** | `(columns,)` | `A[:, mask]` | `A[:, mask] = v` |
+
+We already know cell masks from [Masking: Sets and Logic](masking.qmd). Row and column masks are new, and they are the reason this page exists. They come from `np.any()` and `np.all()` with an `axis`:
+
+```{python}
+A = np.array([[2, 7, 4, 9],
+              [5, 1, 8, 3],
+              [6, 0, 12, 10]])
+
+cell_mask = A > 5
+print(cell_mask)
+print(A[cell_mask])  # a 1D array: the values that show through the holes
+```
+
+Now a **row mask**: which rows contain a value greater than 8? We ask the question along `axis=1`, the axis that runs across each row, so every row collapses to one answer:
+
+```{python}
+row_mask = np.any(A > 8, axis=1)
+print(row_mask)         # one value per row, shape (3,)
+print(A[row_mask])      # whole rows
+```
+
+And a **column mask**: which columns have only positive numbers? `axis=0` runs down every column:
+
+```{python}
+col_mask = np.all(A > 0, axis=0)
+print(col_mask)         # one value per column, shape (4,)
+print(A[:, col_mask])   # all the rows (the colon), only the selected columns
+```
+
+The colon in `A[:, col_mask]` says "all the rows". The mask goes in the **second** position because columns are the second axis.
+
+::: {.callout-important}
+## Which axis, which mask?
+
+`np.any(..., axis=1)` and `np.all(..., axis=1)` give **one answer per row**. `axis=0` gives **one answer per column**. The axis you name is the one that disappears.
+
+If you remember only one rule: a row mask has as many values as the array has rows, and a column mask as many as it has columns.
+:::
+
+Writing works the same way. The mask chooses the rows or columns, and the assignment fills all of them:
+
+```{python}
+B = A.copy()
+B[:, col_mask] = 0   # zero the columns that passed the test
+print(B)
+```
+
+---
+
+## Practice
+
+Use these grades for the exercises. Each row is a student and each column is an exam.
+
+```{python}
+names = np.array(["Alice", "Bruno", "Chloe", "Diego", "Emma"])
+grades = np.array([[7, 9, 6],
+                   [5, 8, 10],
+                   [4, 6, 5],
+                   [9, 9, 8],
+                   [3, 5, 7]])   # 5 students (rows), 3 exams (columns)
+```
+
+::: {.callout-note}
+## Exercise: Predict the Cardboard
+
+Without running the code, write what it prints. Then check it in the lab: use the array `[[3, 8, 1], [6, 2, 9]]` and the mask `A % 3 == 0`.
+
+```python
+A = np.array([[3, 8, 1],
+              [6, 2, 9]])
+mask = A % 3 == 0
+print(A[mask])
+A[mask] = 0
+print(A)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+A = np.array([[3, 8, 1],
+              [6, 2, 9]])
+mask = A % 3 == 0
+print(A[mask])   # [3 6 9]: the multiples of 3, as a 1D array
+A[mask] = 0
+print(A)
+```
+
+The mask has the shape of `A`, so it is a cell mask. `A[mask]` is always **1D**, even when `A` is 2D: the holes are not in a rectangle. Writing through the holes leaves the covered numbers (`8`, `1`, `2`) untouched.
+:::
+
+::: {.callout-note}
+## Exercise: Who Passed Everything?
+
+A student passes when every grade is at least `5`. Use a **row mask** to print the names of the students who passed all three exams. Hint: `names` is an array, so it can be indexed with the same mask as `grades`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+passed_all = np.all(grades >= 5, axis=1)
+print(passed_all)         # one value per student
+print(names[passed_all])  # ['Alice' 'Bruno' 'Diego']
+```
+
+`grades >= 5` is a cell mask with the shape `(5, 3)`. `np.all(..., axis=1)` asks "is every exam above 5?" for each row, and returns a mask with the shape `(5,)`. That mask fits both `grades` (5 rows) and `names` (5 elements).
+:::
+
+::: {.callout-note}
+## Exercise: The Hard Exam
+
+1. Which exams did **nobody** fail? Build a column mask and select those exams: `grades[:, mask]`.
+2. The exams whose average is below `7` were too hard. Give `+1` point to everybody in those exams, using `grades[:, hard] += 1`. Work on a copy so `grades` stays as it is.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+nobody_failed = np.all(grades >= 5, axis=0)
+print(nobody_failed)              # [False  True  True]
+print(grades[:, nobody_failed])   # exams 1 and 2, for every student
+```
+
+```{python}
+curved = grades.copy()
+hard = grades.mean(axis=0) < 7    # the average of every exam: a column mask
+print(grades.mean(axis=0))        # [5.6 7.4 7.2]
+curved[:, hard] += 1
+print(curved)
+```
+
+`grades.mean(axis=0)` has one average per column, so `< 7` gives a column mask directly.
+:::
+
+::: {.callout-note}
+## Exercise: Predict the Error
+
+This code wants to set to zero the grades of every student who failed an exam. Predict the error message. Then fix it.
+
+```python
+grades[np.any(grades < 5, axis=0)] = 0
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```text
+IndexError: boolean index did not match indexed array along axis 0; size of axis is 5 but size of corresponding boolean axis is 3
+```
+
+`axis=0` runs down the columns, so we get one answer per **exam** (3 values). But we use that mask to choose **students**, and there are 5 of them. The cardboard has three slots for five rows. To ask the question for each student, the axis that disappears must be the columns, `axis=1`:
+
+```{python}
+zeroed = grades.copy()
+zeroed[np.any(grades < 5, axis=1)] = 0
+print(zeroed)
+```
+:::
+
+::: {.callout-note}
+## Exercise: Above Average
+
+Print the grades of the students whose **total** is above the average total. Hint: first `grades.sum(axis=1)`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+totals = grades.sum(axis=1)       # one total per student
+print(totals, totals.mean())      # [22 23 15 26 15] 20.2
+print(grades[totals > totals.mean()])
+```
+
+The comparison `totals > totals.mean()` is already a row mask: one value per student. There is no need for `np.any()` or `np.all()` here, because the sum already collapsed each row.
+:::
+
+::: {.callout-note}
+## Challenge: A Frame
+
+Create a `6 x 6` array of zeros and write `1` on its border, using **one** Boolean vector as a row mask and as a column mask. Hint: `np.arange(6)` and the positions `0` and `5`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+img = np.zeros((6, 6), dtype=int)
+position = np.arange(6)
+edge = (position == 0) | (position == 5)   # True for 0 and 5
+
+img[edge, :] = 1   # the first and the last row
+img[:, edge] = 1   # the first and the last column
+print(img)
+```
+
+The same `edge` mask works as a row mask and as a column mask because the array is square. For a non-square array we would need one mask per axis.
+:::
+
+---
+
+## Things to Try in the Lab
+
+1. **A mask with a hole too many.** Load `A > 2 & A < 9`. Read the error and explain it with the precedence rule from [Masking: Sets and Logic](masking.qmd#common-pitfalls). Then add the parentheses.
+2. **A square array.** Load `[[1, 2, 3], [4, 5, 6], [7, 8, 9]]` with the mask `np.any(A > 6, axis=0)`, then with `axis=1`. Both masks have 3 values: which one selects rows and which one selects columns?
+3. **Integers do not become floats.** Select some cells with an integer array and write `0.5` through them. What does the lab report? Compare with `a = np.array([1, 2, 3]); a[a > 1] = 0.5`. The `dtype` of an array is fixed when the array is created.
+4. **Edit the mask by hand.** Switch some `True` and `False` values in the table under the board, and predict the output of `A[mask]` before pressing the button.
+
+---
+
+## Summary
+
+- A Boolean mask is cardboard with holes: you read and write only through them.
+- A **cell** mask has the shape of `A`, and `A[mask]` is always 1D.
+- `np.any()` and `np.all()` with an `axis` produce a **row** mask (`axis=1`) or a **column** mask (`axis=0`). The axis you name is the one that disappears.
+- Select rows with `A[mask]` and columns with `A[:, mask]`.
+- A mask that does not fit the axis it is used on raises an `IndexError`.
+- Assigning through a mask never changes the `dtype` of the array.
+
+*The cardboard explanation and the first interactive version were created by Manuel Morante for his section of the course.*
+
+---
+
+# Back to the Notes
+
+[Masking: Sets and Logic](masking.qmd){.btn .btn-primary}
+[Masking with Images](masking_images.qmd){.btn .btn-primary}
