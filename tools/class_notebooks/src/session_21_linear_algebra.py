@@ -39,11 +39,10 @@ def show_image(img: np.ndarray):
 
 
 url_img = "https://raw.githubusercontent.com/daniprec/Python-Course/main/img/"
-url_dog = url_img + "dog_nice.png"
-url_beach = url_img + "beach.jpg"
+url_image = url_img + "queen_charlotte_king_george.jpg"
 
 # %% [markdown]
-- Load the dog and show it. Shape? Type? How many numbers do we store?
+- Load the image and show it. Shape? Type? How many numbers do we store?
 
 # %%
 
@@ -102,7 +101,7 @@ A = np.array([[2, 1], [1, 2]])
 
 $A = Q\,\Lambda\,Q^{-1}$, with $\Lambda$ the diagonal matrix of eigenvalues.
 
-- Eigen decomposition needs a square matrix. Crop the dog to a square `img`.
+- Eigen decomposition needs a square matrix. Is our image square? Call it `img`.
 - Eigenvalues and eigenvectors of `img` with `np.linalg.eig()`. Shapes? `dtype`?
 - Reconstruct the image and show it. What goes wrong?
 
@@ -123,7 +122,7 @@ $$
 
 - Build `M`: zeros of double size, the image bottom-left, its transpose top-right. Show it.
 - Decompose `M` with `np.linalg.eigh()`. Reconstruct it as $Q\,\Lambda\,Q^T$. Why $Q^T$ and not $Q^{-1}$?
-- Crop the bottom-left corner. Is it our dog?
+- Crop the bottom-left corner. Is it our image?
 
 # %%
 
@@ -156,20 +155,11 @@ How many values have we eliminated? Give the number and the percentage of the or
 
 $A = U\,\Sigma\,V^T$, for a matrix of **any** shape.
 
-- SVD of the full (non-square) dog: `np.linalg.svd(dog, full_matrices=False)`. Shapes of `U`, `S`, `Vt`?
+- SVD of the image: `np.linalg.svd(img, full_matrices=False)`. Shapes of `U`, `S`, `Vt`?
 - Reconstruct the image.
 - Keep the top `k = 50` singular values. How many numbers do we store? Compare with section 5.
 
 # %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-### Exercise: Compress an RGB Image
-
-Load the beach with `color=True` and compress it, keeping the top `k` singular values. Hint: shape `(height, width, 3)`.
 
 # %%
 
