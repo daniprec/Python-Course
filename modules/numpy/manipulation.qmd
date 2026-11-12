@@ -707,6 +707,131 @@ Note that `rival_export.reshape(5, 8)` would also give the right shape, but with
 
 ---
 
+## Exam-Style Practice
+
+The midterm and the final exam have the same kinds of exercises you have been solving: a debugging exercise and an open problem. Try these two without AI, as you would in the exam, and open the solution only when you are done. Both come from the course of Manuel Morante.
+
+::: {.callout-note}
+## Debugging Exercise: Padding a Matrix
+
+The following function should add a border of a given number around a matrix, like the function `np.pad()`. It adds one row above, one row below, one column on the left, and one column on the right. This can be useful when every element needs neighbors in all directions.
+
+However, it raises this error:
+
+```text
+ValueError: all the input arrays must have same number of dimensions, but the array at index 0 has 1 dimension(s) and the array at index 1 has 2 dimension(s)
+```
+
+Explain the error and fix the function. Does your fix work for a matrix that is not square?
+
+```python
+def manual_pad(A, number):
+    # Create rows and columns to add around the current array
+    rows = np.ones(A.shape[0]) * number
+    columns = np.ones(A.shape[1]) * number
+
+    # Stack vertically and horizontally the new rows and columns
+    C = np.vstack((rows, A, rows))
+    D = np.hstack((columns, C, columns))
+
+    return D
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+
+print(manual_pad(A, 1))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+There are three problems, and each one is about shapes:
+
+1. `np.vstack()` accepts the 1D `rows` because it treats a vector as a row, so the vertical stack works.
+2. `np.hstack()` needs arrays with the same number of dimensions. `columns` is 1D, and `C` is 2D. This is the error. A column must have the shape `(n, 1)`, not `(n,)`.
+3. The new columns must be as long as the array **after** adding the rows, which is `C.shape[0]`, not `A.shape[1]`. Also, a new row must have `A.shape[1]` values, not `A.shape[0]`. The code only works by chance when the matrix is square, and a rectangular matrix would fail with a different error.
+
+```{python}
+def manual_pad(A, number):
+    # One row with as many values as columns, shape (1, columns)
+    rows = np.full((1, A.shape[1]), number)
+    C = np.vstack((rows, A, rows))
+
+    # One column with as many values as the new number of rows, shape (rows, 1)
+    columns = np.full((C.shape[0], 1), number)
+    return np.hstack((columns, C, columns))
+
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+R = np.array([[1, 2, 3, 4],
+              [5, 6, 7, 8]])   # not square
+
+print(manual_pad(A, 1))
+print(manual_pad(R, 0))
+```
+
+NumPy already has this function. Check that your version agrees with it:
+
+```{python}
+print(np.array_equal(manual_pad(R, 7), np.pad(R, 1, constant_values=7)))
+```
+
+Knowing that `np.pad()` exists is what matters in the exam, because you will find it in the cheat sheet. Understanding the shapes is what lets you use it, or write it yourself when it is not there.
+:::
+
+::: {.callout-note}
+## Open Problem: Vectorized Evaluation of Mathematical Functions
+
+Your mathematics teacher asks you to apply several functions to a range of numbers. The challenge is to use a **single array** for the whole range of input values. Do not create a separate input array for each function.
+
+1. Create a 1D array with **21 equally spaced values from 0.5 to 4**, including both endpoints. Its length is divisible by 3.
+2. Split it into three equal sub-arrays. Evaluate the following functions on the corresponding sub-array, with vectorized operations and no loops:
+
+   - $f_1(x) = x^3 - 3x + 2$ on the first sub-array.
+   - $f_2(x) = \ln(x) + \sqrt{x}$ on the second sub-array.
+   - $f_3(x) = e^{x/2}$ on the third sub-array.
+
+3. For each function, find the positions where its result is greater than `2`. A position is the index inside its own sub-array, from 0 to 6.
+4. Build a 2D array with three columns, one for each function, in this order. Each column has the positions of its function. The columns may have different lengths, so fill the shorter ones with `np.nan`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = np.linspace(0.5, 4, 21)
+x1, x2, x3 = np.split(x, 3)
+
+f1 = x1**3 - 3*x1 + 2
+f2 = np.log(x2) + np.sqrt(x2)
+f3 = np.exp(x3 / 2)
+
+# One array of positions for each function
+positions = [np.where(f > 2)[0] for f in (f1, f2, f3)]
+print(positions)
+```
+
+The columns have different lengths, so we first create the final array full of `np.nan` and then fill each column with slicing. The number of rows is the length of the longest column:
+
+```{python}
+n_rows = max(len(p) for p in positions)
+
+result = np.full((n_rows, 3), np.nan)
+for column, p in enumerate(positions):
+    result[:len(p), column] = p
+
+print(result)
+```
+
+On this range, $f_1$ never exceeds `2` (its largest value is about `1.07`), so `np.where` returns an empty array and the first column is all `np.nan`. A correct solution must not fail in that case. The loop above only assembles the result: the functions themselves are applied without loops.
+:::
+
+---
+
 ## Summary
 
 You do not need to memorize every joining and splitting function. Focus on the shape of each input, the shape you want as output, and the axis along which the operation acts.
