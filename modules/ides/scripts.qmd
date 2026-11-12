@@ -163,6 +163,50 @@ When something fails, read the error message first. If you need a reminder of de
 Do the [Guessing Game](review_general.qmd#ex-guessing-game) as a script `guessing_game.py`. Import the `random` library to generate the number. The game must end when the user guesses the number or types `exit`, and then print the number of guesses.
 :::
 
+::: {.callout-tip collapse="true"}
+## Solution
+
+Save this as `guessing_game.py` and run it with `python guessing_game.py`:
+
+```python
+import random
+
+
+def guessing_game():
+    number = random.randint(1, 9)   # both ends are included
+    guesses = 0
+
+    while True:
+        guess = input("Guess a number between 1 and 9, or type 'exit': ")
+
+        if guess.lower() == "exit":
+            break
+
+        guess = int(guess)
+        guesses += 1
+
+        if guess < number:
+            print("Too low!")
+        elif guess > number:
+            print("Too high!")
+        else:
+            print("Exactly right!")
+            break
+
+    print(f"Game over. You took {guesses} guesses.")
+
+
+def main():
+    guessing_game()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+`random.randint(a, b)` includes **both** limits, so `random.randint(1, 9)` can return 9. Compare with `np.random.randint(1, 10)`, where the upper limit is excluded. If the user types something that is not a number or `exit`, `int(guess)` raises a `ValueError`: you can handle it with `try` / `except ValueError`.
+:::
+
 ::: {.callout-note}
 ## Exercise: Standard Deviation
 
