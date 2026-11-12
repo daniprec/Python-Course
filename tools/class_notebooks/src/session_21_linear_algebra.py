@@ -190,6 +190,55 @@ M = np.array([[1, 2, 0], [0, 3, 1], [4, 0, 2]])
 # %%
 
 # %% [markdown]
+## Exam-Style Practice: Satellite Images
+
+Exam format: read the statement, then solve it **without AI**, using only the cheat sheet. 15 minutes.
+
+A satellite sends square grayscale images, stored as 2D NumPy arrays. Only these pixels are relevant: the pixels of the **diagonal**, and the **top-right** and **bottom-left** corners. Joined in a 1D array, they are `relevant_pixels`.
+
+An image is **valid** if the difference between the largest and the smallest value of `relevant_pixels` is at most `maximum_difference`.
+
+1. Write `get_relevant_pixels(image)`.
+2. Write `is_valid(image, maximum_difference)`. It **returns** `True` or `False`.
+
+Expected results:
+
+- `get_relevant_pixels(image_a)` gives `[10  9 11  8  7]` (diagonal, top-right, bottom-left).
+- `is_valid(image_a, 10)` is `True` (11 - 7 = 4).
+- `is_valid(image_b, 10)` is `False` (40 - 1 = 39).
+
+Questions to get started:
+
+- Shape of `image`? How many pixels on the diagonal of an $n \times n$ image?
+- Which function extracts a diagonal? And without it?
+- How do we reach the top-right corner without knowing `n`?
+- How do we join an array with two loose values?
+
+# %%
+image_a = np.array([[10, 2, 8],
+                    [4, 9, 6],
+                    [7, 5, 11]])
+image_b = np.array([[1, 20, 3],
+                    [15, 40, 8],
+                    [9, 7, 30]])
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Homework: Filter the Images
+
+Write `filter_images(images, maximum_difference)`. It receives a **list** of images of different sizes and returns:
+
+- the list of valid images,
+- a list of messages `"Incorrect image. Number: {index}"` for the invalid ones.
+
+If no image is valid, print a message.
+
+# %%
+
+# %% [markdown]
 ## Next session
 
 Our Monty Hall simulation loops over the games one by one. One million games take a while. **Can we play them all at once, without a loop?**
