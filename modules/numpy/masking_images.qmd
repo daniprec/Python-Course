@@ -360,6 +360,23 @@ mask_beach_5[-h:, -w:] = mask_pixels
 beach_5[mask_beach_5] = dog_green[mask_pixels]
 show_image(beach_5)
 ```
+
+Or, if you want to preserve the dog's details, you can just set the red and blue channels to zero, leaving the green channel intact.
+
+```{python}
+dog_green = dog_rgb.copy()
+mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
+mask_pixels[:, :, 1] = False  # Turn off the green channel in the mask
+dog_green[mask_pixels] = 0  # Red and Blue channels set to 0, Green remains unchanged
+
+beach_5 = beach_rgb_original.copy()
+mask_beach_5 = np.zeros(beach_5.shape[:2]).astype(bool)
+h, w = mask_pixels.shape
+mask_beach_5[-h:, -w:] = mask_pixels
+
+beach_5[mask_beach_5] = dog_green[mask_pixels]
+show_image(beach_5)
+```
 :::
 
 ::: {.callout-note}
