@@ -39,11 +39,10 @@ def show_image(img: np.ndarray):
 
 
 url_img = "https://raw.githubusercontent.com/daniprec/Python-Course/main/img/"
-url_dog = url_img + "dog_nice.png"
-url_beach = url_img + "beach.jpg"
+url_image = url_img + "queen_charlotte_king_george.jpg"
 
 # %% [markdown]
-- Load the dog and show it. Shape? Type? How many numbers do we store?
+- Load the image and show it. Shape? Type? How many numbers do we store?
 
 # %%
 
@@ -102,7 +101,7 @@ A = np.array([[2, 1], [1, 2]])
 
 $A = Q\,\Lambda\,Q^{-1}$, with $\Lambda$ the diagonal matrix of eigenvalues.
 
-- Eigen decomposition needs a square matrix. Crop the dog to a square `img`.
+- Eigen decomposition needs a square matrix. Is our image square? Call it `img`.
 - Eigenvalues and eigenvectors of `img` with `np.linalg.eig()`. Shapes? `dtype`?
 - Reconstruct the image and show it. What goes wrong?
 
@@ -123,7 +122,7 @@ $$
 
 - Build `M`: zeros of double size, the image bottom-left, its transpose top-right. Show it.
 - Decompose `M` with `np.linalg.eigh()`. Reconstruct it as $Q\,\Lambda\,Q^T$. Why $Q^T$ and not $Q^{-1}$?
-- Crop the bottom-left corner. Is it our dog?
+- Crop the bottom-left corner. Is it our image?
 
 # %%
 
@@ -156,20 +155,11 @@ How many values have we eliminated? Give the number and the percentage of the or
 
 $A = U\,\Sigma\,V^T$, for a matrix of **any** shape.
 
-- SVD of the full (non-square) dog: `np.linalg.svd(dog, full_matrices=False)`. Shapes of `U`, `S`, `Vt`?
+- SVD of the image: `np.linalg.svd(img, full_matrices=False)`. Shapes of `U`, `S`, `Vt`?
 - Reconstruct the image.
 - Keep the top `k = 50` singular values. How many numbers do we store? Compare with section 5.
 
 # %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-### Exercise: Compress an RGB Image
-
-Load the beach with `color=True` and compress it, keeping the top `k` singular values. Hint: shape `(height, width, 3)`.
 
 # %%
 
@@ -186,6 +176,55 @@ Load the beach with `color=True` and compress it, keeping the top `k` singular v
 
 # %%
 M = np.array([[1, 2, 0], [0, 3, 1], [4, 0, 2]])
+
+# %%
+
+# %% [markdown]
+## Exam-Style Practice: Satellite Images
+
+Exam format: read the statement, then solve it **without AI**, using only the cheat sheet. 15 minutes.
+
+A satellite sends square grayscale images, stored as 2D NumPy arrays. Only these pixels are relevant: the pixels of the **diagonal**, and the **top-right** and **bottom-left** corners. Joined in a 1D array, they are `relevant_pixels`.
+
+An image is **valid** if the difference between the largest and the smallest value of `relevant_pixels` is at most `maximum_difference`.
+
+1. Write `get_relevant_pixels(image)`.
+2. Write `is_valid(image, maximum_difference)`. It **returns** `True` or `False`.
+
+Expected results:
+
+- `get_relevant_pixels(image_a)` gives `[10  9 11  8  7]` (diagonal, top-right, bottom-left).
+- `is_valid(image_a, 10)` is `True` (11 - 7 = 4).
+- `is_valid(image_b, 10)` is `False` (40 - 1 = 39).
+
+Questions to get started:
+
+- Shape of `image`? How many pixels on the diagonal of an $n \times n$ image?
+- Which function extracts a diagonal? And without it?
+- How do we reach the top-right corner without knowing `n`?
+- How do we join an array with two loose values?
+
+# %%
+image_a = np.array([[10, 2, 8],
+                    [4, 9, 6],
+                    [7, 5, 11]])
+image_b = np.array([[1, 20, 3],
+                    [15, 40, 8],
+                    [9, 7, 30]])
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Homework: Filter the Images
+
+Write `filter_images(images, maximum_difference)`. It receives a **list** of images of different sizes and returns:
+
+- the list of valid images,
+- a list of messages `"Incorrect image. Number: {index}"` for the invalid ones.
+
+If no image is valid, print a message.
 
 # %%
 

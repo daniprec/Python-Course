@@ -524,6 +524,313 @@ This is exactly what we did with `house * np.array([2, 1])`.
 
 ---
 
+## Exam-Style Practice
+
+The midterm and the final exam have the same kinds of exercises you have been solving: a debugging exercise and an open problem. Try these two without AI, as you would in the exam, and open the solution only when you are done. Both come from the course of Manuel Morante.
+
+::: {.callout-note}
+## Debugging Exercise: Cumulative Sum
+
+The following function should calculate the cumulative sum of each column of an array, but only if **every column contains at least one negative value**. Otherwise, it should print a message saying that the operation cannot be performed.
+
+However, it raises this error:
+
+```text
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+```
+
+Explain the error and fix the function.
+
+```python
+def perform_cumsum(A):
+    # Check that the columns contain a negative value
+    if np.any(A < 0, axis=0):
+        # Perform the cumulative sum
+        C = np.cumsum(A, axis=0)
+
+    return C
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+
+print(perform_cumsum(A))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`np.any(A < 0, axis=0)` gives **one Boolean per column**, an array of shape `(3,)`. An `if` needs a single `True` or `False`, so NumPy refuses to decide. We need a second step that combines the three answers: "do all the columns have a negative value?" is `np.all()` of the column answers.
+
+There is another bug. If the condition is false, `C` is never created and the function fails at `return C`, and the promised message is never printed. The fixed function covers both cases:
+
+```{python}
+def perform_cumsum(A):
+    # One answer per column: does it contain a negative value?
+    has_negative = np.any(A < 0, axis=0)
+
+    # A single answer: does every column?
+    if np.all(has_negative):
+        return np.cumsum(A, axis=0)
+
+    print("The operation cannot be performed.")
+    return None
+
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+B = np.array([[1, 0, -1],
+              [2, 1, 2],
+              [0, -3, 1]])   # the first column has no negative value
+
+print(perform_cumsum(A))
+print(perform_cumsum(B))
+```
+:::
+
+::: {.callout-note}
+## Open Problem: Toy Electrical Safety Inspection
+
+A company manufactures toys for children. Each toy contains an electrical grid that can be represented as a 2D NumPy array, where each element is the voltage at one pin. Toys have different sizes, so the grids can have different dimensions.
+
+For safety reasons, the pin with the **minimum voltage** must be in the **bottom-right corner** of the grid. Assume that each grid has a unique minimum value.
+
+Create a function `check_toy_production(grids)` that takes a list of voltage grids and returns a string:
+
+- If every toy meets the requirement, the string is `"All toys meet the requirement!"`.
+- Otherwise, the string starts with `"The following toys are defective:"`. Then, for each defective toy, it has a line `Toy <index>:` followed by its grid.
+
+Store each defective toy in a list as a tuple `(index, grid)` before you build the string.
+
+```python
+voltage_grids = [
+    np.array([[3, 7],
+              [8, 1]]),
+
+    np.array([[0, 2, 4],
+              [5, 1, 3]]),
+
+    np.array([[6, 5],
+              [4, 2],
+              [3, 1]]),
+
+    np.array([[2, 1, 3],
+              [5, 0, 4]])
+]
+
+print(check_toy_production(voltage_grids))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The bottom-right corner is `grid[-1, -1]` for a grid of any size. It holds the minimum exactly when it equals `grid.min()`.
+
+```{python}
+def check_toy_production(grids):
+    defective_toys = []
+
+    for index, grid in enumerate(grids):
+        if grid[-1, -1] != grid.min():
+            defective_toys.append((index, grid))
+
+    if not defective_toys:
+        return "All toys meet the requirement!"
+
+    report = "\n".join(f"Toy {index}:\n{grid}" for index, grid in defective_toys)
+    return f"The following toys are defective:\n{report}"
+
+
+voltage_grids = [
+    np.array([[3, 7],
+              [8, 1]]),
+
+    np.array([[0, 2, 4],
+              [5, 1, 3]]),
+
+    np.array([[6, 5],
+              [4, 2],
+              [3, 1]]),
+
+    np.array([[2, 1, 3],
+              [5, 0, 4]])
+]
+
+print(check_toy_production(voltage_grids))
+print(check_toy_production([voltage_grids[0], voltage_grids[2]]))
+```
+
+Another route is to find where the minimum is with `np.argmin(grid)` and `np.unravel_index(np.argmin(grid), grid.shape)`, and compare it with `(rows - 1, columns - 1)`. It works, but it needs more steps than the negative indices.
+:::
+
+---
+
+## Exam-Style Practice
+
+The midterm and the final exam have the same kinds of exercises you have been solving: a debugging exercise and an open problem. Try each one on your own, without AI, as you would in the exam, before opening its collapsed solution.
+
+::: {.callout-note}
+## Debugging: Cumulative Sum
+
+*Adapted from the exam-style exercises of Manuel Morante.*
+
+The following function should calculate the cumulative sum of each column of an array, but only if **every column contains at least one negative value**. Otherwise, it should print a message saying that the operation cannot be performed.
+
+However, it raises this error:
+
+```text
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+```
+
+Explain the error and fix the function.
+
+```{python}
+#| eval: false
+def perform_cumsum(A):
+    # Check that the columns contain a negative value
+    if np.any(A < 0, axis=0):
+        # Perform the cumulative sum
+        C = np.cumsum(A, axis=0)
+
+    return C
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+
+print(perform_cumsum(A))
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+`np.any(A < 0, axis=0)` gives **one Boolean per column**, an array of shape `(3,)`. An `if` needs a single `True` or `False`, so NumPy refuses to decide. A second step must combine the three answers: "does every column have a negative value?" is `np.all()` of the column answers.
+
+There is another bug. If the condition is false, `C` is never created, so the function fails at `return C` and the promised message is never printed. The fixed function covers both cases:
+
+```{python}
+def perform_cumsum(A):
+    # One answer per column: does it contain a negative value?
+    has_negative = np.any(A < 0, axis=0)
+
+    # A single answer: does every column?
+    if np.all(has_negative):
+        return np.cumsum(A, axis=0)
+
+    print("The operation cannot be performed.")
+    return None
+
+
+A = np.array([[1, 0, -1],
+              [-2, 1, 2],
+              [0, -3, 1]])
+B = np.array([[1, 0, -1],
+              [2, 1, 2],
+              [0, -3, 1]])   # the first column has no negative value
+
+print(perform_cumsum(A))
+print(perform_cumsum(B))
+```
+:::
+
+::: {.callout-note}
+## Open Problem: Toy Electrical Safety Inspection
+
+*Adapted from the exam-style exercises of Manuel Morante.*
+
+A company manufactures toys for children. Each toy contains an electrical grid that can be represented as a 2D NumPy array, where each element is the voltage at one pin. Toys have different sizes, so the grids can have different dimensions.
+
+For safety reasons, the pin with the **minimum voltage** must be in the **bottom-right corner** of the grid. Assume that each grid has a unique minimum value.
+
+Write a Python function `check_toy_production(grids)` that takes a list of voltage grids and returns a string:
+
+- If every toy meets the requirement, the string is `"All toys meet the requirement!"`.
+- Otherwise, the string starts with `"The following toys are defective:"`. Then, for each defective toy, it has a line `Toy <index>:` followed by its grid.
+
+Store each defective toy in a list as a tuple `(index, grid)` before you build the string.
+
+*Sample input:*
+
+```python
+voltage_grids = [
+    np.array([[3, 7],
+              [8, 1]]),
+
+    np.array([[0, 2, 4],
+              [5, 1, 3]]),
+
+    np.array([[6, 5],
+              [4, 2],
+              [3, 1]]),
+
+    np.array([[2, 1, 3],
+              [5, 0, 4]])
+]
+
+print(check_toy_production(voltage_grids))
+```
+
+*Expected result:*
+
+```text
+The following toys are defective:
+Toy 1:
+[[0 2 4]
+ [5 1 3]]
+Toy 3:
+[[2 1 3]
+ [5 0 4]]
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+The bottom-right corner is `grid[-1, -1]` for a grid of any size. It holds the minimum exactly when it equals `grid.min()`.
+
+```{python}
+def check_toy_production(grids):
+    defective_toys = []
+
+    for index, grid in enumerate(grids):
+        if grid[-1, -1] != grid.min():
+            defective_toys.append((index, grid))
+
+    if not defective_toys:
+        return "All toys meet the requirement!"
+
+    report = "\n".join(f"Toy {index}:\n{grid}" for index, grid in defective_toys)
+    return f"The following toys are defective:\n{report}"
+
+
+voltage_grids = [
+    np.array([[3, 7],
+              [8, 1]]),
+
+    np.array([[0, 2, 4],
+              [5, 1, 3]]),
+
+    np.array([[6, 5],
+              [4, 2],
+              [3, 1]]),
+
+    np.array([[2, 1, 3],
+              [5, 0, 4]])
+]
+
+print(check_toy_production(voltage_grids))
+print(check_toy_production([voltage_grids[0], voltage_grids[2]]))
+```
+
+Another route finds the position of the minimum with `np.unravel_index(np.argmin(grid), grid.shape)` and compares it with `(rows - 1, columns - 1)`. It works, but it needs more steps than the negative indices.
+:::
+
+---
+
 ## Summary and Reflection
 
 - Arithmetic operators act element by element on compatible arrays: this is vector addition and multiplication by a scalar. An operation with a scalar applies to every element.

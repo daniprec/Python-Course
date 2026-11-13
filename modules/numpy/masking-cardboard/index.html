@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An interactive cardboard that shows how a NumPy Boolean mask selects and changes the values of an array."
+    />
+    <title>The Cardboard Mask — Masking Lab</title>
+    <script>
+      // Same light/dark preference as the course site (Quarto stores
+      // "default" = light, "alternate" = dark); otherwise follow the OS.
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem("quarto-color-scheme"); } catch (e) {}
+        var dark = saved ? saved === "alternate"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../../theme/ie-tokens.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="maskexpr.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <button class="theme-toggle" id="theme-toggle" type="button"></button>
+
+    <header class="hero">
+      <div class="hero__eyebrow">Masking Lab</div>
+      <h1>The <em>cardboard</em> mask</h1>
+      <p class="hero__subtitle">
+        A mask is a piece of cardboard with holes. <code>True</code> cuts a hole,
+        <code>False</code> leaves the cardboard. You can only read, or write, through the holes.
+      </p>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="setup-title">
+        <p class="section-label">Setup</p>
+        <h2 id="setup-title">Choose an array and a mask</h2>
+
+        <div class="inputs">
+          <div class="field">
+            <label for="array-input">Array <code>A</code> (1D or 2D, up to 100 numbers)</label>
+            <textarea id="array-input" rows="3" spellcheck="false" autocomplete="off">[[2, 7, 4, 9], [5, 1, 8, 3], [6, 0, 12, 10]]</textarea>
+          </div>
+          <div class="field">
+            <label for="mask-input">Mask (a NumPy expression using <code>A</code>)</label>
+            <input id="mask-input" type="text" spellcheck="false" autocomplete="off" value="A > 5" />
+            <p class="hint">
+              Use <code>&gt; &lt; == !=</code>, <code>&amp; | ~</code>, <code>%</code>, and
+              <code>np.any(…, axis=)</code> / <code>np.all(…, axis=)</code> for row and column masks.
+            </p>
+          </div>
+        </div>
+
+        <div class="presets" role="group" aria-label="Example masks" id="presets"></div>
+
+        <div class="row">
+          <button class="button button--primary" id="load" type="button">Load array and mask</button>
+        </div>
+
+        <p class="message" id="message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="card" aria-labelledby="board-title">
+        <div class="topline">
+          <div>
+            <p class="section-label">Experiment</p>
+            <h2 id="board-title">Step 1 — The original array</h2>
+          </div>
+          <div class="stepper">
+            <button class="button" id="prev" type="button">◀ Previous</button>
+            <button class="button button--primary" id="next" type="button">Next ▶</button>
+          </div>
+        </div>
+
+        <ol class="steps" id="steps" aria-label="Steps">
+          <li>1 · Array</li>
+          <li>2 · Cardboard</li>
+          <li>3 · Read or write</li>
+        </ol>
+
+        <div class="board-wrap">
+          <svg id="board" role="img" aria-label="The array"></svg>
+        </div>
+        <p class="stats" id="stats"></p>
+
+        <div class="actions">
+          <button class="button button--primary" id="select" type="button">A[mask]</button>
+          <label class="inline" for="value">value</label>
+          <input id="value" type="number" step="any" value="99" />
+          <button class="button button--go" id="assign" type="button">A[mask] = value</button>
+          <button class="button" id="reset" type="button">Reset array</button>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="toggles-title">
+        <p class="section-label">Edit by hand</p>
+        <h2 id="toggles-title">The Boolean mask</h2>
+        <p class="hint" id="toggles-hint">Press any cell to switch it between True and False.</p>
+        <div class="toggles" id="toggles"></div>
+      </section>
+
+      <section class="card" aria-labelledby="out-title">
+        <p class="section-label">What NumPy would print</p>
+        <h2 id="out-title">Transcript</h2>
+        <pre class="readout" id="readout" tabindex="0" aria-label="NumPy transcript"></pre>
+      </section>
+    </main>
+
+    <footer>
+      <span>Computer Programming I · Module 3: NumPy</span>
+      <span>Idea: the cardboard-mask explanation by Manuel Morante.</span>
+    </footer>
+  </body>
+</html>

@@ -2,8 +2,6 @@
 title: "Linear Algebra with NumPy"
 subtitle: "Module 3: NumPy"
 format: html
-execute:
-  enabled: false
 ---
 
 # Linear Algebra with NumPy
@@ -238,8 +236,12 @@ $$A = Q\ \Lambda\ Q^{-1}$$
 # Reconstruct the compressed image
 compressed_image = eigenvectors @ np.diag(eigenvalues) @ np.linalg.inv(eigenvectors)
 
-# Display the compressed image
-show_image(compressed_image)
+# The eigenvalues are complex, so the result is complex too
+print(compressed_image.dtype)
+print(np.abs(compressed_image.imag).max())  # the imaginary part is only numerical noise
+
+# Display the real part (imshow cannot draw complex numbers)
+show_image(compressed_image.real)
 ```
 
 For a general, non-symmetric image matrix, eigenvalues and eigenvectors may be complex. The reconstruction formula also requires the inverse of the eigenvector matrix, not its transpose. These facts make eigen decomposition an awkward compression tool for a general image.
@@ -365,7 +367,7 @@ For an $N \times N$ image, the compressed version needs $k + 2Nk$ values instead
 SVD is another powerful matrix decomposition technique. Like eigen decomposition, SVD breaks down a matrix into constituent parts, but this time into singular values and two unitary matrices.
 
 <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=1ERAIFmEtAXG3eXkDXgzVVUTPImXiGTNO" width="300" />
+<img src="../../img/svd.png" width="300" height="auto" />
 </p>
 
 In the context of image processing, SVD allows for image compression similar to eigen decomposition. The idea is to retain only the most significant singular values (and corresponding vectors), which can still capture the essence of the image but with fewer data.
