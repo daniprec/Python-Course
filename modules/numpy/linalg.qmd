@@ -172,14 +172,17 @@ def show_image(img: np.ndarray):
 We can load our image just as we did last class.
 
 ```{python}
-# Link to the image
-url_dog = "https://drive.google.com/uc?export=view&id=1-NQIwp2Q2Sc5leg9dkOC6TkOWurfIVnm"
+# Link to the image as a text file
+url_txt = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking/dog.txt"
 
-# Load and display the image
-dog = load_image(url_dog)
-print(f"The array has dimension: {dog.ndim}")
-print(f"The array contains values of type: {dog.dtype}\n")
-show_image(dog)
+# Load the text file using numpy
+img_raw = np.loadtxt(url_txt, dtype=int)
+
+print(f"The array has dimension: {img_raw.ndim}")
+print(f"The array contains values of type: {img_raw.dtype}\n")
+
+# Display the image
+show_image(img_raw)
 ```
 
 ---
@@ -189,16 +192,16 @@ show_image(dog)
 For some of our mathematical operations, especially eigen decomposition, it's important that our matrices (or in this case, images) are square. That means the width and height should be the same. We'll preprocess our image to ensure this condition is met.
 
 ```{python}
-# Get the dimensions (height and width) of the dog image
-h, w = dog.shape
+# Get the dimensions (height and width) of the raw image
+h, w = img_raw.shape
 
 # Ensure the image is square for eigen decomposition:
 # If width is greater than height, truncate the width to match the height
 # Otherwise, truncate the height to match the width
 if h > w:
-  img = dog[:w, :]
+  img = img_raw[:w, :]
 else:
-  img = dog[:, :h]
+  img = img_raw[:, :h]
 
 # Print the shape of the processed image to confirm its dimensions
 print(img.shape)
@@ -371,9 +374,9 @@ The strenght of SVD lies in that it does not need a square matrix. Matrices of a
 
 ```{python}
 # Compute the SVD of the grayscale image
-U, S, Vt = np.linalg.svd(dog, full_matrices=False)
+U, S, Vt = np.linalg.svd(img_raw, full_matrices=False)
 
-print(f"Shape of image: {dog.shape}")
+print(f"Shape of image: {img_raw.shape}")
 print(f"Shape of U: {U.shape}")
 print(f"Shape of Sigma: {S.shape}")
 print(f"Shape of V*: {Vt.shape}")
@@ -410,15 +413,15 @@ show_image(compressed_image)
 
 Now you want to compress an RGB image. How would you do it? Load the image below and produce a compressed version that keeps only the top `k` singular values.
 
-```python
+```{python}
 # Link to the image
-url_dog = "https://www.ausdog.com.au/wp-content/uploads/2022/03/puppy-training-from-day-one.jpg"
+url_img = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking/dog_nice.png"
 
 # Load and display the image
-dog_color = load_image(url_dog, color=True)
-print(f"The array has dimension: {dog_color.ndim}")
-print(f"The array contains values of type: {dog_color.dtype}\n")
-show_image(dog_color)
+img_raw = load_image(url_img, color=True)
+print(f"The array has dimension: {img_raw.ndim}")
+print(f"The array contains values of type: {img_raw.dtype}\n")
+show_image(img_raw)
 ```
 :::
 
@@ -429,10 +432,10 @@ An RGB image has shape `(height, width, 3)`, so SVD cannot be applied to it dire
 
 ```{python}
 k = 50
-compressed_color = np.zeros(dog_color.shape)
+compressed_color = np.zeros(img_raw.shape)
 
 for channel in range(3):
-  U, S, Vt = np.linalg.svd(dog_color[:, :, channel], full_matrices=False)
+  U, S, Vt = np.linalg.svd(img_raw[:, :, channel], full_matrices=False)
   compressed_color[:, :, channel] = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]
 
 # Values must stay in the valid pixel range [0, 255]
@@ -448,7 +451,7 @@ show_image(compressed_color)
 
 Build a symmetric $3 \times 3$ matrix from
 
-```python
+```{python}
 M = np.array([[1, 2, 0], [0, 3, 1], [4, 0, 2]])
 ```
 

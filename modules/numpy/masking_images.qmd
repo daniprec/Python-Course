@@ -49,16 +49,11 @@ def show_image(img: np.ndarray):
 
 ## Loading the Images: A Review of Session 17
 
-In Session 17 we loaded the ghost photos from text files on the internet. Our pictures are stored in the same way: each file is a table of numbers, one per pixel, from `0` (black) to `255` (white). `BASE` is the address of the folder:
+In Session 17 we loaded the ghost photos from text files on the internet. Our pictures are stored in the same way: each file is a table of numbers, one per pixel, from `0` (black) to `255` (white). `np.loadtxt()` reads a text file straight from its URL. It returns floats by default, but pixels are integers, so we ask for `dtype=int`:
 
 ```{python}
-BASE = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking"
-```
-
-`np.loadtxt()` reads a text file straight from its URL. It returns floats by default, but pixels are integers, so we ask for `dtype=int`:
-
-```{python}
-dog = np.loadtxt(f"{BASE}/dog.txt", dtype=int)
+url_txt = "https://raw.githubusercontent.com/daniprec/Python-Course/main/data/masking/dog.txt"
+dog = np.loadtxt(url_txt, dtype=int)
 
 print(f"The array has shape: {dog.shape}")
 print(f"The array contains values of type: {dog.dtype}")
