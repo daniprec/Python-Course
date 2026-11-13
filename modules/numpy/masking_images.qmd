@@ -291,15 +291,14 @@ Now try to insert the puppy on the bottom left corner.
 Only the column slice changes: the first `w` columns instead of the last `w`.
 
 ```{python}
-beach_rgb = beach_original.copy()
-beach_rgb = np.loadtxt(f"{BASE}/beach_rgb.txt", dtype=int)
+beach_left = beach_rgb_original.copy()
 
-mask_beach_rgb = np.zeros(beach_rgb.shape).astype(bool)
-h, w = mask_dog.shape
-mask_beach_rgb[-h:, :w] = mask_dog
+mask_beach_left = np.zeros(beach_left.shape, dtype=bool)
+h, w, _ = mask_dog_rgb.shape
+mask_beach_left[-h:, :w] = mask_dog_rgb
 
-beach_rgb[mask_beach_rgb] = dog_rgb[mask_dog]
-show_image(beach_rgb)
+beach_left[mask_beach_left] = dog_rgb[mask_dog_rgb]
+show_image(beach_left)
 ```
 :::
 
@@ -322,9 +321,9 @@ A negative step on the column axis reverses the columns, which mirrors the image
 dog_flipped = dog_rgb[:, ::-1]
 mask_flipped = dog_flipped > 0
 
-beach_4 = beach_original.copy()
-mask_beach_4 = np.zeros(beach_4.shape).astype(bool)
-h, w = mask_flipped.shape
+beach_4 = beach_rgb_original.copy()
+mask_beach_4 = np.zeros(beach_4.shape, dtype=bool)
+h, w, _ = mask_flipped.shape
 mask_beach_4[-h:, -w:] = mask_flipped
 
 beach_4[mask_beach_4] = dog_flipped[mask_flipped]
@@ -365,9 +364,11 @@ Or, if you want to preserve the dog's details, you can just set the red and blue
 
 ```{python}
 dog_green = dog_rgb.copy()
-mask_pixels = dog_green.sum(axis=2) > 0  # 2D mask: one value per pixel
-mask_pixels[:, :, 1] = False  # Turn off the green channel in the mask
-dog_green[mask_pixels] = 0  # Red and Blue channels set to 0, Green remains unchanged
+mask_channels = dog_green > 0  # 3D mask: one value per colour channel
+mask_channels[:, :, 1] = False  # Keep the green channel unchanged
+dog_green[mask_channels] = 0  # Set nonzero red and blue values to zero
+
+mask_pixels = dog_rgb.sum(axis=2) > 0  # 2D mask: one value per pixel
 
 beach_5 = beach_rgb_original.copy()
 mask_beach_5 = np.zeros(beach_5.shape[:2]).astype(bool)
