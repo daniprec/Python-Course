@@ -29,7 +29,7 @@ Today: a loop is a pattern. Learn to recognize it, and the replacement is almost
 | The loop... | The replacement |
 |---|---|
 | works on each element on its own | arithmetic on the array |
-| has an `if` inside | a mask, or `np.where()` (course notes: Masking, Avoiding Loops) |
+| has an `if` inside | a mask, or `np.where()` (section 4) |
 | accumulates (sum, count, running total) | `.sum()`, `.mean()`, `.cumsum()` with an `axis` |
 | is a `while` that searches | `np.argmax()` on a Boolean array |
 | calls a function that fails on arrays | a mask, or `np.vectorize()` |
@@ -137,13 +137,70 @@ changes = np.array([200, -150, 100, -250, 300])
 # %%
 
 # %% [markdown]
-## 4. Functions that do not broadcast
+## 4. A loop with an `if`: masks (review)
+
+Predict, run, fix.
+
+```python
+arr = np.array([1, 2, 3, 4, 5])
+if arr > 0:
+    print("positive")
+```
+
+- Why can `if` not use an array of Booleans? What do we use instead?
+- The element-wise "not": `not mask` fails. What works?
+- Values of `arr` greater than 2: with a loop, then with a mask.
+- In `grid`, replace every `0` with `2`.
+- Add 1 to every odd number of `numbers`, so it becomes the closest even.
+- Every price above 100 gets a 10% discount. With a mask, then with `np.where(condition, if_true, if_false)`. Which one do we prefer?
+
+# %%
+arr = np.array([1, 2, 3, 4, 5])
+grid = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+numbers = np.array([1, 2, 3, 4, 5, 6, 7])
+prices = np.array([50, 120, 80, 200, 99.0])
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Exercise: Curve the Grades
+
+Rewrite without a loop.
+
+```python
+curved = np.zeros(scores.shape)
+for i in range(len(scores)):
+    new_score = scores[i] + 5
+    if new_score > 100:
+        new_score = 100
+    if new_score < 50:
+        new_score = 50
+    curved[i] = new_score
+```
+
+Hint: two masks, or `np.where()`, or `np.clip()`.
+
+# %%
+
+# %%
+
+# %% [markdown]
+## 5. Functions that do not broadcast
 
 Divide `numerators` by `denominators`. When the denominator is `0`, return $10^{10}$.
 
 - Write `safe_division(numerator, denominator)` with an `if`. Does it work on the arrays?
 - `np.vectorize()`. Is it faster than a loop?
-- The `if` is the problem. In the course notes, masks solve it without `np.vectorize()`.
 
 # %%
 numerators = np.array([1, 2, 3])
@@ -154,7 +211,14 @@ denominators = np.array([0, 1, 2])
 # %%
 
 # %% [markdown]
-## 5. Challenge: A nested loop
+### Exercise: Safe Division with Masks
+
+Same task, without `np.vectorize()`. Hint: a mask and its `~`.
+
+# %%
+
+# %% [markdown]
+## 6. Challenge: A nested loop
 
 Every point with every other point: `distances[i, j]` is the absolute difference between `points[i]` and `points[j]`.
 
@@ -179,4 +243,4 @@ points = np.array([1, 4, 9, 16])
 
 Review and homework: a random student, a random exercise from the NumPy problem set. **Could you solve and explain any of them at the board?**
 
-In the course notes, as review and extension: Masking, Avoiding Loops (masks, `np.where()`) and the Monty Hall simulation at full speed.
+In the course notes, as extension: the Monty Hall simulation at full speed, and more masking practice (Masking: Avoiding Loops).
