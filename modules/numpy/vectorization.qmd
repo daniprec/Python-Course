@@ -12,6 +12,28 @@ Suppose a simulation contains one million values. A Python loop can process them
 import numpy as np
 ```
 
+A weather station stores one million temperatures in Celsius, and we need them in Fahrenheit: $F = 1.8\,C + 32$.
+
+```{python}
+# This is a random number generator,
+# which is a way to get reproducible results. The `0` is the seed.
+rng = np.random.default_rng(0)
+
+celsius = rng.uniform(-10, 40, size=1_000_000)
+
+# With a loop
+fahrenheit = np.zeros(celsius.shape)
+for i in range(len(celsius)):
+  fahrenheit[i] = celsius[i] * 9 / 5 + 32
+
+# Without a loop
+fahrenheit_vec = celsius * 9 / 5 + 32
+
+print(np.allclose(fahrenheit, fahrenheit_vec))
+```
+
+Same result, one line. In a notebook, `%%time` at the top of each cell shows the difference: the array operation is roughly 10 to 20 times faster than the loop (the exact numbers depend on the computer). Each iteration of the loop only looked at its own element, and that is the sign that the loop can disappear.
+
 ---
 
 ## Vectorization (Review)
@@ -301,16 +323,28 @@ else:
 
 A loop inside a loop, where `i` walks the rows and `j` the columns, is a job for broadcasting. A column of shape `(n, 1)` against a row of shape `(1, n)` gives an `(n, n)` table.
 
+::: {.callout-note}
+## Exercise: A Nested Loop
+
+Every point with every other point: `distances[i, j]` is the absolute difference between `points[i]` and `points[j]`. Rewrite without loops. Then build a multiplication table of the numbers 1 to 9 in one line.
+
+```python
+points = np.array([1, 4, 9, 16])
+
+distances = np.zeros((len(points), len(points)))
+for i in range(len(points)):
+  for j in range(len(points)):
+    distances[i, j] = abs(points[i] - points[j])
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
 ```{python}
 points = np.array([1, 4, 9, 16])
 
-# With two loops
-distances = np.zeros((len(points), len(points)))
-for i in range(len(points)):
-    for j in range(len(points)):
-        distances[i, j] = abs(points[i] - points[j])
-
-# With broadcasting
+# (4, 1) minus (1, 4) broadcasts to (4, 4)
 distances = np.abs(points[:, np.newaxis] - points[np.newaxis, :])
 print(distances)
 
@@ -318,6 +352,7 @@ print(distances)
 n = np.arange(1, 10)
 print(n[:, np.newaxis] * n[np.newaxis, :])
 ```
+:::
 
 ---
 
