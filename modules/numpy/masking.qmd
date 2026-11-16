@@ -374,10 +374,65 @@ The quarter disc $D = \{(x, y) \in [0, 1]^2 : x^2 + y^2 < 1\}$ has area $\pi / 4
 2. Use broadcasting to build an $N \times N$ mask that is `True` where $x^2 + y^2 < 1$.
 3. Use the mask to estimate $\pi$ for $N = 10, 100, 1000$. How fast does the error decrease?
 4. Display the mask with `plt.imshow(inside, cmap="gray")`. This is an extension, remember `matplotlib` is not part of this course.
+
+Hint: in step 2 you need *every* $x$ paired with *every* $y$. Turn one copy of the coordinates into a column and the other into a row. If you feel stuck, solve $N = 4$ first.
 :::
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
+**Step 1: one point.** A point of the grid is a pair $(x_j, y_i)$. Take a tiny grid, $N = 4$. The coordinates are the centres of four cells:
+
+```{python}
+N = 4
+x = (np.arange(N) + 0.5) / N
+print(x)
+```
+
+Is the point with $x$ = `x[2]` and $y$ = `x[1]` inside the disc? It is a single comparison:
+
+```{python}
+print(x[1] ** 2 + x[2] ** 2 < 1)
+```
+
+**Step 2: all the points, without a loop.** We have $4 \times 4 = 16$ points, one for every pair of indices $(i, j)$. We want a table where the entry `[i, j]` is `x[i]**2 + x[j]**2`. The trick is to give the two copies of `x` different shapes:
+
+```{python}
+column = x[:, np.newaxis]  # shape (4, 1): the values go down, along the rows
+row = x[np.newaxis, :]     # shape (1, 4): the values go across, along the columns
+
+print(column.shape, row.shape)
+print(column)
+print(row)
+```
+
+`np.newaxis` is a way to say "put an empty axis here". With `x[:, np.newaxis]` the colon keeps the original axis in the first position, and the new axis of length 1 goes second: **a column vector**. With `x[np.newaxis, :]` the new axis goes first: **a row vector**.
+
+When we add a column `(4, 1)` and a row `(1, 4)`, broadcasting stretches both to `(4, 4)`, exactly as in [Session 15](arithmetics.qmd). Entry `[i, j]` combines `column[i]` with `row[j]`:
+
+```{python}
+squares = column**2 + row**2  # x[i]^2 + x[j]^2
+print(squares.round(2))
+
+inside = squares < 1
+print(inside.astype(int))  # 1 = inside, 0 = outside
+print(4 * np.mean(inside))
+```
+
+Of the $16$ points, $13$ are inside: the estimate is $4 \cdot 13 / 16 = 3.25$. With a grid this coarse we cannot expect more.
+
+**Alternative with `reshape`.** `np.newaxis` is not the only way to build a row or a column. The method `reshape()` gives the same values a new shape, and `-1` means "whatever fits":
+
+```{python}
+column = x.reshape(-1, 1)  # N rows, 1 column
+row = x.reshape(1, -1)     # 1 row, N columns
+
+print(np.array_equal(column**2 + row**2 < 1, inside))
+```
+
+Both versions give the same result. `np.newaxis` says what we *add*, `reshape` says what we *want*. Use the one that reads better to you.
+
+**Step 3: finer grids.** Now the same three lines work for any $N$, so we can loop over the sizes:
 
 ```{python}
 for N in [10, 100, 1000]:
@@ -386,6 +441,8 @@ for N in [10, 100, 1000]:
     estimate = 4 * np.mean(inside)  # proportion of points inside, times 4
     print(f"N = {N:4d}: π ≈ {estimate:.6f}, error = {abs(estimate - np.pi):.6f}")
 ```
+
+**Step 4: the picture.**
 
 ```{python}
 N = 50
@@ -397,13 +454,13 @@ plt.axis("off")
 plt.show()
 ```
 
-`np.mean(inside)` is $|D \cap \text{grid}| \,/\, |\text{grid}|$, so this is a counting version of an integral. In Session 19 we will replace the regular grid with random points: that is the **Monte Carlo** method.
+`np.mean(inside)` is $|D \cap \text{grid}| \,/\, |\text{grid}|$, so this is a counting version of an integral. In future sessions we will replace the regular grid with random points: that is the [**Monte Carlo** method](random_fancy_indexing.qmd).
 :::
 
 ::: {.callout-note}
 ## Pascal's Triangle and the Sierpiński Triangle
 
-Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$.
+Each row of Pascal's triangle is built from the previous one: every entry is the sum of the two entries above it, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$. In our array, row $n$ is stored from column $0$, so "the two above" are the entry **directly above** (same column $k$) and the entry **above to the left** (column $k-1$).
 
 1. Build a $64 \times 64$ array `pascal` where row $n$ holds $\binom{n}{0}, \dots, \binom{n}{n}$ followed by zeros. You may loop over the rows, but compute each row from the previous one in a single line, with slicing. To avoid huge numbers, store each entry **modulo 2**.
 2. Build the mask of the odd entries and display it with `plt.imshow(odd, cmap="gray_r")`. Your result should look like the picture below. Do you recognise the shape? This is an extension, remember `matplotlib` is not part of this course.
@@ -417,6 +474,53 @@ Each row of Pascal's triangle is built from the previous one: every entry is the
 ::: {.callout-tip collapse="true"}
 ## Solution
 
+**Step 1: what "the two above" means.** Write two consecutive rows with the columns aligned:
+
+```
+column:        0   1   2   3   4   5
+row n-1:       1   4   6   4   1   0
+row n:         1   5  10  10   5   1
+```
+
+The `5` in column `1` of row $n$ is `1 + 4`, from columns `0` and `1` above it. The `10` in column `2` is `4 + 6`, from columns `1` and `2`. In general, the entry in column $k$ is the sum of columns $k-1$ and $k$ of the previous row. Seen from the previous row, each **neighbouring pair** `(i, i+1)` produces one entry of the new row, in column `i+1`. Column `0` is always `1`, because it has nothing to its left.
+
+**Step 2: one row, by hand.** Keep the rows the same length, padded with zeros:
+
+```{python}
+previous = np.array([1, 4, 6, 4, 1, 0, 0, 0])
+```
+
+We need the pairs `(0, 1)`, `(1, 2)`, `(2, 3)`, and so on, all at once. Two slices of the same array do it:
+
+```{python}
+print(previous[:-1])  # columns 0 to N-2: the left member of every pair
+print(previous[1:])   # columns 1 to N-1: the right member of every pair
+```
+
+- `previous[:-1]` means "everything except the last element".
+- `previous[1:]` means "everything except the first element".
+
+Both slices have $N - 1$ elements, and they are **shifted by one position**. Placed side by side, the element at position `i` of the first is `previous[i]`, and the element at position `i` of the second is `previous[i + 1]`:
+
+```
+previous[:-1]   1   4   6   4   1   0   0
+previous[1:]    4   6   4   1   0   0   0
+sum             5  10  10   5   1   0   0
+```
+
+Their sum is already the new row, except for the first `1`:
+
+```{python}
+new = np.zeros_like(previous)
+new[0] = 1
+new[1:] = previous[1:] + previous[:-1]
+print(new)
+```
+
+The sum has $N - 1$ elements, so it goes into `new[1:]`, which also has $N - 1$. If the lengths did not agree, NumPy would raise an error: that is a useful check.
+
+**Step 3: all the rows.** Put the same line inside a loop over the rows of a 2D array. A row `pascal[n]` is the new row, and `pascal[n - 1]` is the previous one. The `% 2` keeps only the parity, to avoid huge numbers:
+
 ```{python}
 N = 64
 pascal = np.zeros((N, N), dtype=int)
@@ -425,6 +529,12 @@ pascal[:, 0] = 1  # the first entry of every row is 1
 for n in range(1, N):
     pascal[n, 1:] = (pascal[n - 1, 1:] + pascal[n - 1, :-1]) % 2
 
+print(pascal[:6, :6])  # the first rows of the triangle, modulo 2
+```
+
+**Step 4: the odd entries.**
+
+```{python}
 odd = pascal == 1
 
 plt.imshow(odd, cmap="gray_r")
@@ -449,6 +559,73 @@ print(np.array_equal(odd, odd_lucas))
 This is also why `&` works on masks: `True` and `False` are the bits `1` and `0`, and AND on a single bit is exactly the logical "and".
 :::
 
+::: {.callout-note}
+## Is It Increasing?
+
+You have a function $f$ and you want to know if it is **monotonically increasing** on $[a, b]$, which means $f(x) < f(y)$ whenever $x < y$. You cannot check infinitely many points, so you draw $1000$ equally spaced values of $x$ and evaluate $f$ at each of them.
+
+1. For $f(x) = x + 0.3 \sin x$ on $[0, 10]$, build the array `y` with the $1000$ values.
+2. Build a mask `up` that says, for each pair of **consecutive** values, whether the function went up. Hint: you need `y[i]` and `y[i + 1]` for every `i`. How can two slices give you that?
+3. Is the function increasing on $[0, 10]$?
+4. Repeat with $g(x) = x + 2 \sin x$. If it is not increasing, how many steps go down, and near which values of $x$?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+x = np.linspace(0, 10, 1000)
+y = x + 0.3 * np.sin(x)
+```
+
+We want to compare `y[0]` with `y[1]`, `y[1]` with `y[2]`, and so on. Do it with two slices: `y[1:]` holds the **next** value of every position, and `y[:-1]` holds the **current** value of every position, as in Pascal's triangle.
+
+```{python}
+up = y[1:] > y[:-1]  # up[i] is True when y[i + 1] > y[i]
+
+print(up.shape)      # one step less than values: 999 steps between 1000 points
+print(np.all(up))    # "for all steps, the function went up"
+```
+
+The function is increasing at every sampled step. Now the second function:
+
+```{python}
+y2 = x + 2 * np.sin(x)
+up2 = y2[1:] > y2[:-1]
+
+print(np.all(up2))
+print(np.sum(~up2))                # number of steps that go down
+print(x[:-1][~up2][[0, -1]])       # first and last x where it goes down
+```
+
+The mask `up2` has `False` where the function goes down, so it is the set of "bad steps". We can use it to index `x[:-1]`, because `up2` has one element less than `x`: element `i` of the mask describes the step from `x[i]` to `x[i + 1]`.
+
+**Caution.** This is **evidence**, not a proof. If the function has a short dip between two sampled points, we will never see it. A finer grid reduces the risk, but only the derivative can give certainty. In this case, $f'(x) = 1 + 0.3\cos x > 0$ and $g'(x) = 1 + 2\cos x$ changes sign, which agrees with what we found.
+:::
+
+::: {.callout-important}
+## The Neighbours Cheat-Code: `a[1:]` and `a[:-1]`
+
+For an array `a` of length $N$:
+
+| Expression | Meaning | Length |
+|:--|:--|:-:|
+| `a[:-1]` | every element **except the last**: each position's *current* value | $N - 1$ |
+| `a[1:]` | every element **except the first**: each position's *next* value | $N - 1$ |
+
+The two slices are the same array shifted by one place, so operating on them **pairs every element with its right-hand neighbour**, with no loop. The result has $N - 1$ elements, one for every pair of neighbours.
+
+| You want | Write | Example |
+|:--|:--|:--|
+| The change between neighbours | `a[1:] - a[:-1]` (same as `np.diff(a)`) | daily changes in a price |
+| The relative change | `a[1:] / a[:-1] - 1` | daily returns, see [Exercise Assets](exercise_assets.qmd) |
+| Is it increasing? | `np.all(a[1:] > a[:-1])` | the exercise above |
+| Where does it go down? | `np.where(a[1:] < a[:-1])` | the exercise above |
+| Do neighbours sum to something? | `a[1:] + a[:-1]` | Pascal's triangle |
+
+Remember the rule: `a[:-1]` is **where I am** and `a[1:]` is **where I go next**.
+:::
+
 ---
 
 ## Summary and Reflection
@@ -459,6 +636,7 @@ This is also why `&` works on masks: `True` and `False` are the bits `1` and `0`
 - `np.sum(mask)` counts the elements of the set and `np.mean(mask)` gives its proportion.
 - `np.any()` and `np.all()` are the quantifiers "there exists" and "for all".
 - `np.where(mask, a, b)` chooses between two values for every element.
+- `a[1:]` and `a[:-1]` pair every element with its next neighbour: a loop-free way to compare consecutive values.
 
 Explain why Python's scalar operators `and`, `or`, and `not` cannot be used directly with Boolean arrays.
 

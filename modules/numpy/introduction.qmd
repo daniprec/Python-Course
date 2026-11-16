@@ -336,6 +336,27 @@ print(marks.size)
 print(marks.dtype)
 ```
 
+::: {.callout-warning}
+## Two Meanings of "Dimension"
+
+If you took Linear Algebra, be careful: the word *dimension* does not mean the same there.
+
+- **In linear algebra**, the dimension of a space is the number of independent numbers needed to describe one of its elements. The space of $3 \times 3$ matrices has dimension $9$ (or $6$ if we only allow symmetric matrices). A vector of $\mathbb{R}^3$ has dimension $3$.
+- **In NumPy**, the dimension of an array is the number of **axes**, which is the number of indices needed to point at a single element. It is the Euclidean idea: a line is 1D, a table is 2D, a cube is 3D.
+
+```{python}
+vector = np.array([1.0, 2.0, 3.0])  # a vector of R^3
+matrix = np.ones((3, 3))            # a 3 x 3 matrix
+
+print(vector.ndim, vector.size)  # 1 axis, 3 numbers
+print(matrix.ndim, matrix.size)  # 2 axes, 9 numbers
+```
+
+So the NumPy `ndim` counts axes, and the linear algebra dimension is closest to `size`, the number of values stored. A vector of $\mathbb{R}^3$ is a **one-dimensional** array. A $3 \times 3$ matrix is a **two-dimensional** array with $9$ values. NumPy does not know about symmetry either: a symmetric matrix still stores all $9$ values.
+
+In this course, "dimension" always means `ndim`, unless we say otherwise.
+:::
+
 ::: {.callout-note}
 ## Exercise: Shapes That Must Agree
 
