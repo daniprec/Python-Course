@@ -1,57 +1,43 @@
 # %% [markdown]
 # Session 22: Vectorization
-## One million games
+## A loop in disguise
 
-Back to Monty Hall. Below is our simulation from that session: a loop that plays the games one by one, always switching doors.
+A weather station stores one million temperatures in Celsius. We need them in Fahrenheit: $F = 1.8\,C + 32$.
 
-**Can we play one million games at once, without a loop?**
+Below is the loop that does it. It works.
+
+**Can the loop disappear? And how do we recognize a loop that can?**
 
 # %%
 import numpy as np
 
-
-def monty_hall_init(n_games: int) -> np.ndarray:
-    """One row per game, one column per door: 1 for the car, 0 for a goat."""
-    x = np.zeros((n_games, 3), dtype=int)
-    ls_id_car = np.random.randint(0, 3, size=n_games)
-    x[np.arange(n_games), ls_id_car] = 1
-    return x
-
-
-def play_with_loop(game: np.ndarray) -> float:
-    """Play every game with a loop, always switching; return the win probability."""
-    n_games = game.shape[0]
-    sum_car = 0
-    for id_game in range(n_games):
-        id_guest = np.random.randint(0, 3)
-        id_car = np.argmax(game[id_game])
-        id_host = (3 - id_guest - id_car) % 3
-        if id_host == id_car:
-            id_host = (id_host + np.random.randint(1, 3)) % 3
-        id_swap = (3 - id_guest - id_host) % 3
-        sum_car += game[id_game, id_swap]
-    return sum_car / n_games
+rng = np.random.default_rng(0)
+celsius = rng.uniform(-10, 40, size=1_000_000)
 
 # %% [markdown]
-- Play 10,000 games. And 1,000,000? How long does it take? Hint: `%%time` at the top of the cell.
+- Convert with a loop. How long does it take? Hint: `%%time` at the top of the cell.
+- Convert without a loop. Same result? Hint: `np.allclose()`. How long now?
+- What did the loop do with each element? Did one iteration need any other?
 
 # %%
 
 # %%
 
 # %% [markdown]
-## 1. Vectorization (review)
+Today: a loop is a pattern. Learn to recognize it, and the replacement is almost always one line.
 
-- Add `a` and `b` element-wise with a loop. Then without it.
-- Repeat with two arrays of one million random numbers. Time both. Hint: `%timeit`.
+| The loop... | The replacement |
+|---|---|
+| works on each element on its own | arithmetic on the array |
+| has an `if` inside | a mask, or `np.where()` |
+| accumulates (sum, count, running total) | `.sum()`, `.mean()`, `.cumsum()` with an `axis` |
+| is a `while` that searches | `np.argmax()` on a Boolean array |
+| calls a function that fails on arrays | a mask, or `np.vectorize()` |
+| is nested (every row with every column) | broadcasting |
 
-# %%
-a = np.array([1, 2, 3])
-b = np.array([4, 5, 6])
+## 1. Element by element: just arithmetic
 
-# %%
-
-# %%
+- A function with only arithmetic inside: does it need any change to accept an array?
 
 # %% [markdown]
 ### Exercise: Vectorize a Polynomial
@@ -73,23 +59,23 @@ arr = np.array([1, 2, 3, 4, 5])
 # %%
 
 # %% [markdown]
-## 2. When `if` meets an array
+## 2. A loop with an `if`: masks and `np.where()`
 
 Predict, run, fix.
 
 ```python
-if arr > 0:
-    print("its higher")
+x = np.array([4, -1, 7, -3])
+if x > 0:
+    print("positive")
 ```
 
-```python
-mask = arr > 1
-print(not mask)
-```
+- Why can `if` not use an array of Booleans? What do we use instead?
+- The element-wise "not": `not mask` fails. What works?
+- Every price above 100 gets a 10% discount. Write it with a loop and an `if`. Then with `np.where(condition, if_true, if_false)`. Then with a mask.
+- Which one do we prefer: `np.where()` or a mask?
 
-- What does `mask` contain? Why can `if` not use it?
-- The element-wise "not".
-- One Boolean from many: `.all()`, `.any()`. Write "not all" and "none".
+# %%
+prices = np.array([50, 120, 80, 200, 99.0])
 
 # %%
 
@@ -98,7 +84,107 @@ print(not mask)
 # %%
 
 # %% [markdown]
-## 3. Functions that do not broadcast
+### Exercise: Curve the Grades
+
+Rewrite without a loop.
+
+```python
+curved = np.zeros(scores.shape)
+for i in range(len(scores)):
+    new_score = scores[i] + 5
+    if new_score > 100:
+        new_score = 100
+    if new_score < 50:
+        new_score = 50
+    curved[i] = new_score
+```
+
+Hint: two `np.where()`, or the function `np.clip()`.
+
+# %%
+scores = np.array([38, 47, 62, 95, 99, 71, 44])
+
+# %%
+
+# %% [markdown]
+## 3. A loop that accumulates: reductions and `axis`
+
+- A shopping cart: `total += price * quantity` in a loop. Then without it. Hint: element-wise product and `.sum()`.
+- How many `scores` are at least 50? Loop with a counter, then a Boolean array and `.sum()`.
+- What fraction of them? Hint: `.mean()` of a Boolean array.
+- Average of every student (rows) and of every exam (columns) in `grades`. Hint: `axis`.
+- The running total of `steps`: a loop with `total += s`, then `np.cumsum()`.
+- One Boolean from many: does **everyone** pass? Did **anyone** get 100? Hint: `.all()`, `.any()`.
+
+# %%
+prices = np.array([2.5, 4.0, 1.2, 10.0])
+quantities = np.array([4, 1, 10, 2])
+grades = np.array([[60, 70, 80], [40, 90, 50], [100, 30, 70], [55, 65, 75]])
+steps = np.array([3, 1, 4, 1, 5, 9, 2, 6])
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Exercise: The Best Day
+
+`sales` has the sales of 4 weeks (rows) over 7 days (columns, Monday to Sunday).
+
+- Total of every week.
+- Total of every weekday over the 4 weeks.
+- Which weekday sells the most? Hint: `np.argmax()`.
+
+# %%
+sales = np.array([[5, 3, 4, 6, 9, 12, 2],
+                  [4, 2, 5, 7, 8, 11, 3],
+                  [6, 3, 3, 5, 10, 13, 1],
+                  [5, 4, 4, 6, 9, 10, 2]])
+
+# %%
+
+# %% [markdown]
+## 4. A `while` that searches: `np.argmax()`
+
+Starting at index `0`, add the `steps` one by one **until the total reaches 20**. How many steps does it take?
+
+- Write it with a `while` loop.
+- `np.cumsum(steps) >= 20` is a Boolean array. Where is the first `True`? Hint: `np.argmax()`.
+- What does `np.argmax()` return when there is no `True` at all? Try the threshold 100. How do we protect against it? Hint: `.any()`.
+- First day of `temps` above 35.
+- Does every `while` become a one-liner? Think of a loop where step $i$ needs the result of step $i-1$.
+
+# %%
+temps = np.array([31, 33, 34, 36, 38, 30])
+
+# %%
+
+# %%
+
+# %%
+
+# %%
+
+# %% [markdown]
+### Exercise: The First Negative Balance
+
+`changes` holds the monthly changes of a bank account that starts at `0`. In which month does the balance first go below `0`? If it never does, print a message.
+
+# %%
+changes = np.array([200, -150, 100, -250, 300])
+
+# %%
+
+# %% [markdown]
+## 5. Functions that do not broadcast
 
 Divide `numerators` by `denominators`. When the denominator is `0`, return $10^{10}$.
 
@@ -121,85 +207,23 @@ Same task, without `np.vectorize()`. Hint: a mask and its `~`.
 # %%
 
 # %% [markdown]
-## 4. Masking (review)
+## 6. Challenge: A nested loop
 
-- Values greater than 2: with a loop, then with a mask.
-- In `grid`, replace every `0` with `2`.
-- Raise every odd number of `numbers` to its closest even.
-- Broadcasting vs. element-wise replacement: which shapes must match?
-
-# %%
-arr = np.array([1, 2, 3, 4, 5])
-grid = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
-numbers = np.array([1, 2, 3, 4, 5, 6, 7])
-
-# %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-### Exercise: Fix the Program
-
-Replace every negative $x$ with $x^2$. Without running it: which error, and why? Then fix the last line.
+Every point with every other point: `distances[i, j]` is the absolute difference between `points[i]` and `points[j]`.
 
 ```python
-arr = np.array([-3, -2, -1, 0, 1, 2, 3])
-mask_neg = arr < 0
-replacement_values = np.array([10, 20])
-arr[mask_neg] = replacement_values
+distances = np.zeros((len(points), len(points)))
+for i in range(len(points)):
+    for j in range(len(points)):
+        distances[i, j] = abs(points[i] - points[j])
 ```
 
-# %%
+Rewrite without loops. Hint: shapes `(4, 1)` and `(1, 4)`.
 
-# %% [markdown]
-### Exercise: Random Replacements
-
-Replace all negative values with random integers between 1 and 10.
+Then, a multiplication table of the numbers 1 to 9, in one line.
 
 # %%
-arr = np.array([1, -1, 2, -2, 3, -3])
-
-# %%
-
-# %% [markdown]
-## 5. Monty Hall at full speed
-
-- **Keep** the first pick: the guest's choice for every game at once, and the win probability. Hint: fancy indexing.
-- Where is the car in every game? Hint: `axis`.
-- The host's door: `(3 - id_guest - id_car) % 3`. Fix the games where the guest picked the car, with a mask.
-- **Switch**: the remaining door, and the win probability.
-- One million games: time it and compare with the loop.
-
-# %%
-
-# %%
-
-# %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-## 6. Challenge: Curve the Grades
-
-Rewrite without a loop. Then, with one Boolean each: does **everyone** pass (at least 50)? Did **anyone** get 100?
-
-```python
-curved = np.zeros(scores.shape)
-for i in range(len(scores)):
-    new_score = scores[i] + 5
-    if new_score > 100:
-        new_score = 100
-    if new_score < 50:
-        new_score = 50
-    curved[i] = new_score
-```
-
-# %%
-scores = np.array([38, 47, 62, 95, 99, 71, 44])
+points = np.array([1, 4, 9, 16])
 
 # %%
 
@@ -207,3 +231,5 @@ scores = np.array([38, 47, 62, 95, 99, 71, 44])
 ## Next session
 
 Review and homework: a random student, a random exercise from the NumPy problem set. **Could you solve and explain any of them at the board?**
+
+The Monty Hall simulation at full speed is in the course notes, as an extension.
