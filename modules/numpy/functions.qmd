@@ -75,13 +75,17 @@ face[4, 6] = 1
 
 ## Aggregation Functions
 
-`np.sum()` adds all the elements of an array. For `points`, that would be the total points of the whole class, which is not what we want:
+`np.sum()` adds all the elements of an array. Given a 1D array $x = (x_0, x_1, \dots, x_{N-1})$, it returns the single number
+
+$$\texttt{np.sum}(x) = \sum_{i=0}^{N-1} x_i = x_0 + x_1 + \dots + x_{N-1}.$$
+
+For a 2D array `points`, with no `axis`, it adds **all** the elements: the total points of the whole class, which is not what we want:
 
 ```{python}
 print(np.sum(points))
 ```
 
-The `axis` argument chooses the dimension that is "collapsed". To add the points of each student, we sum **along the exercises**, which is dimension 1 (the columns). That was the last piece of our one-line grading:
+The `axis` argument chooses the dimension that is "collapsed". Here a *dimension* is an **axis** of the array (as in `ndim`), not a linear algebra dimension. To add the points of each student, we sum **along the exercises**, which is dimension 1 (the columns). That was the last piece of our one-line grading:
 
 ```{python}
 final_grades = np.sum(points, axis=1) / 10
@@ -118,7 +122,14 @@ print(np.max(house, axis=0))
 print(np.max(house, axis=0) - np.min(house, axis=0))   # width and height
 ```
 
-`np.prod()` multiplies all the elements, and `np.cumsum()` keeps every partial sum:
+`np.prod()` multiplies all the elements, and `np.cumsum()` keeps every partial sum. Given a 1D array $x = (x_0, \dots, x_{N-1})$:
+
+$$\texttt{np.prod}(x) = \prod_{i=0}^{N-1} x_i, \qquad \texttt{np.cumsum}(x) = (c_0, \dots, c_{N-1}) \text{ with } c_k = \sum_{i=0}^{k} x_i.$$
+
+`np.sum()` and `np.prod()` return **one number**. `np.cumsum()` returns **an array of the same length**, and its last element is `np.sum(x)`. The same goes for `np.min()` and `np.max()`, which return $\min_i x_i$ and $\max_i x_i$.
+
+For example, with $x = (1, 2, 3, 4)$: the product is $1 \cdot 2 \cdot 3 \cdot 4 = 24$ and the partial sums are $c = (1,\ 1+2,\ 1+2+3,\ 1+2+3+4) = (1, 3, 6, 10)$.
+
 
 ```{python}
 print(np.prod(np.array([1, 2, 3, 4])))
@@ -174,6 +185,8 @@ print(positions)
 print(np.sum(steps, axis=0))
 ```
 
+With `axis=0`, the formula of `np.cumsum()` is applied to each column. If row $i$ of `steps` is the move $s_i$, then row $k$ of `positions` is $p_k = \sum_{i=0}^{k} s_i$, the sum of all the moves up to step $k$.
+
 The robot is at $(1, 2)$ after step 4, and it finishes at $(1, 3)$: the sum of all the moves, just as you add vectors tip to tail.
 :::
 
@@ -197,7 +210,7 @@ highest = np.argmax(y)
 print(highest, corners[highest])
 ```
 
-`np.argmin()` works the same way for the smallest value. When there is a tie, both return the first one:
+In formulas, $\texttt{np.argmax}(x)$ is the index $k$ such that $x_k = \max_i x_i$ (the first one, if there is a tie), and `np.argmin()` is the same for the smallest value. Both return the first one when there is a tie:
 
 ```{python}
 lowest = np.argmin(y)
@@ -256,25 +269,33 @@ To go from the farthest to the closest, reverse the order with the slice `[::-1]
 
 How did the class do as a whole? NumPy computes the usual descriptive statistics.
 
-The **mean** is the average of a data set.
+In this section, $x = (x_0, \dots, x_{N-1})$ is a 1D array. The **mean** is the average of a data set:
+
+$$\texttt{np.mean}(x) = \bar{x} = \frac{1}{N}\sum_{i=0}^{N-1} x_i.$$
 
 ```{python}
 print("Mean:", np.mean(final_grades))
 ```
 
-The **median** is the middle value when the data set is ordered.
+The **median** is the middle value when the data set is ordered. If $x_{(0)} \le \dots \le x_{(N-1)}$ are the sorted values, it is $x_{((N-1)/2)}$ when $N$ is odd, and the mean of the two middle values, $\tfrac{1}{2}\big(x_{(N/2-1)} + x_{(N/2)}\big)$, when $N$ is even.
 
 ```{python}
 print("Median:", np.median(final_grades))
 ```
 
-The **standard deviation** measures the dispersion of data from its mean.
+The **standard deviation** measures the dispersion of data from its mean. It is the square root of the average squared distance to the mean:
+
+$$\texttt{np.std}(x) = \sqrt{\frac{1}{N}\sum_{i=0}^{N-1} (x_i - \bar{x})^2}.$$
 
 ```{python}
 print("Standard Deviation:", np.std(final_grades))
 ```
 
-**Variance** is the square of the standard deviation.
+**Variance** is the square of the standard deviation:
+
+$$\texttt{np.var}(x) = \frac{1}{N}\sum_{i=0}^{N-1} (x_i - \bar{x})^2.$$
+
+Note the $\frac{1}{N}$ (not $\frac{1}{N-1}$). NumPy divides by $N$ unless you pass `ddof=1`.
 
 ```{python}
 print("Variance:", np.var(final_grades))
