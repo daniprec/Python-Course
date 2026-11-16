@@ -108,57 +108,9 @@ print(result)
 
 :::
 
-But what happens when we have an `if` clause? That does not work for arrays.
+But what happens when a function has an `if`? An `if` needs a single Boolean, not an array of them, so the function cannot take a whole array (we will see why in [Masking: Avoiding Loops](masking_loops.qmd)). Some other functions cannot broadcast for the same reason. This happens, for instance, when using conditions inside the function that rely on scalar comparisons (like `if` statements), which are not inherently compatible with array inputs. In these cases, NumPy cannot apply the function to the entire array at once because the function was designed to handle only one value at a time.
 
-```{python}
-#| eval: false
-arr = np.array([1, 2, 3, 4, 5])
-
-if arr > 0:
-  print("its higher")
-```
-
-Why? Because `if` cannot interpret a sequence of booleans! It needs a single one:
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5])
-
-mask = arr > 1
-print(mask)  # This is a NumPy boolean array
-```
-
-Do also remember that we cannot use `and` or `or` with boolean arrays. Instead, we use `&` and `|` for element-wise logical operations.
-
-```{python}
-#| eval: false
-# We cannot use a "not" with boolean arrays!
-print(not mask)
-```
-
-```{python}
-# A "not" for a boolean array is a "~"
-print(~mask)
-```
-
-If you want to check if **all** or **any** of the elements in a boolean array are `True`, you can use the `.all()` and `.any()` methods.
-
-```{python}
-print(mask.all())
-# Same as using "(a == True) and (b == True) and (c == True) ..."
-
-print(mask.any())
-# Same as using "(a == True) or (b == True) or (c == True) ..."
-
-print(not mask.all())
-# Same as using "(a == False) or (b == False) or (c == False) ..."
-
-print(not mask.any())
-# Same as using "(a == False) and (b == False) and (c == False) ..."
-```
-
-Some other functions cannot broadcast. This happens, for instance, when using conditions inside the function that rely on scalar comparisons (like `if` statements), which are not inherently compatible with array inputs. In these cases, NumPy cannot apply the function to the entire array at once because the function was designed to handle only one value at a time.
-
-For convenience, `np.vectorize()` can adapt a scalar function so it accepts arrays. Despite its name, it does not provide the main performance benefit of true NumPy vectorization; it still calls the Python function element by element. When possible, prefer array expressions, masks, or `np.where()`.
+For convenience, `np.vectorize()` can adapt a scalar function so it accepts arrays. Despite its name, it does not provide the main performance benefit of true NumPy vectorization; it still calls the Python function element by element. When possible, prefer array expressions, masks, or `np.where()` (see [Masking: Avoiding Loops](masking_loops.qmd)).
 
 :::{.callout-note}
 ## Exercise: Safe Division with `np.vectorize()`
@@ -208,267 +160,6 @@ print(result)
 
 ---
 
-## Masking
-
-**Masking** allows us to filter or operate on specific elements of an array based on conditions. We create a boolean mask—an array of `True` or `False` values—and apply it to another array to select or modify elements where the condition is true.
-
-:::{.callout-note}
-## Exercise: Numbers Greater Than 2
-
-You have an array of numbers. Find all elements greater than 2.
-:::
-
-
-
-:::{.callout-tip collapse="true"}
-## Solution: Using a Loop and print
-
-This is a bad solution. The loop is inefficient, and using `print` inside the loop is not ideal for collecting results.
-```{python}
-arr = np.array([1, 2, 3, 4, 5])
-
-for val in arr:
-  if val > 2:
-    print(val)
-```
-:::
-
-:::{.callout-tip collapse="true"}
-## Solution: Using a Loop and storing the results
-
-While the loop is still inefficient, this solution collects the results in a list instead of printing them directly.
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5])
-result = []
-
-for val in arr:
-  if val > 2:
-    result.append(val)
-
-print(result)
-```
-:::
-
-:::{.callout-tip collapse="true"}
-## Solution: Using Masking
-
-This is the most efficient solution. We create a boolean mask that identifies which elements of the array are greater than 2, and then we use that mask to filter the array.
-
-
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5])
-
-# Create a mask where the condition is True for elements > 2
-mask = arr > 2
-
-print(mask)
-
-# Use the mask to filter the array
-filtered = arr[mask]
-
-print(filtered)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Filter Values Above 5
-
-Given the array below, use masking to create a new array that only contains values greater than 5.
-
-```python
-arr = np.array([2, 5, 7, 9, 3])
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-arr = np.array([2, 5, 7, 9, 3])
-
-apple = arr > 5  # mask named "apple"
-print(apple)
-
-arr_new = arr[apple]
-print(arr_new)
-```
-
-:::
-
-### Replacing Array Values with a Mask
-
-We can use **masking** to selectively replace values in an array based on a specific condition, similar to how we would use an `if` statement. By creating a **boolean mask**, we can identify elements that meet the condition and apply operations or assignments only to those elements. This method provides an efficient way to modify arrays without using loops.
-
-**Example.** Given a 2D array, find all 0s and replace them with 2s.
-
-```{python}
-arr = np.array([
-    [0, 1, 0],
-    [1, 0, 1],
-    [0, 1, 0]
-])
-
-# Create a boolean mask where 0 is True
-mask = arr == 0  # "mask" is a new array different than "arr"
-print(mask)
-
-# Use the mask to replace 0s with 2s
-# Here we use broadcasting
-# (a single value is assigned to a whole piece of the array)
-arr[mask] = 2  # We are modifying the original "arr"
-# The masked array is a 1D array
-print(arr[mask])
-
-print(arr)
-```
-
-**Example.** Given an array, find the odd numbers and raise them to their closest even.
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5, 6, 7])
-
-mask_odd = arr % 2 == 1
-
-arr[mask_odd] = arr[mask_odd] + 1
-
-print(arr)
-```
-
-```{python}
-arr = np.array([1, 2, 3, 4, 5, 6, 7])
-
-# Create a boolean mask where the condition (arr % 2 == 1)
-# is True for odd numbers
-mask_odd = arr % 2 == 1
-print(mask_odd)
-
-# Use the mask to select only the odd numbers and add 1 to them
-arr[mask_odd] = arr[mask_odd] + 1
-
-print(arr)
-```
-
-As we have seen, replacing values in an array using a mask can be done in two ways:
-
-1. **Broadcasting**: This involves replacing all selected elements with a single value.
-   
-2. **Element-wise Replacement**: This involves replacing the selected elements with values from another array, but the two arrays (the original and the one you're assigning) must have matching shapes.
-
-**Important:** If the shape of the array you are trying to assign doesn’t match the shape of the mask, NumPy will throw an error!
-
-
-
-::: {.callout-note}
-## Exercise: Fix the Program
-
-The programmer wants to replace every negative value $x$ with $x^2$, but the code raises an error. Without running it, name the error and explain why it happens. Then fix the assignment line.
-
-```python
-# Define a 1D array
-arr = np.array([-3, -2, -1, 0, 1, 2, 3])
-
-# Create a mask for negative numbers
-mask_neg = arr < 0
-print(mask_neg)
-
-# Try to replace negative numbers with an array that has a different shape
-replacement_values = np.array([10, 20])
-print(replacement_values)
-
-# This will raise a ValueError because the shapes don't match
-arr[mask_neg] = replacement_values
-
-print(arr)
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-It raises a `ValueError`. The mask selects three elements, but `replacement_values` has only two, so NumPy cannot match the shapes. The replacement must come from the selected elements themselves:
-
-```{python}
-arr = np.array([-3, -2, -1, 0, 1, 2, 3])
-mask_neg = arr < 0
-
-arr[mask_neg] = arr[mask_neg] ** 2
-
-print(arr)
-```
-:::
-
-::: {.callout-note}
-## Exercise: Random Replacements
-
-Given a 1D array, replace all negative values with random integers between 1 and 10.
-
-```python
-arr = np.array([1, -1, 2, -2, 3, -3])
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-arr = np.array([1, -1, 2, -2, 3, -3])
-
-# Create a boolean mask where the condition
-# (arr < 0) is True for negative elements
-mask_neg = arr < 0
-print(mask_neg)
-
-# Generate random integers between 1 and 10,
-# with the same number of values as there are negatives
-# np.sum(mask_neg) counts how many True values there are in the mask
-# (i.e., the number of negative values in arr)
-randvals = np.random.randint(1, 11, np.sum(mask_neg))
-
-# Replace the negative values in 'arr' (indicated by the mask)
-# with the generated random integers
-arr[mask_neg] = randvals
-print(arr)
-```
-
-:::
-
-::: {.callout-note}
-## Exercise: Safe Division with Masks
-
-Given two arrays, one of numerators and one of denominators, perform a safe division without `np.vectorize()`. When a denominator is 0, the result is $10^{10}$.
-
-```python
-numerators = np.array([1, 2, 3])
-denominators = np.array([0, 1, 2])
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-numerators = np.array([1, 2, 3])
-denominators = np.array([0, 1, 2])
-
-# Initialize the array of results
-result = np.zeros(len(numerators))
-
-# Create a mask to find the 0s in the denominator array
-mask_zeros = denominators == 0
-
-# Assign 1e10 to the zeros, compute division for the rest
-result[mask_zeros] = 1e10
-result[~mask_zeros] = numerators[~mask_zeros] / denominators[~mask_zeros]
-
-print(result)
-```
-
-:::
-
----
-
 ## Recognizing a Loop That Can Disappear
 
 A loop is a pattern. Once you recognize it, the replacement is almost always one line.
@@ -476,79 +167,11 @@ A loop is a pattern. Once you recognize it, the replacement is almost always one
 | The loop... | The replacement |
 |---|---|
 | works on each element on its own | arithmetic on the array |
-| has an `if` inside | a mask, or `np.where()` |
+| has an `if` inside | a mask, or `np.where()` (next page: [Masking: Avoiding Loops](masking_loops.qmd)) |
 | accumulates (sum, count, running total) | `.sum()`, `.mean()`, `.cumsum()` with an `axis` |
 | is a `while` that searches | `np.argmax()` on a Boolean array |
 | calls a function that fails on arrays | a mask, or `np.vectorize()` |
 | is nested (every row with every column) | broadcasting |
-
-### A Loop with an `if`: `np.where()`
-
-`np.where(condition, value_if_true, value_if_false)` is an `if/else` applied to every element at once.
-
-```{python}
-prices = np.array([50, 120, 80, 200, 99.0])
-
-# With a loop
-discounted = np.zeros(prices.shape)
-for i in range(len(prices)):
-    if prices[i] > 100:
-        discounted[i] = prices[i] * 0.9
-    else:
-        discounted[i] = prices[i]
-
-# With np.where
-print(np.where(prices > 100, prices * 0.9, prices))
-
-# With a mask
-discounted = prices.copy()
-mask = prices > 100
-discounted[mask] *= 0.9
-print(discounted)
-```
-
-Use `np.where()` when the result is a new array built from two options. Use a mask when you modify some elements in place.
-
-::: {.callout-note}
-## Exercise: Curve the Grades
-
-Rewrite without a loop. Then print, with a single Boolean each, whether **all** students now pass (score at least 50) and whether **any** student got 100. Hint: two `np.where()`, or `np.clip()`.
-
-```python
-scores = np.array([38, 47, 62, 95, 99, 71, 44])
-
-curved = np.zeros(scores.shape)
-for i in range(len(scores)):
-    new_score = scores[i] + 5
-    if new_score > 100:
-        new_score = 100
-    if new_score < 50:
-        new_score = 50
-    curved[i] = new_score
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{python}
-scores = np.array([38, 47, 62, 95, 99, 71, 44])
-
-# Add 5, then force every value into the range [50, 100]
-curved = np.clip(scores + 5, 50, 100)
-print(curved)
-
-# Same with two np.where
-new_scores = scores + 5
-new_scores = np.where(new_scores > 100, 100, new_scores)
-new_scores = np.where(new_scores < 50, 50, new_scores)
-print(new_scores)
-
-# One Boolean each: does everyone pass? Did anyone get 100?
-print("All pass:", (curved >= 50).all())
-print("Any 100: ", (curved == 100).any())
-```
-:::
 
 ### A Loop That Accumulates: Reductions and `axis`
 
@@ -699,14 +322,6 @@ print(n[:, np.newaxis] * n[np.newaxis, :])
 
 ---
 
-### Want to Practice More?
-
-[In this notebook](https://drive.google.com/file/d/1Rth92pp2echsRSDEMgXY_Ej-lDlOyK7S/view?usp=sharing), you will find a complete masking exercise involving images. The goal: using masking techniques, take the image of a dog and seamlessly place it onto a beach picture!
-
-This exercise will help you apply the concept of masking in a more creative and visual way, improving your understanding of how to manipulate arrays in practical scenarios.
-
----
-
 ## Extension: Monty Hall at Full Speed
 
 ::: {.callout-note}
@@ -848,17 +463,15 @@ print("Win probability:", sum_car / n_games)
 
 - Vectorization replaces element-by-element Python loops with array operations.
 - Broadcasting lets compatible shapes participate in one expression.
-- A comparison with an array creates a Boolean array, not one Boolean value.
-- Use `&`, `|`, and `~` for element-wise Boolean logic.
-- Use `.all()` or `.any()` when an `if` statement needs one Boolean result.
+- A loop that accumulates becomes a reduction (`.sum()`, `.mean()`, `.cumsum()`) with an `axis`.
+- A `while` that searches becomes `np.argmax()` on a Boolean array.
+- A nested loop becomes broadcasting.
 - `np.vectorize()` changes an interface but usually does not make a scalar Python function faster.
 
 Choose one loop from this lesson and explain which array operation replaces each part of the loop.
 
 ---
 
-# Homework and Review
+# Next
 
-Work through the homework exercises available here.
-
-[Homework](homework_numpy.qmd#vectorization){.btn .btn-primary}
+[Masking: Avoiding Loops](masking_loops.qmd){.btn .btn-primary}

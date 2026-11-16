@@ -29,7 +29,7 @@ Today: a loop is a pattern. Learn to recognize it, and the replacement is almost
 | The loop... | The replacement |
 |---|---|
 | works on each element on its own | arithmetic on the array |
-| has an `if` inside | a mask, or `np.where()` |
+| has an `if` inside | a mask, or `np.where()` (course notes: Masking, Avoiding Loops) |
 | accumulates (sum, count, running total) | `.sum()`, `.mean()`, `.cumsum()` with an `axis` |
 | is a `while` that searches | `np.argmax()` on a Boolean array |
 | calls a function that fails on arrays | a mask, or `np.vectorize()` |
@@ -59,55 +59,7 @@ arr = np.array([1, 2, 3, 4, 5])
 # %%
 
 # %% [markdown]
-## 2. A loop with an `if`: masks and `np.where()`
-
-Predict, run, fix.
-
-```python
-x = np.array([4, -1, 7, -3])
-if x > 0:
-    print("positive")
-```
-
-- Why can `if` not use an array of Booleans? What do we use instead?
-- The element-wise "not": `not mask` fails. What works?
-- Every price above 100 gets a 10% discount. Write it with a loop and an `if`. Then with `np.where(condition, if_true, if_false)`. Then with a mask.
-- Which one do we prefer: `np.where()` or a mask?
-
-# %%
-prices = np.array([50, 120, 80, 200, 99.0])
-
-# %%
-
-# %%
-
-# %%
-
-# %% [markdown]
-### Exercise: Curve the Grades
-
-Rewrite without a loop.
-
-```python
-curved = np.zeros(scores.shape)
-for i in range(len(scores)):
-    new_score = scores[i] + 5
-    if new_score > 100:
-        new_score = 100
-    if new_score < 50:
-        new_score = 50
-    curved[i] = new_score
-```
-
-Hint: two `np.where()`, or the function `np.clip()`.
-
-# %%
-scores = np.array([38, 47, 62, 95, 99, 71, 44])
-
-# %%
-
-# %% [markdown]
-## 3. A loop that accumulates: reductions and `axis`
+## 2. A loop that accumulates: reductions and `axis`
 
 - A shopping cart: `total += price * quantity` in a loop. Then without it. Hint: element-wise product and `.sum()`.
 - How many `scores` are at least 50? Loop with a counter, then a Boolean array and `.sum()`.
@@ -119,6 +71,7 @@ scores = np.array([38, 47, 62, 95, 99, 71, 44])
 # %%
 prices = np.array([2.5, 4.0, 1.2, 10.0])
 quantities = np.array([4, 1, 10, 2])
+scores = np.array([38, 47, 62, 95, 99, 71, 44])
 grades = np.array([[60, 70, 80], [40, 90, 50], [100, 30, 70], [55, 65, 75]])
 steps = np.array([3, 1, 4, 1, 5, 9, 2, 6])
 
@@ -152,7 +105,7 @@ sales = np.array([[5, 3, 4, 6, 9, 12, 2],
 # %%
 
 # %% [markdown]
-## 4. A `while` that searches: `np.argmax()`
+## 3. A `while` that searches: `np.argmax()`
 
 Starting at index `0`, add the `steps` one by one **until the total reaches 20**. How many steps does it take?
 
@@ -184,12 +137,13 @@ changes = np.array([200, -150, 100, -250, 300])
 # %%
 
 # %% [markdown]
-## 5. Functions that do not broadcast
+## 4. Functions that do not broadcast
 
 Divide `numerators` by `denominators`. When the denominator is `0`, return $10^{10}$.
 
 - Write `safe_division(numerator, denominator)` with an `if`. Does it work on the arrays?
 - `np.vectorize()`. Is it faster than a loop?
+- The `if` is the problem. In the course notes, masks solve it without `np.vectorize()`.
 
 # %%
 numerators = np.array([1, 2, 3])
@@ -200,14 +154,7 @@ denominators = np.array([0, 1, 2])
 # %%
 
 # %% [markdown]
-### Exercise: Safe Division with Masks
-
-Same task, without `np.vectorize()`. Hint: a mask and its `~`.
-
-# %%
-
-# %% [markdown]
-## 6. Challenge: A nested loop
+## 5. Challenge: A nested loop
 
 Every point with every other point: `distances[i, j]` is the absolute difference between `points[i]` and `points[j]`.
 
@@ -232,4 +179,4 @@ points = np.array([1, 4, 9, 16])
 
 Review and homework: a random student, a random exercise from the NumPy problem set. **Could you solve and explain any of them at the board?**
 
-The Monty Hall simulation at full speed is in the course notes, as an extension.
+In the course notes, as review and extension: Masking, Avoiding Loops (masks, `np.where()`) and the Monty Hall simulation at full speed.
