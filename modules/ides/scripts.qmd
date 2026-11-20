@@ -160,7 +160,7 @@ When something fails, read the error message first. If you need a reminder of de
 ::: {.callout-note}
 ## Exercise: Guessing Game
 
-Do the [Guessing Game](review_general.qmd#ex-guessing-game) as a script `guessing_game.py`. Import the `numpy.random` submodule (or the `random` library) to generate the number. The game must end when the user guesses the number or types `exit`, and then print the number of guesses.
+Do the [Guessing Game](review_general.qmd#ex-guessing-game) as a script `guessing_game.py`. Use `np.random.randint` to generate the number. The game must end when the user guesses the number or types `exit`, and then print the number of guesses.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -173,7 +173,7 @@ import numpy as np
 
 
 def guessing_game():
-    number = np.random.randint(1, 9)   # both ends are included
+    number = np.random.randint(1, 10)   # the upper limit is excluded: 1 to 9
     guesses = 0
 
     while True:
@@ -204,7 +204,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`random.randint(a, b)` includes **both** limits, so `random.randint(1, 9)` can return 9. Compare with `np.random.randint(1, 10)`, where the upper limit is excluded. If the user types something that is not a number or `exit`, `int(guess)` raises a `ValueError`: you can handle it with `try` / `except ValueError`.
+`np.random.randint(1, 10)` returns values from 1 to 9: the upper limit is **excluded**, so `randint(1, 9)` would never return 9. If the user types something that is not a number or `exit`, `int(guess)` raises a `ValueError`: you can handle it with `try` / `except ValueError`.
 :::
 
 ::: {.callout-note}
@@ -310,7 +310,7 @@ def computer_passes(amount):
 
 def play():
     amount = 1
-    player_turn = random.choice([True, False])
+    player_turn = np.random.random() < 0.5   # True: the player starts
     while True:
         if player_turn:
             choice = input(f"Your turn. Pot: {amount} EUR. Take or pass? ").strip().lower()

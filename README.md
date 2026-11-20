@@ -15,7 +15,7 @@ This course provides a comprehensive introduction to programming using Python. S
 1. **Module 1: Introduction to Python** - Learn the fundamentals of Python programming
 2. **Module 2: Data Structures** - Explore Python's built-in data structures
 3. **Module 3: Control Flow and Functions** - Master conditional statements, loops, and functions
-4. **Module 4: Advanced Topics** - Dive into file I/O, error handling, and libraries
+4. **Module 4: IDEs & Tools** - Set up VS Code, manage environments, write scripts, work with files and build your own library
 
 ## 🚀 Local Development
 
