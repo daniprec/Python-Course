@@ -44,15 +44,18 @@ class S25Workshop(Deck):
             ("Libraries you install", "other people's tools"),
             ("Projects that stay separate", "each one with its own tools"),
         ]]).arrange(DOWN, buff=0.15)
-        right = VGroup(need_t, needs).arrange(DOWN, aligned_edge=LEFT, buff=0.2).shift(RIGHT * 3.0 + DOWN * 0.95)
-        self.play(FadeIn(need_t))
+        right = VGroup(need_t, needs).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        # centre in the free area below the heading and above the footer
+        right.move_to(RIGHT * 3.0 + DOWN * 0.45)
+        nbg.move_to(LEFT * 4.2 + DOWN * 0.45)
+        self.play(FadeIn(need_t), nbg.animate.move_to(LEFT * 4.2 + DOWN * 0.45), run_time=0.4)
         for c in needs:
             self.play(FadeIn(c, shift=LEFT * 0.4), run_time=0.5)
             self.click()
 
         # --- the workshop -----------------------------------------------------
         self.heading("The workshop: an IDE", "Integrated Development Environment")
-        tbox = toolbox(3.6).shift(LEFT * 4.6 + DOWN * 0.5)
+        tbox = toolbox(3.2).shift(LEFT * 5.0 + DOWN * 0.5)
         lab = T("VS Code", 28, OCEAN, BOLD).next_to(tbox, DOWN, buff=0.3)
         self.play(DrawBorderThenFill(tbox), FadeIn(lab), run_time=0.9)
         drawers = [
@@ -61,12 +64,21 @@ class S25Workshop(Deck):
             ("Files panel", "the shelves: your folders and scripts", folder(0.9)),
             ("Extensions", "attachments: Python, Jupyter, Copilot", package(0.7)),
         ]
+        # all four cards share one width and all icons share one column
+        mw = max(card(n, d, w=0, tsize=24, bsize=18)[0].width for n, d, _ in drawers)
+        cs = VGroup(*[card(n, d, w=mw, tsize=24, bsize=18) for n, d, _ in drawers]).arrange(DOWN, buff=0.2)
+        slot = 1.0
+        total = slot + 0.3 + mw
+        left = -3.2 + (10.1 - total) / 2
+        cs.move_to(ORIGIN).shift(DOWN * 0.45)
         cards = VGroup()
-        for name, desc, icon in drawers:
-            c = card(name, desc, w=7.2, tsize=24, bsize=20)
-            row = VGroup(icon, c).arrange(RIGHT, buff=0.35)
-            cards.add(row)
-        cards.arrange(DOWN, aligned_edge=LEFT, buff=0.2).shift(RIGHT * 2.9 + DOWN * 0.45)
+        for c, (_, _, icon) in zip(cs, drawers):
+            icon.scale_to_fit_height(min(icon.height, 0.9))
+            if icon.width > slot:
+                icon.scale_to_fit_width(slot)
+            c.align_to(np.array([left + slot + 0.3, 0, 0]), LEFT)
+            icon.move_to([left + slot / 2, c.get_center()[1], 0])
+            cards.add(VGroup(icon, c))
         for row in cards:
             self.play(FadeIn(row, shift=LEFT * 0.8),
                       Indicate(tbox, scale_factor=1.04, color=MARINE), run_time=0.7)
