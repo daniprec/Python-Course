@@ -9,6 +9,7 @@ The notebooks are clean: a guide for the class (prompts and exercises), the star
 | `1_fundamentals` | 1–6 |
 | `2_structures` | 7–12 |
 | `3_numpy` | 14–23 (`side_project_mnist.pptx` is not a session) |
+| `4_ides` | 25–27 (animated `.html` slides and static `.pdf`, built with Manim from `4_ides/manim_slides/`) |
 
 ## Editing or restoring a notebook
 
