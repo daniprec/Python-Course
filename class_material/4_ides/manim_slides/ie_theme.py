@@ -20,6 +20,7 @@ GREY = "#434445"       # secondary text
 SOFT = "#F4F4F4"       # soft background
 GREEN = "#6DC201"      # decoration / success (pair with text + icon)
 TANGERINE = "#FF7B31"  # highlight
+INFO = "#0000DB"       # IE Electric Blue: information signs
 RED = "#F31233"        # decoration / error (pair with text + icon)
 WINE = "#7E1103"       # error text on light backgrounds
 YELLOW = "#FBCA1E"     # warning decoration
@@ -193,12 +194,12 @@ def window(lines, w=8.0, title="Terminal", size=24, colors=None, gap=0.2, pad=1.
 
 
 def callout(text, kind="note", w=11.5, size=22, left=True):
-    spec = {"note": (SEA, "i", ICE), "warning": (TANGERINE, "!", "#FFF1E8"),
+    spec = {"note": (INFO, "i", ICE), "warning": (TANGERINE, "!", "#FFF1E8"),
             "tip": (GREEN, "✓", "#F0FAE3"), "important": (MARINE, "!", LIGHT)}[kind]
     bar_col, sym, fill = spec
     body = T(text, size, INK, line_spacing=0.9)
     badge = VGroup(Circle(radius=0.26, fill_color=bar_col, fill_opacity=1, stroke_width=0),
-                   T(sym, 24, WHITE if kind != "note" else OCEAN, BOLD))
+                   T(sym, 24, WHITE, BOLD))
     badge[1].move_to(badge[0])
     inner = VGroup(badge, body).arrange(RIGHT, buff=0.3)
     rect = RoundedRectangle(corner_radius=0.15, width=max(w, inner.width + 0.8),
@@ -272,6 +273,7 @@ class Deck(Slide):
         self._show_number()
         self.current_title = None
         self._clicks = 0   # clicks so far = index of the slide step being built
+        self._pending = False
         self._finals = []  # steps whose last frame is the "final version" of a page
 
     def _show_number(self):
@@ -290,6 +292,7 @@ class Deck(Slide):
             self._show_number()
 
     def tear_down(self):
+        self._flush()
         super().tear_down()
         import json
         os.makedirs("slides", exist_ok=True)
@@ -298,6 +301,7 @@ class Deck(Slide):
 
     def heading(self, text, sub=None):
         """Replace everything on screen (except the footer) with a new title."""
+        self._flush()
         olds = [m for m in self.mobjects if m not in (self.foot, self.brand, self.numtxt)]
         self._mark_page_end()
         t = T(text, 44, OCEAN, BOLD)
@@ -318,15 +322,29 @@ class Deck(Slide):
     def wipe(self):
         """Clear the content area, keep the title and footer."""
         keep = (self.foot, self.current_title, self.brand, self.numtxt)
+        self._flush()
         olds = [m for m in self.mobjects if m not in keep]
         self._mark_page_end()
         if olds:
             self.play(FadeOut(*olds), run_time=0.4)
 
-    def click(self):
-        self.wait(0.3)  # hold the finished frame (also the one used for the PDF)
-        self._clicks += 1
-        self.next_slide()
+    def click(self, hard=False):
+        """By default a slide is ONE click: calls to click() only mark a pause and the
+        animations keep playing by themselves; the real click (next_slide) happens when
+        the slide ends (next heading / wipe / end of scene). click(hard=True) forces a
+        real click in the middle of a slide."""
+        if hard:
+            self._pending = False
+            self.wait(0.3)  # hold the finished frame (also the one used for the PDF)
+            self._clicks += 1
+            self.next_slide()
+        else:
+            self._pending = True
+            self.wait(0.5)
+
+    def _flush(self):
+        if getattr(self, "_pending", False):
+            self.click(hard=True)
 
     def type_lines(self, mobs, run_time=0.5, pause_between=False):
         for m in mobs:

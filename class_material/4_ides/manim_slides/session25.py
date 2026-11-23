@@ -35,7 +35,7 @@ class S25Workshop(Deck):
         nbg = VGroup(nb, nb_lab).arrange(DOWN, buff=0.3).shift(LEFT * 4.2 + DOWN * 0.8)
         self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in nb], lag_ratio=0.3),
                   FadeIn(nb_lab), run_time=1.2)
-        self.click()
+        self.click(hard=True)
 
         need_t = T("Real projects need more:", 28, OCEAN, BOLD)
         needs = VGroup(*[card(t, w=5.8, h=0.95, tsize=26) for t in [
@@ -84,7 +84,6 @@ class S25Workshop(Deck):
             self.play(FadeIn(row, shift=LEFT * 0.8),
                       Indicate(tbox, scale_factor=1.04, color=MARINE), run_time=0.7)
             self.click()
-        self.play(Indicate(tbox, scale_factor=1.08, color=MARINE))
         self.click()
 
         # --- map of the module ------------------------------------------------
@@ -145,12 +144,12 @@ class S25VSCode(Deck):
 
         # --- 2. three steps ---------------------------------------------------
         self.wipe()
-        b = bench(4.2).shift(RIGHT * 3.5 + DOWN * 1.0)
+        b = bench(4.2).shift(RIGHT * 3.5 + DOWN * 0.45)
         steps = equalize(VGroup(
             card("1  VS Code", "the workbench", w=7.4, tsize=26),
             card("2  Anaconda", "the only Python you install", w=7.4, tsize=26),
             card("3  Extensions", "attachments: they connect VS Code to it", w=7.4, tsize=26),
-        )).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 1.95, UP)
+        )).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 2.1, UP)
         slogos = [logo(n, height=0.7).move_to(steps[i][0].get_right() + LEFT * 0.8)
                   for i, n in enumerate(["vscode", "anaconda", "python"])]
         slogos[1].scale_to_fit_height(0.55)
@@ -172,7 +171,7 @@ class S25VSCode(Deck):
         self.play(FadeIn(steps[2], shift=RIGHT * 0.3), FadeIn(slogos[2]))
         self.play(LaggedStart(*[FadeIn(a, shift=DOWN * 0.4) for a in att], lag_ratio=0.4))
         note = callout("The Python extension does not install Python: it connects VS Code to the Anaconda one.",
-                       "important", w=12.0, size=20).to_edge(DOWN, buff=0.6)
+                       "important", w=12.0, size=20).to_edge(DOWN, buff=1.05)
         self.play(FadeIn(note, shift=UP * 0.2))
         self.click()
 
@@ -218,7 +217,7 @@ class S25VSCode(Deck):
         info = VGroup(
             T("Pick the one with  base  or  conda  in its name", 24, INK),
             T("For notebooks: top right  →  Select Kernel", 24, INK),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.9)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=1.4)
         self.play(FadeIn(info, shift=UP * 0.2))
         self.click()
 
@@ -266,7 +265,7 @@ class S25Copilot(Deck):
         self.play(FadeIn(right_t), LaggedStart(*[FadeIn(x, shift=RIGHT * 0.3) for x in bad], lag_ratio=0.3))
         self.click()
         self.play(FadeIn(callout("What matters is that YOU can explain and modify your code.", "important", w=11)
-                         .to_edge(DOWN, buff=1.0)))
+                         .to_edge(DOWN, buff=1.1)))
         self.click()
 
         # --- which route -------------------------------------------------------
@@ -297,17 +296,14 @@ class S25Copilot(Deck):
         for d, l in zip(dots, labels):
             l.next_to(d, DOWN, buff=0.35)
         line = Line(dots[0].get_center(), dots[-1].get_center(), color=LIGHT, stroke_width=6).set_z_index(-1)
-        self.add(line)
-        self.play(FadeIn(dots), FadeIn(labels))
-        runner = Dot(radius=0.12, color=TANGERINE).move_to(dots[0])
-        self.add(runner)
-        for i, d in enumerate(dots):
-            self.play(runner.animate.move_to(d), d[0].animate.set_fill(LIGHT), run_time=0.5)
-            self.click()
+        self.play(Create(line), run_time=0.6)
+        for d, l in zip(dots, labels):
+            self.play(FadeIn(d, scale=0.6), FadeIn(l, shift=UP * 0.1), run_time=0.5)
+            self.wait(0.25)
         notes = equalize(VGroup(
             callout("Approval: minutes for many, several days for some. Do not reapply while one is pending.", "note", w=12, size=18),
             callout("Only upload what GitHub asks for. Never share passwords or codes. Never buy a paid plan.", "warning", w=12, size=18),
-        )).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_edge(DOWN, buff=0.7).to_edge(LEFT, buff=0.7)
+        )).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_edge(DOWN, buff=1.1).to_edge(LEFT, buff=0.7)
         self.play(FadeIn(notes, shift=UP * 0.2))
         self.click()
 
@@ -331,7 +327,7 @@ class S25Copilot(Deck):
         self.play(LaggedStart(*[FadeIn(h, shift=RIGHT * 0.3) for h in habits], lag_ratio=0.4))
         self.click()
         off = callout("In class we may switch it off: click Copilot in the status bar (bottom right).", "warning", w=12, size=20)
-        off.to_edge(DOWN, buff=0.7)
+        off.to_edge(DOWN, buff=0.85)
         self.play(FadeIn(off, shift=UP * 0.2))
         self.click()
 
@@ -381,7 +377,7 @@ class S25Environments(Deck):
             card("Isolate", "no conflicts", w=3.8, tsize=24, bsize=19),
             card("Reproduce", "same results for all", w=3.8, tsize=24, bsize=19),
             card("Dispose", "broken? start again", w=3.8, tsize=24, bsize=19),
-        )).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.8)
+        )).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=1.2)
         self.play(envs.animate.scale(0.75).shift(UP * 0.6))
         self.play(LaggedStart(*[FadeIn(w, shift=UP * 0.3) for w in why], lag_ratio=0.3))
         self.click()
@@ -398,10 +394,10 @@ class S25Environments(Deck):
         self.click()
         self.play(Write(ln[2]), run_time=0.6)
         self.play(FadeIn(ln[3]))
-        self.play(Circumscribe(ln[0][21:29], color=SEA))
+        self.play(Circumscribe(ln[0][18:28], color=SEA))
         self.click()
         self.play(FadeIn(callout("First time? conda may ask you to accept the Terms of Service: type a.", "note", w=11.5, size=20)
-                         .to_edge(DOWN, buff=0.8)))
+                         .to_edge(DOWN, buff=1.2)))
         self.click()
 
         # --- activate ----------------------------------------------------------
@@ -419,7 +415,7 @@ class S25Environments(Deck):
         self.play(FadeIn(ln[2]))
         self.click()
         self.play(FadeIn(callout("The name in brackets tells you which environment is active.", "important", w=11)
-                         .to_edge(DOWN, buff=0.8)))
+                         .to_edge(DOWN, buff=1.2)))
         self.click()
 
         # --- install -----------------------------------------------------------
@@ -433,7 +429,7 @@ class S25Environments(Deck):
             self.play(Write(l), run_time=1.0)
             self.click()
         self.play(FadeIn(callout("ModuleNotFoundError for a library you installed? Check the active environment.", "warning", w=12, size=20)
-                         .to_edge(DOWN, buff=0.8)))
+                         .to_edge(DOWN, buff=1.2)))
         self.click()
 
         # --- use in VS Code ----------------------------------------------------
@@ -456,7 +452,7 @@ class S25Environments(Deck):
             T("Script: click the interpreter and choose your environment", 22, INK),
             T("Notebook: Select Kernel  →  Python Environments  →  your environment", 22, INK),
             T("Notebooks need ipykernel in that environment", 22, INK),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.8)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=1.2)
         self.play(FadeIn(steps, shift=UP * 0.2))
         self.click()
 
@@ -504,6 +500,6 @@ class S25Recap(Deck):
             self.play(FadeIn(r, shift=RIGHT * 0.3), run_time=0.5)
             self.click()
         nxt = callout("Next session: stock the toolbox with libraries, and write your first scripts.", "note", w=12)
-        nxt.to_edge(DOWN, buff=0.75)
+        nxt.to_edge(DOWN, buff=1.15)
         self.play(FadeIn(nxt, shift=UP * 0.2))
         self.click()
