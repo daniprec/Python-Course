@@ -10,11 +10,11 @@ from manim import *  # noqa: F401,F403
 from manim_slides import Slide
 
 # --- IE University palette (see the ie-brand skill) -------------------------
-OCEAN = "#000066"      # primary: headings
-MARINE = "#0032A0"     # accent: strokes, diagrams
-SEA = "#47BFFF"        # decoration only, never text
-LIGHT = "#BDE8FF"      # surfaces
-ICE = "#E6F7FF"        # soft surfaces
+OCEAN = "#000024"      # Tech Black: headings and text
+MARINE = "#1F3700"     # Green Olive: strokes, diagrams, pills
+SEA = "#6DC201"        # Tech Green: decoration only, never text
+LIGHT = "#D8FFA5"      # light green surfaces
+ICE = "#EFEFEF"        # soft grey surfaces
 INK = "#0F0F0F"        # body text
 GREY = "#434445"       # secondary text
 SOFT = "#F4F4F4"       # soft background
@@ -23,7 +23,7 @@ TANGERINE = "#FF7B31"  # highlight
 RED = "#F31233"        # decoration / error (pair with text + icon)
 WINE = "#7E1103"       # error text on light backgrounds
 YELLOW = "#FBCA1E"     # warning decoration
-NIGHT = "#1B1A43"      # terminal background
+NIGHT = "#000024"      # terminal background
 MIDDLE = "#BFC1C3"     # terminal secondary text
 
 FONT = "Montserrat"

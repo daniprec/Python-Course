@@ -149,7 +149,7 @@ class S25VSCode(Deck):
             card("1  VS Code", "the workbench", w=6.0, tsize=26),
             card("2  Anaconda", "the power supply: the only Python you install", w=6.0, tsize=26),
             card("3  Extensions", "attachments: they connect VS Code to it", w=6.0, tsize=26),
-        )).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 2.35, UP)
+        )).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 1.95, UP)
         self.play(FadeIn(steps[0], shift=RIGHT * 0.3), FadeIn(b))
         self.click()
         power = VGroup(RoundedRectangle(corner_radius=0.1, width=1.9, height=1.2, fill_color=OCEAN,
@@ -169,7 +169,7 @@ class S25VSCode(Deck):
         self.play(FadeIn(steps[2], shift=RIGHT * 0.3))
         self.play(LaggedStart(*[FadeIn(a, shift=DOWN * 0.4) for a in att], lag_ratio=0.4))
         note = callout("The Python extension does not install Python: it connects VS Code to the Anaconda one.",
-                       "important", w=12.0, size=20).to_edge(DOWN, buff=0.85)
+                       "important", w=12.0, size=20).to_edge(DOWN, buff=0.6)
         self.play(FadeIn(note, shift=UP * 0.2))
         self.click()
 
