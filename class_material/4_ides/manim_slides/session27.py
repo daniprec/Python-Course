@@ -44,11 +44,11 @@ class S27Files(Deck):
 
         # --- operating systems -----------------------------------------------------
         self.heading("Paths on each system", "Python needs to know WHERE a file is")
-        cards = VGroup(
+        cards = equalize(VGroup(
             card("Windows", "drive letters: C:\\\nseparator: backslash\nC:\\Users\\maria\\Documents", w=4.0, tsize=26, bsize=18),
             card("macOS", "one root: /\nseparator: slash\n/Users/maria/Documents", w=4.0, tsize=26, bsize=18),
             card("Linux", "one root: /\nseparator: slash\n/home/maria/Documents", w=4.0, tsize=26, bsize=18),
-        ).arrange(RIGHT, buff=0.4).shift(UP * 0.2)
+        )).arrange(RIGHT, buff=0.4).shift(UP * 0.2)
         for c in cards:
             self.play(FadeIn(c, shift=UP * 0.3), run_time=0.5)
             self.click()
@@ -99,7 +99,7 @@ class S27Files(Deck):
 
         # --- moving around in the terminal ----------------------------------------
         self.heading("Moving around in the terminal", "The same floor plan, with commands")
-        tree = tree_rows(TREE, size=20, gap=0.1).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+        tree = tree_rows(TREE, size=20, gap=0.1).to_edge(LEFT, buff=0.8).shift(UP * 0.0)
         self.play(FadeIn(tree))
         pin = you_are_here(tree[0])
         self.play(FadeIn(pin))
@@ -135,11 +135,11 @@ class S27Data(Deck):
         self.heading("Reading and writing files", "open() and its modes")
 
         # --- modes --------------------------------------------------------------
-        modes = VGroup(
+        modes = equalize(VGroup(
             card('"r"  read', "the file must exist", w=3.9, tsize=28, bsize=22),
             card('"w"  write', "creates it, or ERASES it", w=3.9, tsize=26, bsize=20, fill="#FFF1E8", stroke=TANGERINE),
             card('"a"  append', "adds at the end", w=3.9, tsize=26, bsize=20),
-        ).arrange(RIGHT, buff=0.4).shift(UP * 0.4)
+        )).arrange(RIGHT, buff=0.4).shift(UP * 0.4)
         for m in modes:
             self.play(FadeIn(m, shift=UP * 0.3), run_time=0.5)
             self.click()
@@ -204,8 +204,8 @@ class S27Data(Deck):
         d = VGroup(RoundedRectangle(corner_radius=0.15, width=5.4, height=2.6, fill_color=ICE, stroke_color=MARINE, stroke_width=3),
                    VGroup(T("A Python dict", 24, OCEAN, BOLD), d_code).arrange(DOWN, buff=0.2))
         d[1].move_to(d[0])
-        d.move_to(LEFT * 4.0 + UP * 0.4)
-        fj = file_icon(1.3, lines=3).move_to(RIGHT * 4.6 + UP * 0.5)
+        d.move_to(LEFT * 4.0 + UP * 0.9)
+        fj = file_icon(1.3, lines=3).move_to(RIGHT * 4.6 + UP * 0.9)
         fjl = M("file.json", 20, INK).next_to(fj, DOWN, buff=0.15)
         self.play(FadeIn(d), FadeIn(fj), FadeIn(fjl))
         dump_arrow = Arrow(d.get_right() + UP * 0.35, fj.get_left() + UP * 0.35, buff=0.2, color=MARINE, stroke_width=6)
@@ -219,8 +219,8 @@ class S27Data(Deck):
         self.click()
         table = [("dict", "object { }"), ("list, tuple", "array [ ]"), ("str", "string"),
                  ("int, float", "number"), ("True, False, None", "true, false, null")]
-        tbl = VGroup(*[VGroup(M(a, 22, INK), T("→", 22, GREY), M(b, 22, MARINE)).arrange(RIGHT, buff=0.3) for a, b in table])
-        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(DOWN * 1.4)
+        tbl = VGroup(*[VGroup(M(a, 20, INK), T("→", 20, GREY), M(b, 20, MARINE)).arrange(RIGHT, buff=0.3) for a, b in table])
+        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(DOWN * 1.8)
         self.play(FadeOut(dump_lab), FadeOut(load_lab), FadeOut(dump_arrow), FadeOut(load_arrow))
         self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in tbl], lag_ratio=0.2))
         self.click()

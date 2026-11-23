@@ -192,7 +192,7 @@ def window(lines, w=8.0, title="Terminal", size=24, colors=None, gap=0.2, pad=1.
     return VGroup(frame, bar, ttl, stack), mobs
 
 
-def callout(text, kind="note", w=11.5, size=22):
+def callout(text, kind="note", w=11.5, size=22, left=True):
     spec = {"note": (SEA, "i", ICE), "warning": (TANGERINE, "!", "#FFF1E8"),
             "tip": (GREEN, "✓", "#F0FAE3"), "important": (MARINE, "!", LIGHT)}[kind]
     bar_col, sym, fill = spec
@@ -205,7 +205,22 @@ def callout(text, kind="note", w=11.5, size=22):
                             height=inner.height + 0.5, fill_color=fill, fill_opacity=1,
                             stroke_color=bar_col, stroke_width=3)
     inner.move_to(rect)
+    if left:
+        inner.align_to(rect, LEFT).shift(RIGHT * 0.4)
     return VGroup(rect, inner)
+
+
+def equalize(group):
+    """Give every card / callout in `group` the width of the widest one (left edges kept)."""
+    W = max(g[0].width for g in group)
+    for g in group:
+        r = g[0]
+        if abs(r.width - W) > 1e-3:
+            n = RoundedRectangle(corner_radius=0.15, width=W, height=r.height, fill_color=r.get_fill_color(),
+                                 fill_opacity=1, stroke_color=r.get_stroke_color(),
+                                 stroke_width=r.get_stroke_width()).move_to(r).align_to(r, LEFT)
+            g.submobjects[0] = n
+    return group
 
 
 def labelled(mob, text, size=20, color=INK, direction=DOWN, buff=0.2):

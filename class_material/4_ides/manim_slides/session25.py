@@ -62,7 +62,7 @@ class S25Workshop(Deck):
             ("Editor", "where you write your code", hammer(0.8)),
             ("Terminal", "where you give commands: python, pip, conda", wrench(0.8)),
             ("Files panel", "the shelves: your folders and scripts", folder(0.9)),
-            ("Extensions", "attachments: Python, Jupyter, Copilot", package(0.7)),
+            ("Extensions", "attachments: Python support, Jupyter, Copilot", package(0.7)),
         ]
         # all four cards share one width and all icons share one column
         mw = max(card(n, d, w=0, tsize=24, bsize=18)[0].width for n, d, _ in drawers)
@@ -113,11 +113,11 @@ class S25Workshop(Deck):
 
         # --- how to work ------------------------------------------------------
         self.heading("How to work in this module")
-        rules = VGroup(
+        rules = equalize(VGroup(
             card("Practise in VS Code", "do your exercises there, not in Colab", w=11.5, tsize=26, bsize=22),
             card("One environment per project", "start from a fresh one every time", w=11.5, tsize=26, bsize=22),
             card("Stuck? Ask.", "email dprecioso@faculty.ie.edu\nwith the error message and your operating system", w=11.5, tsize=26, bsize=22),
-        ).arrange(DOWN, buff=0.3).shift(DOWN * 0.4)
+        )).arrange(DOWN, buff=0.3, aligned_edge=LEFT).shift(DOWN * 0.4)
         for r in rules:
             self.play(FadeIn(r, shift=UP * 0.3), run_time=0.5)
             self.click()
@@ -144,12 +144,12 @@ class S25VSCode(Deck):
 
         # --- 2. three steps ---------------------------------------------------
         self.wipe()
-        b = bench(4.2).shift(RIGHT * 3.5 + DOWN * 1.5)
-        steps = VGroup(
+        b = bench(4.2).shift(RIGHT * 3.5 + DOWN * 1.0)
+        steps = equalize(VGroup(
             card("1  VS Code", "the workbench", w=6.0, tsize=26),
-            card("2  Anaconda", "the power supply: Python + conda", w=6.0, tsize=26),
-            card("3  Extensions", "the attachments: Python, Jupyter", w=6.0, tsize=26),
-        ).arrange(DOWN, buff=0.35).to_edge(LEFT, buff=0.7).shift(DOWN * 0.5)
+            card("2  Anaconda", "the power supply: the only Python you install", w=6.0, tsize=26),
+            card("3  Extensions", "attachments: they connect VS Code to it", w=6.0, tsize=26),
+        )).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 2.35, UP)
         self.play(FadeIn(steps[0], shift=RIGHT * 0.3), FadeIn(b))
         self.click()
         power = VGroup(RoundedRectangle(corner_radius=0.1, width=1.9, height=1.2, fill_color=OCEAN,
@@ -168,6 +168,9 @@ class S25VSCode(Deck):
             .arrange(RIGHT, buff=0.2).next_to(b, UP, buff=0.05).shift(LEFT * 0.5)
         self.play(FadeIn(steps[2], shift=RIGHT * 0.3))
         self.play(LaggedStart(*[FadeIn(a, shift=DOWN * 0.4) for a in att], lag_ratio=0.4))
+        note = callout("The Python extension does not install Python: it connects VS Code to the Anaconda one.",
+                       "important", w=12.0, size=20).to_edge(DOWN, buff=0.85)
+        self.play(FadeIn(note, shift=UP * 0.2))
         self.click()
 
         # --- 3. check the installation ----------------------------------------
@@ -181,11 +184,11 @@ class S25VSCode(Deck):
         self.play(Circumscribe(ln[0][:6], color=SEA))
         self.click()
         notes = VGroup(
-            callout("Windows: open the Anaconda Prompt. It starts with (base).", "tip", w=11.5, size=20),
-            callout("Leave “Add Anaconda3 to my PATH” unticked; tick “Register as default Python”.", "warning", w=11.5, size=20),
-            callout("macOS / Linux: if conda is not found, close and reopen the terminal.", "note", w=11.5, size=20),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.7)
-        self.play(term_g.animate.scale(0.75).move_to(UP * 1.0))
+            callout("Windows: open the Anaconda Prompt. It starts with (base).", "tip", w=12.6, size=20),
+            callout("Leave “Add Anaconda3 to my PATH” unticked; tick “Register as default Python”.", "warning", w=12.6, size=20),
+            callout("macOS / Linux: if conda is not found, close and reopen the terminal.", "note", w=12.6, size=20),
+        ).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_edge(DOWN, buff=1.0).to_edge(LEFT, buff=0.7)
+        self.play(term_g.animate.scale(0.75).move_to(UP * 1.3).to_edge(LEFT, buff=0.7))
         for n in notes:
             self.play(FadeIn(n, shift=UP * 0.2), run_time=0.5)
         self.click()
@@ -297,10 +300,10 @@ class S25Copilot(Deck):
         for i, d in enumerate(dots):
             self.play(runner.animate.move_to(d), d[0].animate.set_fill(LIGHT), run_time=0.5)
             self.click()
-        notes = VGroup(
+        notes = equalize(VGroup(
             callout("Approval: minutes for many, several days for some. Do not reapply while one is pending.", "note", w=12, size=18),
             callout("Only upload what GitHub asks for. Never share passwords or codes. Never buy a paid plan.", "warning", w=12, size=18),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.7)
+        )).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_edge(DOWN, buff=0.7).to_edge(LEFT, buff=0.7)
         self.play(FadeIn(notes, shift=UP * 0.2))
         self.click()
 
@@ -370,11 +373,11 @@ class S25Environments(Deck):
         self.play(FadeIn(lab))
         self.click()
         self.play(FadeOut(lab))
-        why = VGroup(
+        why = equalize(VGroup(
             card("Isolate", "no conflicts", w=3.8, tsize=24, bsize=19),
             card("Reproduce", "same results for all", w=3.8, tsize=24, bsize=19),
             card("Dispose", "broken? start again", w=3.8, tsize=24, bsize=19),
-        ).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.8)
+        )).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.8)
         self.play(envs.animate.scale(0.75).shift(UP * 0.6))
         self.play(LaggedStart(*[FadeIn(w, shift=UP * 0.3) for w in why], lag_ratio=0.3))
         self.click()
