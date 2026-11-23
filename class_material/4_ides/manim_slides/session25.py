@@ -38,13 +38,13 @@ class S25Workshop(Deck):
         self.click()
 
         need_t = T("Real projects need more:", 28, OCEAN, BOLD)
-        needs = VGroup(*[card(a, b, w=6.6, tsize=22, bsize=18) for a, b in [
-            ("Code you can reuse", "functions in one file, used by many"),
-            ("Files you read and write", "data, results, settings"),
-            ("Libraries you install", "other people's tools"),
-            ("Projects that stay separate", "each one with its own tools"),
-        ]]).arrange(DOWN, buff=0.15)
-        right = VGroup(need_t, needs).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        needs = VGroup(*[card(t, w=5.8, h=0.95, tsize=26) for t in [
+            "Code you can reuse",
+            "Files you read and write",
+            "Libraries you install",
+            "Projects that stay separate",
+        ]]).arrange(DOWN, buff=0.3)
+        right = VGroup(need_t, needs).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         # centre in the free area below the heading and above the footer
         right.move_to(RIGHT * 3.0 + DOWN * 0.45)
         nbg.move_to(LEFT * 4.2 + DOWN * 0.45)
@@ -66,7 +66,8 @@ class S25Workshop(Deck):
         ]
         # all four cards share one width and all icons share one column
         mw = max(card(n, d, w=0, tsize=24, bsize=18)[0].width for n, d, _ in drawers)
-        cs = VGroup(*[card(n, d, w=mw, tsize=24, bsize=18) for n, d, _ in drawers]).arrange(DOWN, buff=0.2)
+        mh = max(card(n, d, w=mw, tsize=24, bsize=18)[0].height for n, d, _ in drawers)
+        cs = VGroup(*[card(n, d, w=mw, h=mh, tsize=24, bsize=18) for n, d, _ in drawers]).arrange(DOWN, buff=0.2)
         slot = 1.0
         total = slot + 0.3 + mw
         left = -3.2 + (10.1 - total) / 2
@@ -77,14 +78,13 @@ class S25Workshop(Deck):
             if icon.width > slot:
                 icon.scale_to_fit_width(slot)
             c.align_to(np.array([left + slot + 0.3, 0, 0]), LEFT)
-            icon.move_to([left + slot / 2, c.get_center()[1], 0])
+            icon.move_to([0, c.get_center()[1], 0]).align_to(np.array([left, 0, 0]), LEFT)
             cards.add(VGroup(icon, c))
         for row in cards:
             self.play(FadeIn(row, shift=LEFT * 0.8),
                       Indicate(tbox, scale_factor=1.04, color=MARINE), run_time=0.7)
             self.click()
-        new_lab = T("VS Code: everything in one place", 28, OCEAN, BOLD).next_to(tbox, DOWN, buff=0.3)
-        self.play(Transform(lab, new_lab), Indicate(tbox, scale_factor=1.08, color=MARINE))
+        self.play(Indicate(tbox, scale_factor=1.08, color=MARINE))
         self.click()
 
         # --- map of the module ------------------------------------------------
@@ -456,15 +456,15 @@ class S25Environments(Deck):
         # --- share -------------------------------------------------------------
         self.heading("Share your bench", "requirements.txt lists the tools")
         me = VGroup(RoundedRectangle(corner_radius=0.15, width=3.8, height=2.6, fill_color=ICE,
-                                     stroke_color=MARINE, stroke_width=3), T("Your computer", 22, OCEAN, BOLD)).shift(LEFT * 4.2)
+                                     stroke_color=MARINE, stroke_width=3), T("Your computer", 22, OCEAN, BOLD)).shift(LEFT * 3.6)
         me[1].move_to(me[0].get_top() + DOWN * 0.4)
         fr = VGroup(RoundedRectangle(corner_radius=0.15, width=3.8, height=2.6, fill_color=ICE,
-                                     stroke_color=MARINE, stroke_width=3), T("A classmate", 22, OCEAN, BOLD)).shift(RIGHT * 4.2)
+                                     stroke_color=MARINE, stroke_width=3), T("A classmate", 22, OCEAN, BOLD)).shift(RIGHT * 3.6)
         fr[1].move_to(fr[0].get_top() + DOWN * 0.4)
         for g in (me, fr):
             g.shift(UP * 0.2)
         self.play(FadeIn(me), FadeIn(fr))
-        c1 = M("pip freeze > requirements.txt", 20, INK).next_to(me, DOWN, buff=0.4)
+        c1 = M("pip freeze > requirements.txt", 18, INK).next_to(me, DOWN, buff=0.4)
         self.play(Write(c1), run_time=1.0)
         f = file_icon(0.7).move_to(me[0]).shift(DOWN * 0.3)
         lab = M("requirements.txt", 16, INK).next_to(f, DOWN, buff=0.1)
@@ -472,7 +472,7 @@ class S25Environments(Deck):
         self.click()
         self.play(f.animate.move_to(fr[0].get_center() + DOWN * 0.3), lab.animate.next_to(fr[0].get_center() + DOWN * 0.3 + DOWN * 0.6, ORIGIN),
                   run_time=1.2)
-        c2 = M("pip install -r requirements.txt", 20, INK).next_to(fr, DOWN, buff=0.4).shift(LEFT * 0.7)
+        c2 = M("pip install -r requirements.txt", 18, INK).next_to(fr, DOWN, buff=0.4)
         self.play(Write(c2), run_time=1.0)
         self.click()
 

@@ -30,6 +30,6 @@ for s in session25 session26 session27; do
   done
   echo ">> exporting ${NAMES[$s]}"
   manim-slides convert --one-file ${SCENES[$s]} "$OUT/${NAMES[$s]}.html"
-  manim-slides convert ${SCENES[$s]} "$OUT/${NAMES[$s]}.pdf"
+  python make_pdf.py "$OUT/${NAMES[$s]}.pdf" ${SCENES[$s]}
 done
 echo "Done. Open the .html files in a browser (arrow keys or click to advance)."

@@ -195,8 +195,8 @@ class S26Scripts(Deck):
         # --- anatomy of a script ----------------------------------------------
         self.heading("Anatomy of a script", "Three parts, always in this order")
         code, ln = window(["import numpy as np", "", "", "def greet(name):", '    return f"Hello, {name}!"',
-                           "", "", 'name = "BAM"', "print(greet(name))"], w=7.2, size=24, title="hello.py", gap=0.1)
-        code.shift(LEFT * 3.0 + DOWN * 0.1)
+                           "", "", 'name = "BAM"', "print(greet(name))"], w=6.4, size=24, title="hello.py", gap=0.1)
+        code.shift(LEFT * 3.4 + DOWN * 0.3)
         self.play(FadeIn(code[:3]))
         labels = [("1  imports", MARINE, ln[0:1]), ("2  functions", OCEAN, ln[3:5]), ("3  main code", GREY, ln[7:9])]
         for name, col, lines in labels:
@@ -206,7 +206,7 @@ class S26Scripts(Deck):
             self.play(Create(br), FadeIn(lab, shift=LEFT * 0.2), run_time=0.6)
             self.click()
         run, rl = window(["$ python hello.py", "Hello, BAM!"], w=4.4, size=22, title="Terminal", colors=[WHITE, MIDDLE])
-        run.scale(0.8).move_to(RIGHT * 5.0 + DOWN * 1.9)
+        run.scale(0.8).move_to(RIGHT * 5.15 + DOWN * 2.6)
         self.play(FadeIn(run[:3]))
         self.play(Write(rl[0]), run_time=0.8)
         self.play(FadeIn(rl[1]))

@@ -86,14 +86,14 @@ class S27Files(Deck):
         self.play(pin.animate.next_to(tree[1], RIGHT, buff=0.4))
         term, tl = window(['open("data.csv")', "FileNotFoundError:", "No such file: 'data.csv'"], w=5.8, size=20,
                           title="Python", colors=[WHITE, "#FF8A9A", "#FF8A9A"])
-        term.move_to(RIGHT * 4.4 + UP * 0.9)
+        term.move_to(RIGHT * 4.4 + UP * 0.9).to_edge(RIGHT, buff=0.4)
         self.play(FadeIn(term[:3]))
         self.play(Write(tl[0]), run_time=0.7)
         self.play(FadeIn(tl[1]), FadeIn(tl[2]))
         self.play(Indicate(tl[1], color=RED))
         self.click()
-        fix = callout("The file is not where Python is looking.\nCheck the working directory\nand the spelling.", "important",
-                      w=5.0, size=18).move_to(RIGHT * 4.4 + DOWN * 1.5)
+        fix = callout("The file is not where Python\nis looking. Check the working\ndirectory and the spelling.", "important",
+                      w=5.0, size=18).move_to(DOWN * 1.5).align_to(term, RIGHT)
         self.play(FadeIn(fix, shift=UP * 0.2))
         self.click()
 

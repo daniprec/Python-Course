@@ -25,7 +25,7 @@ Open the pre-built files in `class_material/4_ides/` (one level up):
 | Session 27 | `session_27_files_library.html` | `session_27_files_library.pdf` |
 
 In the HTML deck press the right arrow (or click) to play the next step, the left arrow to go back and `F` for full screen.
-The PDF has one page per click, to share or print. The `.html` files are self-contained: download one and open it.
+The PDF has one page per slide, showing its final version (all the build-up steps are done), to share or print. The `.html` files are self-contained: download one and open it.
 
 ## Rebuild them
 
@@ -53,6 +53,7 @@ manim-slides present S25Environments     # opens a window; arrow keys to advance
 |---|---|
 | `ie_theme.py` | IE University colours, the helpers (cards, terminal windows, icons, callouts) and the `Deck` base class every scene extends |
 | `session25.py`, `session26.py`, `session27.py` | The scenes. Each `self.click()` is one step of the presentation |
+| `make_pdf.py` | Builds the static PDF with one page per slide (final version) |
 | `build.sh` | Renders every scene and exports the HTML and PDF decks to `class_material/4_ides/` |
 
 ## Editing
@@ -62,4 +63,4 @@ manim-slides present S25Environments     # opens a window; arrow keys to advance
 - Colours are the IE palette. Sea Blue (`SEA`) is decoration only, never text.
 - The font is Montserrat. If it is not installed, Manim falls back to a default font and the text can be a little wider, so install it for the intended look.
 - Going back one step jumps instead of playing in reverse (`skip_reversing = True` in `Deck`). It avoids a rendering step that can hang on some machines.
-- The PDF contains the last frame of every click, so a slide that builds in four steps becomes four pages.
+- The PDF has one page per slide: `make_pdf.py` keeps the last frame of the step before each new heading (or `wipe()`), and the last step of each scene. A slide that builds in four steps is one page.

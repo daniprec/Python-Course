@@ -5,6 +5,7 @@ Metaphor used everywhere: Python development is a WORKSHOP.
   environment = one bench per project, script = blueprint, notebook = sketchbook.
 """
 
+import os
 from manim import *  # noqa: F401,F403
 from manim_slides import Slide
 
@@ -223,10 +224,26 @@ class Deck(Slide):
         self.foot.to_corner(DL, buff=0.3)
         self.add(self.foot)
         self.current_title = None
+        self._clicks = 0   # clicks so far = index of the slide step being built
+        self._finals = []  # steps whose last frame is the "final version" of a page
+
+    def _mark_page_end(self):
+        """Called before the screen is cleared: the step just finished is a complete page."""
+        step = self._clicks - 1
+        if step >= 0 and step not in self._finals:
+            self._finals.append(step)
+
+    def tear_down(self):
+        super().tear_down()
+        import json
+        os.makedirs("slides", exist_ok=True)
+        with open(f"slides/{type(self).__name__}.finals.json", "w") as f:
+            json.dump({"clicks": self._clicks, "finals": self._finals}, f)
 
     def heading(self, text, sub=None):
         """Replace everything on screen (except the footer) with a new title."""
         olds = [m for m in self.mobjects if m is not self.foot]
+        self._mark_page_end()
         t = T(text, 44, OCEAN, BOLD)
         bar = Rectangle(width=0.12, height=t.height + 0.1, fill_color=SEA, fill_opacity=1,
                         stroke_width=0)
@@ -244,10 +261,13 @@ class Deck(Slide):
         """Clear the content area, keep the title and footer."""
         keep = (self.foot, self.current_title)
         olds = [m for m in self.mobjects if m not in keep]
+        self._mark_page_end()
         if olds:
             self.play(FadeOut(*olds), run_time=0.4)
 
     def click(self):
+        self.wait(0.3)  # hold the finished frame (also the one used for the PDF)
+        self._clicks += 1
         self.next_slide()
 
     def type_lines(self, mobs, run_time=0.5, pause_between=False):
