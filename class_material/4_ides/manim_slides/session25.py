@@ -15,7 +15,7 @@ class S25Workshop(Deck):
         sub = T("From the sketchbook\nto the workshop", 32, GREY, line_spacing=0.9)
         txt = VGroup(kicker, main, sub).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         txt.to_edge(LEFT, buff=1.0).shift(UP * 0.3)
-        tb = toolbox(3.6).shift(RIGHT * 3.6 + DOWN * 0.2)
+        tb = toolbox(3.6).shift(RIGHT * 3.6 + DOWN * 0.6)
         h = hammer(1.3).next_to(tb, UL, buff=-0.4).shift(UP * 0.1)
         w = wrench(1.3).next_to(tb, UR, buff=-0.4).shift(UP * 0.1)
         self.play(FadeIn(txt, shift=RIGHT * 0.4), run_time=0.8)
@@ -56,7 +56,7 @@ class S25Workshop(Deck):
         # --- the workshop -----------------------------------------------------
         self.heading("The workshop: an IDE", "Integrated Development Environment")
         tbox = toolbox(3.2).shift(LEFT * 5.0 + DOWN * 0.5)
-        lab = T("VS Code", 28, OCEAN, BOLD).next_to(tbox, DOWN, buff=0.3)
+        lab = Group(logo("vscode", height=0.6), T("VS Code", 28, OCEAN, BOLD)).arrange(RIGHT, buff=0.25).next_to(tbox, DOWN, buff=0.3)
         self.play(DrawBorderThenFill(tbox), FadeIn(lab), run_time=0.9)
         drawers = [
             ("Editor", "where you write your code", hammer(0.8)),
@@ -133,7 +133,8 @@ class S25VSCode(Deck):
         # --- 1. editor without python -----------------------------------------
         b = bench(4.0).shift(LEFT * 3.5 + DOWN * 0.8)
         editor = card("VS Code", "the editor", w=3.2, tsize=26).next_to(b, UP, buff=0.1)
-        self.play(FadeIn(b), FadeIn(editor, shift=DOWN * 0.3), run_time=0.8)
+        vs_logo = logo("vscode", height=0.9).next_to(editor, UP, buff=0.2)
+        self.play(FadeIn(b), FadeIn(editor, shift=DOWN * 0.3), FadeIn(vs_logo), run_time=0.8)
         miss = VGroup(cross(0.3), T("Python is NOT included", 26, WINE, BOLD)).arrange(RIGHT, buff=0.25)
         miss.shift(RIGHT * 3.4 + UP * 0.2)
         self.play(FadeIn(miss, shift=LEFT * 0.3))
@@ -146,27 +147,29 @@ class S25VSCode(Deck):
         self.wipe()
         b = bench(4.2).shift(RIGHT * 3.5 + DOWN * 1.0)
         steps = equalize(VGroup(
-            card("1  VS Code", "the workbench", w=6.0, tsize=26),
-            card("2  Anaconda", "the power supply: the only Python you install", w=6.0, tsize=26),
-            card("3  Extensions", "attachments: they connect VS Code to it", w=6.0, tsize=26),
+            card("1  VS Code", "the workbench", w=7.4, tsize=26),
+            card("2  Anaconda", "the only Python you install", w=7.4, tsize=26),
+            card("3  Extensions", "attachments: they connect VS Code to it", w=7.4, tsize=26),
         )).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).align_to(UP * 1.95, UP)
-        self.play(FadeIn(steps[0], shift=RIGHT * 0.3), FadeIn(b))
+        slogos = [logo(n, height=0.7).move_to(steps[i][0].get_right() + LEFT * 0.8)
+                  for i, n in enumerate(["vscode", "anaconda", "python"])]
+        slogos[1].scale_to_fit_height(0.55)
+        self.play(FadeIn(steps[0], shift=RIGHT * 0.3), FadeIn(slogos[0]), FadeIn(b))
         self.click()
-        power = VGroup(RoundedRectangle(corner_radius=0.1, width=1.9, height=1.2, fill_color=OCEAN,
-                                        fill_opacity=1, stroke_width=0),
-                       T("Anaconda", 20, WHITE, BOLD)).shift(RIGHT * 5.6 + UP * 0.9)
-        power[1].move_to(power[0])
+        power = VGroup(RoundedRectangle(corner_radius=0.1, width=2.2, height=1.3, fill_color=WHITE,
+                                        fill_opacity=1, stroke_color=OCEAN, stroke_width=4)).shift(RIGHT * 5.6 + UP * 0.9)
+        power_logo = logo("anaconda", width=1.8).move_to(power[0])
         bl = bolt(0.8).next_to(power, UP, buff=0.1)
         cable = CubicBezier(power.get_bottom(), power.get_bottom() + DOWN * 1.0,
                             b.get_top() + UP * 1.0 + RIGHT * 1.5, b.get_top() + RIGHT * 1.5,
                             color=GREY, stroke_width=6)
-        self.play(FadeIn(steps[1], shift=RIGHT * 0.3), FadeIn(power), FadeIn(bl))
+        self.play(FadeIn(steps[1], shift=RIGHT * 0.3), FadeIn(slogos[1]), FadeIn(power), FadeIn(power_logo), FadeIn(bl))
         self.play(Create(cable), run_time=0.9)
         self.play(Flash(b.get_top() + RIGHT * 1.5, color=YELLOW, flash_radius=0.4))
         self.click()
         att = VGroup(pill("Python", fill=MARINE, size=18), pill("Jupyter", fill=MARINE, size=18)) \
             .arrange(RIGHT, buff=0.2).next_to(b, UP, buff=0.05).shift(LEFT * 0.5)
-        self.play(FadeIn(steps[2], shift=RIGHT * 0.3))
+        self.play(FadeIn(steps[2], shift=RIGHT * 0.3), FadeIn(slogos[2]))
         self.play(LaggedStart(*[FadeIn(a, shift=DOWN * 0.4) for a in att], lag_ratio=0.4))
         note = callout("The Python extension does not install Python: it connects VS Code to the Anaconda one.",
                        "important", w=12.0, size=20).to_edge(DOWN, buff=0.6)
@@ -245,6 +248,7 @@ class S25Copilot(Deck):
     def construct(self):
         self.begin()
         self.heading("GitHub Copilot", "An apprentice in your workshop")
+        self.play(FadeIn(logo("github-copilot", height=1.3).move_to(RIGHT * 5.4 + UP * 1.7)), run_time=0.5)
 
         # --- learn, don't skip -------------------------------------------------
         left_t = VGroup(tick(0.3), T("Use it to learn", 28, OCEAN, BOLD)).arrange(RIGHT, buff=0.25)

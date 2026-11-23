@@ -395,7 +395,7 @@ class S27Recap(Deck):
         for r in rows:
             self.play(FadeIn(r, shift=RIGHT * 0.3), run_time=0.5)
             self.click()
-        tb = toolbox(1.8).to_corner(UR, buff=0.6)
+        tb = toolbox(1.4).to_corner(UR, buff=0.6).shift(DOWN * 0.95)
         self.play(DrawBorderThenFill(tb))
         end = callout("Use these tools in every project from now on.\nStuck? Email the error message and your operating system.",
                       "note", w=11, size=20).to_edge(DOWN, buff=0.75)

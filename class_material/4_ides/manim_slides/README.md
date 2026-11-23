@@ -53,6 +53,7 @@ manim-slides present S25Environments     # opens a window; arrow keys to advance
 |---|---|
 | `ie_theme.py` | IE University colours, the helpers (cards, terminal windows, icons, callouts) and the `Deck` base class every scene extends |
 | `session25.py`, `session26.py`, `session27.py` | The scenes. Each `self.click()` is one step of the presentation |
+| `logos/` | Logos used on the slides: the IE School of Science & Technology logo (`sstech.png`, shown on every slide) and the VS Code, Anaconda, GitHub Copilot and Python logos (copies of the files in `img/`; `python.png` is rendered from `img/python.svg`) |
 | `make_pdf.py` | Builds the static PDF with one page per slide (final version) |
 | `build.sh` | Renders every scene and exports the HTML and PDF decks to `class_material/4_ides/` |
 
@@ -64,3 +65,4 @@ manim-slides present S25Environments     # opens a window; arrow keys to advance
 - The font is Montserrat. If it is not installed, Manim falls back to a default font and the text can be a little wider, so install it for the intended look.
 - Going back one step jumps instead of playing in reverse (`skip_reversing = True` in `Deck`). It avoids a rendering step that can hang on some machines.
 - The PDF has one page per slide: `make_pdf.py` keeps the last frame of the step before each new heading (or `wipe()`), and the last step of each scene. A slide that builds in four steps is one page.
+- Every slide shows the Scitech logo (top right) and a slide number (bottom right). The number only changes when a new slide starts (a new `heading()` or `wipe()`), never between the steps of one slide, and it continues across the scenes of a deck, so render the scenes in order (`build.sh` does).

@@ -227,6 +227,31 @@ def labelled(mob, text, size=20, color=INK, direction=DOWN, buff=0.2):
     return VGroup(mob, T(text, size, color)).arrange(direction, buff=buff)
 
 
+LOGOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos")
+SCENE_ORDER = [["S25Workshop", "S25VSCode", "S25Copilot", "S25Environments", "S25Recap"],
+               ["S26Libraries", "S26Scripts", "S26Recap"],
+               ["S27Files", "S27Data", "S27Library", "S27Recap"]]
+
+
+def logo(name, height=None, width=None):
+    """Image from manim_slides/logos/ (vscode, anaconda, github-copilot, python, sstech)."""
+    im = ImageMobject(os.path.join(LOGOS, f"{name}.png"))
+    if height is not None:
+        im.scale_to_fit_height(height)
+    if width is not None:
+        im.scale_to_fit_width(width)
+    return im
+
+
+def _pages_of(scene):
+    import json
+    try:
+        d = json.load(open(f"slides/{scene}.finals.json"))
+    except OSError:
+        return 0
+    return len(set(d["finals"]) | {d["clicks"] - 1})
+
+
 # --- base class for every deck ----------------------------------------------
 class Deck(Slide):
     """Every `self.next_slide()` is one click of the presentation."""
@@ -238,15 +263,31 @@ class Deck(Slide):
         self.foot = T(f"Computer Programming I  ·  Module 4  ·  {self.section}", 18, GREY)
         self.foot.to_corner(DL, buff=0.3)
         self.add(self.foot)
+        # Scitech logo (top right) and slide number (bottom right) stay on every slide
+        self.brand = logo("sstech", height=0.55).to_corner(UR, buff=0.3)
+        self.add(self.brand)
+        order = next(o for o in SCENE_ORDER if type(self).__name__ in o)
+        self._page = 1 + sum(_pages_of(s) for s in order[:order.index(type(self).__name__)])
+        self.numtxt = None
+        self._show_number()
         self.current_title = None
         self._clicks = 0   # clicks so far = index of the slide step being built
         self._finals = []  # steps whose last frame is the "final version" of a page
 
+    def _show_number(self):
+        if self.numtxt is not None:
+            self.remove(self.numtxt)
+        self.numtxt = T(str(self._page), 20, GREY).to_corner(DR, buff=0.3)
+        self.add(self.numtxt)
+
     def _mark_page_end(self):
-        """Called before the screen is cleared: the step just finished is a complete page."""
+        """Called before the screen is cleared: the step just finished is a complete page.
+        The slide number only changes here, never between the steps of one slide."""
         step = self._clicks - 1
         if step >= 0 and step not in self._finals:
             self._finals.append(step)
+            self._page += 1
+            self._show_number()
 
     def tear_down(self):
         super().tear_down()
@@ -257,7 +298,7 @@ class Deck(Slide):
 
     def heading(self, text, sub=None):
         """Replace everything on screen (except the footer) with a new title."""
-        olds = [m for m in self.mobjects if m is not self.foot]
+        olds = [m for m in self.mobjects if m not in (self.foot, self.brand, self.numtxt)]
         self._mark_page_end()
         t = T(text, 44, OCEAN, BOLD)
         bar = Rectangle(width=0.12, height=t.height + 0.1, fill_color=SEA, fill_opacity=1,
@@ -266,6 +307,8 @@ class Deck(Slide):
         if sub:
             parts.append(T(sub, 24, GREY))
         g = VGroup(*parts).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        if g.width > 11.0:  # keep clear of the logo in the top-right corner
+            g.scale(11.0 / g.width)
         g.to_corner(UL, buff=0.5)
         anims = [FadeOut(*olds)] if olds else []
         self.play(*anims, FadeIn(g, shift=RIGHT * 0.3), run_time=0.7)
@@ -274,7 +317,7 @@ class Deck(Slide):
 
     def wipe(self):
         """Clear the content area, keep the title and footer."""
-        keep = (self.foot, self.current_title)
+        keep = (self.foot, self.current_title, self.brand, self.numtxt)
         olds = [m for m in self.mobjects if m not in keep]
         self._mark_page_end()
         if olds:
