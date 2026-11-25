@@ -471,7 +471,7 @@ result    | 3 | 4 | 5 |       <- the 3 had no partner, it is an extra dimension
 
 The 5 is paired with a 1 (stretched to 5), the 4 with a 4 (match), and the 3 has nothing in front of it. The result has shape `(3, 4, 5)`: the `(4, 1)` array is repeated 3 times, once per "layer" of `A`.
 
-The function below draws the sliding boxes for any two shapes, and tells us the shape of the result. It is only a learning tool, so you do not need to understand how it works. Use it to check your answers, **after** trying by hand.
+The function below draws the sliding boxes for any two shapes and tells us the shape of the result. Then it **asks NumPy** (with `np.broadcast_shapes`) whether the operation is possible, and checks that NumPy agrees with the boxes. It is only a learning tool, so you do not need to understand how it works. Use it to check your answers, **after** trying by hand.
 
 ```{python}
 #| code-fold: true
@@ -499,10 +499,18 @@ def sliding_boxes(a, b):
     print(row("A", top))
     print(row("B", bottom))
     print(f"{'':<8}" + "".join(f" {m:^5}" for m in marks))
-    if "✗" in marks:
-        print("Result:  error, these shapes cannot be broadcast")
-    else:
-        print(f"Result:  {tuple(result)}")
+    by_boxes = "✗" not in marks
+    print(f"Boxes:   {'compatible, shape ' + str(tuple(result)) if by_boxes else 'incompatible'}")
+
+    # Ask NumPy itself, and check that the boxes agree with it
+    try:
+        real = np.broadcast_shapes(tuple(a), tuple(b))
+        print(f"NumPy:   works, shape {real}")
+        agree = by_boxes and real == tuple(result)
+    except ValueError:
+        print("NumPy:   ValueError, cannot be broadcast")
+        agree = not by_boxes
+    assert agree, "the sliding boxes and NumPy disagree!"
 
 sliding_boxes((3, 4, 5), (4, 1))
 ```
