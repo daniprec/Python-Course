@@ -56,7 +56,7 @@ body { background: #fff !important; }
 /* Things that only make sense on screen */
 .quarto-title-breadcrumbs, .quarto-code-tools, .code-copy-button, .code-tools-button,
 .callout-btn-toggle, .quarto-alternate-formats, .page-navigation, .nav-footer,
-.hw-filter, .anchorjs-link, .quarto-title-meta:empty { display: none !important; }
+.hw-filter, .no-pdf, .anchorjs-link, .quarto-title-meta:empty { display: none !important; }
 a { color: inherit; text-decoration: none; }
 #quarto-document-content a[href] { text-decoration: underline; text-decoration-color: rgba(0,0,0,.35); }
 

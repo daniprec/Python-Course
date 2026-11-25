@@ -12,13 +12,13 @@ execute:
 import numpy as np
 ```
 
-## The Sliding Boxes
+## Right-Aligned Boxes
 
-In [the previous page](arithmetics.qmd) we broadcast arrays with one or two dimensions. The same rule works with **any number of dimensions**, and there is a simple way to apply it by hand: the **sliding boxes**.
+In [the previous page](arithmetics.qmd) we broadcast arrays with one or two dimensions. The same rule works with **any number of dimensions**, and there is a simple way to apply it by hand: the **right-aligned boxes**.
 
-Write each shape as a row of cells, one number per cell. Put the two rows one on top of the other, and follow three steps:
+Write each shape as a row of cells, one number per cell. Put the two rows one on top of the other, **aligned on the right edge**, and follow three steps:
 
-1. **Slide.** Push the shorter row to the right until the two rows touch the right edge. This is the maximum possible overlap: every cell of the shorter row sits under (or over) a cell of the longer one. The alignment is **always on the right edge**. You cannot slide further to look for a better match, because NumPy only ever compares the trailing dimensions with each other.
+1. **Align on the right.** The last cells of the two rows must be on top of each other, the second-to-last cells too, and so on. If one row is shorter, it simply stops earlier. The alignment is **always on the right edge**, never on the left or anywhere else, because NumPy only ever compares the trailing dimensions with each other.
 2. **Compare each pair of stacked cells.** If the two numbers are equal, they match. If one of them is `1`, it can be stretched to the other number. Anything else is a ✗, and NumPy raises an error.
 3. **Copy the leftovers.** The cells of the longer row with nothing above or below them do not need a partner. They go straight to the result, and they are the **extra dimensions**: the shorter array is repeated along them.
 
@@ -26,19 +26,19 @@ For example, `(3, 4, 5) + (4, 1)`:
 
 ```text
 A         | 3 | 4 | 5 |
-B         |   | 4 | 1 |       <- B slid to the right edge
+B         |   | 4 | 1 |       <- B is aligned on the right edge
             -   ✓   ✓
 result    | 3 | 4 | 5 |       <- the 3 had no partner, it is an extra dimension
 ```
 
 The 5 is paired with a 1 (stretched to 5), the 4 with a 4 (match), and the 3 has nothing in front of it. The result has shape `(3, 4, 5)`: the `(4, 1)` array is repeated 3 times, once per "layer" of `A`.
 
-The function below draws the sliding boxes for any two shapes and tells us the shape of the result. Then it **asks NumPy** (with `np.broadcast_shapes`) whether the operation is possible, and checks that NumPy agrees with the boxes. It is only a learning tool, so you do not need to understand how it works. Use it to check your answers, **after** trying by hand.
+The function below draws the right-aligned boxes for any two shapes and tells us the shape of the result. Then it **asks NumPy** (with `np.broadcast_shapes`) whether the operation is possible, and checks that NumPy agrees with the boxes. It is only a learning tool, so you do not need to understand how it works. Use it to check your answers, **after** trying by hand.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Show the code of sliding_boxes()"
-def sliding_boxes(a, b):
+#| code-summary: "Show the code of align_shapes()"
+def align_shapes(a, b):
     """Draw two shapes as rows of cells, aligned on the right edge, and compare them."""
     n = max(len(a), len(b))
     top = [None] * (n - len(a)) + list(a)
@@ -72,9 +72,9 @@ def sliding_boxes(a, b):
     except ValueError:
         print("NumPy:   ValueError, cannot be broadcast")
         agree = not by_boxes
-    assert agree, "the sliding boxes and NumPy disagree!"
+    assert agree, "the boxes and NumPy disagree!"
 
-sliding_boxes((3, 4, 5), (4, 1))
+align_shapes((3, 4, 5), (4, 1))
 ```
 
 ::: {.callout-important}
@@ -94,7 +94,7 @@ NumPy never looks at *which* numbers are equal, only at their **positions**, cou
 ::: {.callout-note}
 ## Exercise: Two Shapes That Do Not Fit
 
-Draw the sliding boxes by hand, and decide if the operation is possible. Why, or why not?
+Draw the aligned boxes by hand, and decide if the operation is possible. Why, or why not?
 
 1. `A + B`, where `A` has shape `(8, 5)` and `B` has shape `(4, 5)`. If it fails, how could you change one of the arrays so that the sum works?
 2. `A * B`, where `A` has shape `(3, 4, 5)` and `B` has shape `(2, 5, 6)`. What would change if we used the matrix product `A @ B`?
@@ -103,7 +103,7 @@ Draw the sliding boxes by hand, and decide if the operation is possible. Why, or
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-**1.** Both shapes have two cells, so there is nothing to slide:
+**1.** Both shapes have two cells, so there is nothing to align:
 
 ```text
 A         | 8 | 5 |
@@ -114,7 +114,7 @@ B         | 4 | 5 |
 The `5`s match, but `8` and `4` are different and neither is `1`. The sum **fails**. Notice that `8 = 2 · 4`: it looks as if `B` could be repeated twice, but NumPy does not guess that.
 
 ```{python}
-sliding_boxes((8, 5), (4, 5))
+align_shapes((8, 5), (4, 5))
 ```
 
 There are two ways to make it work, depending on what we mean:
@@ -125,11 +125,11 @@ There are two ways to make it work, depending on what we mean:
 ```{python}
 A = np.ones((8, 5))
 B = np.arange(4 * 5).reshape(4, 5)
-sliding_boxes((2, 4, 5), (4, 5))
+align_shapes((2, 4, 5), (4, 5))
 print((A.reshape(2, 4, 5) + B).shape)
 ```
 
-**2.** Both shapes have three cells, again with no sliding:
+**2.** Both shapes have three cells, aligned the same way:
 
 ```text
 A         | 3 | 4 | 5 |
@@ -140,12 +140,12 @@ B         | 2 | 5 | 6 |
 **All three** columns fail (`3` vs `2`, `4` vs `5`, `5` vs `6`), and one failure is enough.
 
 ```{python}
-sliding_boxes((3, 4, 5), (2, 5, 6))
+align_shapes((3, 4, 5), (2, 5, 6))
 ```
 
-You may be tempted to say "both have a `5`, so it should work". But the boxes never slide to look for a match: the `5` of `A` is in the last cell and the `5` of `B` is in the middle one, so they are never compared.
+You may be tempted to say "both have a `5`, so it should work". But the boxes are always aligned on the right, with no search for a match: the `5` of `A` is in the last cell and the `5` of `B` is in the middle one, so they are never compared.
 
-Those `5`s matter for the **matrix product**: a `(4, 5)` matrix times a `(5, 6)` matrix gives a `(4, 6)` matrix. With `@`, NumPy treats the last two cells as the matrices and applies the sliding boxes to the remaining ones. Here the `3` and the `2` still differ, so `A @ B` fails too. With `B` of shape `(1, 5, 6)` or `(5, 6)` it works, with result shape `(3, 4, 6)`.
+Those `5`s matter for the **matrix product**: a `(4, 5)` matrix times a `(5, 6)` matrix gives a `(4, 6)` matrix. With `@`, NumPy treats the last two cells as the matrices and applies the same boxes to the remaining ones. Here the `3` and the `2` still differ, so `A @ B` fails too. With `B` of shape `(1, 5, 6)` or `(5, 6)` it works, with result shape `(3, 4, 6)`.
 :::
 
 ::: {.callout-note}
@@ -162,9 +162,9 @@ In each case, one number is a multiple of the other. Can the two arrays be added
 ## Solution
 
 ```{python}
-sliding_boxes((7, 9, 4), (9, 2))
-sliding_boxes((6, 4), (3, 4))
-sliding_boxes((12,), (4,))
+align_shapes((7, 9, 4), (9, 2))
+align_shapes((6, 4), (3, 4))
+align_shapes((12,), (4,))
 ```
 
 1. **Fails.** The `9`s match, and the `7` is an extra dimension, but the last cells are `4` and `2`. Even though `4 = 2 · 2`, only a `1` can be stretched. To repeat the two columns of `B` twice, we repeat them explicitly, for instance with `np.tile`:
@@ -200,7 +200,7 @@ B = np.arange(9).reshape(3, 3)
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-**1.** Yes. The boxes are slid to the right edge:
+**1.** Yes. The boxes are aligned on the right edge:
 
 ```text
 A         | 3 | 3 | 3 |
@@ -211,7 +211,7 @@ B         |   | 3 | 3 |
 The two cells of `B` sit under the **last two** cells of `A`. The first `3` of `A` has no partner: it is an extra dimension, so `B` is added to each of the 3 layers `A[0]`, `A[1]`, `A[2]`. The repeated numbers change nothing: the result is `A[i, j, k] + B[j, k]`.
 
 ```{python}
-sliding_boxes((3, 3, 3), (3, 3))
+align_shapes((3, 3, 3), (3, 3))
 print(A[1, 2, 0] + B[2, 0] == (A + B)[1, 2, 0])
 ```
 
@@ -241,9 +241,67 @@ print((A + v.reshape(3, 1, 1))[:, 0, 0])   # (3, 1, 1): v varies along the first
 :::
 
 ::: {.callout-note}
+## Exercise: Shifted Shapes
+
+Let `A` have shape `(6, 7, 8)` and `B` have shape `(7, 8, 9)`. The numbers `7` and `8` appear in both shapes, but one position apart.
+
+1. Can we compute `A + B`? Why?
+2. The `7`s and the `8`s would be on top of each other if `B` started one cell further to the left. NumPy never shifts the boxes, but you can change the shape of `A` yourself. Which shape must `A` have so that `A + B` works? What is the shape of the result?
+3. Do the same for `(5, 6)` and `(6, 7)`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+**1.** No. Both shapes have three cells, so they are aligned cell by cell, and all three columns differ:
+
+```text
+A         | 6 | 7 | 8 |
+B         | 7 | 8 | 9 |
+            ✗   ✗   ✗
+```
+
+NumPy compares the `8` of `A` with the `9` of `B`, not with the `8` of `B`. The boxes are always aligned on the right edge.
+
+```{python}
+align_shapes((6, 7, 8), (7, 8, 9))
+A = np.arange(6 * 7 * 8).reshape(6, 7, 8)
+B = np.arange(7 * 8 * 9).reshape(7, 8, 9)
+A + B
+```
+
+**2.** We add a cell with a `1` at the end of `A`. With the extra cell, the `7` and the `8` of `A` are now on top of the `7` and the `8` of `B`:
+
+```text
+A         | 6 | 7 | 8 | 1 |      A.reshape(6, 7, 8, 1)
+B         |   | 7 | 8 | 9 |
+            -   ✓   ✓   ✓
+result    | 6 | 7 | 8 | 9 |
+```
+
+The `1` is stretched to `9`, and the `6` is an extra dimension. The result has shape `(6, 7, 8, 9)`, and `result[i, j, k, :]` is `A[i, j, k] + B[j, k, :]`.
+
+```{python}
+align_shapes((6, 7, 8, 1), (7, 8, 9))
+C = A.reshape(6, 7, 8, 1) + B
+print(C.shape)
+print(np.array_equal(C[2, 3, 5], A[2, 3, 5] + B[3, 5]))
+```
+
+**3.** The same idea, with a `1` at the end of the first shape:
+
+```{python}
+align_shapes((5, 6, 1), (6, 7))
+print((np.ones((5, 6)).reshape(5, 6, 1) + np.ones((6, 7))).shape)
+```
+
+The rule is that **you** choose where the `1`s go. NumPy never moves the boxes for you, but a `reshape` lets you build the alignment you want.
+:::
+
+::: {.callout-note}
 ## Exercise: Predict the Result
 
-For each pair of shapes, draw the sliding boxes by hand and decide if the arrays can be added. If they can, give the shape of the result.
+For each pair of shapes, draw the aligned boxes by hand and decide if the arrays can be added. If they can, give the shape of the result.
 
 1. `(3, 1)` and `(1, 4)`
 2. `(2, 3, 4)` and `(3, 4)`
@@ -271,7 +329,7 @@ pairs = [
 ]
 for a, b in pairs:
     print(f"--- {a} and {b}")
-    sliding_boxes(a, b)
+    align_shapes(a, b)
 ```
 
 Summary:
@@ -279,7 +337,7 @@ Summary:
 1. `(3, 4)`: both are stretched. This is the outer-product pattern, a column against a row.
 2. `(2, 3, 4)`: the `(3, 4)` array fits in the last two cells, and the `2` is an extra dimension.
 3. `(2, 3, 4)`: the `4` is paired with a `1` and the `3` with a `3`.
-4. **Error**. The `(2, 3)` array slides to the right edge, so `3` is compared with `4`. Compare with exercise 3: the right edge decides everything. To make it work, the second array would need shape `(2, 3, 1)`.
+4. **Error**. The `(2, 3)` array is aligned on the right edge, so `3` is compared with `4`. Compare with exercise 3: the right edge decides everything. To make it work, the second array would need shape `(2, 3, 1)`.
 5. `(5, 3, 4)`: the `4` is paired with a `1`, the `1` with `3`, and the `5` is an extra dimension. Both arrays are stretched, and the result has a shape that neither of them had.
 6. `(4, 1, 5)`: the `5` of the first array is paired with a `1` (stretched to 5), its `1` is paired with a `1`, and the `4` is an extra dimension.
 7. `(6, 2, 5)`: the `5`s match, the `1` is stretched to `2`, and the `6` is an extra dimension.
@@ -297,7 +355,7 @@ cube = rng.integers(0, 11, size=(30, 4, 5)).astype(float)
 ```
 
 1. For each exam and question, compute the mean **across all students**, and subtract it from every student's mark. Which shape does the array of means have?
-2. For each student, compute the mean over all their exams and questions, and subtract it from that student's marks. Which shape must the array of means have, so that the sliding boxes work?
+2. For each student, compute the mean over all their exams and questions, and subtract it from that student's marks. Which shape must the array of means have, so that the aligned boxes work?
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -308,7 +366,7 @@ cube = rng.integers(0, 11, size=(30, 4, 5)).astype(float)
 ```{python}
 mean_question = cube.mean(axis=0)
 print(mean_question.shape)
-sliding_boxes(cube.shape, mean_question.shape)
+align_shapes(cube.shape, mean_question.shape)
 centred_1 = cube - mean_question
 print(centred_1.shape)
 ```
@@ -317,7 +375,7 @@ print(centred_1.shape)
 
 ```{python}
 mean_student = cube.mean(axis=(1, 2)).reshape(30, 1, 1)
-sliding_boxes(cube.shape, mean_student.shape)
+align_shapes(cube.shape, mean_student.shape)
 centred_2 = cube - mean_student
 print(centred_2.shape)
 print(np.allclose(centred_2.mean(axis=(1, 2)), 0))  # every student now has mean 0
@@ -346,7 +404,7 @@ result         | 4 | 4 | 2 |
 ```{python}
 P = np.array([[0, 0], [1, 0], [1, 1], [0, 2]])
 D = P.reshape(4, 1, 2) - P.reshape(1, 4, 2)
-sliding_boxes((4, 1, 2), (1, 4, 2))
+align_shapes((4, 1, 2), (1, 4, 2))
 print(D.shape)
 print(D[2, 3], P[2] - P[3])   # the same vector
 ```
