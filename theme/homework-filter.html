@@ -1,0 +1,130 @@
+<!-- Homework pages: choose which exercises to show (both / mandatory / optional).
+     Mandatory exercises are the red boxes (.callout-warning). Optional exercises are a
+     blue box (.callout-note) followed by its collapsed solution (.callout-tip). -->
+<style>
+.hw-filter {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--ie-border, #ccd);
+  border-left: 4px solid var(--ie-accent, #1d6fb8);
+  border-radius: 8px;
+  background: var(--ie-bg, #fff);
+  box-shadow: 0 2px 10px rgba(0, 0, 36, 0.08);
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+.hw-filter__label { font-weight: 700; font-size: 0.95rem; }
+.hw-filter__group { display: inline-flex; border-radius: 999px; overflow: hidden; border: 1px solid var(--ie-border, #ccd); }
+.hw-filter__btn {
+  appearance: none; border: 0; margin: 0; cursor: pointer;
+  padding: 0.4rem 1rem; font: inherit; font-size: 0.9rem; font-weight: 600;
+  color: inherit; background: transparent;
+}
+.hw-filter__btn + .hw-filter__btn { border-left: 1px solid var(--ie-border, #ccd); }
+.hw-filter__btn[aria-pressed="true"] {
+  color: var(--ie-on-brand, #fff);
+  background: var(--ie-brand, #0a2a66);
+}
+.hw-filter__count { font-size: 0.85rem; opacity: 0.8; }
+
+/* Hidden exercises and the headings that end up empty */
+.hw-hidden { display: none !important; }
+
+/* Printing / PDF: show everything, drop the toolbar */
+@media print {
+  .hw-filter { display: none !important; }
+  .hw-hidden { display: block !important; }
+}
+</style>
+<script>
+(function () {
+  function init() {
+    var root = document.getElementById("quarto-document-content");
+    if (!root) return;
+    var section = root.querySelector("main") || root;
+
+    // 1. Group the callouts into exercises.
+    var items = [];            // {kind, nodes[]}
+    var current = null;
+    var children = Array.prototype.slice.call(section.querySelectorAll(".callout")).filter(function (el) {
+      return !el.parentElement.closest(".callout"); // top-level callouts only
+    });
+    children.forEach(function (el) {
+      if (el.classList.contains("callout-warning")) {
+        current = { kind: "mandatory", nodes: [el] };
+        items.push(current);
+      } else if (el.classList.contains("callout-note")) {
+        current = { kind: "optional", nodes: [el] };
+        items.push(current);
+      } else if (el.classList.contains("callout-tip") && current && current.kind === "optional") {
+        current.nodes.push(el);
+      }
+    });
+    if (!items.length) return;
+    items.forEach(function (it) {
+      it.nodes.forEach(function (n) { n.setAttribute("data-hw", it.kind); });
+    });
+
+    var nMand = items.filter(function (i) { return i.kind === "mandatory"; }).length;
+    var nOpt = items.length - nMand;
+
+    // 2. Build the toolbar.
+    var modes = [
+      { id: "both", text: "Both" },
+      { id: "mandatory", text: "Mandatory (" + nMand + ")" },
+      { id: "optional", text: "Optional (" + nOpt + ")" }
+    ];
+    var bar = document.createElement("div");
+    bar.className = "hw-filter";
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", "Choose which exercises to show");
+    bar.innerHTML = '<span class="hw-filter__label">Show exercises:</span><span class="hw-filter__group"></span><span class="hw-filter__count" aria-live="polite"></span>';
+    var group = bar.querySelector(".hw-filter__group");
+    var count = bar.querySelector(".hw-filter__count");
+    var buttons = {};
+    modes.forEach(function (m) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "hw-filter__btn";
+      b.textContent = m.text;
+      b.addEventListener("click", function () { apply(m.id); });
+      group.appendChild(b);
+      buttons[m.id] = b;
+    });
+    // Place the toolbar right after the page title block (before the first heading of the body)
+    var anchor = section.querySelector(":scope > section") || section.firstElementChild;
+    section.insertBefore(bar, anchor);
+
+    // 3. Apply a mode.
+    var headings = Array.prototype.slice.call(section.querySelectorAll("section.level1, section.level2"));
+    function apply(mode) {
+      items.forEach(function (it) {
+        var show = mode === "both" || mode === it.kind;
+        it.nodes.forEach(function (n) { n.classList.toggle("hw-hidden", !show); });
+      });
+      // hide sections that contain exercises but none visible
+      headings.forEach(function (sec) {
+        var all = sec.querySelectorAll("[data-hw]");
+        if (!all.length) { sec.classList.remove("hw-hidden"); return; }
+        var visible = sec.querySelectorAll("[data-hw]:not(.hw-hidden)");
+        sec.classList.toggle("hw-hidden", visible.length === 0);
+      });
+      Object.keys(buttons).forEach(function (id) {
+        buttons[id].setAttribute("aria-pressed", id === mode ? "true" : "false");
+      });
+      count.textContent = mode === "both" ? (nMand + nOpt) + " exercises"
+        : mode === "mandatory" ? nMand + " mandatory exercises"
+        : nOpt + " optional exercises";
+    }
+    apply("both"); // default: both
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>

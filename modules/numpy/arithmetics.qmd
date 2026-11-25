@@ -450,6 +450,265 @@ show(face * horizontal)
 In step 3, **both** arrays are stretched: the row `(8,)` is repeated down, and the column `(8, 1)` is repeated across. The result has shape `(8, 8)`, even though neither input does.
 :::
 
+### Sliding Boxes: Broadcasting in Any Dimension
+
+So far we have broadcast arrays with one or two dimensions. The same rule works with **any number of dimensions**, and there is a simple way to apply it by hand: the **sliding boxes**.
+
+Write each shape as a row of cells, one number per cell. Put the two rows one on top of the other, and follow three steps:
+
+1. **Slide.** Push the shorter row to the right until the two rows touch the right edge. This is the maximum possible overlap: every cell of the shorter row sits under (or over) a cell of the longer one. The alignment is **always on the right edge**. You cannot slide further to look for a better match, because NumPy only ever compares the trailing dimensions with each other.
+2. **Compare each pair of stacked cells.** If the two numbers are equal, they match. If one of them is `1`, it can be stretched to the other number. Anything else is a ✗, and NumPy raises an error.
+3. **Copy the leftovers.** The cells of the longer row with nothing above or below them do not need a partner. They go straight to the result, and they are the **extra dimensions**: the shorter array is repeated along them.
+
+For example, `(3, 4, 5) + (4, 1)`:
+
+```text
+A         | 3 | 4 | 5 |
+B         |   | 4 | 1 |       <- B slid to the right edge
+            -   ✓   ✓
+result    | 3 | 4 | 5 |       <- the 3 had no partner, it is an extra dimension
+```
+
+The 5 is paired with a 1 (stretched to 5), the 4 with a 4 (match), and the 3 has nothing in front of it. The result has shape `(3, 4, 5)`: the `(4, 1)` array is repeated 3 times, once per "layer" of `A`.
+
+The function below draws the sliding boxes for any two shapes, and tells us the shape of the result. It is only a learning tool, so you do not need to understand how it works. Use it to check your answers, **after** trying by hand.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code of sliding_boxes()"
+def sliding_boxes(a, b):
+    """Draw two shapes as rows of cells, aligned on the right edge, and compare them."""
+    n = max(len(a), len(b))
+    top = [None] * (n - len(a)) + list(a)
+    bottom = [None] * (n - len(b)) + list(b)
+    result, marks = [], []
+    for x, y in zip(top, bottom):
+        if x is None or y is None:
+            result.append(y if x is None else x)
+            marks.append("-")
+        elif x == y or x == 1 or y == 1:
+            result.append(max(x, y))
+            marks.append("✓")
+        else:
+            result.append("?")
+            marks.append("✗")
+
+    def row(label, cells):
+        return f"{label:<8}" + "".join(f"|{'' if c is None else c:^5}" for c in cells) + "|"
+
+    print(row("A", top))
+    print(row("B", bottom))
+    print(f"{'':<8}" + "".join(f" {m:^5}" for m in marks))
+    if "✗" in marks:
+        print("Result:  error, these shapes cannot be broadcast")
+    else:
+        print(f"Result:  {tuple(result)}")
+
+sliding_boxes((3, 4, 5), (4, 1))
+```
+
+::: {.callout-important}
+## Equal or 1: being multiples is not enough
+
+Two numbers in the same column are compatible only if they are **equal** or one of them is **1**. It does not matter if one is a multiple of the other: `8` and `4`, or `6` and `3`, do **not** match. NumPy never repeats a dimension "two and a half times" or "twice" on its own: the only thing it can stretch is a `1`.
+:::
+
+::: {.callout-note}
+## Exercise: Can We Add `(8, 5)` and `(4, 5)`?
+
+Let `A` have shape `(8, 5)` and `B` have shape `(4, 5)`. Draw the sliding boxes by hand. Can you compute `A + B`? Why, or why not? If not, how could you change one of the arrays so that the sum works?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Both shapes have two cells, so there is nothing to slide:
+
+```text
+A         | 8 | 5 |
+B         | 4 | 5 |
+            ✗   ✓
+```
+
+The `5`s match, but `8` and `4` are different and neither is `1`. The sum **fails**. Notice that `8 = 2 · 4`: it looks as if `B` could be repeated twice, but NumPy does not guess that. Only a `1` is stretched.
+
+```{python}
+sliding_boxes((8, 5), (4, 5))
+```
+
+```{python}
+A = np.ones((8, 5))
+B = np.arange(4 * 5).reshape(4, 5)
+print(A + B)
+```
+
+There are two ways to make it work, depending on what we mean:
+
+- **Cut** `A` to the size of `B`, for instance with `A[:4] + B`: the result has shape `(4, 5)`.
+- **Repeat** `B` along a new axis. If we see the 8 rows of `A` as 2 blocks of 4 rows, `A.reshape(2, 4, 5)` has shape `(2, 4, 5)`, and now `B` fits in the last two cells. The leftover `2` is an extra dimension, so `B` is repeated in both blocks:
+
+```{python}
+sliding_boxes((2, 4, 5), (4, 5))
+print((A.reshape(2, 4, 5) + B).shape)
+```
+
+If we want a flat `(8, 5)` result, we can reshape back with `.reshape(8, 5)`.
+:::
+
+::: {.callout-note}
+## Exercise: Can We Multiply `(3, 4, 5)` and `(2, 5, 6)`?
+
+Let `A` have shape `(3, 4, 5)` and `B` have shape `(2, 5, 6)`. Can you compute `A * B`? Draw the boxes and explain why. Then answer: what would change if we used the matrix product `A @ B`?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+Both shapes have three cells, so again there is no sliding:
+
+```text
+A         | 3 | 4 | 5 |
+B         | 2 | 5 | 6 |
+            ✗   ✗   ✗
+```
+
+**All three** columns fail: `3` vs `2`, `4` vs `5`, and `5` vs `6`. One failure would be enough for NumPy to stop.
+
+```{python}
+sliding_boxes((3, 4, 5), (2, 5, 6))
+```
+
+You may be tempted to say "the `5` of `A` and the `5` of `B` are both there, so it should work". But the sliding boxes never slide to look for a match: the `5` of `A` is in the last cell, and the `5` of `B` is in the middle one, so they are never compared.
+
+The `5`s are the ones that matter for the **matrix product**, because a product of a `(4, 5)` matrix by a `(5, 6)` matrix needs the inner dimensions to match, and gives a `(4, 6)` matrix. With `@`, NumPy treats the last two cells as the matrices, and applies the sliding boxes to the remaining ones, the *batch* dimensions: `3` and `2`. They are still different, so `A @ B` fails too. If `B` had shape `(1, 5, 6)` or `(5, 6)`, the batch would broadcast:
+
+```{python}
+A = np.ones((3, 4, 5))
+print((A @ np.ones((1, 5, 6))).shape)  # batch: 3 with 1
+print((A @ np.ones((5, 6))).shape)     # batch: 3 with nothing
+```
+:::
+
+::: {.callout-note}
+## Exercise: Predict the Result
+
+For each pair of shapes, draw the sliding boxes by hand and decide if the arrays can be added. If they can, give the shape of the result.
+
+1. `(3, 1)` and `(1, 4)`
+2. `(2, 3, 4)` and `(3, 4)`
+3. `(2, 3, 4)` and `(3, 1)`
+4. `(2, 3, 4)` and `(2, 3)`
+5. `(5, 1, 4)` and `(3, 1)`
+6. `(1, 5)` and `(4, 1, 1)`
+7. `(6, 1, 5)` and `(2, 5)`
+8. `(4, 3)` and `(3, 4)`
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{python}
+pairs = [
+    ((3, 1), (1, 4)),
+    ((2, 3, 4), (3, 4)),
+    ((2, 3, 4), (3, 1)),
+    ((2, 3, 4), (2, 3)),
+    ((5, 1, 4), (3, 1)),
+    ((1, 5), (4, 1, 1)),
+    ((6, 1, 5), (2, 5)),
+    ((4, 3), (3, 4)),
+]
+for a, b in pairs:
+    print(f"--- {a} and {b}")
+    sliding_boxes(a, b)
+```
+
+Summary:
+
+1. `(3, 4)`: both are stretched. This is the outer-product pattern, a column against a row.
+2. `(2, 3, 4)`: the `(3, 4)` array fits in the last two cells, and the `2` is an extra dimension.
+3. `(2, 3, 4)`: the `4` is paired with a `1` and the `3` with a `3`.
+4. **Error**. The `(2, 3)` array slides to the right edge, so `3` is compared with `4`. Compare with exercise 3: the right edge decides everything. To make it work, the second array would need shape `(2, 3, 1)`.
+5. `(5, 3, 4)`: `4` with nothing, `1` with `3`, and `5` is an extra dimension. Both arrays are stretched, and the result has a shape that neither of them had.
+6. `(4, 1, 5)`: the `5` of the first array is paired with a `1` (stretched to 5), its `1` is paired with a `1`, and the `4` is an extra dimension.
+7. `(6, 2, 5)`: the `5`s match, the `1` is stretched to `2`, and the `6` is an extra dimension.
+8. **Error**. `3` against `4` and `4` against `3`. Same numbers, wrong order: the order of the dimensions matters.
+:::
+
+::: {.callout-note}
+## Exercise: Centring a Cube of Marks
+
+A university stores the marks of 30 students in 4 exams, with 5 questions each, in an array `cube` of shape `(30, 4, 5)`.
+
+```{python}
+rng = np.random.default_rng(0)
+cube = rng.integers(0, 11, size=(30, 4, 5)).astype(float)
+```
+
+1. For each exam and question, compute the mean **across all students**, and subtract it from every student's mark. Which shape does the array of means have?
+2. For each student, compute the mean over all their exams and questions, and subtract it from that student's marks. Which shape must the array of means have, so that the sliding boxes work?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+**1.** The mean over students, `cube.mean(axis=0)`, removes the first dimension, so it has shape `(4, 5)`. This fits at the right of `(30, 4, 5)`, and the `30` is an extra dimension: the same `(4, 5)` array is subtracted from every student.
+
+```{python}
+mean_question = cube.mean(axis=0)
+print(mean_question.shape)
+sliding_boxes(cube.shape, mean_question.shape)
+centred_1 = cube - mean_question
+print(centred_1.shape)
+```
+
+**2.** There is one mean per student: 30 values. A shape `(30,)` would be matched with the *last* cell (`5`) and fail. We need the 30 to sit in the first cell, with `1`s in the other two, so the shape must be `(30, 1, 1)`:
+
+```{python}
+mean_student = cube.mean(axis=(1, 2)).reshape(30, 1, 1)
+sliding_boxes(cube.shape, mean_student.shape)
+centred_2 = cube - mean_student
+print(centred_2.shape)
+print(np.allclose(centred_2.mean(axis=(1, 2)), 0))  # every student now has mean 0
+```
+
+The idea is the same as with the bonus points of `marks`: one value per **row** needed a column `(6, 1)`. In 3D, one value per student needs `(30, 1, 1)`: the `1`s protect the dimensions that we do not want to change.
+:::
+
+::: {.callout-note}
+## Exercise: All Pairs of Points
+
+Given 4 points on a line, stored in `x = np.array([0, 1, 3, 6])`, build the $4 \times 4$ table with the distance between every pair of points, with no loops. Then think about the same problem in the plane: if `P` has shape `(4, 2)`, with one point per row, which two shapes would you subtract to get an array of shape `(4, 4, 2)` that holds every difference vector?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+In 1D, a column against a row builds the whole table:
+
+```{python}
+x = np.array([0, 1, 3, 6])
+distances = np.abs(x.reshape(4, 1) - x)   # (4, 1) with (4,)
+print(distances)
+```
+
+In the plane, we want `result[i, j] = P[i] - P[j]`, a vector with 2 coordinates. We need a shape `(4, 4, 2)` and, by the sliding boxes, both arrays must be stretched, one along each of the first two cells:
+
+```text
+P as rows      | 4 | 1 | 2 |      P.reshape(4, 1, 2)   index i
+P as columns   | 1 | 4 | 2 |      P.reshape(1, 4, 2)   index j
+result         | 4 | 4 | 2 |
+```
+
+```{python}
+P = np.array([[0, 0], [1, 0], [1, 1], [0, 2]])
+differences = P.reshape(4, 1, 2) - P.reshape(1, 4, 2)
+sliding_boxes((4, 1, 2), (1, 4, 2))
+print(differences.shape)
+print(differences[2, 3])  # P[2] - P[3]
+```
+:::
+
 ### Practice
 
 Deactivate AI assistant tools, and try the following exercises.
